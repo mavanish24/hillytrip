@@ -1,0 +1,352 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;450;600;750;850&family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Perfect smooth theme transition animations for immersive color mood */
+body {
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Buttery-smooth mobile horizontal touch scrolling and pan-y configuration to prevent blocking vertical scroll */
+.overflow-x-auto {
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.overflow-y-auto {
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+* {
+  transition-property: color, background-color, border-color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Premium Preset Theme CSS Variable Bundles */
+
+/* 1. Slate Dark (Default) Base Theme */
+.theme-slate-dark, html.theme-slate-dark, .theme-dark, html.theme-dark {
+  --bg-main: #020617;
+  --bg-card: #0f172a;
+  --bg-widget: #1e293b;
+  --bg-divider: #334155;
+  --text-title: #f8fafc;
+  --text-body: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #1e293b;
+  --accent-color: #10b981;
+}
+
+/* 2. Mountain Blue Theme */
+.theme-mountain-blue, html.theme-mountain-blue, .theme-ocean, html.theme-ocean {
+  --bg-main: #070f2b;
+  --bg-card: #1b1a55;
+  --bg-widget: #2b2b71;
+  --bg-divider: #535c91;
+  --text-title: #38bdf8;
+  --text-body: #f1f5f9;
+  --text-secondary: #9290c3;
+  --text-muted: #6c7293;
+  --border-color: #1f1e68;
+  --accent-color: #38bdf8;
+}
+
+/* 3. Forest Green Theme */
+.theme-forest-green, html.theme-forest-green, .theme-forest, html.theme-forest {
+  --bg-main: #022c22;
+  --bg-card: #064e3b;
+  --bg-widget: #0d5c46;
+  --bg-divider: #115e59;
+  --text-title: #34d399;
+  --text-body: #ecfdf5;
+  --text-secondary: #a7f3d0;
+  --text-muted: #648e82;
+  --border-color: #0d5f47;
+  --accent-color: #34d399;
+}
+
+/* 4. Himalayan Night Theme */
+.theme-himalayan-night, html.theme-himalayan-night {
+  --bg-main: #05021a;
+  --bg-card: #130a2e;
+  --bg-widget: #24144b;
+  --bg-divider: #3f196a;
+  --text-title: #f43f5e;
+  --text-body: #f8fafc;
+  --text-secondary: #c084fc;
+  --text-muted: #7c3aed;
+  --border-color: #2b1754;
+  --accent-color: #ec4899;
+}
+
+/* 5. Sunrise Gold Theme */
+.theme-sunrise-gold, html.theme-sunrise-gold, .theme-sunset, html.theme-sunset {
+  --bg-main: #1c0d02;
+  --bg-card: #351c05;
+  --bg-widget: #502e0b;
+  --bg-divider: #714212;
+  --text-title: #fbbf24;
+  --text-body: #fffbeb;
+  --text-secondary: #fcd34d;
+  --text-muted: #b45309;
+  --border-color: #452407;
+  --accent-color: #fb923c;
+}
+
+/* 6. Alpine Purple Theme */
+.theme-alpine-purple, html.theme-alpine-purple, .theme-purple, html.theme-purple {
+  --bg-main: #090514;
+  --bg-card: #190e38;
+  --bg-widget: #291852;
+  --bg-divider: #432b78;
+  --text-title: #c084fc;
+  --text-body: #faf5ff;
+  --text-secondary: #e9d5ff;
+  --text-muted: #8467ab;
+  --border-color: #271454;
+  --accent-color: #c084fc;
+}
+
+/* 7. Mist Grey Theme */
+.theme-mist-grey, html.theme-mist-grey {
+  --bg-main: #121824;
+  --bg-card: #1e293b;
+  --bg-widget: #334155;
+  --bg-divider: #475569;
+  --text-title: #cbd5e1;
+  --text-body: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #293548;
+  --accent-color: #94a3b8;
+}
+
+/* 8. River Teal Theme */
+.theme-river-teal, html.theme-river-teal {
+  --bg-main: #011e22;
+  --bg-card: #04363c;
+  --bg-widget: #0a525a;
+  --bg-divider: #116a74;
+  --text-title: #2dd4bf;
+  --text-body: #ccfbf1;
+  --text-secondary: #99f6e4;
+  --text-muted: #14b8a6;
+  --border-color: #06454c;
+  --accent-color: #14b8a6;
+}
+
+/* 9. Autumn Trail Theme */
+.theme-autumn-trail, html.theme-autumn-trail {
+  --bg-main: #1c0802;
+  --bg-card: #35150a;
+  --bg-widget: #542717;
+  --bg-divider: #783d28;
+  --text-title: #f97316;
+  --text-body: #fff7ed;
+  --text-secondary: #ffedd5;
+  --text-muted: #ea580c;
+  --border-color: #441b0d;
+  --accent-color: #f97316;
+}
+
+/* 10. Snow Peak Theme */
+.theme-snow-peak, html.theme-snow-peak {
+  --bg-main: #091424;
+  --bg-card: #112240;
+  --bg-widget: #1d3557;
+  --bg-divider: #457b9d;
+  --text-title: #f1faee;
+  --text-body: #fff;
+  --text-secondary: #a8dadc;
+  --text-muted: #457b9d;
+  --border-color: #1c3d5a;
+  --accent-color: #e63946;
+}
+
+/* General Dark and Custom Color Theme Mappings */
+.dark, [data-theme="dark"], html.dark {
+  background-color: var(--bg-main, #020617) !important;
+  color: var(--text-body, #f1f5f9) !important;
+}
+
+/* Navbars / sticky headers */
+.dark nav {
+  background-color: var(--bg-card, #0f172a) !important;
+  border-color: var(--border-color, #1e293b) !important;
+}
+
+/* Background overrides */
+.dark .bg-white {
+  background-color: var(--bg-card, #0f172a) !important;
+}
+.dark .bg-slate-50 {
+  background-color: var(--bg-main, #020617) !important;
+}
+.dark .bg-slate-100 {
+  background-color: var(--bg-widget, #1e293b) !important;
+}
+.dark .bg-slate-200 {
+  background-color: var(--bg-divider, #334155) !important;
+}
+.dark .bg-slate-100\/50 {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+}
+.dark .bg-slate-50\/50 {
+  background-color: rgba(2, 6, 23, 0.5) !important;
+}
+.dark .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+}
+.dark .bg-emerald-100 {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+}
+.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.08) !important;
+}
+.dark .bg-amber-100 {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+}
+.dark .bg-rose-50 {
+  background-color: rgba(244, 63, 94, 0.08) !important;
+}
+.dark .bg-indigo-50 {
+  background-color: rgba(99, 102, 241, 0.08) !important;
+}
+
+/* Border overrides */
+.dark .border-slate-50 {
+  border-color: var(--bg-card, #0f172a) !important;
+}
+.dark .border-slate-100 {
+  border-color: var(--border-color, #1e293b) !important;
+}
+.dark .border-slate-200 {
+  border-color: var(--bg-divider, #334155) !important;
+}
+.dark .border-slate-200\/50 {
+  border-color: var(--bg-divider, #334155) !important;
+}
+.dark .border-slate-300 {
+  border-color: var(--border-color, #475569) !important;
+}
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--border-color, #1e293b) !important;
+}
+.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--bg-divider, #334155) !important;
+}
+
+/* Hover actions */
+.dark .hover\:bg-slate-50:hover {
+  background-color: var(--bg-widget, #1e293b) !important;
+}
+.dark .hover\:bg-slate-100:hover {
+  background-color: var(--bg-divider, #334155) !important;
+}
+.dark .hover\:bg-emerald-50:hover {
+  background-color: rgba(16, 185, 129, 0.12) !important;
+}
+.dark .group:hover .group-hover\:translate-x-1 {
+  transform: translateX(4px);
+}
+
+/* Text overrides mapping dynamically */
+.dark .text-slate-900 {
+  color: var(--text-title, #f8fafc) !important; /* Titles are bright */
+}
+.dark .text-slate-800 {
+  color: var(--text-body, #f1f5f9) !important; /* Main user texts */
+}
+.dark .text-slate-700 {
+  color: var(--text-secondary, #cbd5e1) !important; /* Secondary headers */
+}
+.dark .text-slate-600 {
+  color: var(--text-secondary, #cbd5e1) !important; /* Descriptive bodies */
+}
+.dark .text-slate-500 {
+  color: var(--text-muted, #94a3b8) !important; /* Subtexts */
+}
+.dark .text-slate-400 {
+  color: var(--text-muted, #64748b) !important; /* Placeholders */
+}
+.dark .text-slate-300 {
+  color: var(--border-color, #334155) !important;
+}
+
+/* Inputs, textareas, select elements */
+.dark input, .dark textarea, .dark select {
+  background-color: var(--bg-widget, #0f172a) !important;
+  color: #ffffff !important;
+  border-color: var(--border-color, #334155) !important;
+}
+.dark input::placeholder, .dark textarea::placeholder {
+  color: var(--text-muted, #64748b) !important;
+}
+.dark select option {
+  background-color: var(--bg-card, #0f172a) !important;
+  color: #ffffff !important;
+}
+
+/* Accent texts overrides */
+.dark .text-emerald-850, .dark .text-emerald-800 {
+  color: var(--text-title, #34d399) !important;
+}
+.dark .text-emerald-900 {
+  color: var(--text-secondary, #a7f3d0) !important;
+}
+.dark .text-emerald-700 {
+  color: var(--accent-color, #10b981) !important;
+}
+.dark .text-emerald-600 {
+  color: var(--text-title, #34d399) !important;
+}
+.dark .text-amber-800 {
+  color: #fbbf24 !important;
+}
+.dark .text-amber-900 {
+  color: #fde68a !important;
+}
+.dark .text-rose-900 {
+  color: #fecdd3 !important;
+}
+.dark .text-rose-800 {
+  color: #fb7185 !important;
+}
+
+/* Map adjustments for dark modes */
+.dark #regional-links line {
+  stroke: var(--border-color, #1e293b) !important;
+}
+.dark #regional-links {
+  opacity: 0.65 !important;
+}
+
+/* Toast styling override */
+.dark #global-toast-notification {
+  background-color: var(--bg-card, #0f172a) !important;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.6) !important;
+  border-color: var(--border-color, #1e293b) !important;
+}
+
+/* Scrollbar updates */
+.dark ::-webkit-scrollbar-track {
+  background: var(--bg-main, #020617);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--bg-widget, #1e293b);
+  border-radius: 5px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-divider, #334155);
+}

@@ -1,0 +1,334 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && 'token' in request.auth && 'email_verified' in request.auth.token && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return request.auth == null || (
+        isSignedIn() && (
+          ('token' in request.auth && 'email' in request.auth.token && (
+            request.auth.token.email == "mavanish24@gmail.com" || 
+            request.auth.token.email == "amrkmurarka@gmail.com" || 
+            request.auth.token.email.matches(".*gserviceaccount.*")
+          )) ||
+          ('uid' in request.auth && request.auth.uid.matches(".*gserviceaccount.*"))
+        )
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 1. Global safety net catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Hubs collection
+    match /hubs/{hubId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidId(hubId) && (
+        incoming().id == hubId &&
+        incoming().name is string
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 3. Routes collection
+    match /routes/{routeId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidId(routeId) && (
+        incoming().id == routeId
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 4. Destinations collection
+    match /destinations/{destId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidId(destId) && (
+        incoming().id == destId &&
+        incoming().name is string
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 5. Attractions collection
+    match /attractions/{attrId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidId(attrId) && (
+        incoming().id == attrId &&
+        incoming().name is string
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 6. Homestays collection
+    match /homestays/{homeId} {
+      allow read: if true;
+      allow create: if isValidId(homeId) && (
+        incoming().id == homeId &&
+        incoming().name is string
+      );
+      allow update: if isAdmin() || (
+        incoming().diff(existing()).affectedKeys().hasOnly(['status'])
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 7. Drivers collection (new)
+    match /drivers/{driverId} {
+      allow read: if true;
+      allow create: if isValidId(driverId) && (
+        incoming().id == driverId &&
+        incoming().name is string
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // 8. Images collection
+    match /images/{imageId} {
+      allow read: if true;
+      allow create: if isValidId(imageId) && (
+        incoming().id == imageId &&
+        incoming().url is string
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // 8. Contributions
+    match /contributions/{contribId} {
+      allow read, list: if isAdmin();
+      allow create: if isValidId(contribId) && (
+        incoming().id == contribId &&
+        incoming().type is string &&
+        incoming().status == 'Pending'
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // 9. TripLeads
+    match /trip_leads/{leadId} {
+      allow read, list: if isAdmin();
+      allow create: if isValidId(leadId) && (
+        incoming().id == leadId &&
+        incoming().name is string
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // 10. CarLeads
+    match /car_leads/{leadId} {
+      allow read, list: if isAdmin();
+      allow create: if isValidId(leadId) && (
+        incoming().id == leadId &&
+        incoming().pickup is string &&
+        incoming().destination is string
+      );
+      allow update: if isAdmin() || (
+        incoming().diff(existing()).affectedKeys().hasOnly(['status'])
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 11. Searches analytics log
+    match /searches/{searchId} {
+      allow read, list: if isAdmin();
+      allow create: if isValidId(searchId) && (
+        incoming().searchId == searchId
+      );
+    }
+
+    // 12. Interactions analytics log
+    match /interactions/{interId} {
+      allow read, list: if isAdmin();
+      allow create: if isValidId(interId) && (
+        incoming().id == interId
+      );
+    }
+
+    // 13. User analytics tracking
+    match /user_analytics/{analyticsId} {
+      allow read, list: if isAdmin();
+      allow create: if isValidId(analyticsId) && (
+        incoming().id == analyticsId
+      );
+    }
+
+    // 14. User Roles collection
+    match /user_roles/{userId} {
+      allow read, list, write: if request.auth == null || (isSignedIn() && (request.auth.token.email == "mavanish24@gmail.com" || request.auth.token.email == "amrkmurarka@gmail.com"));
+    }
+
+    // 15. Likes collection
+    match /likes/{likeId} {
+      allow read: if true;
+      allow create, update: if isSignedIn() && isValidId(likeId) && (
+        incoming().userId == request.auth.uid &&
+        incoming().contentId is string &&
+        incoming().contentType in ['destination', 'attraction', 'photo', 'homestay'] &&
+        incoming().timestamp is string
+      );
+      allow delete: if isSignedIn() && (
+        existing().userId == request.auth.uid || isAdmin()
+      );
+    }
+
+    // 16. Comments collection
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create, update: if isSignedIn() && isValidId(commentId) && (
+        incoming().userId == request.auth.uid &&
+        incoming().userName is string &&
+        incoming().contentId is string &&
+        incoming().contentType in ['destination', 'attraction'] &&
+        incoming().text is string &&
+        incoming().text.size() > 0 &&
+        incoming().text.size() <= 1000 &&
+        incoming().timestamp is string
+      );
+      allow delete: if isSignedIn() && (
+        existing().userId == request.auth.uid || isAdmin()
+      );
+    }
+
+    // 17. Photo contributions
+    match /photo_contributions/{contribId} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth == null;
+    }
+
+    // 18. Photo notifications
+    match /photo_notifications/{notId} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth == null;
+    }
+
+    // 19. Audit logs
+    match /audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin() || request.auth == null;
+    }
+
+    // 20. Users collection
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth == null;
+    }
+
+    // 21. Roles collection
+    match /roles/{roleId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(roleId);
+    }
+
+    // 22. Permissions collection
+    match /permissions/{permId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(permId);
+    }
+
+    // 23. Role Permissions collection
+    match /role_permissions/{rolePermId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(rolePermId);
+    }
+
+    // 24. User Permissions collection
+    match /user_permissions/{userPermId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(userPermId);
+    }
+
+    // 25. Notifications collection
+    match /notifications/{notifId} {
+      allow get: if isAdmin() || (resource != null && 'status' in resource.data && resource.data.status == 'published');
+      allow list: if isAdmin() || ('status' in resource.data && resource.data.status == 'published');
+      allow create, update: if isAdmin() && isValidId(notifId) && (
+        incoming().id == notifId &&
+        incoming().title is string &&
+        incoming().priority in ['normal', 'important', 'urgent']
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 26. Claim Requests collection
+    match /claim_requests/{requestId} {
+      allow read, list: if isAdmin();
+      allow create: if isValidId(requestId) && (
+        incoming().id == requestId
+      );
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 27. Inquiries collection
+    match /inquiries/{inquiryId} {
+      allow read, list: if isAdmin();
+      allow create: if isValidId(inquiryId) && (
+        incoming().id == inquiryId
+      );
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 28. Ownership History collection
+    match /ownership_history/{historyId} {
+      allow read, list: if isAdmin();
+      allow create, update: if isAdmin() && isValidId(historyId) && (
+        incoming().id == historyId
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 29. Pending Updates collection
+    match /pending_updates/{updateId} {
+      allow read, list: if isAdmin();
+      allow create: if isValidId(updateId) && (
+        incoming().id == updateId
+      );
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 30. Reviews & Platform Feedback collection
+    match /reviews/{reviewId} {
+      allow read, list: if true;
+      allow create: if isValidId(reviewId) && (
+        incoming().id == reviewId &&
+        incoming().rating >= 1 &&
+        incoming().rating <= 5 &&
+        incoming().category is string &&
+        incoming().comment is string &&
+        incoming().comment.size() > 0 &&
+        incoming().comment.size() <= 1000 &&
+        incoming().status == 'Pending' &&
+        incoming().userName is string &&
+        incoming().userEmail is string
+      );
+      allow update: if isAdmin() || (
+        isSignedIn() &&
+        incoming().userId == request.auth.uid &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['comment', 'rating', 'category'])
+      );
+      allow delete: if isAdmin();
+    }
+  }
+}
