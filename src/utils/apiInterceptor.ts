@@ -18,14 +18,42 @@ import {
 } from '../data/initialData';
 import { Hub, Route, Destination, Attraction, Homestay, ImageItem, Contribution, TripLead, CarLead, Driver, DEFAULT_HOMESTAY_IMAGE } from '../types';
 
-let useStaticFallback = false;
+let useStaticFallback = (() => {
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    if (
+      host.includes('netlify') || 
+      host.includes('github') || 
+      host.includes('vercel') || 
+      host.includes('pages.dev') ||
+      host.includes('hillytrip') ||
+      host === 'hillytrip.com' ||
+      host === 'www.hillytrip.com'
+    ) {
+      console.log('[HillyTrip API Interceptor] Detected static platform hosting synchronously. Enabling client-side Firestore sandbox mode.');
+      return true;
+    }
+  }
+  return false;
+})();
 
 // Determine if we should redirect API requests to direct Firestore
 async function checkBackendStatus() {
+  if (useStaticFallback) {
+    return;
+  }
   // If hosted on netlify, bypass and fallback immediately
   if (typeof window !== 'undefined') {
     const host = window.location.hostname;
-    if (host.includes('netlify') || host.includes('github') || host.includes('vercel') || host.includes('pages.dev')) {
+    if (
+      host.includes('netlify') || 
+      host.includes('github') || 
+      host.includes('vercel') || 
+      host.includes('pages.dev') ||
+      host.includes('hillytrip') ||
+      host === 'hillytrip.com' ||
+      host === 'www.hillytrip.com'
+    ) {
       console.log('[HillyTrip API Interceptor] Detected static platform hosting. Enabling client-side Firestore sandbox mode.');
       useStaticFallback = true;
       return;
@@ -444,6 +472,256 @@ async function handleMockApiRequest(url: string, options?: RequestInit): Promise
 
     if (method === 'POST' && pathName === '/api/auth/logout') {
       return jsonResponse({ success: true });
+    }
+
+    if (method === 'GET' && pathName === '/api/auth/profile') {
+      const email = queryParams.get('email') || '';
+      if (!email) {
+        return jsonResponse({ error: 'Email parameter is required' }, 400);
+      }
+      const cleanEmail = email.trim().toLowerCase();
+      const users = await fetchCollection<any>('users', fallbackUsers);
+      const user = users.find(u => u.email.trim().toLowerCase() === cleanEmail);
+      if (!user) {
+        return jsonResponse({ error: 'User profile not found' }, 404);
+      }
+      const userRolesArr = user.roles && user.roles.length > 0 ? user.roles : [user.role || 'traveler'];
+      return jsonResponse({
+        success: true,
+        user: {
+          id: user.id || cleanEmail,
+          email: user.email || cleanEmail,
+          name: user.name || '',
+          role: user.role || 'traveler',
+          roles: userRolesArr,
+          status: user.status || 'active',
+          emailVerified: user.emailVerified ?? true,
+          customPermissions: user.customPermissions || [],
+          mobile: user.mobile,
+          businessName: user.businessName,
+          businessType: user.businessType,
+          partnerLocation: user.partnerLocation,
+          partnerMobile: user.partnerMobile,
+          partnerStatus: user.partnerStatus || 'none',
+          partnerDocuments: user.partnerDocuments,
+          contributorRegion: user.contributorRegion,
+          contributorReason: user.contributorReason,
+          contributorExperience: user.contributorExperience,
+          contributorStatus: user.contributorStatus || 'none'
+        }
+      });
+    }
+
+    if (method === 'POST' && pathName === '/api/auth/profile/update') {
+      const body = parseBody();
+      const { email, name, mobile, password } = body;
+      if (!email) {
+        return jsonResponse({ error: 'Email is required' }, 400);
+      }
+      const cleanEmail = email.trim().toLowerCase();
+      const users = await fetchCollection<any>('users', fallbackUsers);
+      const user = users.find(u => u.email.trim().toLowerCase() === cleanEmail);
+      if (!user) {
+        return jsonResponse({ error: 'User profile not found' }, 404);
+      }
+      if (name) user.name = name.trim();
+      if (mobile !== undefined) user.mobile = mobile.trim();
+      if (password) {
+        user.passwordHash = await hashPasswordClient(password);
+      }
+      
+      try {
+        await setDoc(doc(db, 'users', cleanEmail), user);
+        invalidateCache('users');
+      } catch (err) {
+        console.warn('[Mock Profile Update Save failed]', err);
+      }
+
+      return jsonResponse({
+        success: true,
+        message: 'Profile updated successfully!',
+        user: {
+          id: user.id || cleanEmail,
+          email: user.email || cleanEmail,
+          name: user.name || '',
+          role: user.role || 'traveler',
+          roles: user.roles || [user.role || 'traveler'],
+          status: user.status || 'active',
+          emailVerified: user.emailVerified ?? true,
+          customPermissions: user.customPermissions || [],
+          mobile: user.mobile,
+          businessName: user.businessName,
+          businessType: user.businessType,
+          partnerLocation: user.partnerLocation,
+          partnerMobile: user.partnerMobile,
+          partnerStatus: user.partnerStatus || 'none',
+          partnerDocuments: user.partnerDocuments,
+          contributorRegion: user.contributorRegion,
+          contributorReason: user.contributorReason,
+          contributorExperience: user.contributorExperience,
+          contributorStatus: user.contributorStatus || 'none'
+        }
+      });
+    }
+
+    if (method === 'POST' && pathName === '/api/user/apply-partner') {
+      const body = parseBody();
+      const { email, businessName, businessType, partnerLocation, partnerMobile, partnerDocuments } = body;
+      if (!email) {
+        return jsonResponse({ error: 'User email is required' }, 400);
+      }
+      const cleanEmail = email.trim().toLowerCase();
+      const users = await fetchCollection<any>('users', fallbackUsers);
+      const user = users.find(u => u.email.trim().toLowerCase() === cleanEmail);
+      if (!user) {
+        return jsonResponse({ error: 'User not found' }, 404);
+      }
+
+      user.businessName = businessName;
+      user.businessType = businessType;
+      user.partnerLocation = partnerLocation;
+      user.partnerMobile = partnerMobile;
+      user.partnerDocuments = partnerDocuments;
+      user.partnerStatus = 'pending';
+
+      try {
+        await setDoc(doc(db, 'users', cleanEmail), user);
+        invalidateCache('users');
+      } catch (err) {
+        console.warn('[Mock Apply Partner Save failed]', err);
+      }
+
+      return jsonResponse({ success: true, message: 'Application submitted successfully under pending status' });
+    }
+
+    if (method === 'POST' && pathName === '/api/user/apply-contributor') {
+      const body = parseBody();
+      const { email, contributorRegion, contributorReason, contributorExperience } = body;
+      if (!email) {
+        return jsonResponse({ error: 'User email is required' }, 400);
+      }
+      const cleanEmail = email.trim().toLowerCase();
+      const users = await fetchCollection<any>('users', fallbackUsers);
+      const user = users.find(u => u.email.trim().toLowerCase() === cleanEmail);
+      if (!user) {
+        return jsonResponse({ error: 'User not found' }, 404);
+      }
+
+      user.contributorRegion = contributorRegion;
+      user.contributorReason = contributorReason;
+      user.contributorExperience = contributorExperience;
+      user.contributorStatus = 'pending';
+
+      try {
+        await setDoc(doc(db, 'users', cleanEmail), user);
+        invalidateCache('users');
+      } catch (err) {
+        console.warn('[Mock Apply Contributor Save failed]', err);
+      }
+
+      return jsonResponse({ success: true, message: 'Application submitted successfully under pending status' });
+    }
+
+    if (method === 'GET' && pathName === '/api/user/leads') {
+      const mobile = queryParams.get('mobile') || '';
+      const name = queryParams.get('name') || '';
+
+      const tripLeads = await fetchCollection<TripLead>('trip_leads', []);
+      const carLeads = await fetchCollection<CarLead>('car_leads', []);
+
+      const filteredTrips = tripLeads.filter(lead => {
+        const matchMobile = mobile && lead.mobile && lead.mobile.trim() === mobile.trim();
+        const matchName = name && lead.name && lead.name.toLowerCase().trim() === name.toLowerCase().trim();
+        return matchMobile || matchName;
+      });
+
+      const filteredCars = carLeads.filter(lead => {
+        const matchMobile = mobile && lead.mobile && lead.mobile.trim() === mobile.trim();
+        const matchName = name && lead.name && lead.name.toLowerCase().trim() === name.toLowerCase().trim();
+        return matchMobile || matchName;
+      });
+
+      return jsonResponse({
+        success: true,
+        trips: filteredTrips,
+        cars: filteredCars
+      });
+    }
+
+    if (method === 'GET' && pathName === '/api/partner/listings') {
+      const name = queryParams.get('name') || '';
+      const mobile = queryParams.get('mobile') || '';
+
+      const homestaysList = await fetchCollection<Homestay>('homestays', initialHomestays);
+      const driversList = await fetchCollection<Driver>('drivers', []);
+
+      const filteredHomes = homestaysList.filter(h => {
+        return (name && h.ownerName && h.ownerName.toLowerCase().trim() === name.toLowerCase().trim()) ||
+               (mobile && h.mobile && h.mobile.trim() === mobile.trim());
+      });
+
+      const filteredDrivers = driversList.filter(d => {
+        return (name && d.name && d.name.toLowerCase().trim() === name.toLowerCase().trim()) ||
+               (mobile && d.mobile && d.mobile.trim() === mobile.trim());
+      });
+
+      return jsonResponse({
+        success: true,
+        homestays: filteredHomes,
+        drivers: filteredDrivers
+      });
+    }
+
+    if (method === 'DELETE' && pathName.startsWith('/api/partner/listings/')) {
+      const parts = pathName.replace('/api/partner/listings/', '').split('/');
+      const type = parts[0];
+      const id = parts[1];
+      const body = parseBody();
+      const { mobile, name } = body;
+
+      if (type === 'homestay') {
+        const homestays = await fetchCollection<Homestay>('homestays', initialHomestays);
+        const index = homestays.findIndex(h => h.id === id);
+        if (index === -1) {
+          return jsonResponse({ error: 'Homestay not found' }, 404);
+        }
+        const h = homestays[index];
+        const isOwner = (name && h.ownerName && h.ownerName.toLowerCase().trim() === String(name).toLowerCase().trim()) ||
+                        (mobile && h.mobile && h.mobile.trim() === String(mobile).trim());
+        if (!isOwner) {
+          return jsonResponse({ error: 'Unauthorized: You do not own this homestay listing' }, 403);
+        }
+        homestays.splice(index, 1);
+        try {
+          await deleteDoc(doc(db, 'homestays', id));
+          invalidateCache('homestays');
+        } catch (err) {
+          console.warn('[Mock Delete Homestay Save failed]', err);
+        }
+        return jsonResponse({ success: true, message: 'Homestay listing deleted successfully' });
+      } else if (type === 'driver') {
+        const drivers = await fetchCollection<Driver>('drivers', []);
+        const index = drivers.findIndex(d => d.id === id);
+        if (index === -1) {
+          return jsonResponse({ error: 'Driver/car listing not found' }, 404);
+        }
+        const d = drivers[index];
+        const isOwner = (name && d.name && d.name.toLowerCase().trim() === String(name).toLowerCase().trim()) ||
+                        (mobile && d.mobile && d.mobile.trim() === String(mobile).trim());
+        if (!isOwner) {
+          return jsonResponse({ error: 'Unauthorized: You do not own this driver list' }, 403);
+        }
+        drivers.splice(index, 1);
+        try {
+          await deleteDoc(doc(db, 'drivers', id));
+          invalidateCache('drivers');
+        } catch (err) {
+          console.warn('[Mock Delete Driver Save failed]', err);
+        }
+        return jsonResponse({ success: true, message: 'Cab/driver listing deleted successfully' });
+      } else {
+        return jsonResponse({ error: 'Invalid listing type' }, 400);
+      }
     }
 
     // ---------------- GET COLLECTION LISTINGS ----------------

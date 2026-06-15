@@ -256,7 +256,33 @@ class GraphDatabase {
         this.data.routes = this.data.routes || [];
         this.data.destinations = this.data.destinations || [];
         this.data.attractions = this.data.attractions || [];
-        this.data.homestays = this.data.homestays || [];
+        // Self-healing: Clean stale or broken default homestay images on load
+        let dbHomestaysChanged = false;
+        this.data.homestays = (this.data.homestays || []).map(h => {
+          let homestayImgChanged = false;
+          if (h.images && h.images.length > 0) {
+            const cleanedImages = h.images.map(img => {
+              if (!img || img.trim() === '' || img.includes('photo-1588880331179-bc9b93a8c5c2')) {
+                homestayImgChanged = true;
+                return DEFAULT_HOMESTAY_IMAGE;
+              }
+              return img;
+            });
+            if (homestayImgChanged) {
+              h.images = cleanedImages;
+              dbHomestaysChanged = true;
+            }
+          } else {
+            h.images = [DEFAULT_HOMESTAY_IMAGE];
+            dbHomestaysChanged = true;
+          }
+          return h;
+        });
+
+        if (dbHomestaysChanged) {
+          console.log('[Database Healing] Automatically migrator replaced broken default homestay image URLs with working ones.');
+          this.save();
+        }
         this.data.images = this.data.images || [];
         this.data.contributions = this.data.contributions || [];
         this.data.tripLeads = this.data.tripLeads || [];

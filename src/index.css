@@ -14,9 +14,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Buttery-smooth mobile horizontal touch scrolling and pan-y configuration to prevent blocking vertical scroll */
+/* Buttery-smooth mobile horizontal touch scrolling and pan-x pan-y configuration to prevent blocking vertical scroll */
 .overflow-x-auto {
-  touch-action: pan-y !important;
+  touch-action: pan-x pan-y !important;
   -webkit-overflow-scrolling: touch !important;
 }
 

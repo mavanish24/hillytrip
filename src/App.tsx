@@ -18,6 +18,17 @@ import { auth, googleSignIn, logout, uploadImageToFirebase, db } from './utils/f
 import { compressAndConvertToWebP } from './utils/imageOptimizer';
 import { hillyTripFetch } from './utils/apiInterceptor';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import { 
+  initGA, 
+  trackPageView, 
+  trackRouteSearch, 
+  trackDestinationView, 
+  trackAttractionView, 
+  trackRouteResultView, 
+  trackNavigateGoogleMaps, 
+  trackSaveDestination, 
+  trackLikeDestination 
+} from './utils/analytics';
 
 // Lazily load complex/heavy components to dramatically reduce initial mobile JS payload sizes
 const ImageGallerySystem = React.lazy(() => import('./components/ImageGallerySystem'));
@@ -1161,6 +1172,19 @@ export default function App() {
       }
     });
 
+    if (!isSaved) {
+      if (type === 'destination') {
+        const d = destinations.find(x => x.id === id);
+        if (d) trackSaveDestination(id, d.name, 'destination');
+      } else if (type === 'attraction') {
+        const a = attractions.find(x => x.id === id);
+        if (a) trackSaveDestination(id, a.name, 'attraction');
+      } else if (type === 'homestay') {
+        const h = homestays.find(x => x.id === id);
+        if (h) trackSaveDestination(id, h.name, 'homestay');
+      }
+    }
+
     setNotification({
       type: 'success',
       message: isSaved ? 'Removed from Saved Places!' : '🔖 Saved to your local collection!'
@@ -1189,6 +1213,15 @@ export default function App() {
         contentType,
         timestamp: new Date().toISOString()
       }]);
+    }
+
+    // Track GA4 like custom events
+    if (contentType === 'destination') {
+      const d = destinations.find(x => x.id === contentId);
+      if (d) trackLikeDestination(contentId, d.name, !alreadyLiked, 'destination');
+    } else if (contentType === 'attraction') {
+      const a = attractions.find(x => x.id === contentId);
+      if (a) trackLikeDestination(contentId, a.name, !alreadyLiked, 'attraction');
     }
 
     try {
@@ -1498,6 +1531,9 @@ export default function App() {
 
   // Listen for router history and parameter updates
   useEffect(() => {
+    // Globally load GA4 on startup
+    initGA();
+
     const handlePopState = () => {
       setCurrentHash(window.location.pathname || '/');
       window.scrollTo(0, 0);
@@ -1801,6 +1837,9 @@ export default function App() {
             const resolvedFromId = resolveSlugToHubId(fromId);
             const resolvedToId = resolveSlugToHubId(toId);
 
+            // Track GA4 Route Search
+            trackRouteSearch(resolvedFromId, resolvedToId);
+
             // 7. Diagnostic logging: resolved hub IDs
             console.log('[Route Diagnostic] resolved hub IDs:', {
               from: resolvedFromId,
@@ -1866,6 +1905,9 @@ export default function App() {
               setActiveRouteResults(data);
               setSelectedRouteIdx(shortestIdx);
               setShowAllRoutes(false);
+
+              // Track GA4 Route Result View
+              trackRouteResultView(resolvedFromId, resolvedToId, data.length);
 
               try {
                 localStorage.setItem(cacheKey, JSON.stringify({ data, shortestIdx }));
@@ -2342,7 +2384,28 @@ export default function App() {
       script.innerHTML = JSON.stringify(schemaObj);
       document.head.appendChild(script);
     }
+
+    // Capture manual pageview on route shifts
+    trackPageView(currentPath);
   }, [currentPath, destinations, attractions, homestays]);
+
+  // Track Destination detailed view custom events
+  useEffect(() => {
+    if (activeDestDetail?.destination?.id) {
+      trackDestinationView(activeDestDetail.destination.id, activeDestDetail.destination.name);
+    }
+  }, [activeDestDetail?.destination?.id]);
+
+  // Track Attraction detailed view custom events
+  useEffect(() => {
+    if (activeAttrDetail?.attraction?.id) {
+      trackAttractionView(
+        activeAttrDetail.attraction.id,
+        activeAttrDetail.attraction.name,
+        activeAttrDetail.attraction.category
+      );
+    }
+  }, [activeAttrDetail?.attraction?.id]);
 
   // Load User Analytics directly from Firebase
   const loadUserAnalytics = async () => {
@@ -4502,10 +4565,24 @@ export default function App() {
                 SECTION 1: FEATURED ATTRACTIONS
                 ======================================================== */}
             {(() => {
-              const featuredAttractions = attractions
-                .filter(a => !!a.isFeaturedAttraction)
-                .slice()
-                .reverse()
+              // Automatically select the top featured attractions based on user likes, visits/clicks, gems and properties
+              const featuredAttractions = [...attractions]
+                .map(a => {
+                  const likeCount = likes.filter(l => l.contentId === a.id).length;
+                  const viewCount = attractionStats[a.id] || 0;
+                  const isHidden = !!a.isHiddenGem;
+                  
+                  // Score is calculated from active user engagement and local experts' baseline boosts
+                  let baselineBoost = 0;
+                  if (a.id === 'tiger-hill') baselineBoost = 40;
+                  if (a.id === 'mirik-lake') baselineBoost = 35;
+                  if (a.id === 'delo-park') baselineBoost = 30;
+                  if (a.id === 'lava-monastery') baselineBoost = 25;
+                  
+                  const score = (likeCount * 15) + (viewCount * 2) + (isHidden ? 15 : 0) + (a.isFeaturedAttraction ? 50 : 0) + baselineBoost;
+                  return { ...a, autoFeaturedScore: score };
+                })
+                .sort((a, b) => b.autoFeaturedScore - a.autoFeaturedScore)
                 .slice(0, 4);
 
               return (
@@ -4517,7 +4594,7 @@ export default function App() {
                           📍 Featured Attractions
                         </h2>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                          Most stunning sightseeing sites, scenic views, and trails selected by Hill Station experts.
+                          Most stunning sightseeing sites, scenic views, and trails automatically updated by visitor engagement.
                         </p>
                       </div>
                       <button 
@@ -4533,7 +4610,7 @@ export default function App() {
                       <div className="text-center py-12 px-6 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-205/80">
                         <Sparkles className="w-10 h-10 text-emerald-500 mx-auto stroke-1.2 mb-3 animate-pulse" />
                         <p className="text-sm font-extrabold text-slate-700 dark:text-slate-350">Beautiful Attractions Await!</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Admins can mark Attractions as "Featured Attraction" in the spreadsheet editor.</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Attractions automatically update here dynamically based on likes, visitor clicks, and ratings.</p>
                       </div>
                     ) : (
                       <div className="flex sm:grid gap-6 overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-805 sm:grid-cols-2 lg:grid-cols-4">
@@ -4674,8 +4751,19 @@ export default function App() {
                 SECTION 3: POPULAR DESTINATIONS
                 ======================================================== */}
             {(() => {
-              const popularDestinations = destinations
-                .filter(d => !!d.isPopularDestination)
+              // Automatically select the top popular destinations based on user likes, visits, and density of choices
+              const popularDestinations = [...destinations]
+                .map(d => {
+                  const likeCount = likes.filter(l => l.contentId === d.id).length;
+                  const viewCount = destinationStats[d.id] || 0;
+                  const homestayCount = homestays.filter(h => h.destinationId === d.id).length;
+                  const attractionCount = attractions.filter(a => a.destinationId === d.id).length;
+                  
+                  // Score is calculated from user engagement (views/likes) and listing density (sights/homestays)
+                  const score = (likeCount * 12) + (viewCount * 1.5) + (homestayCount * 5) + (attractionCount * 3) + (d.isPopularDestination ? 50 : 0);
+                  return { ...d, autoPopularScore: score };
+                })
+                .sort((a, b) => b.autoPopularScore - a.autoPopularScore)
                 .slice(0, 4);
 
               return (
@@ -4687,7 +4775,7 @@ export default function App() {
                           🏔 Popular Destinations
                         </h2>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                          Highly recommended general destinations and major hubs marked as guest selections.
+                          Highly recommended general destinations and major hubs, automatically updated by travel traffic, homestays, and likes.
                         </p>
                       </div>
                       <button 
@@ -4703,7 +4791,7 @@ export default function App() {
                       <div className="text-center py-12 px-6 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-805/85">
                         <Sparkles className="w-10 h-10 text-sky-500 mx-auto stroke-1.2 mb-3 animate-pulse" />
                         <p className="text-sm font-extrabold text-slate-705 dark:text-slate-350">Popular Stations Coming Soon!</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Admins can mark Destinations as "Popular Destination" in the spreadsheet editor.</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Destinations automatically update here dynamically based on likes, visitor clicks, and listing counts.</p>
                       </div>
                     ) : (
                       <div className="flex sm:grid gap-6 overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-805 sm:grid-cols-2 lg:grid-cols-4">
@@ -4986,7 +5074,12 @@ export default function App() {
                                         })()}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        onClick={(e) => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          const fromName = hubs.find(h => h.id === resItem.route.fromHubId)?.name || resItem.route.fromHubId;
+                                          const toName = hubs.find(h => h.id === resItem.route.toHubId)?.name || resItem.route.toHubId;
+                                          trackNavigateGoogleMaps(`${fromName} to ${toName}`, resItem.route.latitude, resItem.route.longitude);
+                                        }}
                                         className="w-full sm:w-auto px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs tracking-wider uppercase rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 cursor-pointer select-none"
                                       >
                                         <Compass className="w-4 h-4" />
