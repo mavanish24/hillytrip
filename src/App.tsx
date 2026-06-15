@@ -1562,11 +1562,15 @@ export default function App() {
       setLoading(true);
       
       const localSearchRoutes = (fromHubId: string, toHubId: string): RouteSearchResult[] => {
+        // Fall back to initial static arrays if state is still loading/empty
+        const currentHubs = hubs && hubs.length > 0 ? hubs : initialHubs;
+        const currentRoutes = routes && routes.length > 0 ? routes : initialRoutes;
+
         const hubsMap = new Map<string, Hub>();
-        hubs.forEach(h => hubsMap.set(h.id.toLowerCase().trim(), h));
+        currentHubs.forEach(h => hubsMap.set(h.id.toLowerCase().trim(), h));
 
         const adj = new Map<string, Route[]>();
-        routes.forEach(r => {
+        currentRoutes.forEach(r => {
           const rf = r.fromHubId.toLowerCase().trim();
           const rt = r.toHubId.toLowerCase().trim();
 
@@ -1580,7 +1584,7 @@ export default function App() {
             ...r,
             fromHubId: r.toHubId,
             toHubId: r.fromHubId,
-            path: [...r.path].reverse()
+            path: r.path ? [...r.path].reverse() : []
           };
           adj.get(rt)!.push(revRoute);
         });
@@ -1590,13 +1594,22 @@ export default function App() {
         const fromHub = hubsMap.get(fromHubId.toLowerCase().trim());
         const toHub = hubsMap.get(toHubId.toLowerCase().trim());
 
-        if (!fromHub || !toHub) return [];
+        console.log('[Route Detail Diagnostic - Engine Audit]');
+        console.log(`- Source Node Query ID: "${fromHubId}" (Normalized mapping found: ${fromHub ? `Hub "${fromHub.name}" [ID: ${fromHub.id}]` : 'None'})`);
+        console.log(`- Destination Node Query ID: "${toHubId}" (Normalized mapping found: ${toHub ? `Hub "${toHub.name}" [ID: ${toHub.id}]` : 'None'})`);
+        console.log(`- Graph Node Count: ${currentHubs.length}`);
+        console.log(`- Graph Edge Count: ${currentRoutes.length}`);
+
+        if (!fromHub || !toHub) {
+          console.log('- BFS Terminated: Source or destination node not mapped in graph keys.');
+          return [];
+        }
 
         const fIdNormalized = fromHub.id.toLowerCase().trim();
         const tIdNormalized = toHub.id.toLowerCase().trim();
 
         // Find direct routes
-        const directRoutes = routes.filter(r => {
+        const directRoutes = currentRoutes.filter(r => {
           const rf = r.fromHubId.toLowerCase().trim();
           const rt = r.toHubId.toLowerCase().trim();
           return (rf === fIdNormalized && rt === tIdNormalized) ||
@@ -1612,7 +1625,7 @@ export default function App() {
                 ...r,
                 fromHubId: fromHub.id,
                 toHubId: toHub.id,
-                path: [...r.path].reverse()
+                path: r.path ? [...r.path].reverse() : []
               },
               fromHub,
               toHub
@@ -1685,7 +1698,7 @@ export default function App() {
             totalTimeMax += route.timeMax;
             if (!route.verified) allVerified = false;
 
-            const cleanStopsInRoute = route.path.slice(1);
+            const cleanStopsInRoute = route.path ? route.path.slice(1) : [];
             combinedPath.push(...cleanStopsInRoute);
 
             return {
@@ -1716,6 +1729,13 @@ export default function App() {
             hops
           });
         });
+
+        console.log(`- BFS Paths Computed Result count: ${results.length}`);
+        if (results.length > 0) {
+          console.log('- Paths detail:', results.map(r => `${r.route.fromHubId} -> ${r.route.toHubId} (Hops: ${r.hops ? r.hops.length : 1}, Time: ${r.route.timeMin}-${r.route.timeMax}m)`).join(' | '));
+        } else {
+          console.log('- BFS Pathfinding failed to connect these specific nodes.');
+        }
 
         return results;
       };
@@ -1752,13 +1772,18 @@ export default function App() {
               console.error('[Route Parser] Error loading hubs:', err);
             }
             if (!Array.isArray(allHubsList) || allHubsList.length === 0) {
-              allHubsList = initialHubs;
+              allHubsList = hubs.length > 0 ? hubs : initialHubs;
             }
 
             // Slug-to-Hub ID Resolution function
             const resolveSlugToHubId = (slugName: string): string => {
               const clean = slugName.trim().toLowerCase();
               if (!clean) return '';
+
+              // Static equivalents fallbacks
+              const currentHubs = hubs && hubs.length > 0 ? hubs : initialHubs;
+              const currentDests = destinations && destinations.length > 0 ? destinations : initialDestinations;
+              const currentAttrs = attractions && attractions.length > 0 ? attractions : initialAttractions;
 
               // Strict custom slugify helper for comparisons
               const getSlug = (text: string): string => {
@@ -1789,7 +1814,7 @@ export default function App() {
               if (byName) return byName.id;
 
               // Check if matches a destination's name, ID or slug, and resolve to nearestHubId
-              const byDest = destinations.find(d => 
+              const byDest = currentDests.find(d => 
                 d.id.toLowerCase() === clean || 
                 getSlug(d.id) === cleanSlug || 
                 d.name.toLowerCase() === clean || 
@@ -1801,7 +1826,7 @@ export default function App() {
               }
 
               // Check if matches an attraction's name, ID or slug
-              const byAttr = attractions.find(a => 
+              const byAttr = currentAttrs.find(a => 
                 a.id.toLowerCase() === clean || 
                 getSlug(a.id) === cleanSlug || 
                 a.name.toLowerCase() === clean || 
@@ -1814,7 +1839,7 @@ export default function App() {
                 }
                 // Fallback to parent destination's nearestHubId
                 if (byAttr.destinationId) {
-                  const parentDest = destinations.find(d => d.id === byAttr.destinationId);
+                  const parentDest = currentDests.find(d => d.id === byAttr.destinationId);
                   if (parentDest && parentDest.nearestHubId) {
                     const nearHub = allHubsList.find(h => h.id.toLowerCase() === parentDest.nearestHubId.toLowerCase().trim());
                     if (nearHub) return nearHub.id;
@@ -2213,7 +2238,7 @@ export default function App() {
     };
 
     loadRouteData();
-  }, [currentPath, isAdmin]);
+  }, [currentPath, isAdmin, hubs, routes, destinations, attractions]);
 
   // Client-Side SEO Management hook
   useEffect(() => {
