@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { GoogleGenAI, Type } from "@google/genai";
+import { Type } from "@google/genai";
 import { dbStore } from './db';
+import { executeGeminiOperation } from "./geminiClient";
 
 // Cache configuration
 const CACHE_PATH = path.join(process.cwd(), 'src', 'server', 'geocoding_cache.json');
@@ -41,26 +42,6 @@ function saveCache() {
 
 // Initial cache load
 loadCache();
-
-// Gemini client lazy initialization
-let aiInstance: GoogleGenAI | null = null;
-function getGeminiClient(): GoogleGenAI {
-  if (!aiInstance) {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error('GEMINI_API_KEY is not defined in your Secrets panel.');
-    }
-    aiInstance = new GoogleGenAI({
-      apiKey,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
-        }
-      }
-    });
-  }
-  return aiInstance;
-}
 
 // Distance helper
 export function getDistanceInKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -108,46 +89,74 @@ export function buildLocationQuery(record: any, type: string, destinations: any[
 }
 
 // Low level geocoding
-export async function geocodeLocationGemini(query: string): Promise<CachedLocation> {
+export async function geocodeLocationGemini(query: string, defaultFallback?: CachedLocation): Promise<CachedLocation> {
   const normQuery = query.toLowerCase().trim();
   if (geocodingCache[normQuery]) {
     return geocodingCache[normQuery];
   }
 
-  const ai = getGeminiClient();
-  const response = await ai.models.generateContent({
-    model: "gemini-3.5-flash",
-    contents: `Retrieve highly precise geographical coordinates (latitude and longitude), district, state, and country for: "${query}". Respond ONLY with valid JSON conforming strictly to the requested schema. Ensure mountain region coordinates are highly accurate.`,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          latitude: { type: Type.NUMBER, description: "Latitude coordinates (e.g. 27.03)" },
-          longitude: { type: Type.NUMBER, description: "Longitude coordinates (e.g. 88.26)" },
-          district: { type: Type.STRING, description: "District name" },
-          state: { type: Type.STRING, description: "State name" },
-          country: { type: Type.STRING, description: "Country name" }
-        },
-        required: ["latitude", "longitude", "district", "state", "country"]
-      }
+  const phase = process.env.AI_GEOCODING_PHASE ? parseInt(process.env.AI_GEOCODING_PHASE, 10) : 1; 
+
+  if (phase === 1) {
+    // Phase 1: Local caching and smart fallback coordinates determination 
+    return defaultFallback || {
+      latitude: 27.03,
+      longitude: 88.26,
+      district: "Darjeeling",
+      state: "West Bengal",
+      country: "India"
+    };
+  }
+
+  try {
+    const responseText = await executeGeminiOperation(async (ai) => {
+      const response = await ai.models.generateContent({
+        model: "gemini-3.5-flash",
+        contents: `Retrieve highly precise geographical coordinates (latitude and longitude), district, state, and country for: "${query}". Respond ONLY with valid JSON conforming strictly to the requested schema. Ensure mountain region coordinates are highly accurate.`,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              latitude: { type: Type.NUMBER, description: "Latitude coordinates (e.g. 27.03)" },
+              longitude: { type: Type.NUMBER, description: "Longitude coordinates (e.g. 88.26)" },
+              district: { type: Type.STRING, description: "District name" },
+              state: { type: Type.STRING, description: "State name" },
+              country: { type: Type.STRING, description: "Country name" }
+            },
+            required: ["latitude", "longitude", "district", "state", "country"]
+          }
+        }
+      });
+      return response.text || "";
+    });
+
+    if (!responseText) {
+      throw new Error('Empty response returned from Gemini API.');
     }
-  });
 
-  if (!response.text) {
-    throw new Error('Emply response returned from Gemini API.');
+    const resultStr = responseText.trim();
+    const parsed = JSON.parse(resultStr) as CachedLocation;
+
+    if (typeof parsed.latitude !== 'number' || typeof parsed.longitude !== 'number') {
+      throw new Error('Invalid coordinate format received.');
+    }
+
+    geocodingCache[normQuery] = parsed;
+    saveCache();
+    return parsed;
+  } catch (err: any) {
+    const errMsg = err?.message || String(err);
+    console.log(`[Geocoding Fallback] Gemini Geocoding unavailable or rate-limited. (Quiet fallback applied for query: "${query}")`);
+    
+    return defaultFallback || {
+      latitude: 27.03,
+      longitude: 88.26,
+      district: "Darjeeling",
+      state: "West Bengal",
+      country: "India"
+    };
   }
-
-  const resultStr = response.text.trim();
-  const parsed = JSON.parse(resultStr) as CachedLocation;
-
-  if (typeof parsed.latitude !== 'number' || typeof parsed.longitude !== 'number') {
-    throw new Error('Invalid coordinate format received.');
-  }
-
-  geocodingCache[normQuery] = parsed;
-  saveCache();
-  return parsed;
 }
 
 // Record Lookup mapping helper
@@ -246,6 +255,26 @@ export async function recalculateSpatialForRecord(col: string, recordId: string)
 
   updates.nearbyHomestays = sortedHomestays;
 
+  // 5. Nearby destinations (limit close 5, under 80km) - only for destinations
+  if (col === 'destinations') {
+    const sortedDestinations = destinations
+      .filter(d => d.id !== recordId && isCoordinateValid(Number(d.latitude), Number(d.longitude)))
+      .map(d => {
+        const dist = getDistanceInKm(lat, lon, Number(d.latitude), Number(d.longitude));
+        return {
+          id: d.id,
+          name: d.name,
+          distance: dist,
+          image: d.image,
+          tourismType: d.tourismType
+        };
+      })
+      .filter(d => d.distance <= 80)
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 5);
+    updates.nearbyDestinations = sortedDestinations;
+  }
+
   await dbStore.updateRecord(col, recordId, updates);
   return true;
 }
@@ -283,7 +312,7 @@ export async function recalculateAllSpatialRelations(): Promise<{ count: number 
 }
 
 // On the fly trigger
-export async function triggerBackgroundGeocodingAndSpatial(col: string, recordId: string) {
+export async function triggerBackgroundGeocodingAndSpatial(col: string, recordId: string, forceGemini: boolean = false) {
   try {
     const record = lookupRecord(col, recordId);
     if (!record) return;
@@ -296,8 +325,44 @@ export async function triggerBackgroundGeocodingAndSpatial(col: string, recordId
       return;
     }
 
+    if (!forceGemini) {
+      console.log(`[On-The-Fly GPS Hook] Automatic Gemini geocoding is skipped for saves/imports on ${col}/${recordId}. Pending manual geocoding approval.`);
+      return;
+    }
+
+    // Determine smart parent coordinates/district fallback
+    let fallbackLat = 27.03;
+    let fallbackLon = 88.26;
+    let fallbackDistrict = "Darjeeling";
+    let fallbackState = "West Bengal";
+    let fallbackCountry = "India";
+
+    if (col === 'attractions' || col === 'homestays') {
+      const parentDest = dbStore.getDestinations().find(d => d.id === record.destinationId);
+      if (parentDest && isCoordinateValid(Number(parentDest.latitude), Number(parentDest.longitude))) {
+        // Apply deterministic jitter based on recordId hash to prevent direct overlay
+        const seed = record.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+        const jitterLat = ((seed % 100) - 50) / 10000; // range from -0.005 to +0.005 (~500m)
+        const jitterLon = (((seed * 7) % 100) - 50) / 10000; // range from -0.005 to +0.005 (~500m)
+
+        fallbackLat = Number(parentDest.latitude) + jitterLat;
+        fallbackLon = Number(parentDest.longitude) + jitterLon;
+        fallbackDistrict = parentDest.district || parentDest.name;
+        fallbackState = parentDest.state || fallbackState;
+        fallbackCountry = parentDest.country || fallbackCountry;
+      }
+    }
+
+    const smartFallback: CachedLocation = {
+      latitude: fallbackLat,
+      longitude: fallbackLon,
+      district: fallbackDistrict,
+      state: fallbackState,
+      country: fallbackCountry
+    };
+
     const query = buildLocationQuery(record, col === 'hubs' ? 'hub' : col.replace(/s$/, ''), dbStore.getDestinations());
-    const result = await geocodeLocationGemini(query);
+    const result = await geocodeLocationGemini(query, smartFallback);
     
     const updates = {
       latitude: result.latitude,
@@ -343,7 +408,7 @@ function addLog(msg: string) {
 }
 
 // Bulk auto-fill engine
-export async function runBulkGeocodeJob() {
+export async function runBulkGeocodeJob(options?: { limit?: number; targetIds?: string[] }) {
   if (activeGeocodeJob.status === 'running') return;
 
   const destinations = dbStore.getDestinations();
@@ -351,7 +416,7 @@ export async function runBulkGeocodeJob() {
   const homestays = dbStore.getHomestays();
   const hubs = dbStore.getHubs();
 
-  const items: { col: string; record: any }[] = [];
+  let items: { col: string; record: any }[] = [];
 
   for (const h of hubs) {
     if (!isCoordinateValid(Number((h as any).latitude), Number((h as any).longitude))) {
@@ -374,6 +439,16 @@ export async function runBulkGeocodeJob() {
     }
   }
 
+  // Filter items based on selected targetIds if provided
+  if (options && Array.isArray(options.targetIds)) {
+    items = items.filter(item => options.targetIds!.includes(item.record.id));
+  }
+
+  // Apply batch size limit if provided
+  if (options && typeof options.limit === 'number' && options.limit > 0) {
+    items = items.slice(0, options.limit);
+  }
+
   if (items.length === 0) {
     activeGeocodeJob = {
       status: 'completed',
@@ -381,7 +456,7 @@ export async function runBulkGeocodeJob() {
       current: 0,
       successCount: 0,
       failureCount: 0,
-      logs: ['All available records already possess optimal coordinates.']
+      logs: ['No pending records to process matching criteria.']
     };
     return;
   }

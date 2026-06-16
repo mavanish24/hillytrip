@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, getDocs, collection, getDocFromServer, deleteDoc, onSnapshot, setLogLevel } from 'firebase/firestore';
-import { Hub, Route, Destination, Attraction, Homestay, ImageItem, Contribution, TripLead, CarLead, RouteSearchResult, Driver, UserRole, User, Role, Permission, RolePermission, UserPermission, AuditLog, PhotoContribution, PhotoNotification, AppNotification, ClaimRequest, Inquiry, OwnershipHistory, PendingUpdate, DEFAULT_HOMESTAY_IMAGE } from '../types';
+import { Hub, Route, Destination, Attraction, Homestay, ImageItem, Contribution, TripLead, CarLead, RouteSearchResult, Driver, UserRole, User, Role, Permission, RolePermission, UserPermission, AuditLog, PhotoContribution, PhotoNotification, AppNotification, ClaimRequest, Inquiry, OwnershipHistory, PendingUpdate } from '../types';
+import { DEFAULT_HOMESTAY_IMAGE } from '../constants';
 import { initialHubs, initialDestinations, initialAttractions, initialHomestays, initialRoutes } from '../data/initialData';
 
 const DB_FILE = path.join(process.cwd(), 'hillytrip_db_store.json');
@@ -25,6 +26,7 @@ if (fs.existsSync(CONFIG_FILE)) {
 }
 
 export let firestoreDb: any = null;
+export let isFirestoreOnline = false;
 if (firebaseConfig) {
   try {
     const app = initializeApp(firebaseConfig);
@@ -47,7 +49,10 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number, errorMessage = "
 }
 
 async function testConnection(): Promise<boolean> {
-  if (!firestoreDb) return false;
+  if (!firestoreDb) {
+    isFirestoreOnline = false;
+    return false;
+  }
   try {
     await withTimeout(
       getDocFromServer(doc(firestoreDb, 'hubs', 'connection-test-doc-id')),
@@ -55,8 +60,10 @@ async function testConnection(): Promise<boolean> {
       "Firestore connection check timed out"
     );
     console.log("Firebase Firestore connection verified successfully.");
+    isFirestoreOnline = true;
     return true;
   } catch (error) {
+    isFirestoreOnline = false;
     if (error instanceof Error && error.message.includes('the client is offline')) {
       console.warn("Please check your Firebase configuration. The client is offline.");
     } else {
@@ -90,7 +97,7 @@ function sanitizeDocumentPayload(colName: string, data: any): any {
   const schemaKeys: Record<string, string[]> = {
     hubs: ['id', 'name', 'type', 'latitude', 'longitude', 'district', 'state', 'country'],
     routes: ['id', 'fromHubId', 'toHubId', 'path', 'type', 'fareMin', 'fareMax', 'timeMin', 'timeMax', 'verified', 'lastUpdated', 'distance'],
-    destinations: ['id', 'name', 'description', 'tourismType', 'bestSeason', 'image', 'gallery', 'isHiddenGem', 'isFeaturedThisWeek', 'isPopularDestination', 'coverImage', 'coverPrompt', 'coverStatus', 'latitude', 'longitude', 'district', 'state', 'country', 'nearestHubId', 'distanceFromHub', 'nearbyAttractions', 'nearbyHomestays'],
+    destinations: ['id', 'name', 'description', 'tourismType', 'bestSeason', 'image', 'gallery', 'isHiddenGem', 'isFeaturedThisWeek', 'isPopularDestination', 'coverImage', 'coverPrompt', 'coverStatus', 'latitude', 'longitude', 'district', 'state', 'country', 'nearestHubId', 'distanceFromHub', 'nearbyAttractions', 'nearbyHomestays', 'nearbyDestinations'],
     attractions: ['id', 'name', 'category', 'destinationId', 'description', 'image', 'gallery', 'isHiddenGem', 'isFeaturedThisWeek', 'isFeaturedAttraction', 'coverImage', 'coverPrompt', 'coverStatus', 'latitude', 'longitude', 'district', 'state', 'country', 'nearestDestinationId', 'distanceFromDestination', 'nearestHubId', 'distanceFromHub'],
     homestays: ['id', 'name', 'destinationId', 'priceMin', 'priceMax', 'contact', 'amenities', 'images', 'status', 'latitude', 'longitude', 'district', 'state', 'country', 'nearestDestinationId', 'distanceFromDestination', 'nearestHubId', 'distanceFromHub', 'ownerId', 'description', 'whatsappNumber', 'roomRates', 'contactInfo', 'checkInInfo', 'houseRules', 'breakfastIncluded', 'lunchAvailable', 'dinnerAvailable'],
     drivers: ['id', 'name', 'mobile', 'whatsapp', 'vehicleType', 'vehicleName', 'vehicleNumber', 'serviceAreas', 'pricingPerDay', 'createdAt', 'status', 'licenseNumber'],
@@ -133,7 +140,10 @@ function sanitizeDocumentPayload(colName: string, data: any): any {
 }
 
 async function syncDoc(collectionName: string, docId: string, data: any) {
-  if (!firestoreDb) return;
+  if (!firestoreDb || !isFirestoreOnline) {
+    console.log(`[Firestore Offline] Skipping sync for ${collectionName}/${docId} because connection is not established.`);
+    return;
+  }
   try {
     const cleaned = sanitizeDocumentPayload(collectionName, data);
     const docRef = doc(firestoreDb, collectionName, docId);
@@ -145,7 +155,10 @@ async function syncDoc(collectionName: string, docId: string, data: any) {
 }
 
 async function deleteDocInFirestore(collectionName: string, docId: string) {
-  if (!firestoreDb) return;
+  if (!firestoreDb || !isFirestoreOnline) {
+    console.log(`[Firestore Offline] Skipping delete for ${collectionName}/${docId} because connection is not established.`);
+    return;
+  }
   try {
     const docRef = doc(firestoreDb, collectionName, docId);
     await deleteDoc(docRef);
@@ -156,15 +169,27 @@ async function deleteDocInFirestore(collectionName: string, docId: string) {
 }
 
 async function syncCollectionToFirestore(collectionName: string, items: any[]) {
-  if (!firestoreDb) return;
+  if (!firestoreDb || !isFirestoreOnline) return;
   try {
-    for (const item of items) {
-      if (!item.id) continue;
-      const cleaned = sanitizeDocumentPayload(collectionName, item);
-      const docRef = doc(firestoreDb, collectionName, item.id);
-      await setDoc(docRef, cleaned);
+    const validItems = items.filter(item => item && item.id);
+    const limit = 40; // Write 40 documents concurrently in stages
+    const chunks: any[][] = [];
+    for (let i = 0; i < validItems.length; i += limit) {
+      chunks.push(validItems.slice(i, i + limit));
     }
-    console.log(`Synced ${items.length} records of ${collectionName} to Firestore.`);
+    
+    let successCount = 0;
+    for (const chunk of chunks) {
+      await Promise.all(
+        chunk.map(async (item) => {
+          const cleaned = sanitizeDocumentPayload(collectionName, item);
+          const docRef = doc(firestoreDb, collectionName, item.id);
+          await setDoc(docRef, cleaned);
+          successCount++;
+        })
+      );
+    }
+    console.log(`Synced ${successCount} records of ${collectionName} to Firestore in throttled concurrent chunks.`);
   } catch (e) {
     console.error(`Error syncing ${collectionName} to Firestore:`, e);
   }
@@ -234,6 +259,7 @@ class GraphDatabase {
   constructor() {
     this.load();
     testConnection().then((isOk) => {
+      isFirestoreOnline = isOk;
       if (isOk) {
         this.loadFromFirestore().catch(err => {
           console.error("[Firestore Sync] Error loading from Firestore:", err);
@@ -242,6 +268,7 @@ class GraphDatabase {
         console.log("[Firestore Sync] Connection check failed or timed out. Standard local database files used natively, preventing any startup hangs.");
       }
     }).catch(err => {
+      isFirestoreOnline = false;
       console.error("[Firestore Sync] Exception during Firestore connection check:", err);
     });
   }
@@ -251,14 +278,86 @@ class GraphDatabase {
       if (fs.existsSync(DB_FILE)) {
         const fileContent = fs.readFileSync(DB_FILE, 'utf-8');
         this.data = JSON.parse(fileContent);
-        // Ensure lists exist
-        this.data.hubs = this.data.hubs || [];
-        this.data.routes = this.data.routes || [];
-        this.data.destinations = this.data.destinations || [];
-        this.data.attractions = this.data.attractions || [];
+
+        // Self-healing: Unpack any flat arrays that were erroneously stored as a nested object under ID "bulk"
+        let didUnpackBulk = false;
+        for (const colKey of Object.keys(this.data)) {
+          const arr = this.data[colKey as keyof Schema];
+          if (Array.isArray(arr)) {
+            const bulkIdx = arr.findIndex((x: any) => x && x.id === 'bulk');
+            if (bulkIdx > -1) {
+            const bulkObj: any = arr[bulkIdx];
+            console.log(`[Database Healing Local] Detected nested "bulk" document in collection "${colKey}". Processing unpack...`);
+              if (bulkObj.records && Array.isArray(bulkObj.records)) {
+                const existingMap = new Map<string, any>();
+                arr.forEach((item: any, idx: number) => {
+                  if (idx !== bulkIdx && item && item.id) {
+                    existingMap.set(String(item.id).toLowerCase().trim(), item);
+                  }
+                });
+                bulkObj.records.forEach((item: any) => {
+                  if (item && item.id) {
+                    existingMap.set(String(item.id).toLowerCase().trim(), item);
+                  }
+                });
+                this.data[colKey as keyof Schema] = Array.from(existingMap.values()) as any;
+                didUnpackBulk = true;
+                console.log(`[Database Healing Local] Successfully unpacked and flattened ${bulkObj.records.length} records in collection "${colKey}".`);
+              } else {
+                arr.splice(bulkIdx, 1);
+                didUnpackBulk = true;
+                console.log(`[Database Healing Local] Stale or empty "bulk" document removed from collection "${colKey}".`);
+              }
+            }
+          }
+        }
+        if (didUnpackBulk) {
+          this.save();
+        }
+
+        // Self-healing helper: ensure lists exist and filter out any items missing 'id'
+        let didHealIds = false;
+        const cleanArr = (arr: any[] | undefined, label: string): any[] => {
+          if (!arr || !Array.isArray(arr)) return [];
+          const initialLen = arr.length;
+          const filtered = arr.filter(item => item && typeof item === 'object' && item.id);
+          if (filtered.length !== initialLen) {
+            console.log(`[Database Healing] Removed ${initialLen - filtered.length} corrupt records missing IDs from collection ${label}`);
+            didHealIds = true;
+          }
+          return filtered;
+        };
+
+        // Filter and assign with healing, then smart merge with default template seed definitions to prevent any loss of reference data and auto-heal missing documents
+        const mergeWithInitial = (currentList: any[], initialList: any[], label: string): any[] => {
+          const cleanedCurrent = cleanArr(currentList, label);
+          const mergedMap = new Map<string, any>();
+          initialList.forEach(item => {
+            if (item && item.id) {
+              mergedMap.set(String(item.id).toLowerCase().trim(), item);
+            }
+          });
+          cleanedCurrent.forEach(item => {
+            if (item && item.id) {
+              mergedMap.set(String(item.id).toLowerCase().trim(), item);
+            }
+          });
+          if (cleanedCurrent.length < initialList.length) {
+            console.log(`[Database Healing] Restored missing ${initialList.length - cleanedCurrent.length} ${label} records from default templates.`);
+            didHealIds = true;
+          }
+          return Array.from(mergedMap.values());
+        };
+
+        this.data.hubs = mergeWithInitial(this.data.hubs, initialHubs, 'hubs');
+        this.data.routes = mergeWithInitial(this.data.routes, initialRoutes, 'routes');
+        this.data.destinations = mergeWithInitial(this.data.destinations, initialDestinations, 'destinations');
+        this.data.attractions = mergeWithInitial(this.data.attractions, initialAttractions, 'attractions');
+
         // Self-healing: Clean stale or broken default homestay images on load
         let dbHomestaysChanged = false;
-        this.data.homestays = (this.data.homestays || []).map(h => {
+        const rawHomestays = cleanArr(this.data.homestays, 'homestays');
+        this.data.homestays = rawHomestays.map(h => {
           let homestayImgChanged = false;
           if (h.images && h.images.length > 0) {
             const cleanedImages = h.images.map(img => {
@@ -280,32 +379,36 @@ class GraphDatabase {
         });
 
         if (dbHomestaysChanged) {
-          console.log('[Database Healing] Automatically migrator replaced broken default homestay image URLs with working ones.');
+          console.log('[Database Healing] Automatically replaced broken default homestay image URLs with working ones.');
+        }
+
+        this.data.images = cleanArr(this.data.images, 'images');
+        this.data.contributions = cleanArr(this.data.contributions, 'contributions');
+        this.data.tripLeads = cleanArr(this.data.tripLeads, 'tripLeads');
+        this.data.carLeads = cleanArr(this.data.carLeads, 'carLeads');
+        this.data.drivers = cleanArr(this.data.drivers, 'drivers');
+        this.data.userRoles = cleanArr(this.data.userRoles, 'userRoles');
+        this.data.users = cleanArr(this.data.users, 'users');
+        this.data.roles = cleanArr(this.data.roles, 'roles');
+        this.data.permissions = cleanArr(this.data.permissions, 'permissions');
+        this.data.rolePermissions = cleanArr(this.data.rolePermissions, 'rolePermissions');
+        this.data.userPermissions = cleanArr(this.data.userPermissions, 'userPermissions');
+        this.data.auditLogs = cleanArr(this.data.auditLogs, 'auditLogs');
+        this.data.photoContributions = cleanArr(this.data.photoContributions, 'photoContributions');
+        this.data.notifications = cleanArr(this.data.notifications, 'notifications');
+        this.data.appNotifications = cleanArr(this.data.appNotifications, 'appNotifications');
+        this.data.claimRequests = cleanArr(this.data.claimRequests, 'claimRequests');
+        this.data.inquiries = cleanArr(this.data.inquiries, 'inquiries');
+        this.data.ownershipHistory = cleanArr(this.data.ownershipHistory, 'ownershipHistory');
+        this.data.pendingUpdates = cleanArr(this.data.pendingUpdates, 'pendingUpdates');
+
+        if (didHealIds || dbHomestaysChanged) {
           this.save();
         }
-        this.data.images = this.data.images || [];
-        this.data.contributions = this.data.contributions || [];
-        this.data.tripLeads = this.data.tripLeads || [];
-        this.data.carLeads = this.data.carLeads || [];
-        this.data.drivers = this.data.drivers || [];
-        this.data.userRoles = this.data.userRoles || [];
-        this.data.users = this.data.users || [];
-        this.data.roles = this.data.roles || [];
-        this.data.permissions = this.data.permissions || [];
-        this.data.rolePermissions = this.data.rolePermissions || [];
-        this.data.userPermissions = this.data.userPermissions || [];
-        this.data.auditLogs = this.data.auditLogs || [];
-        this.data.photoContributions = this.data.photoContributions || [];
-        this.data.notifications = this.data.notifications || [];
-        this.data.appNotifications = this.data.appNotifications || [];
-        this.data.claimRequests = this.data.claimRequests || [];
-        this.data.inquiries = this.data.inquiries || [];
-        this.data.ownershipHistory = this.data.ownershipHistory || [];
-        this.data.pendingUpdates = this.data.pendingUpdates || [];
 
         // Protection check: Ensure mavanish24@gmail.com is always the Super Admin and active
         const superId = 'mavanish24@gmail.com';
-        const sAdmin = this.data.users.find(u => u.email.trim().toLowerCase() === superId);
+        const sAdmin = this.data.users.find(u => u && u.email && u.email.trim().toLowerCase() === superId);
         if (!sAdmin) {
           this.data.users.push({
             id: superId,
@@ -329,7 +432,7 @@ class GraphDatabase {
 
         // Action check: Ensure amrkmurarka@gmail.com is always a Super Admin and active
         const adminId = 'amrkmurarka@gmail.com';
-        const sAdmin2 = this.data.users.find(u => u.email.trim().toLowerCase() === adminId);
+        const sAdmin2 = this.data.users.find(u => u && u.email && u.email.trim().toLowerCase() === adminId);
         if (!sAdmin2) {
           this.data.users.push({
             id: adminId,
@@ -476,12 +579,40 @@ class GraphDatabase {
               seen.add(normalizedId);
               list.push(item);
             }
-          } else {
-            list.push(item);
           }
         });
-        (this.data[dataKey] as any) = list;
-        console.log(`[Firestore Sync] Successfully loaded ${list.length} records for ${collectionName}`);
+
+        // Smart merge for key static seed/reference collections to prevent accidental data-loss fallbacks
+        const initialMap: Record<string, any[]> = {
+          hubs: initialHubs,
+          routes: initialRoutes,
+          destinations: initialDestinations,
+          attractions: initialAttractions,
+          homestays: initialHomestays
+        };
+
+        const staticData = initialMap[collectionName];
+        if (staticData) {
+          const mergedMap = new Map<string, any>();
+          // 1. Establish baseline from initial static seed definitions
+          staticData.forEach(item => {
+            if (item && item.id) {
+              mergedMap.set(String(item.id).toLowerCase().trim(), item);
+            }
+          });
+          // 2. Overlay remote Firestore definitions (such as user modifications / updates)
+          list.forEach(item => {
+            if (item && item.id) {
+              mergedMap.set(String(item.id).toLowerCase().trim(), item);
+            }
+          });
+          const mergedList = Array.from(mergedMap.values());
+          (this.data[dataKey] as any) = mergedList;
+          console.log(`[Firestore Sync] Successfully loaded and merged ${mergedList.length} records for reference collection ${collectionName} (pulled ${list.length} from Firestore)`);
+        } else {
+          (this.data[dataKey] as any) = list;
+          console.log(`[Firestore Sync] Successfully loaded ${list.length} records for ${collectionName}`);
+        }
       } catch (err) {
         console.error(`[Firestore Sync Warning] Failed to pull collection ${collectionName} from Firestore:`, err);
       }
@@ -576,36 +707,29 @@ class GraphDatabase {
       );
       
       let seededAny = false;
-      if (hubsSnap.empty) {
-        console.log("Firestore empty of master hubs. Seeding initial hubs...");
+      const isBrandNewDb = hubsSnap.empty && destSnap.empty && routesSnap.empty && attractionsSnap.empty && homestaysSnap.empty;
+
+      if (isBrandNewDb) {
+        console.log("[Firestore Sync] Entirely empty Firestore master database detected. Conducting premium initial seeding of developer datasets...");
+        
         this.data.hubs = initialHubs;
         await syncCollectionToFirestore('hubs', this.data.hubs);
-        seededAny = true;
-      }
-      if (destSnap.empty) {
-        console.log("Firestore empty of master destinations. Seeding initial destinations...");
+
         this.data.destinations = initialDestinations;
         await syncCollectionToFirestore('destinations', this.data.destinations);
-        seededAny = true;
-      }
-      if (routesSnap.empty) {
-        console.log("Firestore empty of master routes. Seeding initial routes...");
+
         this.data.routes = initialRoutes;
         await syncCollectionToFirestore('routes', this.data.routes);
-        seededAny = true;
-      }
-      if (attractionsSnap.empty) {
-        console.log("Firestore empty of master attractions. Seeding initial attractions...");
+
         this.data.attractions = initialAttractions;
         await syncCollectionToFirestore('attractions', this.data.attractions);
-        seededAny = true;
-      }
-      if (homestaysSnap.empty) {
-        console.log("Firestore empty of master homestays. Seeding initial homestays...");
+
         this.data.homestays = initialHomestays;
         await syncCollectionToFirestore('homestays', this.data.homestays);
+
         seededAny = true;
       }
+
       if (usersSnap.empty) {
         console.log("Firestore empty of security users. Syncing initial security setups...");
         await syncCollectionToFirestore('users', this.data.users);
@@ -624,10 +748,74 @@ class GraphDatabase {
       console.log("Performing startup pull to synchronize client-to-server cache...");
       await this.pullAllFromFirestore();
 
+      // Self-healing: Automatically unpack and delete nested "bulk" records from any collection in Firestore
+      let didUnpackAnyBulk = false;
+      const keyMapToFirestoreCol: Record<string, string> = {
+        hubs: 'hubs',
+        routes: 'routes',
+        destinations: 'destinations',
+        attractions: 'attractions',
+        homestays: 'homestays'
+      };
+
+      for (const colKey of Object.keys(this.data)) {
+        const arr = this.data[colKey as keyof Schema];
+        if (Array.isArray(arr)) {
+          const bulkIdx = arr.findIndex((x: any) => x && x.id === 'bulk');
+          if (bulkIdx > -1) {
+            const bulkObj: any = arr[bulkIdx];
+            console.log(`[Database Healing Firestore] Detected nested "bulk" document in collection "${colKey}". Automatically unpacking and deleting bulk document...`);
+            
+            const fsCol = keyMapToFirestoreCol[colKey];
+            if (fsCol) {
+              // Delete the bulk document from Firestore
+              deleteDocInFirestore(fsCol, 'bulk').catch(err => {
+                console.error(`[Database Healing Firestore] Minor: Failed to delete "bulk" document from Firestore collection "${fsCol}":`, err);
+              });
+            }
+
+            if (bulkObj.records && Array.isArray(bulkObj.records)) {
+              // Merge standard records case-insensitive
+              const existingMap = new Map<string, any>();
+              arr.forEach((item: any, idx: number) => {
+                if (idx !== bulkIdx && item && item.id) {
+                  existingMap.set(String(item.id).toLowerCase().trim(), item);
+                }
+              });
+              bulkObj.records.forEach((item: any) => {
+                if (item && item.id) {
+                  existingMap.set(String(item.id).toLowerCase().trim(), item);
+                }
+              });
+              
+              const mergedList = Array.from(existingMap.values());
+              this.data[colKey as keyof Schema] = mergedList as any;
+              didUnpackAnyBulk = true;
+
+              // Re-upload the unpacked individual documents to Firestore flatly so everything is fully restored in the cloud!
+              if (fsCol) {
+                console.log(`[Database Healing Firestore] Re-syncing ${mergedList.length} flat unpacked records back to Firestore collection "${fsCol}"...`);
+                syncCollectionToFirestore(fsCol, mergedList).catch(err => {
+                  console.error(`[Database Healing Firestore] Re-sync error for collection "${fsCol}":`, err);
+                });
+              }
+            } else {
+              // No sub records, just splice out
+              arr.splice(bulkIdx, 1);
+              didUnpackAnyBulk = true;
+            }
+          }
+        }
+      }
+
+      if (didUnpackAnyBulk) {
+        this.save();
+      }
+
       // Ensure that both super-admin and amrkmurarka exist in memory and are synced to Firestore!
       let hasChange = false;
       const superId = 'mavanish24@gmail.com';
-      let sAdmin = this.data.users.find(u => u.email.trim().toLowerCase() === superId);
+      let sAdmin = this.data.users.find(u => u && u.email && u.email.trim().toLowerCase() === superId);
       if (!sAdmin) {
         sAdmin = {
           id: superId,
@@ -654,7 +842,7 @@ class GraphDatabase {
       }
 
       const adminId = 'amrkmurarka@gmail.com';
-      let sAdmin2 = this.data.users.find(u => u.email.trim().toLowerCase() === adminId);
+      let sAdmin2 = this.data.users.find(u => u && u.email && u.email.trim().toLowerCase() === adminId);
       if (!sAdmin2) {
         sAdmin2 = {
           id: adminId,
@@ -718,10 +906,10 @@ class GraphDatabase {
   public updateUsers(users: User[]) {
     // Protection Rule: Prevent Super Admin demotion/deactivation or deletion
     const superId = 'mavanish24@gmail.com';
-    const hasSuper = users.some(u => u.email.trim().toLowerCase() === superId);
+    const hasSuper = users.some(u => u && u.email && u.email.trim().toLowerCase() === superId);
     if (!hasSuper) {
       // Re-insert Super Admin if missing
-      const oldSuper = this.data.users.find(u => u.email.trim().toLowerCase() === superId) || {
+      const oldSuper = this.data.users.find(u => u && u.email && u.email.trim().toLowerCase() === superId) || {
         id: superId,
         email: superId,
         name: 'Mavanish Super Admin',
@@ -734,7 +922,7 @@ class GraphDatabase {
       };
       users.push(oldSuper);
     } else {
-      const sAdminObj = users.find(u => u.email.trim().toLowerCase() === superId);
+      const sAdminObj = users.find(u => u && u.email && u.email.trim().toLowerCase() === superId);
       if (sAdminObj) {
         sAdminObj.role = 'super_admin';
         sAdminObj.status = 'active';
@@ -1067,9 +1255,13 @@ class GraphDatabase {
       (col === 'ownershipHistory' ? 'ownership_history' : 
       (col === 'pendingUpdates' ? 'pending_updates' : col)))))
     );
-    await syncDoc(fsCol, record.id, record);
+    try {
+      await syncDoc(fsCol, record.id, record);
+    } catch (errSync: any) {
+      console.warn(`[Firestore Sync Warning] Failed to sync doc ${record.id} in collection ${fsCol} to Firestore (local save will proceed):`, errSync.message || errSync);
+    }
 
-    // If writing to Firestore succeeds, safely commit locally to memory and save to hillytrip_db_store.json file
+    // Safely commit locally to memory and save to hillytrip_db_store.json file
     const arr = this.data[targetKey] as any[];
     const idx = arr.findIndex(item => item.id === record.id);
     const isNew = idx === -1;
@@ -1152,6 +1344,103 @@ class GraphDatabase {
     return true;
   }
 
+  public async saveRecordsBulk(col: string, records: any[]): Promise<boolean> {
+    const keyMap: Record<string, keyof Schema> = {
+      hubs: 'hubs',
+      routes: 'routes',
+      destinations: 'destinations',
+      attractions: 'attractions',
+      homestays: 'homestays',
+      images: 'images',
+      contributions: 'contributions',
+      trip_leads: 'tripLeads',
+      car_leads: 'carLeads',
+      tripLeads: 'tripLeads',
+      carLeads: 'carLeads',
+      drivers: 'drivers',
+      user_roles: 'userRoles',
+      userRoles: 'userRoles',
+      notifications: 'appNotifications',
+      appNotifications: 'appNotifications',
+      claim_requests: 'claimRequests',
+      claimRequests: 'claimRequests',
+      inquiries: 'inquiries',
+      ownership_history: 'ownershipHistory',
+      ownershipHistory: 'ownershipHistory',
+      pending_updates: 'pendingUpdates',
+      pendingUpdates: 'pendingUpdates'
+    };
+
+    const targetKey = keyMap[col];
+    if (!targetKey) return false;
+
+    const fsCol = (
+      col === 'tripLeads' ? 'trip_leads' : 
+      (col === 'carLeads' ? 'car_leads' : 
+      (col === 'userRoles' ? 'user_roles' : 
+      (col === 'claimRequests' ? 'claim_requests' : 
+      (col === 'ownershipHistory' ? 'ownership_history' : 
+      (col === 'pendingUpdates' ? 'pending_updates' : col)))))
+    );
+
+    // 1. Concurrently sync directly to Firestore in throttled parallel chunks (prevents connection exhaustion and timeouts)
+    const syncErrors: string[] = [];
+    const validRecords = records.filter(r => r && r.id);
+    const limit = 40; // Sync 40 entries concurrently
+    const chunks: any[][] = [];
+    for (let i = 0; i < validRecords.length; i += limit) {
+      chunks.push(validRecords.slice(i, i + limit));
+    }
+
+    for (const chunk of chunks) {
+      await Promise.all(
+        chunk.map(async (record) => {
+          try {
+            await syncDoc(fsCol, record.id, record);
+          } catch (err: any) {
+            console.error(`[saveRecordsBulk Sync Error] on record "${record.id}":`, err);
+            syncErrors.push(`${record.id}: ${err.message || err}`);
+          }
+        })
+      );
+    }
+
+    // 2. Commit all changes locally to memory
+    const arr = this.data[targetKey] as any[];
+    for (const record of records) {
+      if (record && record.id) {
+        const idx = arr.findIndex(item => item.id === record.id);
+        if (idx > -1) {
+          arr[idx] = { ...arr[idx], ...record };
+        } else {
+          arr.push(record);
+        }
+
+        // Trigger on-the-fly background geocoding & spatial calculations
+        if (['destinations', 'attractions', 'homestays', 'hubs'].includes(col)) {
+          import('./locationIntelligence').then(({ triggerBackgroundGeocodingAndSpatial }) => {
+            triggerBackgroundGeocodingAndSpatial(col, record.id).catch(err => {
+              console.error('[On-the-fly GPS Hook Error during bulk]', err);
+            });
+          });
+        }
+      }
+    }
+
+    // 3. Save database to disk exactly ONCE at the end
+    this.save();
+
+    if (['hubs', 'routes'].includes(col)) {
+      this.invalidateRouteGraph();
+    }
+
+    if (syncErrors.length > 0) {
+      console.warn(`[saveRecordsBulk Completed with Warnings] Local save succeeded, but ${syncErrors.length} records failed to sync to Firestore:`, syncErrors);
+    }
+
+    return true;
+  }
+
   public async updateRecord(col: string, id: string, updatedRecord: any): Promise<boolean> {
     const keyMap: Record<string, keyof Schema> = {
       hubs: 'hubs',
@@ -1197,9 +1486,13 @@ class GraphDatabase {
       (col === 'ownershipHistory' ? 'ownership_history' : 
       (col === 'pendingUpdates' ? 'pending_updates' : col)))))
     );
-    await syncDoc(fsCol, id, mergedRecord);
+    try {
+      await syncDoc(fsCol, id, mergedRecord);
+    } catch (errSync: any) {
+      console.warn(`[Firestore Sync Warning] Failed to update doc ${id} in collection ${fsCol} to Firestore (local save will proceed):`, errSync.message || errSync);
+    }
 
-    // Commit only on success
+    // Commit changes locally
     arr[idx] = mergedRecord;
     this.save();
 
@@ -1263,9 +1556,13 @@ class GraphDatabase {
       (col === 'ownershipHistory' ? 'ownership_history' : 
       (col === 'pendingUpdates' ? 'pending_updates' : col)))))
     );
-    await deleteDocInFirestore(fsCol, id);
+    try {
+      await deleteDocInFirestore(fsCol, id);
+    } catch (errSync: any) {
+      console.warn(`[Firestore Sync Warning] Failed to delete doc ${id} in collection ${fsCol} from Firestore (local deletion will proceed):`, errSync.message || errSync);
+    }
 
-    // Only apply locally if firestore successfully deleted the item
+    // Apply deletion locally
     this.data[targetKey] = arr.filter(item => item.id !== id) as any;
     
     if (['hubs', 'routes'].includes(col)) {
@@ -1285,26 +1582,32 @@ class GraphDatabase {
   public searchRoutes(fromHubId: string, toHubId: string): RouteSearchResult[] {
     if (!this.routeGraph) {
       const hubsMap = new Map<string, Hub>();
-      this.data.hubs.forEach(h => hubsMap.set(h.id.toLowerCase().trim(), h));
+      this.data.hubs.forEach(h => {
+        if (h && h.id) {
+          hubsMap.set(h.id.toLowerCase().trim(), h);
+        }
+      });
 
       const adj = new Map<string, Route[]>();
       this.data.routes.forEach(r => {
-        const rf = r.fromHubId.toLowerCase().trim();
-        const rt = r.toHubId.toLowerCase().trim();
+        if (r && r.fromHubId && r.toHubId) {
+          const rf = r.fromHubId.toLowerCase().trim();
+          const rt = r.toHubId.toLowerCase().trim();
 
-        if (!adj.has(rf)) adj.set(rf, []);
-        if (!adj.has(rt)) adj.set(rt, []);
+          if (!adj.has(rf)) adj.set(rf, []);
+          if (!adj.has(rt)) adj.set(rt, []);
 
-        adj.get(rf)!.push(r);
-        
-        // Reversed connection
-        const revRoute: Route = {
-          ...r,
-          fromHubId: r.toHubId,
-          toHubId: r.fromHubId,
-          path: [...r.path].reverse()
-        };
-        adj.get(rt)!.push(revRoute);
+          adj.get(rf)!.push(r);
+          
+          // Reversed connection
+          const revRoute: Route = {
+            ...r,
+            fromHubId: r.toHubId,
+            toHubId: r.fromHubId,
+            path: r.path ? [...r.path].reverse() : []
+          };
+          adj.get(rt)!.push(revRoute);
+        }
       });
 
       this.routeGraph = { adj, hubsMap };
@@ -1323,6 +1626,7 @@ class GraphDatabase {
 
     // Find direct routes (both primary direction and reversed since mountain routes can be traveled both ways)
     const directRoutes = this.data.routes.filter(r => {
+      if (!r || !r.fromHubId || !r.toHubId) return false;
       const rf = r.fromHubId.toLowerCase().trim();
       const rt = r.toHubId.toLowerCase().trim();
       return (rf === fIdNormalized && rt === tIdNormalized) ||
@@ -1466,7 +1770,7 @@ class GraphDatabase {
 
   public async wipeAll() {
     const collectionsToWipe = ['hubs', 'routes', 'destinations', 'attractions', 'homestays', 'images', 'contributions', 'trip_leads', 'car_leads', 'drivers'];
-    if (firestoreDb) {
+    if (firestoreDb && isFirestoreOnline) {
       for (const col of collectionsToWipe) {
         try {
           const snap = await getDocs(collection(firestoreDb, col));

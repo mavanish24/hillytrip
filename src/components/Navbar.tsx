@@ -18,7 +18,8 @@ import {
   ChevronDown, 
   ChevronUp, 
   Briefcase, 
-  Sliders 
+  Sliders,
+  Palette 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import UserNotificationBell from './UserNotificationBell';
@@ -62,12 +63,6 @@ export default function Navbar({
   // Theme Picker State
   const [themePickerOpen, setThemePickerOpen] = useState(false);
 
-  // Gesture Tracker Ref declarations
-  const clickCount = useRef(0);
-  const clickTimer = useRef<NodeJS.Timeout | null>(null);
-  const pressTimer = useRef<NodeJS.Timeout | null>(null);
-  const isHolding = useRef(false);
-
   // Toast State for theme actions
   const [activeThemeToast, setActiveThemeToast] = useState<{ name: string, emoji: string } | null>(null);
   const toastTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -83,75 +78,9 @@ export default function Navbar({
   // Safe clear timers on unmount
   useEffect(() => {
     return () => {
-      if (clickTimer.current) clearTimeout(clickTimer.current);
-      if (pressTimer.current) clearTimeout(pressTimer.current);
       if (toastTimeout.current) clearTimeout(toastTimeout.current);
     };
   }, []);
-
-  // Gesture hooks
-  const startPress = (e: React.MouseEvent | React.TouchEvent) => {
-    // Prevent touch defaults so emulated mouse events are not generated (stops double tap bugs)
-    if ('touches' in e && e.cancelable) {
-      e.preventDefault();
-    }
-    isHolding.current = false;
-    if (pressTimer.current) clearTimeout(pressTimer.current);
-    
-    pressTimer.current = setTimeout(() => {
-      isHolding.current = true;
-      setThemePickerOpen(true);
-      if (clickTimer.current) clearTimeout(clickTimer.current);
-      clickCount.current = 0;
-    }, 1000); // 1.0 second long press trigger
-  };
-
-  const endPress = (e: React.MouseEvent | React.TouchEvent) => {
-    if ('touches' in e && e.cancelable) {
-      e.preventDefault();
-    }
-    if (pressTimer.current) clearTimeout(pressTimer.current);
-    
-    if (isHolding.current) {
-      isHolding.current = false;
-      return;
-    }
-    
-    clickCount.current += 1;
-    
-    if (clickCount.current === 1) {
-      clickTimer.current = setTimeout(() => {
-        // SINGLE CLICK: Toggle Light vs Dark
-        if (themeMode === 'light') {
-          setThemeMode('dark');
-          showThemeChangeToast('Dark Mode Activated', '🌙');
-        } else {
-          setThemeMode('light');
-          showThemeChangeToast('Light Mode Activated', '💡');
-        }
-        clickCount.current = 0;
-      }, 250);
-    } else if (clickCount.current === 2) {
-      if (clickTimer.current) clearTimeout(clickTimer.current);
-      clickCount.current = 0;
-      
-      // DOUBLE CLICK: Cycle Themes
-      const currentIdx = AVAILABLE_THEMES.findIndex(t => t.id === theme);
-      const nextIdx = (currentIdx + 1) % AVAILABLE_THEMES.length;
-      const nextTheme = AVAILABLE_THEMES[nextIdx];
-      
-      setTheme(nextTheme.id);
-      setThemeMode('dark'); // Automatically active dark variant for full aesthetic beauty
-      showThemeChangeToast(`Active Theme: ${nextTheme.name}`, nextTheme.emoji);
-    }
-  };
-
-  const cancelPress = (e?: React.MouseEvent | React.TouchEvent) => {
-    if (e && 'touches' in e && e.cancelable) {
-      e.preventDefault();
-    }
-    if (pressTimer.current) clearTimeout(pressTimer.current);
-  };
 
   const isActive = (hash: string) => {
     const cleanHash = hash.replace(/^#/, '');
@@ -219,22 +148,23 @@ export default function Navbar({
               {/* Theme Toggle Button */}
               <button
                 id="theme-toggle-btn"
-                onMouseDown={startPress}
-                onMouseUp={endPress}
-                onMouseLeave={cancelPress}
-                onTouchStart={startPress}
-                onTouchEnd={endPress}
-                onTouchCancel={cancelPress}
-                className="p-2 sm:p-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 border border-transparent hover:border-slate-100 dark:hover:border-slate-700 cursor-pointer select-none transition-all outline-hidden flex items-center justify-center relative touch-none"
-                title="Single Click: Light/Dark Mode | Double Click: Next Theme | Long Press: Theme Picker"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (themeMode === 'light') {
+                    setThemeMode('dark');
+                    showThemeChangeToast('Dark Mode Activated', '🌙');
+                  } else {
+                    setThemeMode('light');
+                    showThemeChangeToast('Light Mode Activated', '💡');
+                  }
+                }}
+                className="p-2 sm:p-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 border border-transparent hover:border-slate-100 dark:hover:border-slate-700 cursor-pointer select-none transition-all outline-hidden flex items-center justify-center relative"
+                title="Toggle Light/Dark Mode"
               >
                 {themeMode === 'light' ? (
                   <Moon className="w-5 h-5 text-slate-600 hover:text-indigo-600" />
                 ) : (
                   <Sun className="w-5 h-5 text-amber-500 hover:text-amber-400" />
-                )}
-                {themeMode === 'dark' && theme !== 'slate' && (
-                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 block border border-slate-900" />
                 )}
               </button>
 
@@ -309,8 +239,8 @@ export default function Navbar({
                 <div className="p-4 bg-slate-900/90 border border-slate-850 rounded-2xl flex flex-col gap-3.5 shadow-sm">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-200 text-lg overflow-hidden shrink-0">
-                      {user?.photoURL ? (
-                        <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      {user?.photoURL && user.photoURL.trim() !== '' ? (
+                        <img src={user.photoURL || undefined} alt="Profile" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       ) : (
                         <UserIcon className="w-5 h-5 text-sky-400" />
                       )}
@@ -457,6 +387,79 @@ export default function Navbar({
                     </span>
                     <span>🏔️ Offline Hub</span>
                   </button>
+                </div>
+
+                {/* Integrated Appearance Panel inside the Drawer Menu */}
+                <div id="appearance-panel-menu" className="mx-1 p-3.5 bg-slate-900/40 border border-slate-900/80 rounded-2xl space-y-3 shadow-3xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-slate-400 font-extrabold tracking-wider uppercase leading-none font-mono flex items-center gap-1.5">
+                      <Palette className="w-3.5 h-3.5 text-indigo-400" /> Appearance
+                    </span>
+                    <span className="text-[9px] bg-slate-900 text-slate-300 font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wider font-mono">
+                      {activeThemeObj.name.split(' ')[0]}
+                    </span>
+                  </div>
+
+                  {/* Dark Mode toggle switch inside menu */}
+                  <div className="flex items-center justify-between py-1 border-b border-slate-900/30">
+                    <span className="text-[11px] font-bold text-slate-350">Dark Mode</span>
+                    <button
+                      onClick={() => {
+                        if (themeMode === 'light') {
+                          setThemeMode('dark');
+                          showThemeChangeToast('Dark Mode Activated', '🌙');
+                        } else {
+                          setThemeMode('light');
+                          showThemeChangeToast('Light Mode Activated', '💡');
+                        }
+                      }}
+                      className="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-150 ease-in-out focus:outline-none bg-slate-850"
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-slate-100 shadow-xs ring-0 transition duration-150 ease-in-out ${
+                          themeMode === 'dark' ? 'translate-x-5 bg-emerald-450' : 'translate-x-0'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Themes circular swatches row */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-350">Mountain Preset Moods</span>
+                      <button
+                        onClick={() => setThemePickerOpen(true)}
+                        className="text-[10px] font-extrabold text-indigo-400 hover:text-indigo-300 underline cursor-pointer"
+                      >
+                        All Themes
+                      </button>
+                    </div>
+                    {/* Horizontal preview swatches */}
+                    <div className="flex flex-wrap gap-[7px] pt-1">
+                      {AVAILABLE_THEMES.slice(0, 10).map(t => {
+                        const active = theme === t.id;
+                        return (
+                          <button
+                            key={t.id}
+                            onClick={() => {
+                              setTheme(t.id);
+                              setThemeMode('dark'); // Automatically active dark variant for full aesthetic beauty
+                              showThemeChangeToast(`${t.name}`, t.emoji);
+                            }}
+                            className={`w-7.5 h-7.5 rounded-full flex items-center justify-center border transition relative cursor-pointer ${
+                              active 
+                                ? 'border-indigo-500 scale-110 shadow-xs ring-2 ring-indigo-500/30' 
+                                : 'border-slate-850 hover:border-slate-700 hover:scale-105'
+                            }`}
+                            style={{ backgroundColor: t.color }}
+                            title={t.name}
+                          >
+                            <span className="text-xs shrink-0 select-none">{t.emoji}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Acrylic Divider */}

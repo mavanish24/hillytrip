@@ -9,10 +9,21 @@ import {
   generateCoverImage, 
   generateCoverPrompt, 
   bulkGenerateMissingPrompts,
-  askAiTravelGuide
+  askAiTravelGuide,
+  bulkApplyUnsplashCovers
 } from './src/server/coverService';
+import { 
+  isCoordinateValid, 
+  getDistanceInKm, 
+  activeGeocodeJob, 
+  runBulkGeocodeJob, 
+  runDataQualityCheck, 
+  recalculateAllSpatialRelations, 
+  triggerBackgroundGeocodingAndSpatial 
+} from './src/server/locationIntelligence';
 import fs from 'fs';
-import { UserRole, User, Role, Permission, RolePermission, UserPermission, AuditLog, ClaimRequest, OwnershipHistory, PendingUpdate, Inquiry, DEFAULT_HOMESTAY_IMAGE } from './src/types';
+import { UserRole, User, Role, Permission, RolePermission, UserPermission, AuditLog, ClaimRequest, OwnershipHistory, PendingUpdate, Inquiry } from './src/types';
+import { DEFAULT_HOMESTAY_IMAGE } from './src/constants';
 
 // Slugification utility for SEO friendly URLs
 export function toSlug(text: string): string {
@@ -174,8 +185,9 @@ async function startServer() {
     next();
   };
 
-  // Body parser
-  app.use(express.json());
+  // Body parser with expanded limits to support large image data and bulk admin updates
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
   // Log API requests briefly
   app.use((req, res, next) => {
@@ -341,8 +353,39 @@ async function startServer() {
       hubIds.includes(r.fromHubId) || hubIds.includes(r.toHubId)
     );
 
+    // Dynamic generation of nearbyDestinations if not already populated
+    let nearbyDestinations = dest.nearbyDestinations || [];
+    if (!nearbyDestinations || nearbyDestinations.length === 0) {
+      try {
+        const lat = Number(dest.latitude);
+        const lon = Number(dest.longitude);
+        if (isCoordinateValid(lat, lon)) {
+          nearbyDestinations = dbStore.getDestinations()
+            .filter(d => d.id !== dest.id && isCoordinateValid(Number(d.latitude), Number(d.longitude)))
+            .map(d => {
+              const dist = getDistanceInKm(lat, lon, Number(d.latitude), Number(d.longitude));
+              return {
+                id: d.id,
+                name: d.name,
+                distance: dist,
+                image: d.image,
+                tourismType: d.tourismType
+              };
+            })
+            .filter(d => d.distance <= 80)
+            .sort((a, b) => a.distance - b.distance)
+            .slice(0, 5);
+        }
+      } catch (err) {
+        console.error('Failed to compute on-the-fly nearby destinations:', err);
+      }
+    }
+
     res.json({
-      destination: dest,
+      destination: {
+        ...dest,
+        nearbyDestinations
+      },
       attractions,
       homestays,
       routes
@@ -2629,7 +2672,23 @@ async function startServer() {
           tourismType: d.tourismType || 'Hill Station',
           bestSeason: d.bestSeason || 'September to June',
           image: d.image || 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800&auto=format&fit=crop',
-          gallery: Array.isArray(d.gallery) ? d.gallery : (d.gallery ? [d.gallery] : [])
+          gallery: Array.isArray(d.gallery) ? d.gallery : (d.gallery ? [d.gallery] : []),
+          isHiddenGem: d.isHiddenGem === true || String(d.isHiddenGem).toLowerCase() === 'true',
+          isFeaturedThisWeek: d.isFeaturedThisWeek === true || String(d.isFeaturedThisWeek).toLowerCase() === 'true',
+          isPopularDestination: d.isPopularDestination === true || String(d.isPopularDestination).toLowerCase() === 'true',
+          coverImage: d.coverImage || '',
+          coverPrompt: d.coverPrompt || '',
+          coverStatus: d.coverStatus || 'pending',
+          latitude: d.latitude !== undefined ? Number(d.latitude) : undefined,
+          longitude: d.longitude !== undefined ? Number(d.longitude) : undefined,
+          district: d.district || '',
+          state: d.state || '',
+          country: d.country || '',
+          nearestHubId: d.nearestHubId || '',
+          distanceFromHub: d.distanceFromHub !== undefined ? Number(d.distanceFromHub) : undefined,
+          nearbyAttractions: d.nearbyAttractions || [],
+          nearbyHomestays: d.nearbyHomestays || [],
+          nearbyDestinations: d.nearbyDestinations || []
         }));
 
         if (mode === 'replace') {
@@ -2653,7 +2712,22 @@ async function startServer() {
           destinationId: a.destinationId,
           description: a.description || '',
           image: a.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop',
-          gallery: Array.isArray(a.gallery) ? a.gallery : []
+          gallery: Array.isArray(a.gallery) ? a.gallery : [],
+          isHiddenGem: a.isHiddenGem === true || String(a.isHiddenGem).toLowerCase() === 'true',
+          isFeaturedThisWeek: a.isFeaturedThisWeek === true || String(a.isFeaturedThisWeek).toLowerCase() === 'true',
+          isFeaturedAttraction: a.isFeaturedAttraction === true || String(a.isFeaturedAttraction).toLowerCase() === 'true',
+          coverImage: a.coverImage || '',
+          coverPrompt: a.coverPrompt || '',
+          coverStatus: a.coverStatus || 'pending',
+          latitude: a.latitude !== undefined ? Number(a.latitude) : undefined,
+          longitude: a.longitude !== undefined ? Number(a.longitude) : undefined,
+          district: a.district || '',
+          state: a.state || '',
+          country: a.country || '',
+          nearestDestinationId: a.nearestDestinationId || '',
+          distanceFromDestination: a.distanceFromDestination !== undefined ? Number(a.distanceFromDestination) : undefined,
+          nearestHubId: a.nearestHubId || '',
+          distanceFromHub: a.distanceFromHub !== undefined ? Number(a.distanceFromHub) : undefined
         }));
 
         if (mode === 'replace') {
@@ -2768,9 +2842,22 @@ async function startServer() {
         bestSeason: d.bestSeason || 'September to June',
         image: d.image || 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800&auto=format&fit=crop',
         gallery: d.gallery || [],
+        isHiddenGem: d.isHiddenGem === true || String(d.isHiddenGem).toLowerCase() === 'true',
+        isFeaturedThisWeek: d.isFeaturedThisWeek === true || String(d.isFeaturedThisWeek).toLowerCase() === 'true',
+        isPopularDestination: d.isPopularDestination === true || String(d.isPopularDestination).toLowerCase() === 'true',
         coverImage: d.coverImage || '',
         coverPrompt: d.coverPrompt || '',
-        coverStatus: d.coverStatus || 'pending'
+        coverStatus: d.coverStatus || 'pending',
+        latitude: d.latitude !== undefined ? Number(d.latitude) : undefined,
+        longitude: d.longitude !== undefined ? Number(d.longitude) : undefined,
+        district: d.district || '',
+        state: d.state || '',
+        country: d.country || '',
+        nearestHubId: d.nearestHubId || '',
+        distanceFromHub: d.distanceFromHub !== undefined ? Number(d.distanceFromHub) : undefined,
+        nearbyAttractions: d.nearbyAttractions || [],
+        nearbyHomestays: d.nearbyHomestays || [],
+        nearbyDestinations: d.nearbyDestinations || []
       };
       dests.push(updatedDest);
     }
@@ -2779,7 +2866,10 @@ async function startServer() {
     if (isManual) {
       updatedDest.coverStatus = 'manual';
     } else {
-      await autoGenerateCoverPromptForRecord(updatedDest, 'destinations');
+      if (!updatedDest.coverPrompt) {
+        updatedDest.coverPrompt = '';
+        updatedDest.coverStatus = 'pending';
+      }
     }
 
     dbStore.updateDestinations(dests);
@@ -2801,16 +2891,31 @@ async function startServer() {
       description: a.description || '',
       image: a.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop',
       gallery: a.gallery || [],
+      isHiddenGem: a.isHiddenGem === true || String(a.isHiddenGem).toLowerCase() === 'true',
+      isFeaturedThisWeek: a.isFeaturedThisWeek === true || String(a.isFeaturedThisWeek).toLowerCase() === 'true',
+      isFeaturedAttraction: a.isFeaturedAttraction === true || String(a.isFeaturedAttraction).toLowerCase() === 'true',
       coverImage: a.coverImage || '',
       coverPrompt: a.coverPrompt || '',
-      coverStatus: a.coverStatus || 'pending'
+      coverStatus: a.coverStatus || 'pending',
+      latitude: a.latitude !== undefined ? Number(a.latitude) : undefined,
+      longitude: a.longitude !== undefined ? Number(a.longitude) : undefined,
+      district: a.district || '',
+      state: a.state || '',
+      country: a.country || '',
+      nearestDestinationId: a.nearestDestinationId || '',
+      distanceFromDestination: a.distanceFromDestination !== undefined ? Number(a.distanceFromDestination) : undefined,
+      nearestHubId: a.nearestHubId || '',
+      distanceFromHub: a.distanceFromHub !== undefined ? Number(a.distanceFromHub) : undefined
     };
 
     const isManual = a.coverStatus === 'manual' || (a.coverImage && a.coverImage !== '');
     if (isManual) {
       newAttr.coverStatus = 'manual';
     } else {
-      await autoGenerateCoverPromptForRecord(newAttr, 'attractions');
+      if (!newAttr.coverPrompt) {
+        newAttr.coverPrompt = '';
+        newAttr.coverStatus = 'pending';
+      }
     }
 
     attractions.push(newAttr);
@@ -2865,13 +2970,62 @@ async function startServer() {
         res.status(400).json({ error: 'Body must contain a "records" array.' });
         return;
       }
+
+      // 1. Map to check existing records for cover prompts and coordinate merges
+      const keyMap: Record<string, string> = {
+        hubs: 'hubs',
+        routes: 'routes',
+        destinations: 'destinations',
+        attractions: 'attractions',
+        homestays: 'homestays',
+        images: 'images',
+        contributions: 'contributions',
+        trip_leads: 'tripLeads',
+        car_leads: 'carLeads',
+        drivers: 'drivers',
+        user_roles: 'userRoles'
+      };
+      
+      const targetKey = keyMap[col];
+      const list = targetKey ? (dbStore.data[targetKey as keyof typeof dbStore.data] as any[] || []) : [];
+
+      const finalRecordsToSave: any[] = [];
+      const promptQueue: any[] = [];
+
       for (const record of records) {
         if (record && record.id) {
-          await dbStore.saveRecord(col, record);
+          const existing = list.find((item: any) => item.id === record.id);
+          let finalRecord = { ...record };
+          if (existing) {
+            finalRecord = { ...existing, ...record };
+          }
+
+          if (col === 'destinations' || col === 'attractions') {
+            const isManual = finalRecord.coverStatus === 'manual' || (finalRecord.coverImage && finalRecord.coverImage !== '');
+            if (isManual) {
+              finalRecord.coverStatus = 'manual';
+            } else {
+              if (!finalRecord.coverPrompt) {
+                finalRecord.coverPrompt = '';
+                finalRecord.coverStatus = 'pending';
+              }
+            }
+          }
+
+          finalRecordsToSave.push(finalRecord);
         }
       }
-      res.json({ success: true, count: records.length });
+
+      // 3. Delegate to the new high-performance transactional bulk database save
+      const success = await dbStore.saveRecordsBulk(col, finalRecordsToSave);
+      if (!success) {
+        res.status(400).json({ error: `Unsupported collection: ${col}` });
+        return;
+      }
+
+      res.json({ success: true, count: finalRecordsToSave.length });
     } catch (e: any) {
+      console.error('[Bulk Save Route Error]', e);
       res.status(500).json({ error: e.message || 'Failed to save admin records in bulk' });
     }
   });
@@ -2928,7 +3082,10 @@ async function startServer() {
         if (isManual) {
           record.coverStatus = 'manual';
         } else {
-          await autoGenerateCoverPromptForRecord(record, col);
+          if (!record.coverPrompt) {
+            record.coverPrompt = '';
+            record.coverStatus = 'pending';
+          }
         }
       }
 
@@ -2957,12 +3114,12 @@ async function startServer() {
         if (isNowManual) {
           record.coverStatus = 'manual';
         } else if (existing?.coverStatus !== 'manual') {
-          const hasChanges = !existing?.coverPrompt || record.name !== existing?.name || record.description !== existing?.description || record.tourismType !== existing?.tourismType || record.category !== existing?.category;
-          if (hasChanges) {
-            const fullRecord = { ...existing, ...record };
-            await autoGenerateCoverPromptForRecord(fullRecord, col);
-            record.coverPrompt = fullRecord.coverPrompt;
-            record.coverStatus = fullRecord.coverStatus;
+          if (!record.coverPrompt && existing?.coverPrompt) {
+            record.coverPrompt = existing.coverPrompt;
+            record.coverStatus = existing.coverStatus;
+          } else if (!record.coverPrompt) {
+            record.coverPrompt = '';
+            record.coverStatus = 'pending';
           }
         }
       }
@@ -3123,6 +3280,17 @@ async function startServer() {
     }
   });
 
+  // 4b. Bulk Auto-Fill Cover Images (Unsplash Method 1)
+  app.post('/api/admin/cover/bulk-unsplash-autofill', adminAuth, async (req, res) => {
+    try {
+      const { overwrite } = req.body;
+      const result = await bulkApplyUnsplashCovers(!!overwrite);
+      res.json(result);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || 'Bulk Unsplash fill failed' });
+    }
+  });
+
   // 5. Config Check
   app.get('/api/admin/cover/config-check', adminAuth, (req, res) => {
     const key = process.env.GEMINI_API_KEY;
@@ -3141,7 +3309,6 @@ async function startServer() {
   // 1. Get statistics and coordination details
   app.get('/api/admin/location-intelligence/stats', adminAuth, (req, res) => {
     try {
-      const { isCoordinateValid, activeGeocodeJob } = require('./src/server/locationIntelligence');
       const destinations = dbStore.getDestinations();
       const attractions = dbStore.getAttractions();
       const homestays = dbStore.getHomestays();
@@ -3179,7 +3346,6 @@ async function startServer() {
   // 2. Poll Active Geocoding Job Progress
   app.get('/api/admin/location-intelligence/progress', adminAuth, (req, res) => {
     try {
-      const { activeGeocodeJob } = require('./src/server/locationIntelligence');
       res.json(activeGeocodeJob);
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -3189,8 +3355,8 @@ async function startServer() {
   // 3. Initiate Bulk Autofill Job
   app.post('/api/admin/location-intelligence/geocode-bulk', adminAuth, (req, res) => {
     try {
-      const { runBulkGeocodeJob } = require('./src/server/locationIntelligence');
-      runBulkGeocodeJob();
+      const { limit, targetIds } = req.body;
+      runBulkGeocodeJob({ limit, targetIds });
       res.json({ success: true, message: 'Bulk geocoding operation launched in background.' });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -3200,7 +3366,6 @@ async function startServer() {
   // 4. Force Stop Bulk Geocoding Job
   app.post('/api/admin/location-intelligence/geocode-stop', adminAuth, (req, res) => {
     try {
-      const { activeGeocodeJob } = require('./src/server/locationIntelligence');
       if (activeGeocodeJob.status === 'running') {
         activeGeocodeJob.status = 'idle';
         activeGeocodeJob.logs.push(`[${new Date().toLocaleTimeString()}] Bulk geocoding process aborted by administrator.`);
@@ -3214,7 +3379,6 @@ async function startServer() {
   // 5. Run Data Quality Checker
   app.get('/api/admin/location-intelligence/quality', adminAuth, (req, res) => {
     try {
-      const { runDataQualityCheck } = require('./src/server/locationIntelligence');
       const report = runDataQualityCheck();
       res.json(report);
     } catch (err: any) {
@@ -3225,7 +3389,6 @@ async function startServer() {
   // 6. Recalculate Proximity Graphs
   app.post('/api/admin/location-intelligence/recalculate-spatial', adminAuth, async (req, res) => {
     try {
-      const { recalculateAllSpatialRelations } = require('./src/server/locationIntelligence');
       const result = await recalculateAllSpatialRelations();
       res.json({ success: true, count: result.count, message: 'All proximity relationships have been realigned and committed.' });
     } catch (err: any) {
@@ -3236,7 +3399,6 @@ async function startServer() {
   // 7. Manual Single-Record Geocode operation
   app.post('/api/admin/location-intelligence/geocode-single', adminAuth, async (req, res) => {
     try {
-      const { triggerBackgroundGeocodingAndSpatial } = require('./src/server/locationIntelligence');
       const { col, id } = req.body;
       if (!col || !id) {
         res.status(400).json({ error: 'col and id are required' });

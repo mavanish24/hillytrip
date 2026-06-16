@@ -48,6 +48,8 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [diagnosticsTab, setDiagnosticsTab] = useState<'missing-coord' | 'invalid-coord' | 'missing-fields'>('missing-coord');
   const [showLogs, setShowLogs] = useState(true);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [batchSizeLimit, setBatchSizeLimit] = useState<number>(3);
 
   const logsEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -98,14 +100,22 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
     }
   }, [stats?.activeJob?.logs]);
 
-  const startBulkGeocode = async () => {
+  const startBulkGeocode = async (customLimit?: number, customTargetIds?: string[]) => {
     try {
       const res = await fetch("/api/admin/location-intelligence/geocode-bulk", {
         method: "POST",
-        headers: { "x-admin-password": "admin123" }
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": "admin123"
+        },
+        body: JSON.stringify({
+          limit: customLimit,
+          targetIds: customTargetIds
+        })
       });
       if (res.ok) {
-        showNotify("success", "Bulk geocoding launched successfully! Processing records...");
+        showNotify("success", "Bulk geocoding launched successfully! Processing approved records...");
+        setSelectedIds([]); // Clear selections upon triggering
         fetchStats();
       } else {
         const body = await res.json();
@@ -319,25 +329,42 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
                 </p>
               </div>
 
-              <div className="flex gap-2">
-                {stats?.activeJob?.status === "running" ? (
-                  <button
-                    onClick={stopBulkGeocode}
-                    className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition-all animate-pulse"
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex bg-slate-50 border border-slate-200 rounded-xl p-1 items-center gap-1.5 shadow-2xs">
+                  <span className="text-xs font-semibold px-2 text-slate-500">Auto-Batch Limit:</span>
+                  <select
+                    value={batchSizeLimit}
+                    onChange={(e) => setBatchSizeLimit(Number(e.target.value))}
+                    className="text-xs font-semibold bg-white border border-slate-200 px-2 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   >
-                    <XCircle className="h-4 w-4" />
-                    Stop Bulk Operation
-                  </button>
-                ) : (
-                  <button
-                    onClick={startBulkGeocode}
-                    disabled={stats?.missingCoordinates === 0}
-                    className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition-all"
-                  >
-                    <Sparkles className="h-4 w-4" />
-                    Auto Fill Missing Coordinates
-                  </button>
-                )}
+                    <option value={3}>3 (Small Batch)</option>
+                    <option value={5}>5 (Safe Batch)</option>
+                    <option value={10}>10 (Standard)</option>
+                    <option value={20}>20 (Large)</option>
+                    <option value={99999}>Full Bulk</option>
+                  </select>
+                </div>
+
+                <div className="flex gap-2">
+                  {stats?.activeJob?.status === "running" ? (
+                    <button
+                      onClick={stopBulkGeocode}
+                      className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition-all animate-pulse"
+                    >
+                      <XCircle className="h-4 w-4" />
+                      Stop Bulk Operation
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => startBulkGeocode(batchSizeLimit)}
+                      disabled={stats?.missingCoordinates === 0}
+                      className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition-all"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      Run Auto-Batch
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -421,6 +448,55 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
 
             {report && (
               <div className="space-y-6 pt-4 border-t border-slate-100">
+                {/* Selection Approval Banner */}
+                {selectedIds.length > 0 && (
+                  <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 animate-fade-in shadow-xs">
+                    <div className="flex items-center gap-3">
+                      <div className="h-9 w-9 rounded-full bg-emerald-100 flex items-center justify-center">
+                        <CheckCircle className="h-5 w-5 text-emerald-600" />
+                      </div>
+                      <div>
+                        <span className="text-sm font-bold text-emerald-900 block">
+                          Approved {selectedIds.length} location records
+                        </span>
+                        <span className="text-xs text-emerald-700">
+                          These records will be geocoded using Google Gemini in a controlled batch.
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <div className="flex items-center gap-1.5 bg-white border border-emerald-200 px-2.5 py-1.5 rounded-lg shadow-2xs">
+                        <span className="text-xs font-semibold text-emerald-800">Approved limit:</span>
+                        <select
+                          value={batchSizeLimit}
+                          onChange={(e) => setBatchSizeLimit(Number(e.target.value))}
+                          className="text-xs font-bold text-emerald-900 bg-transparent border-none p-0 focus:outline-none focus:ring-0"
+                        >
+                          <option value={99999}>All Approved ({selectedIds.length})</option>
+                          <option value={1}>1 record</option>
+                          <option value={3}>3 (Small Batch)</option>
+                          <option value={5}>5 (Safe Batch)</option>
+                          <option value={10}>10 (Standard)</option>
+                        </select>
+                      </div>
+                      <button
+                        onClick={() => startBulkGeocode(batchSizeLimit, selectedIds)}
+                        disabled={loading || stats?.activeJob?.status === "running"}
+                        className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs rounded-lg shadow-sm transition-all flex items-center gap-1.5"
+                      >
+                        <Sparkles className="h-3.5 w-3.5" />
+                        Geocode Approved Batch
+                      </button>
+                      <button
+                        onClick={() => setSelectedIds([])}
+                        className="px-3 py-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 text-xs font-semibold rounded-lg transition-all"
+                      >
+                        Reset
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {/* Diagnostics Quality Scores Card */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="bg-slate-50 border border-slate-150 p-4 rounded-xl flex flex-col justify-between">
@@ -480,6 +556,20 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
                       <table className="min-w-full divide-y divide-slate-200 text-left">
                         <thead className="bg-slate-50 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                           <tr>
+                            <th className="w-10 px-5 py-3">
+                              <input
+                                type="checkbox"
+                                checked={report.missingCoordinates.length > 0 && selectedIds.length === report.missingCoordinates.length}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSelectedIds(report.missingCoordinates.map(m => m.id));
+                                  } else {
+                                    setSelectedIds([]);
+                                  }
+                                }}
+                                className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 h-4 w-4"
+                              />
+                            </th>
                             <th className="px-5 py-3">Location Name</th>
                             <th className="px-5 py-3">Domain Type</th>
                             <th className="px-5 py-3 text-right">Quick Remediation Action</th>
@@ -488,13 +578,27 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
                         <tbody className="bg-white divide-y divide-slate-150 text-sm">
                           {report.missingCoordinates.length === 0 ? (
                             <tr>
-                              <td colSpan={3} className="px-5 py-8 text-center text-slate-400">
+                              <td colSpan={4} className="px-5 py-8 text-center text-slate-400">
                                 Perfect! Zero records are missing geographic positions.
                               </td>
                             </tr>
                           ) : (
                             report.missingCoordinates.map((item, id) => (
-                              <tr key={id} className="hover:bg-slate-55/40">
+                              <tr key={id} className={`hover:bg-slate-55/40 ${selectedIds.includes(item.id) ? "bg-emerald-50/20" : ""}`}>
+                                <td className="w-10 px-5 py-2.5">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedIds.includes(item.id)}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        setSelectedIds([...selectedIds, item.id]);
+                                      } else {
+                                        setSelectedIds(selectedIds.filter(selectedId => selectedId !== item.id));
+                                      }
+                                    }}
+                                    className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 h-4 w-4"
+                                  />
+                                </td>
                                 <td className="px-5 py-2.5 font-semibold text-slate-900">{item.name}</td>
                                 <td className="px-5 py-2.5 text-slate-500 capitalize">{formatCollectionName(item.col)}</td>
                                 <td className="px-5 py-2.5 text-right">

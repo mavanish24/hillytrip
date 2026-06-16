@@ -29,6 +29,8 @@ export const AdminCoverManagementTab: React.FC<AdminCoverManagementTabProps> = (
   const [regeneratingRowId, setRegeneratingRowId] = useState<string | null>(null);
   const [uploadingRowId, setUploadingRowId] = useState<string | null>(null);
   const [bulkProcessing, setBulkProcessing] = useState(false);
+  const [unsplashProcessing, setUnsplashProcessing] = useState(false);
+  const [unsplashOverwrite, setUnsplashOverwrite] = useState(false);
   
   // Credentials checking states
   const [configChecked, setConfigChecked] = useState(false);
@@ -327,6 +329,38 @@ export const AdminCoverManagementTab: React.FC<AdminCoverManagementTabProps> = (
     }
   };
 
+  // 6b. Bulk auto-fill Unsplash covers (Method 1)
+  const handleBulkUnsplashFill = async () => {
+    const actionUnit = unsplashOverwrite ? "ALL non-manual cover images" : "only MISSING cover images";
+    if (!window.confirm(`Are you sure you want to automatically assign beautiful Unsplash covers to ${actionUnit} across your destinations and attractions? This will cover your portfolio instantly!`)) {
+      return;
+    }
+
+    setUnsplashProcessing(true);
+    try {
+      const res = await fetch("/api/admin/cover/bulk-unsplash-autofill", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": "admin123"
+        },
+        body: JSON.stringify({ overwrite: unsplashOverwrite })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Bulk Unsplash seeding failed");
+      }
+
+      showNotification("success", `Successfully applied Method 1. Auto-populated covers for ${data.destinationsUpdated} destinations and ${data.attractionsUpdated} attractions!`);
+      fetchData(); // reload
+    } catch (err: any) {
+      showNotification("error", err.message || "Failed bulk Unsplash seeding.");
+    } finally {
+      setUnsplashProcessing(false);
+    }
+  };
+
   // Filtering calculation
   const filteredItems = items.filter(item => {
     const matchesSearch = 
@@ -409,6 +443,57 @@ export const AdminCoverManagementTab: React.FC<AdminCoverManagementTabProps> = (
           <span className="text-[10px] text-slate-400 text-center font-bold">
             Scans missing coverPrompts safely in rate-limited batches
           </span>
+        </div>
+      </div>
+
+      {/* METHOD 1 DASHBOARD CARD */}
+      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-3xl p-6 shadow-xs relative overflow-hidden">
+        <div className="absolute -right-16 -bottom-16 w-48 h-48 bg-indigo-200/20 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -left-12 -top-12 w-36 h-36 bg-purple-200/20 rounded-full blur-xl pointer-events-none" />
+        
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 text-[10px] font-extrabold uppercase rounded-full">
+                Method 1 • Free &amp; Instant
+              </span>
+              <span className="text-xs text-slate-400 font-bold">|</span>
+              <span className="text-xs text-indigo-700 font-extrabold">Seeding 941 Attractions &amp; 200 Destinations</span>
+            </div>
+            <h3 className="font-extrabold text-lg text-indigo-950 tracking-tight">Unsplash Intelligent Bulk Cover Autofill</h3>
+            <p className="text-xs text-slate-600 max-w-2xl leading-relaxed">
+              Dynamically generates context-aware, keyword-optimized cover pictures matching each attraction's or destination's geographical context, name spelling, and segment taxonomy. Perfect for scaling covers across wide tourist inventories instantly with zero API costs.
+            </p>
+            
+            {/* Options */}
+            <div className="flex items-center gap-6 pt-2">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input 
+                  type="checkbox" 
+                  checked={unsplashOverwrite}
+                  onChange={(e) => setUnsplashOverwrite(e.target.checked)}
+                  className="rounded text-indigo-600 focus:ring-indigo-400 h-4 w-4 border-slate-300"
+                />
+                <span className="text-xs text-slate-700 font-bold">Overwrite existing auto-generated covers</span>
+              </label>
+              <div className="text-[11px] text-slate-500 font-medium">
+                Currently loaded items: <strong className="text-indigo-900 font-bold">{items.length} records</strong>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={handleBulkUnsplashFill}
+            disabled={unsplashProcessing || loading}
+            className="px-6 py-4 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-extrabold text-sm rounded-2xl flex items-center justify-center gap-2.5 transition cursor-pointer shadow-md shadow-indigo-200 border border-indigo-700 shrink-0 w-full lg:w-auto"
+          >
+            {unsplashProcessing ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <ImageIcon className="w-4 h-4" />
+            )}
+            {unsplashProcessing ? "Applying Method 1..." : "Auto-Fill All Cover Images"}
+          </button>
         </div>
       </div>
 
@@ -526,7 +611,7 @@ export const AdminCoverManagementTab: React.FC<AdminCoverManagementTabProps> = (
                           {item.coverImage ? (
                             <div className="relative group w-44 h-24 rounded-xl border border-slate-200 overflow-hidden shadow-2xs">
                               <img 
-                                src={item.coverImage} 
+                                src={item.coverImage || undefined} 
                                 alt={`${item.name} cover`} 
                                 className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
                                 referrerPolicy="no-referrer"

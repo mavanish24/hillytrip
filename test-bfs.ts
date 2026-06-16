@@ -35,6 +35,7 @@ async function test() {
     }
   }
   console.log(`Total pairs tested: ${pairsTested} in ${Date.now() - startTime}ms`);
+  process.exit(0);
 }
 
 test();

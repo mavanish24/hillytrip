@@ -16,7 +16,8 @@ import {
   initialHomestays, 
   initialRoutes 
 } from '../data/initialData';
-import { Hub, Route, Destination, Attraction, Homestay, ImageItem, Contribution, TripLead, CarLead, Driver, DEFAULT_HOMESTAY_IMAGE } from '../types';
+import { Hub, Route, Destination, Attraction, Homestay, ImageItem, Contribution, TripLead, CarLead, Driver } from '../types';
+import { DEFAULT_HOMESTAY_IMAGE } from '../constants';
 
 let useStaticFallback = (() => {
   if (typeof window !== 'undefined') {
@@ -1026,6 +1027,25 @@ async function handleMockApiRequest(url: string, options?: RequestInit): Promise
       if (method === 'GET') {
         const data = await fetchCollection<any>(colNormalized, []);
         return jsonResponse(data);
+      }
+      if (method === 'POST' && docId === 'bulk') {
+        const body = parseBody();
+        const records = body.records;
+        if (Array.isArray(records)) {
+          try {
+            await Promise.all(
+              records.map(async (record) => {
+                if (record && record.id) {
+                  await setDoc(doc(db, colNormalized, record.id), record);
+                }
+              })
+            );
+          } catch (errSync) {
+            console.warn('[Offline Sandbox Mode] Error during bulk save sync:', errSync);
+          }
+          invalidateCache(colNormalized);
+          return jsonResponse({ success: true, count: records.length });
+        }
       }
       if (method === 'POST' && docId) {
         const body = parseBody();

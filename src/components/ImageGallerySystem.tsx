@@ -3,6 +3,7 @@ import { Camera, UploadCloud, FileImage, Sparkles, LogIn, Loader2, CheckCircle2,
 import { compressAndConvertToWebP } from '../utils/imageOptimizer';
 import { uploadImageToFirebase } from '../utils/firebase';
 import { hillyTripFetch } from '../utils/apiInterceptor';
+import { DEFAULT_HOMESTAY_IMAGE } from '../constants';
 
 const fetch = hillyTripFetch;
 
@@ -327,7 +328,7 @@ export default function ImageGallerySystem({
             title="Click to view photo"
           >
             <img 
-              src={imgUrl} 
+              src={imgUrl || DEFAULT_HOMESTAY_IMAGE} 
               alt={`${entityType} high-resolution tour visual`} 
               referrerPolicy="no-referrer"
               loading="lazy" 
@@ -357,7 +358,7 @@ export default function ImageGallerySystem({
               title="Click to view and edit caption"
             >
               <img 
-                src={photo.url} 
+                src={photo.url || DEFAULT_HOMESTAY_IMAGE} 
                 alt={photo.altText || photo.caption} 
                 referrerPolicy="no-referrer"
                 loading="lazy" 
@@ -442,7 +443,7 @@ export default function ImageGallerySystem({
 
                 {previewUrl ? (
                   <div className="flex flex-col items-center gap-2">
-                    <img src={previewUrl} alt="WebP preview" className="w-32 h-20 rounded-lg object-cover border-2 border-emerald-400 shadow-sm" />
+                    <img src={previewUrl || DEFAULT_HOMESTAY_IMAGE} alt="WebP preview" className="w-32 h-20 rounded-lg object-cover border-2 border-emerald-400 shadow-sm" />
                     <div>
                       <span className="text-xs font-bold text-emerald-700 block">✓ Optimized WebP Compression Complete</span>
                       <span className="text-[10px] text-slate-400">File ready: {selectedFile?.name} (Compressed to ~80% size)</span>
@@ -594,7 +595,7 @@ export default function ImageGallerySystem({
               )}
               
               <img 
-                src={selectedPhotoForViewer.url} 
+                src={selectedPhotoForViewer.url || DEFAULT_HOMESTAY_IMAGE} 
                 alt={selectedPhotoForViewer.altText || selectedPhotoForViewer.caption || 'HillyTrip scenic landscape'} 
                 referrerPolicy="no-referrer"
                 className="max-w-full max-h-[45vh] md:max-h-[80vh] object-contain p-2 relative z-10 transition-transform duration-300" 

@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getFirestore, initializeFirestore, doc, getDocFromServer, setLogLevel } from 'firebase/firestore';
+import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 // Silence internal Firestore warning/error logs to prevent sandboxed iframe notifications
@@ -18,6 +19,22 @@ export const storage = getStorage(app);
 export const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
 }, firebaseConfig.firestoreDatabaseId);
+
+export let analytics: Analytics | null = null;
+isSupported().then((supported) => {
+  if (supported) {
+    try {
+      analytics = getAnalytics(app);
+      console.log('Firebase Analytics initialized successfully.');
+    } catch (e) {
+      console.warn('Failed to initialize Firebase Analytics:', e);
+    }
+  } else {
+    console.log('Firebase Analytics is not supported in this environment.');
+  }
+}).catch((e) => {
+  console.warn('Error checking Firebase Analytics support:', e);
+});
 
 async function testConnection() {
   try {

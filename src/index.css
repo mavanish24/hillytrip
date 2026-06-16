@@ -1,9 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;450;600;750;850&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Space Grotesk", var(--font-sans);
+  --font-serif: "Lora", Georgia, serif;
 }
 
 /* Perfect smooth theme transition animations for immersive color mood */
@@ -40,144 +42,173 @@ body {
   --bg-card: #0f172a;
   --bg-widget: #1e293b;
   --bg-divider: #334155;
-  --text-title: #f8fafc;
-  --text-body: #f1f5f9;
+  --text-title: #ffffff;
+  --text-body: #f8fafc;
   --text-secondary: #cbd5e1;
   --text-muted: #94a3b8;
   --border-color: #1e293b;
   --accent-color: #10b981;
+  --theme-font-title: "Plus Jakarta Sans", sans-serif;
+  --theme-font-body: "Inter", sans-serif;
 }
 
 /* 2. Mountain Blue Theme */
 .theme-mountain-blue, html.theme-mountain-blue, .theme-ocean, html.theme-ocean {
-  --bg-main: #070f2b;
-  --bg-card: #1b1a55;
-  --bg-widget: #2b2b71;
-  --bg-divider: #535c91;
+  --bg-main: #050a21;
+  --bg-card: #0d123d;
+  --bg-widget: #1c225e;
+  --bg-divider: #363c8f;
   --text-title: #38bdf8;
-  --text-body: #f1f5f9;
-  --text-secondary: #9290c3;
-  --text-muted: #6c7293;
-  --border-color: #1f1e68;
+  --text-body: #f0f7ff;
+  --text-secondary: #a5d3f7;
+  --text-muted: #cbd5e1;
+  --border-color: #252c6f;
   --accent-color: #38bdf8;
+  --theme-font-title: "Outfit", sans-serif;
+  --theme-font-body: "Outfit", sans-serif;
 }
 
 /* 3. Forest Green Theme */
 .theme-forest-green, html.theme-forest-green, .theme-forest, html.theme-forest {
-  --bg-main: #022c22;
-  --bg-card: #064e3b;
-  --bg-widget: #0d5c46;
-  --bg-divider: #115e59;
+  --bg-main: #011d17;
+  --bg-card: #03362a;
+  --bg-widget: #08523f;
+  --bg-divider: #107359;
   --text-title: #34d399;
-  --text-body: #ecfdf5;
+  --text-body: #f0fdf4;
   --text-secondary: #a7f3d0;
-  --text-muted: #648e82;
-  --border-color: #0d5f47;
+  --text-muted: #cbd5e1;
+  --border-color: #0c4d3d;
   --accent-color: #34d399;
+  --theme-font-title: "Work Sans", sans-serif;
+  --theme-font-body: "Inter", sans-serif;
 }
 
 /* 4. Himalayan Night Theme */
 .theme-himalayan-night, html.theme-himalayan-night {
-  --bg-main: #05021a;
-  --bg-card: #130a2e;
-  --bg-widget: #24144b;
-  --bg-divider: #3f196a;
+  --bg-main: #030012;
+  --bg-card: #11082c;
+  --bg-widget: #22124d;
+  --bg-divider: #3b1f7a;
   --text-title: #f43f5e;
-  --text-body: #f8fafc;
-  --text-secondary: #c084fc;
-  --text-muted: #7c3aed;
-  --border-color: #2b1754;
+  --text-body: #fdf2f8;
+  --text-secondary: #e9d5ff;
+  --text-muted: #d8b4fe;
+  --border-color: #2b155e;
   --accent-color: #ec4899;
+  --theme-font-title: "Space Grotesk", sans-serif;
+  --theme-font-body: "Inter", sans-serif;
 }
 
 /* 5. Sunrise Gold Theme */
 .theme-sunrise-gold, html.theme-sunrise-gold, .theme-sunset, html.theme-sunset {
-  --bg-main: #1c0d02;
-  --bg-card: #351c05;
-  --bg-widget: #502e0b;
-  --bg-divider: #714212;
-  --text-title: #fbbf24;
+  --bg-main: #130701;
+  --bg-card: #2c1303;
+  --bg-widget: #472205;
+  --bg-divider: #6a340a;
+  --text-title: #fbc02d;
   --text-body: #fffbeb;
-  --text-secondary: #fcd34d;
-  --text-muted: #b45309;
-  --border-color: #452407;
+  --text-secondary: #fde047;
+  --text-muted: #fcd34d;
+  --border-color: #3f1903;
   --accent-color: #fb923c;
+  --theme-font-title: "Merriweather", serif;
+  --theme-font-body: "Lora", serif;
 }
 
 /* 6. Alpine Purple Theme */
 .theme-alpine-purple, html.theme-alpine-purple, .theme-purple, html.theme-purple {
-  --bg-main: #090514;
-  --bg-card: #190e38;
-  --bg-widget: #291852;
-  --bg-divider: #432b78;
+  --bg-main: #05020c;
+  --bg-card: #13092b;
+  --bg-widget: #23114d;
+  --bg-divider: #3f1f7e;
   --text-title: #c084fc;
   --text-body: #faf5ff;
-  --text-secondary: #e9d5ff;
-  --text-muted: #8467ab;
-  --border-color: #271454;
+  --text-secondary: #edf0ff;
+  --text-muted: #d8b4fe;
+  --border-color: #24114d;
   --accent-color: #c084fc;
+  --theme-font-title: "Manrope", sans-serif;
+  --theme-font-body: "Manrope", sans-serif;
 }
 
 /* 7. Mist Grey Theme */
 .theme-mist-grey, html.theme-mist-grey {
-  --bg-main: #121824;
-  --bg-card: #1e293b;
-  --bg-widget: #334155;
-  --bg-divider: #475569;
-  --text-title: #cbd5e1;
+  --bg-main: #0c0f16;
+  --bg-card: #181d29;
+  --bg-widget: #293144;
+  --bg-divider: #44506c;
+  --text-title: #ffffff;
   --text-body: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border-color: #293548;
-  --accent-color: #94a3b8;
+  --text-secondary: #cbd5e1;
+  --text-muted: #e2e8f0;
+  --border-color: #222938;
+  --accent-color: #cbd5e1;
+  --theme-font-title: "Lexend", sans-serif;
+  --theme-font-body: "Lexend", sans-serif;
 }
 
 /* 8. River Teal Theme */
 .theme-river-teal, html.theme-river-teal {
-  --bg-main: #011e22;
-  --bg-card: #04363c;
-  --bg-widget: #0a525a;
-  --bg-divider: #116a74;
+  --bg-main: #011316;
+  --bg-card: #032a2f;
+  --bg-widget: #073f47;
+  --bg-divider: #0e5b66;
   --text-title: #2dd4bf;
-  --text-body: #ccfbf1;
+  --text-body: #f0fdfa;
   --text-secondary: #99f6e4;
-  --text-muted: #14b8a6;
-  --border-color: #06454c;
-  --accent-color: #14b8a6;
+  --text-muted: #e6fffa;
+  --border-color: #053b42;
+  --accent-color: #2dd4bf;
+  --theme-font-title: "DM Sans", sans-serif;
+  --theme-font-body: "DM Sans", sans-serif;
 }
 
 /* 9. Autumn Trail Theme */
 .theme-autumn-trail, html.theme-autumn-trail {
-  --bg-main: #1c0802;
-  --bg-card: #35150a;
-  --bg-widget: #542717;
-  --bg-divider: #783d28;
-  --text-title: #f97316;
+  --bg-main: #120401;
+  --bg-card: #2b0e04;
+  --bg-widget: #471a0b;
+  --bg-divider: #6e2a14;
+  --text-title: #ff7a1a;
   --text-body: #fff7ed;
   --text-secondary: #ffedd5;
-  --text-muted: #ea580c;
-  --border-color: #441b0d;
-  --accent-color: #f97316;
+  --text-muted: #fdba74;
+  --border-color: #3d1405;
+  --accent-color: #ff7a1a;
+  --theme-font-title: "Lora", serif;
+  --theme-font-body: "Lora", serif;
 }
 
 /* 10. Snow Peak Theme */
 .theme-snow-peak, html.theme-snow-peak {
-  --bg-main: #091424;
-  --bg-card: #112240;
-  --bg-widget: #1d3557;
-  --bg-divider: #457b9d;
+  --bg-main: #050c18;
+  --bg-card: #0c1a2c;
+  --bg-widget: #152a47;
+  --bg-divider: #2a4c7c;
   --text-title: #f1faee;
-  --text-body: #fff;
+  --text-body: #ffffff;
   --text-secondary: #a8dadc;
-  --text-muted: #457b9d;
-  --border-color: #1c3d5a;
+  --text-muted: #e3f8f8;
+  --border-color: #142a42;
   --accent-color: #e63946;
+  --theme-font-title: "Space Grotesk", sans-serif;
+  --theme-font-body: "Lexend", sans-serif;
 }
 
 /* General Dark and Custom Color Theme Mappings */
 .dark, [data-theme="dark"], html.dark {
   background-color: var(--bg-main, #020617) !important;
   color: var(--text-body, #f1f5f9) !important;
+}
+
+/* Apply theme-specific typography at runtime to all elements */
+body, .font-sans, p, span, li, button, input, textarea, select, a {
+  font-family: var(--theme-font-body, "Inter", sans-serif) !important;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display, .font-heading, [class*="font-extrabold"] {
+  font-family: var(--theme-font-title, "Space Grotesk", sans-serif) !important;
 }
 
 /* Navbars / sticky headers */

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
-import { firestoreDb } from './db';
+import { firestoreDb, isFirestoreOnline } from './db';
 
 const ANALYTICS_FILE = path.join(process.cwd(), 'hillytrip_analytics_store.json');
 
@@ -80,7 +80,7 @@ class AnalyticsDatabase {
       try {
         this.data.searches.push(event);
         this.save();
-        if (firestoreDb) {
+        if (firestoreDb && isFirestoreOnline) {
           await setDoc(doc(firestoreDb, 'searches', event.searchId), event);
         }
       } catch (err) {
@@ -95,7 +95,7 @@ class AnalyticsDatabase {
       try {
         this.data.interactions.push(event);
         this.save();
-        if (firestoreDb) {
+        if (firestoreDb && isFirestoreOnline) {
           await setDoc(doc(firestoreDb, 'interactions', event.id), event);
         }
       } catch (err) {
@@ -369,11 +369,11 @@ class AnalyticsDatabase {
           count: 1
         };
 
-        if (firestoreDb) {
+        if (firestoreDb && isFirestoreOnline) {
           await setDoc(doc(firestoreDb, 'user_analytics', id), event);
           console.log(`[User Analytics] Logged to Firestore successfully: ${type} - ${name}`);
         } else {
-          console.warn('[User Analytics Warning] Firestore not initialized, logged event purely inside console.');
+          console.warn('[User Analytics Warning] Firestore not initialized or offline, logged event purely inside console.');
         }
       } catch (err) {
         console.error('Failed to log user analytics event asynchronously to Firestore:', err);
@@ -382,8 +382,8 @@ class AnalyticsDatabase {
   }
 
   public async fetchUserAnalyticsFromFirestore(): Promise<any[]> {
-    if (!firestoreDb) {
-      console.warn('[User Analytics] Firestore is not connected. Returning empty list.');
+    if (!firestoreDb || !isFirestoreOnline) {
+      console.warn('[User Analytics] Firestore is not connected or offline. Returning empty list.');
       return [];
     }
     try {

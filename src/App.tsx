@@ -9,7 +9,8 @@ import {
 } from 'lucide-react';
 import Navbar from './components/Navbar';
 import SearchableCombobox from './components/SearchableCombobox';
-import { Hub, Route, Destination, Attraction, Homestay, RouteSearchResult, TripLead, CarLead, Contribution, ImageItem, User, DEFAULT_HOMESTAY_IMAGE } from './types';
+import { Hub, Route, Destination, Attraction, Homestay, RouteSearchResult, TripLead, CarLead, Contribution, ImageItem, User } from './types';
+import { DEFAULT_HOMESTAY_IMAGE } from './constants';
 import { motion } from 'motion/react';
 import { initialHubs, initialDestinations, initialAttractions, initialHomestays, initialRoutes } from './data/initialData';
 import { onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
@@ -48,6 +49,11 @@ const AdminLocationIntelligenceTab = React.lazy(() =>
 );
 
 const fetch = hillyTripFetch;
+
+const safeSrc = (url?: string, fallback: string = DEFAULT_HOMESTAY_IMAGE) => {
+  if (!url || typeof url !== 'string' || url.trim() === '') return fallback;
+  return url;
+};
 
 const formatWhatsAppNumber = (contactStr: string | null | undefined): string => {
   if (!contactStr) return '';
@@ -3039,7 +3045,7 @@ export default function App() {
           <div className="relative group rounded-xl overflow-hidden border border-emerald-205 bg-emerald-50/50 p-3 flex items-center justify-between gap-4 animate-fade-in">
             <div className="flex items-center gap-3 min-w-0">
               <img 
-                src={contribUploadedUrl} 
+                src={contribUploadedUrl || undefined} 
                 alt="Uploaded preview" 
                 className="w-12 h-12 object-cover rounded-lg border border-slate-200 shadow-xs" 
                 referrerPolicy="no-referrer"
@@ -3582,9 +3588,7 @@ export default function App() {
           bestSeason: "September to June",
           image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800&auto=format&fit=crop",
           gallery: [],
-          isHiddenGem: false,
-          isFeaturedThisWeek: false,
-          isPopularDestination: false
+          isHiddenGem: false
         };
       case 'attractions':
         return {
@@ -3595,9 +3599,7 @@ export default function App() {
           description: "World famous vantage point for viewing Mt Kanchenjunga.",
           image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop",
           gallery: [],
-          isHiddenGem: false,
-          isFeaturedThisWeek: false,
-          isFeaturedAttraction: false
+          isHiddenGem: false
         };
       case 'homestays':
         return {
@@ -3786,29 +3788,6 @@ export default function App() {
   }, [dbEditorItems]);
 
   const handleCellEdit = (rowId: string, field: string, val: any) => {
-    // Prevent more than 4 items from being marked as Featured This Week at the same time
-    if ((dbEditorCollection === 'destinations' || dbEditorCollection === 'attractions') && field === 'isFeaturedThisWeek' && val === true) {
-      let count = 0;
-      if (dbEditorCollection === 'destinations') {
-        count += attractions.filter(a => a.isFeaturedThisWeek).length;
-      } else if (dbEditorCollection === 'attractions') {
-        count += destinations.filter(d => d.isFeaturedThisWeek).length;
-      }
-      spreadsheetRows.forEach(row => {
-        if (row.id !== rowId && row.isFeaturedThisWeek) {
-          count++;
-        }
-      });
-
-      if (count >= 4) {
-        setNotification({
-          type: 'error',
-          message: 'Warning: A maximum of 4 items across Destinations and Attractions can be marked "Featured This Week" at any one time.'
-        });
-        return; // Reject the state update
-      }
-    }
-
     setSpreadsheetRows((prev) => {
       const cloned = [...prev];
       const targetIndex = cloned.findIndex(r => r.id === rowId);
@@ -3820,6 +3799,54 @@ export default function App() {
         };
       }
       return cloned;
+    });
+  };
+
+  const autoSaveRow = async (rowId: string, updatedFields: Record<string, any>) => {
+    // Merge the updated fields in state and queue an asynchronous silent save
+    setSpreadsheetRows((prev) => {
+      const idx = prev.findIndex(r => r.id === rowId);
+      if (idx === -1) return prev;
+      
+      const originalRow = prev[idx];
+      const targetRow = { ...originalRow, ...updatedFields };
+      
+      const cleanPayload = formatSpreadsheetRecord(targetRow, dbEditorCollection);
+      const headers = {
+        'Content-Type': 'application/json',
+        'x-admin-password': 'admin123'
+      };
+
+      const alreadyExists = dbEditorItems.some(item => item.id === cleanPayload.id);
+      const url = alreadyExists
+        ? `/api/admin/data/${dbEditorCollection}/${cleanPayload.id}`
+        : `/api/admin/data/${dbEditorCollection}`;
+      const method = alreadyExists ? 'PUT' : 'POST';
+
+      fetch(url, {
+        method,
+        headers,
+        body: JSON.stringify(cleanPayload)
+      })
+        .then(async (res) => {
+          if (res.ok) {
+            // Unmark the specific row as dirty upon successful server confirmation
+            setSpreadsheetRows(current => 
+              current.map(r => r.id === rowId ? { ...r, ...updatedFields, _dirty: false } : r)
+            );
+            // Silently sync the local collection baseline representation
+            const freshRes = await fetch(url.replace(`/${cleanPayload.id}`, ''), { headers });
+            if (freshRes.ok) {
+              const freshList = await freshRes.json();
+              setDbEditorItems(freshList);
+            }
+          }
+        })
+        .catch(err => {
+          console.error('[Silent Auto-Save Background Error]', err);
+        });
+
+      return prev.map(r => r.id === rowId ? { ...r, ...updatedFields, _dirty: true } : r);
     });
   };
 
@@ -3838,13 +3865,21 @@ export default function App() {
     const template = getStarterSkeleton(collection);
     const expectedKeys = Object.keys(template);
 
+    // Copy all properties of the original row (except starting with an underscore) so we don't discard non-skeleton fields
     const cleanPayload: any = {};
-    expectedKeys.forEach(k => {
-      if (row[k] !== undefined) {
+    Object.keys(row).forEach(k => {
+      if (!k.startsWith('_')) {
         cleanPayload[k] = row[k];
-      } else {
-        cleanPayload[k] = template[k];
       }
+    });
+
+    // Apply template default fields and perform precise boolean normalizations
+    expectedKeys.forEach(k => {
+      let val = cleanPayload[k] !== undefined ? cleanPayload[k] : template[k];
+      if (typeof template[k] === 'boolean') {
+        val = val === true || String(val).toLowerCase() === 'true';
+      }
+      cleanPayload[k] = val;
     });
 
     if (row.id) {
@@ -3861,23 +3896,16 @@ export default function App() {
       cleanPayload.timeMin = Number(cleanPayload.timeMin || 0);
       cleanPayload.timeMax = Number(cleanPayload.timeMax || 0);
       cleanPayload.distance = cleanPayload.distance !== undefined ? Number(cleanPayload.distance) : undefined;
-      cleanPayload.verified = !!cleanPayload.verified;
     }
     if (collection === 'destinations') {
       if (typeof cleanPayload.gallery === 'string') {
         cleanPayload.gallery = cleanPayload.gallery.split(',').map((s: string) => s.trim()).filter(Boolean);
       }
-      cleanPayload.isHiddenGem = !!cleanPayload.isHiddenGem;
-      cleanPayload.isFeaturedThisWeek = !!cleanPayload.isFeaturedThisWeek;
-      cleanPayload.isPopularDestination = !!cleanPayload.isPopularDestination;
     }
     if (collection === 'attractions') {
       if (typeof cleanPayload.gallery === 'string') {
         cleanPayload.gallery = cleanPayload.gallery.split(',').map((s: string) => s.trim()).filter(Boolean);
       }
-      cleanPayload.isHiddenGem = !!cleanPayload.isHiddenGem;
-      cleanPayload.isFeaturedThisWeek = !!cleanPayload.isFeaturedThisWeek;
-      cleanPayload.isFeaturedAttraction = !!cleanPayload.isFeaturedAttraction;
     }
     if (collection === 'homestays') {
       if (typeof cleanPayload.amenities === 'string') {
@@ -3902,44 +3930,64 @@ export default function App() {
     return cleanPayload;
   };
 
+  const ensureValidId = (id: string | undefined, name: string | undefined, collection: string, existingItems: any[], allRows: any[]): string => {
+    const rawId = String(id || '').trim();
+    
+    // Check if the current ID is already fully compliant with ^[a-zA-Z0-9_-]+$ and not a temporary ID
+    const isValidAlphanumeric = /^[a-zA-Z0-9_-]+$/.test(rawId) && !rawId.startsWith('temp_');
+    if (isValidAlphanumeric && rawId !== '') {
+      return rawId;
+    }
+
+    const cleanStr = (text: string): string => {
+      return text
+        .toLowerCase()
+        .replace(/[^a-z0-9\s_'-]/g, '')
+        .trim()
+        .replace(/[\s_']+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    };
+
+    let base = rawId ? cleanStr(rawId) : '';
+    if (!base && name) {
+      base = cleanStr(name);
+    }
+    const prefix = collection === 'trip_leads' ? 'trip' : (collection === 'car_leads' ? 'car' : (collection === 'contributions' ? 'contrib' : collection));
+
+    if (!base) {
+      base = `${prefix}-${Date.now()}`;
+    }
+
+    let finalId = base;
+    let counter = 1;
+    const checkConflict = (checkId: string) => {
+      const existsInDb = existingItems.some(item => String(item.id).toLowerCase() === checkId.toLowerCase());
+      const existsInRows = allRows.some(row => String(row.id).toLowerCase() === checkId.toLowerCase() && row.id !== id);
+      return existsInDb || existsInRows;
+    };
+
+    while (checkConflict(finalId)) {
+      finalId = `${base}-${counter}`;
+      counter++;
+    }
+
+    return finalId;
+  };
+
   const handleSaveSpreadsheetRow = async (rowId: string) => {
-    const row = spreadsheetRows.find(r => r.id === rowId);
+    let row = spreadsheetRows.find(r => r.id === rowId);
     if (!row) return;
 
-    if (!row.id || typeof row.id !== 'string' || row.id.startsWith('temp_') || row.id.trim() === '') {
-      setNotification({
-        type: 'error',
-        message: 'Please double-click and set a unique string ID instead of a temp indicator.'
-      });
-      return;
+    const resolvedId = ensureValidId(row.id, row.name, dbEditorCollection, dbEditorItems, spreadsheetRows);
+    if (resolvedId !== row.id) {
+      row = { ...row, id: resolvedId, _dirty: true };
+      setSpreadsheetRows(prev => prev.map(r => r.id === rowId ? { ...r, id: resolvedId } : r));
     }
 
     setLoading(true);
     try {
       const cleanPayload = formatSpreadsheetRecord(row, dbEditorCollection);
-
-      // Validation limit check for 4 items Featured This Week across both destinations and attractions
-      if ((dbEditorCollection === 'destinations' || dbEditorCollection === 'attractions') && cleanPayload.isFeaturedThisWeek) {
-        let count = 0;
-        if (dbEditorCollection === 'destinations') {
-          count += attractions.filter(a => a.isFeaturedThisWeek).length;
-        } else {
-          count += destinations.filter(d => d.isFeaturedThisWeek).length;
-        }
-        
-        // Count active items in the SAME collection, excluding this specific ID
-        const currentList = dbEditorCollection === 'destinations' ? destinations : attractions;
-        count += currentList.filter(item => item.id !== cleanPayload.id && item.isFeaturedThisWeek).length;
-
-        if (count >= 4) {
-          setNotification({
-            type: 'error',
-            message: 'Cannot save: A maximum of 4 items across Destinations and Attractions can be marked "Featured This Week" at the same time.'
-          });
-          setLoading(false);
-          return;
-        }
-      }
 
       const headers = {
         'Content-Type': 'application/json',
@@ -3987,51 +4035,28 @@ export default function App() {
       return;
     }
 
-    const hasInvalidId = dirtyRows.some(row => !row.id || typeof row.id !== 'string' || row.id.startsWith('temp_') || row.id.trim() === '');
-    if (hasInvalidId) {
-      setNotification({
-        type: 'error',
-        message: 'Please assign a unique string ID instead of a temp indicator before saving.'
-      });
-      return;
-    }
-
     setLoading(true);
     try {
-      const formattedRecords = dirtyRows.map(row => formatSpreadsheetRecord(row, dbEditorCollection));
-
-      // Validation limit check for 4 items Featured This Week across both destinations and attractions during bulk save
-      if (dbEditorCollection === 'destinations' || dbEditorCollection === 'attractions') {
-        let count = 0;
-        if (dbEditorCollection === 'destinations') {
-          count += attractions.filter(a => a.isFeaturedThisWeek).length;
-        } else {
-          count += destinations.filter(d => d.isFeaturedThisWeek).length;
+      const updatedRowsMap: Record<string, string> = {};
+      const resolvedDirtyRows = dirtyRows.map(row => {
+        const resolvedId = ensureValidId(row.id, row.name, dbEditorCollection, dbEditorItems, spreadsheetRows);
+        if (resolvedId !== row.id) {
+          updatedRowsMap[row.id] = resolvedId;
+          return { ...row, id: resolvedId };
         }
+        return row;
+      });
 
-        const updatedIds = new Set(formattedRecords.map(r => r.id));
-        const currentList = dbEditorCollection === 'destinations' ? destinations : attractions;
-        currentList.forEach(item => {
-          if (!updatedIds.has(item.id) && item.isFeaturedThisWeek) {
-            count++;
+      if (Object.keys(updatedRowsMap).length > 0) {
+        setSpreadsheetRows(prev => prev.map(r => {
+          if (updatedRowsMap[r.id]) {
+            return { ...r, id: updatedRowsMap[r.id] };
           }
-        });
-
-        formattedRecords.forEach(r => {
-          if (r.isFeaturedThisWeek) {
-            count++;
-          }
-        });
-
-        if (count > 4) {
-          setNotification({
-            type: 'error',
-            message: 'Cannot save bulk: This would result in more than 4 items being marked "Featured This Week" at the same time.'
-          });
-          setLoading(false);
-          return;
-        }
+          return r;
+        }));
       }
+
+      const formattedRecords = resolvedDirtyRows.map(row => formatSpreadsheetRecord(row, dbEditorCollection));
 
       const headers = {
         'Content-Type': 'application/json',
@@ -4503,15 +4528,29 @@ export default function App() {
 
             {/* ⭐ Hidden Gems of the Week Section */}
             {(() => {
-              const featuredDestinations = destinations.filter(d => !!d.isFeaturedThisWeek).map(d => ({
-                ...d,
-                itemType: 'destination' as const,
-              }));
-              const featuredAttractions = attractions.filter(a => !!a.isFeaturedThisWeek).map(a => ({
-                ...a,
-                itemType: 'attraction' as const,
-              }));
-              const featuredItems = [...featuredDestinations, ...featuredAttractions].slice(0, 4);
+              const featuredDestinations = destinations.filter(d => !!d.isHiddenGem).map(d => {
+                const likeCount = likes.filter(l => l.contentId === d.id).length;
+                const viewCount = destinationStats[d.id] || 0;
+                const score = (likeCount * 15) + (viewCount * 2);
+                return {
+                  ...d,
+                  score,
+                  itemType: 'destination' as const,
+                };
+              });
+              const featuredAttractions = attractions.filter(a => !!a.isHiddenGem).map(a => {
+                const likeCount = likes.filter(l => l.contentId === a.id).length;
+                const viewCount = attractionStats[a.id] || 0;
+                const score = (likeCount * 15) + (viewCount * 2);
+                return {
+                  ...a,
+                  score,
+                  itemType: 'attraction' as const,
+                };
+              });
+              const featuredItems = [...featuredDestinations, ...featuredAttractions]
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 4);
 
               return (
                 <ScrollAnimatedSection className="py-16 px-4 bg-white dark:bg-slate-900 transition-colors duration-200">
@@ -4534,7 +4573,7 @@ export default function App() {
                       <div className="text-center py-12 px-6 bg-slate-50/50 dark:bg-slate-950/40 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800/80">
                         <Sparkles className="w-10 h-10 text-emerald-500 mx-auto stroke-1.2 mb-3 animate-pulse" />
                         <p className="text-sm font-extrabold text-slate-700 dark:text-slate-350">Handpicked Secrets Coming Soon!</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Admins can mark Destinations or Attractions as "Featured This Week" in the Admin Panel.</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Add some items and mark them as Hidden Gems in the Admin Panel to automatically display them here!</p>
                       </div>
                     ) : (
                       <div className="flex gap-6 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-805 -mx-4 px-4 sm:mx-0 sm:px-0">
@@ -4549,7 +4588,7 @@ export default function App() {
                             >
                               <div className="relative w-full sm:w-2/5 h-48 sm:h-auto overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0">
                                 <img 
-                                  src={item.image} 
+                                  src={safeSrc(item.image)} 
                                   alt={item.name} 
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
@@ -4604,7 +4643,7 @@ export default function App() {
                   if (a.id === 'delo-park') baselineBoost = 30;
                   if (a.id === 'lava-monastery') baselineBoost = 25;
                   
-                  const score = (likeCount * 15) + (viewCount * 2) + (isHidden ? 15 : 0) + (a.isFeaturedAttraction ? 50 : 0) + baselineBoost;
+                  const score = (likeCount * 15) + (viewCount * 2) + (isHidden ? 25 : 0) + baselineBoost;
                   return { ...a, autoFeaturedScore: score };
                 })
                 .sort((a, b) => b.autoFeaturedScore - a.autoFeaturedScore)
@@ -4653,7 +4692,7 @@ export default function App() {
                             >
                               <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0">
                                 <img
-                                  src={item.image}
+                                  src={safeSrc(item.image)}
                                   alt={item.name}
                                   loading="lazy"
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -4738,7 +4777,7 @@ export default function App() {
                           >
                             <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0">
                               <img
-                                src={item.image}
+                                src={safeSrc(item.image)}
                                 alt={item.name}
                                 loading="lazy"
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -4785,7 +4824,7 @@ export default function App() {
                   const attractionCount = attractions.filter(a => a.destinationId === d.id).length;
                   
                   // Score is calculated from user engagement (views/likes) and listing density (sights/homestays)
-                  const score = (likeCount * 12) + (viewCount * 1.5) + (homestayCount * 5) + (attractionCount * 3) + (d.isPopularDestination ? 50 : 0);
+                  const score = (likeCount * 12) + (viewCount * 1.5) + (homestayCount * 5) + (attractionCount * 3);
                   return { ...d, autoPopularScore: score };
                 })
                 .sort((a, b) => b.autoPopularScore - a.autoPopularScore)
@@ -4831,7 +4870,7 @@ export default function App() {
                             >
                               <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0">
                                 <img
-                                  src={item.image}
+                                  src={safeSrc(item.image)}
                                   alt={item.name}
                                   loading="lazy"
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -5191,7 +5230,7 @@ export default function App() {
                       <div className="bg-white rounded-3xl overflow-hidden shadow-xs border border-slate-200">
                         <div className="grid grid-cols-1 lg:grid-cols-2">
                           <div className="h-64 lg:h-full min-h-[300px] relative bg-slate-100">
-                            <img src={dest.image} alt={dest.name} className="w-full h-full object-cover" />
+                            <img src={safeSrc(dest.image)} alt={dest.name} className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent lg:hidden" />
                             <div className="absolute bottom-4 left-4 lg:hidden text-white">
                               <h3 className="text-2xl font-extrabold">{dest.name}</h3>
@@ -5265,7 +5304,7 @@ export default function App() {
                                 className="w-[calc(100vw-48px)] min-w-[calc(100vw-48px)] sm:w-[280px] sm:min-w-[280px] md:w-[320px] md:min-w-[320px] snap-center flex-shrink-0 bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden hover:scale-[1.01] transition duration-155 flex flex-col"
                               >
                                 <div className="h-40 bg-slate-100 relative">
-                                  <img src={att.image} alt={att.name} className="w-full h-full object-cover animate-fade-in" />
+                                  <img src={safeSrc(att.image)} alt={att.name} className="w-full h-full object-cover animate-fade-in" />
                                   <span className="absolute top-3 left-3 text-[9px] text-indigo-700 bg-indigo-50/95 font-extrabold uppercase px-2 py-0.5 rounded shadow-xs border border-indigo-150">
                                     {att.category}
                                   </span>
@@ -5441,7 +5480,7 @@ export default function App() {
                                     className="w-[calc(100vw-48px)] min-w-[calc(100vw-48px)] sm:w-[280px] sm:min-w-[280px] md:w-[320px] md:min-w-[320px] snap-center flex-shrink-0 bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden hover:scale-[1.01] transition duration-150 flex flex-col"
                                   >
                                     <div className="h-44 bg-slate-100 relative">
-                                      <img src={d.image} alt={d.name} className="w-full h-full object-cover" />
+                                      <img src={safeSrc(d.image)} alt={d.name} className="w-full h-full object-cover" />
                                       <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-xs font-extrabold text-[9px] text-slate-800 py-1 px-2.5 rounded-full border border-slate-200 uppercase">
                                         🏕️ {d.tourismType}
                                       </span>
@@ -5545,9 +5584,9 @@ export default function App() {
                     <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden divide-y divide-slate-100 dark:divide-slate-800 animate-slide-up">
                       {(() => {
                         const suggestions = destinations.filter(d => 
-                          d.name.toLowerCase().includes(destSearchQuery.toLowerCase()) ||
-                          d.tourismType.toLowerCase().includes(destSearchQuery.toLowerCase()) ||
-                          d.description.toLowerCase().includes(destSearchQuery.toLowerCase())
+                          (d.name || '').toLowerCase().includes(destSearchQuery.toLowerCase()) ||
+                          (d.tourismType || '').toLowerCase().includes(destSearchQuery.toLowerCase()) ||
+                          (d.description || '').toLowerCase().includes(destSearchQuery.toLowerCase())
                         ).slice(0, 5);
 
                         if (suggestions.length === 0) {
@@ -5567,7 +5606,7 @@ export default function App() {
                             }}
                             className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors"
                           >
-                            <img src={d.image} alt={d.name} className="w-10 h-10 rounded-lg object-cover shrink-0" />
+                            <img src={safeSrc(d.image)} alt={d.name} className="w-10 h-10 rounded-lg object-cover shrink-0" />
                             <div className="min-w-0 flex-1">
                               <h4 className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">{d.name}</h4>
                               <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">{d.tourismType}</p>
@@ -5601,7 +5640,7 @@ export default function App() {
                   
                   {/* Large Card Cover Image */}
                   <div className="w-full lg:w-3/5 h-64 lg:h-auto min-h-[280px] bg-slate-950 relative shrink-0">
-                    <img src={surpriseDest.image} alt={surpriseDest.name} className="w-full h-full object-cover rounded-2xl lg:rounded-r-none" />
+                    <img src={safeSrc(surpriseDest.image)} alt={surpriseDest.name} className="w-full h-full object-cover rounded-2xl lg:rounded-r-none" />
                     <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent pointer-events-none" />
                     
                     {/* Floating Badges */}
@@ -5682,7 +5721,7 @@ export default function App() {
                       {/* Anchor image block */}
                       <div className="h-44 bg-slate-100 dark:bg-slate-950 relative overflow-hidden shrink-0">
                         <img 
-                          src={dest.image} 
+                          src={safeSrc(dest.image)} 
                           alt={dest.name} 
                           className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" 
                         />
@@ -5829,7 +5868,7 @@ export default function App() {
                 const photogenic = (() => {
                   return [...destinations].map(dest => {
                     const hasPhotoTag = ['scenic', 'trek', 'lake', 'monastery', 'viewpoint', 'waterfall', 'heritage', 'sanctuary', 'glacier'].some(t => 
-                      dest.tourismType.toLowerCase().includes(t) || dest.description.toLowerCase().includes(t)
+                      (dest.tourismType || '').toLowerCase().includes(t) || (dest.description || '').toLowerCase().includes(t)
                     );
                     const galleryCount = Array.isArray(dest.gallery) ? dest.gallery.length : 0;
                     let score = galleryCount * 12;
@@ -5873,7 +5912,7 @@ export default function App() {
                       r.toHubId === dest.id || 
                       (Array.isArray(r.path) && r.path.includes(dest.name))
                     ).length;
-                    const score = (connectedRoutes * 25) + (dest.tourismType.toLowerCase().includes('weekend') || dest.tourismType.toLowerCase().includes('hill') ? 35 : 10);
+                    const score = (connectedRoutes * 25) + ((dest.tourismType || '').toLowerCase().includes('weekend') || (dest.tourismType || '').toLowerCase().includes('hill') ? 35 : 10);
                     return { dest, score };
                   })
                   .sort((a, b) => b.score - a.score)
@@ -6012,9 +6051,9 @@ export default function App() {
                   if (destSearchQuery.trim()) {
                     const qStr = destSearchQuery.toLowerCase();
                     list = list.filter(d => 
-                      d.name.toLowerCase().includes(qStr) || 
-                      d.description.toLowerCase().includes(qStr) ||
-                      d.tourismType.toLowerCase().includes(qStr)
+                      (d.name || '').toLowerCase().includes(qStr) || 
+                      (d.description || '').toLowerCase().includes(qStr) ||
+                      (d.tourismType || '').toLowerCase().includes(qStr)
                     );
                   }
 
@@ -6087,7 +6126,7 @@ export default function App() {
                                 className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-xs border border-slate-205 dark:border-slate-800 flex flex-col h-full hover:scale-[1.01] transition-transform group"
                               >
                                 <div className="h-52 bg-slate-100 dark:bg-slate-950 relative overflow-hidden shrink-0">
-                                  <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" />
+                                  <img src={safeSrc(dest.image)} alt={dest.name} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" />
                                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-transparent pointer-events-none" />
                                   
                                   {/* Overlay Buttons */}
@@ -6161,7 +6200,7 @@ export default function App() {
                                 className="bg-white dark:bg-slate-900 border border-slate-201 dark:border-slate-800 rounded-2xl overflow-hidden p-4 flex flex-col sm:flex-row items-stretch gap-5 hover:border-slate-320 dark:hover:border-slate-700 transition-colors"
                               >
                                 <div className="w-full sm:w-44 h-32 bg-slate-100 dark:bg-slate-950 rounded-xl overflow-hidden shrink-0">
-                                  <img src={dest.image} alt={dest.name} className="w-full h-full object-cover" />
+                                  <img src={safeSrc(dest.image)} alt={dest.name} className="w-full h-full object-cover" />
                                 </div>
 
                                 <div className="flex-grow flex flex-col justify-between">
@@ -6280,7 +6319,7 @@ export default function App() {
                 <div className="relative overflow-hidden bg-slate-900 text-white min-h-[360px] md:min-h-[460px] flex items-center justify-center py-16 px-6 text-center">
                   <div className="absolute inset-0 z-0 select-none">
                     <img 
-                      src={activeDestDetail.destination.image} 
+                      src={safeSrc(activeDestDetail.destination.image)} 
                       alt={activeDestDetail.destination.name} 
                       className="w-full h-full object-cover opacity-35 object-center scale-105" 
                     />
@@ -6487,7 +6526,7 @@ export default function App() {
                                   className="w-[85%] sm:w-[320px] shrink-0 snap-start bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 hover:shadow-sm transition flex flex-col h-full"
                                 >
                                   <div className="h-36 bg-slate-200 relative shrink-0">
-                                    <img src={att.image} alt={att.name} className="w-full h-full object-cover" />
+                                    <img src={safeSrc(att.image)} alt={att.name} className="w-full h-full object-cover" />
                                     
                                     {/* Action Buttons Overlay */}
                                     <div className="absolute top-2 right-2 z-10 flex items-center gap-1">
@@ -6558,7 +6597,7 @@ export default function App() {
                             {activeDestDetail.attractions.map((att: Attraction) => (
                               <div key={att.id} className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-250 hover:shadow-md transition flex flex-col h-full">
                                 <div className="h-44 bg-slate-200 relative">
-                                  <img src={att.image} alt={att.name} className="w-full h-full object-cover" />
+                                  <img src={safeSrc(att.image)} alt={att.name} className="w-full h-full object-cover" />
                                   
                                   {/* Actions Overlay */}
                                   <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5">
@@ -6763,6 +6802,57 @@ export default function App() {
                       </div>
                     )}
                   </div>
+
+                  {/* 5.5. BEST NEARBY DESTINATIONS */}
+                  {activeDestDetail.destination.nearbyDestinations && activeDestDetail.destination.nearbyDestinations.length > 0 && (
+                    <div id="nearby-destinations-section" className="bg-white rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 space-y-6">
+                      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <div className="space-y-1">
+                          <h4 className="font-extrabold text-2xl text-slate-900 flex items-center gap-2">
+                            ⛰️ Hand-picked Nearby Places
+                          </h4>
+                          <p className="text-xs text-slate-500">Discover other beautiful mountain retreats and valleys within close proximity to {activeDestDetail.destination.name}.</p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {activeDestDetail.destination.nearbyDestinations.map((nearby: any) => (
+                          <button
+                            key={nearby.id}
+                            onClick={() => {
+                              navigate(`#/destination/${nearby.id}`);
+                              // Force scroll to top when looking at a new destination
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className="group text-left bg-slate-50 hover:bg-emerald-50/50 p-4 rounded-2xl border border-slate-200 hover:border-emerald-200 transition-all duration-300 flex gap-4 cursor-pointer shadow-3xs hover:shadow-xs"
+                          >
+                            {nearby.image && (
+                              <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-slate-200 relative">
+                                <img
+                                  src={safeSrc(nearby.image)}
+                                  alt={nearby.name}
+                                  referrerPolicy="no-referrer"
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                  onError={(e) => { e.currentTarget.src = DEFAULT_HOMESTAY_IMAGE }}
+                                />
+                              </div>
+                            )}
+                            <div className="space-y-1 flex-1 min-w-0">
+                              <span className="font-bold text-sm text-slate-900 group-hover:text-slate-950 block truncate">
+                                {nearby.name}
+                              </span>
+                              <span className="text-[10px] bg-emerald-50 text-emerald-800 font-bold uppercase rounded-sm px-1.5 py-0.5 inline-block tracking-wider">
+                                {nearby.tourismType || 'Mountain Village'}
+                              </span>
+                              <span className="text-slate-500 block text-[11px] font-medium font-sans">
+                                📍 ~{nearby.distance.toFixed(1)} km away
+                              </span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* 6. GALERY SECTION & UPLOAD PHOTO SYSTEM */}
                   <div id="gallery-section" className="space-y-4">
@@ -6974,9 +7064,9 @@ export default function App() {
             .filter(a => {
               const matchesFilter = attractionFilter === 'All' || a.category === attractionFilter;
               const matchesSearch = !attractionSearchQuery || 
-                a.name.toLowerCase().includes(attractionSearchQuery.toLowerCase()) ||
-                a.description.toLowerCase().includes(attractionSearchQuery.toLowerCase()) ||
-                a.category.toLowerCase().includes(attractionSearchQuery.toLowerCase());
+                (a.name || '').toLowerCase().includes(attractionSearchQuery.toLowerCase()) ||
+                (a.description || '').toLowerCase().includes(attractionSearchQuery.toLowerCase()) ||
+                (a.category || '').toLowerCase().includes(attractionSearchQuery.toLowerCase());
               return matchesFilter && matchesSearch;
             })
             .sort((a, b) => {
@@ -7024,7 +7114,7 @@ export default function App() {
               >
                 {/* Card Thumbnail Area with linear overlay */}
                 <div className="h-44 bg-slate-100 dark:bg-slate-800 relative overflow-hidden group/thumb">
-                  <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" />
+                  <img src={safeSrc(item.image)} alt={item.name} className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80" />
                   
                   {/* Action Overlays */}
@@ -7165,7 +7255,7 @@ export default function App() {
                             }}
                             className="w-full flex items-center gap-3.5 p-2 hover:bg-emerald-500/5 dark:hover:bg-slate-800 rounded-2xl text-left transition duration-200 group cursor-pointer"
                           >
-                            <img src={item.image} alt={item.name} className="w-11 h-11 rounded-xl object-cover shrink-0" />
+                            <img src={safeSrc(item.image)} alt={item.name} className="w-11 h-11 rounded-xl object-cover shrink-0" />
                             <div className="min-w-0 flex-grow">
                               <span className="text-xs font-extrabold text-slate-800 dark:text-white block group-hover:text-emerald-505 transition truncate leading-tight">{item.name}</span>
                               <span className="text-[10px] text-slate-450 font-mono block mt-0.5 uppercase tracking-wider">{item.category} • {destinations.find(d => d.id === item.destinationId)?.name || 'Himalayas'} area</span>
@@ -7194,7 +7284,7 @@ export default function App() {
                       <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-between min-h-[420px] shadow-sm border border-slate-800 hover:border-slate-700/80 transition duration-300">
                         {/* Immersive background photo layer */}
                         <div className="absolute inset-0 z-0">
-                          <img src={daySpotlight.image} className="w-full h-full object-cover opacity-35 hover:scale-[1.02] transition duration-500" alt={daySpotlight.name} />
+                          <img src={safeSrc(daySpotlight.image)} className="w-full h-full object-cover opacity-35 hover:scale-[1.02] transition duration-500" alt={daySpotlight.name} />
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
                         </div>
 
@@ -7244,7 +7334,7 @@ export default function App() {
                       <div className="bg-white dark:bg-slate-905 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-between min-h-[420px] shadow-sm transition duration-300">
                         {/* Immersive background photo layer */}
                         <div className="absolute inset-0 z-0">
-                          <img src={surpriseAttraction.image} className="w-full h-full object-cover opacity-15 dark:opacity-20 hover:scale-[1.02] transition duration-500" alt={surpriseAttraction.name} />
+                          <img src={safeSrc(surpriseAttraction.image)} className="w-full h-full object-cover opacity-15 dark:opacity-20 hover:scale-[1.02] transition duration-500" alt={surpriseAttraction.name} />
                           <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-950 via-white/80 dark:via-slate-950/60 to-transparent" />
                         </div>
 
@@ -7635,7 +7725,7 @@ export default function App() {
                 <div id="hero-section" className="relative bg-slate-900 h-[380px] sm:h-[450px] md:h-[500px] text-white flex flex-col justify-end overflow-hidden">
                   <div className="absolute inset-0 z-0">
                     <img 
-                      src={activeAttrDetail.attraction.image} 
+                      src={safeSrc(activeAttrDetail.attraction.image)} 
                       alt={activeAttrDetail.attraction.name} 
                       className="w-full h-full object-cover opacity-35 object-center scale-105 transition-transform duration-700 ease-out hover:scale-100" 
                     />
@@ -7716,7 +7806,7 @@ export default function App() {
                       </p>
                       
                       <p className="text-xs sm:text-sm text-slate-400 font-medium italic mt-2 opacity-90 leading-relaxed">
-                        "Experience the pristine beauty of {activeAttrDetail.attraction.name}, a cozy {activeAttrDetail.attraction.category.toLowerCase()} nesting quietly in the {activeAttrDetail.destination?.name || 'Himalayan'} landscape."
+                        "Experience the pristine beauty of {activeAttrDetail.attraction.name}, a cozy {(activeAttrDetail.attraction.category || 'attraction').toLowerCase()} nesting quietly in the {activeAttrDetail.destination?.name || 'Himalayan'} landscape."
                       </p>
                     </div>
                   </div>
@@ -7961,7 +8051,7 @@ export default function App() {
                                 >
                                   <div className="relative h-40 w-full overflow-hidden shrink-0">
                                     <img 
-                                      src={item.image} 
+                                      src={safeSrc(item.image)} 
                                       alt={item.name} 
                                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                                     />
@@ -8492,8 +8582,8 @@ export default function App() {
                 const allHiddenGems = [...hiddenDestinations, ...hiddenAttractions];
 
                 const filteredGems = allHiddenGems.filter(item => {
-                  const matchesSearch = item.name.toLowerCase().includes(gemSearch.toLowerCase()) || 
-                                        item.description.toLowerCase().includes(gemSearch.toLowerCase());
+                  const matchesSearch = (item.name || '').toLowerCase().includes(gemSearch.toLowerCase()) || 
+                                        (item.description || '').toLowerCase().includes(gemSearch.toLowerCase());
                   const matchesType = gemFilterType === 'all' || item.itemType === gemFilterType;
                   return matchesSearch && matchesType;
                 });
@@ -8521,7 +8611,7 @@ export default function App() {
                         >
                           <div className="relative h-52 overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0">
                             <img
-                              src={item.image}
+                              src={safeSrc(item.image)}
                               alt={item.name}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
@@ -9249,7 +9339,7 @@ export default function App() {
                             <div className="relative rounded-xl overflow-hidden border border-emerald-300 bg-emerald-50/40 p-3 flex items-center justify-between gap-3 animate-fade-in">
                               <div className="flex items-center gap-3 min-w-0">
                                 <img 
-                                  src={photoUploadedUrl} 
+                                  src={photoUploadedUrl || undefined} 
                                   alt="Uploader preview" 
                                   className="w-16 h-16 object-cover rounded-xl border border-emerald-200 shadow-xs shrink-0" 
                                   referrerPolicy="no-referrer"
@@ -9351,7 +9441,7 @@ export default function App() {
                               return (
                                 <div key={cont.id} className="flex gap-4 p-4.5 bg-slate-50 rounded-2xl border border-slate-150 shadow-2xs items-start text-left">
                                   <img
-                                    src={cont.imageUrl}
+                                    src={safeSrc(cont.imageUrl)}
                                     alt="Contributed thumbnail"
                                     className="w-16 h-16 object-cover rounded-xl border border-slate-200 shadow-sm shrink-0"
                                     referrerPolicy="no-referrer"
@@ -10333,7 +10423,7 @@ export default function App() {
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {photoContributions.map((contrib: any) => (
                               <div key={contrib.id} className="bg-slate-50 dark:bg-slate-900 rounded-xl p-3 border border-slate-200/50 dark:border-slate-800 flex items-center gap-3">
-                                {contrib.imageUrl && <img src={contrib.imageUrl} className="w-12 h-12 rounded-lg object-cover bg-slate-200 shrink-0" referrerPolicy="no-referrer" />}
+                                {contrib.imageUrl && <img src={safeSrc(contrib.imageUrl)} className="w-12 h-12 rounded-lg object-cover bg-slate-200 shrink-0" referrerPolicy="no-referrer" />}
                                 <div className="text-xs text-left truncate">
                                   <p className="font-bold text-slate-800 dark:text-slate-205 truncate">{contrib.title || 'Mountain Peak view'}</p>
                                   <p className="text-slate-505 font-mono text-[10px] mt-0.5 shrink-0 truncate">Zone: {contrib.mappedDestName || 'Unmapped range'}</p>
@@ -11801,15 +11891,21 @@ export default function App() {
                                               <div className="flex items-center justify-center h-8 w-full">
                                                 <input
                                                   type="checkbox"
-                                                  checked={!!displayVal}
-                                                  onChange={(e) => handleCellEdit(row.id, key, e.target.checked)}
+                                                  checked={originalVal === true || originalVal === 'true'}
+                                                  onChange={(e) => {
+                                                    handleCellEdit(row.id, key, e.target.checked);
+                                                    autoSaveRow(row.id, { [key]: e.target.checked });
+                                                  }}
                                                   className="h-4 w-4 rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500"
                                                 />
                                               </div>
                                             ) : (key === 'type' && dbEditorCollection === 'hubs') ? (
                                               <select
                                                 value={displayVal}
-                                                onChange={(e) => handleCellEdit(row.id, key, e.target.value)}
+                                                onChange={(e) => {
+                                                  handleCellEdit(row.id, key, e.target.value);
+                                                  autoSaveRow(row.id, { [key]: e.target.value });
+                                                }}
                                                 className="w-full h-8 px-2 bg-transparent text-xs font-semibold focus:bg-white focus:outline-hidden text-slate-800"
                                               >
                                                 <option value="main_hub">Main Hub</option>
@@ -11819,7 +11915,10 @@ export default function App() {
                                             ) : (key === 'type' && dbEditorCollection === 'routes') ? (
                                               <select
                                                 value={displayVal}
-                                                onChange={(e) => handleCellEdit(row.id, key, e.target.value)}
+                                                onChange={(e) => {
+                                                  handleCellEdit(row.id, key, e.target.value);
+                                                  autoSaveRow(row.id, { [key]: e.target.value });
+                                                }}
                                                 className="w-full h-8 px-2 bg-transparent text-xs font-semibold focus:bg-white focus:outline-hidden text-slate-800"
                                               >
                                                 <option value="Direct">Direct</option>
@@ -11828,7 +11927,10 @@ export default function App() {
                                             ) : (key === 'category' && dbEditorCollection === 'attractions') ? (
                                               <select
                                                 value={displayVal}
-                                                onChange={(e) => handleCellEdit(row.id, key, e.target.value)}
+                                                onChange={(e) => {
+                                                  handleCellEdit(row.id, key, e.target.value);
+                                                  autoSaveRow(row.id, { [key]: e.target.value });
+                                                }}
                                                 className="w-full h-8 px-2 bg-transparent text-xs font-semibold focus:bg-white focus:outline-hidden text-slate-800"
                                               >
                                                 {attractionCategories.map(cat => (
@@ -11838,19 +11940,26 @@ export default function App() {
                                             ) : (key === 'status' && (dbEditorCollection === 'images' || dbEditorCollection === 'contributions')) ? (
                                               <select
                                                 value={displayVal}
-                                                onChange={(e) => handleCellEdit(row.id, key, e.target.value)}
-                                                className="w-full h-8 px-2 bg-transparent text-xs font-bold focus:bg-white focus:outline-hidden text-slate-800"
-                                              >
-                                                <option value="Pending">Pending</option>
-                                                <option value="Approved">Approved</option>
-                                                <option value="Rejected">Rejected</option>
-                                              </select>
-                                            ) : (typeof getStarterSkeleton(dbEditorCollection)[key] === 'number') ? (
+                                                onChange={(e) => {
+                                                  handleCellEdit(row.id, key, e.target.value);
+                                                   autoSaveRow(row.id, { [key]: e.target.value });
+                                                 }}
+                                                 className="w-full h-8 px-2 bg-transparent text-xs font-bold focus:bg-white focus:outline-hidden text-slate-800"
+                                               >
+                                                 <option value="Pending">Pending</option>
+                                                 <option value="Approved">Approved</option>
+                                                 <option value="Rejected">Rejected</option>
+                                               </select>
+                                             ) : (typeof getStarterSkeleton(dbEditorCollection)[key] === 'number') ? (
                                               <input
                                                 type="number"
                                                 value={displayVal}
                                                 disabled={isReadOnly}
                                                 onChange={(e) => handleCellEdit(row.id, key, e.target.value === '' ? '' : Number(e.target.value))}
+                                                onBlur={(e) => {
+                                                  const val = e.target.value === '' ? 0 : Number(e.target.value);
+                                                  autoSaveRow(row.id, { [key]: val });
+                                                }}
                                                 className="w-full h-8 px-3 font-mono text-right text-xs bg-transparent border-0 focus:ring-1 focus:ring-emerald-500 focus:bg-white focus:outline-hidden select-all"
                                               />
                                             ) : (
@@ -11861,6 +11970,7 @@ export default function App() {
                                                   disabled={isReadOnly}
                                                   placeholder={isNewRow && key === 'id' ? 'Set unique ID' : 'Empty cell'}
                                                   onChange={(e) => handleCellEdit(row.id, key, e.target.value)}
+                                                  onBlur={(e) => autoSaveRow(row.id, { [key]: e.target.value })}
                                                   className={`w-full h-full px-3 text-xs bg-transparent border-0 focus:ring-1 focus:ring-emerald-500 focus:bg-white focus:outline-hidden select-all font-sans ${
                                                     isReadOnly ? 'text-slate-400 font-mono font-bold cursor-not-allowed' : 'text-slate-800'
                                                   } ${
@@ -11915,7 +12025,8 @@ export default function App() {
                                                             }
                                                             
                                                             handleCellEdit(row.id, key, newVal);
-                                                            setNotification({ type: 'success', message: `Successfully uploaded photo! Click "Save" on the right of this row to commit changes.` });
+                                                            autoSaveRow(row.id, { [key]: newVal });
+                                                            setNotification({ type: 'success', message: `Successfully uploaded & saved photo to Firebase!` });
                                                           } catch (err: any) {
                                                             setNotification({ type: 'error', message: `Upload failed: ${err.message}` });
                                                           } finally {
@@ -11928,6 +12039,7 @@ export default function App() {
                                                 )}
                                               </div>
                                             )}
+
                                           </td>
                                         );
                                       })}
@@ -12418,7 +12530,7 @@ export default function App() {
                                 return (
                                   <div key={img.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex gap-4 animate-fade-in shadow-xs">
                                     <div className="w-24 h-24 rounded-lg overflow-hidden shrink-0 border bg-white">
-                                      <img src={img.url} alt={img.altText} className="w-full h-full object-cover" />
+                                      <img src={safeSrc(img.url)} alt={img.altText} className="w-full h-full object-cover" />
                                     </div>
                                     <div className="flex-grow flex flex-col justify-between text-left min-w-0">
                                       <div className="space-y-1">
@@ -12538,7 +12650,7 @@ export default function App() {
                                     <tr key={img.id} className="hover:bg-slate-50 transition border-b bg-white">
                                       <td className="p-3">
                                         <div className="w-12 h-12 bg-white border border-slate-200 rounded-md overflow-hidden shadow-xs shrink-0 bg-slate-100">
-                                          <img src={img.url} alt={img.altText} className="w-full h-full object-cover" />
+                                          <img src={safeSrc(img.url)} alt={img.altText} className="w-full h-full object-cover" />
                                         </div>
                                       </td>
                                       <td className="p-3 max-w-xs text-left">
@@ -13195,8 +13307,8 @@ export default function App() {
                                 <tbody className="divide-y divide-slate-100">
                                   {(() => {
                                     const filtered = allAdminUsers.filter(u => {
-                                      const matchSearch = u.email.toLowerCase().includes(adminSearchQuery.toLowerCase()) || 
-                                                          u.name.toLowerCase().includes(adminSearchQuery.toLowerCase());
+                                      const matchSearch = (u.email || '').toLowerCase().includes(adminSearchQuery.toLowerCase()) || 
+                                                          (u.name || '').toLowerCase().includes(adminSearchQuery.toLowerCase());
                                       const matchRole = adminRoleFilter === 'all' || u.role === adminRoleFilter;
                                       return matchSearch && matchRole;
                                     });
@@ -13495,10 +13607,10 @@ export default function App() {
                                     const matchesStatus = adminStatusFilter === 'All' || cont.status === adminStatusFilter;
                                     const destName = destinations.find(d => d.id === cont.destinationId)?.name || '';
                                     const term = adminSearchTerm.toLowerCase();
-                                    const matchesSearch = cont.travellerName.toLowerCase().includes(term) ||
-                                                          cont.travellerEmail.toLowerCase().includes(term) ||
-                                                          cont.destinationId.toLowerCase().includes(term) ||
-                                                          destName.toLowerCase().includes(term);
+                                    const matchesSearch = (cont.travellerName || '').toLowerCase().includes(term) ||
+                                                          (cont.travellerEmail || '').toLowerCase().includes(term) ||
+                                                          (cont.destinationId || '').toLowerCase().includes(term) ||
+                                                          (destName || '').toLowerCase().includes(term);
                                     return matchesStatus && matchesSearch;
                                   });
 
@@ -13543,7 +13655,7 @@ export default function App() {
                                         <td className="p-3">
                                           <div className="relative group flex items-center">
                                             <img
-                                              src={cont.imageUrl}
+                                              src={safeSrc(cont.imageUrl)}
                                               alt="Traveller scenic thumbnail"
                                               className="w-14 h-14 object-cover rounded-lg border shadow-xs cursor-zoom-in group-hover:scale-105 transition"
                                               referrerPolicy="no-referrer"
@@ -13823,9 +13935,9 @@ export default function App() {
                               <tbody className="divide-y divide-slate-100 font-sans">
                                 {(() => {
                                   const filteredLogs = allAuditLogs.filter(log => {
-                                    const matchSearch = log.email.toLowerCase().includes(adminSearchQuery.toLowerCase()) || 
-                                                        log.action.toLowerCase().includes(adminSearchQuery.toLowerCase()) ||
-                                                        log.details.toLowerCase().includes(adminSearchQuery.toLowerCase());
+                                    const matchSearch = (log.email || '').toLowerCase().includes(adminSearchQuery.toLowerCase()) || 
+                                                        (log.action || '').toLowerCase().includes(adminSearchQuery.toLowerCase()) ||
+                                                        (log.details || '').toLowerCase().includes(adminSearchQuery.toLowerCase());
                                     const matchAction = adminAuditActionFilter === 'all' || log.action === adminAuditActionFilter;
                                     return matchSearch && matchAction;
                                   });

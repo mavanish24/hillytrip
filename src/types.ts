@@ -47,6 +47,7 @@ export interface Destination {
   distanceFromHub?: number;
   nearbyAttractions?: { id: string; name: string; distance: number }[];
   nearbyHomestays?: { id: string; name: string; distance: number }[];
+  nearbyDestinations?: { id: string; name: string; distance: number; image?: string; tourismType?: string }[];
 }
 
 export interface Attraction {
@@ -369,7 +370,6 @@ export interface PlatformReview {
   createdAt: string;
 }
 
-export const DEFAULT_HOMESTAY_IMAGE = 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800&auto=format&fit=crop';
 
 
 
