@@ -2791,16 +2791,16 @@ ${databaseContext}`;
       const tokenVal = generateToken(foundUser);
       res.cookie('token', tokenVal, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
         path: '/',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
       });
 
       res.cookie('admin_token', tokenVal, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
         path: '/',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
       });
@@ -2893,16 +2893,16 @@ ${databaseContext}`;
       const tokenVal = generateToken(user);
       res.cookie('token', tokenVal, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
         path: '/',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
       });
 
       res.cookie('admin_token', tokenVal, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
         path: '/',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
       });
@@ -5590,7 +5590,9 @@ ${databaseContext}`;
 
       // Default filter for public: only Published articles, unless custom status requested
       if (status) {
-        blogs = blogs.filter(b => b.status === status);
+        if (status !== 'all') {
+          blogs = blogs.filter(b => b.status === status);
+        }
       } else {
         blogs = blogs.filter(b => b.status === 'Published');
       }
@@ -5726,12 +5728,29 @@ ${databaseContext}`;
       
       const newBlog = await generateTravelGuide(customTopic);
       if (newBlog) {
-        res.json({ success: true, blog: newBlog });
+        res.json({ success: true, message: 'Blog generated successfully', blog: newBlog });
       } else {
-        res.status(500).json({ error: 'AI Generator failed to produce travel guide' });
+        res.status(500).json({ success: false, error: 'AI Generator failed to produce travel guide' });
       }
     } catch (e: any) {
-      res.status(500).json({ error: e.message });
+      res.status(500).json({ success: false, error: e.message });
+    }
+  });
+
+  // Admin alias for blog generation
+  app.post('/api/admin/blogs/generate', adminAuth, async (req, res) => {
+    try {
+      const { type, title, entityId } = req.body || {};
+      const customTopic = title ? { type, title, entityId } : undefined;
+      
+      const newBlog = await generateTravelGuide(customTopic);
+      if (newBlog) {
+        res.json({ success: true, message: 'AI successfully generated draft', blog: newBlog });
+      } else {
+        res.status(500).json({ success: false, error: 'AI Generator failed to produce travel guide' });
+      }
+    } catch (e: any) {
+      res.status(500).json({ success: false, error: e.message });
     }
   });
 
@@ -5745,7 +5764,7 @@ ${databaseContext}`;
       const blog = blogs.find(b => b.id === id);
       
       if (!blog) {
-        res.status(404).json({ error: 'Blog not found' });
+        res.status(404).json({ success: false, error: 'Blog not found' });
         return;
       }
       
@@ -5770,9 +5789,53 @@ ${databaseContext}`;
       };
       await dbStore.saveRecord('blog_activity_logs', log);
       
-      res.json({ success: true, blog });
+      res.json({ success: true, message: 'Status updated successfully', blog });
     } catch (e: any) {
-      res.status(500).json({ error: e.message });
+      res.status(500).json({ success: false, error: e.message });
+    }
+  });
+
+  // Admin status update endpoint (using body request params instead of route params)
+  app.post('/api/admin/blogs/status', adminAuth, async (req, res) => {
+    try {
+      const { blogId, status } = req.body || {};
+      if (!blogId) {
+        res.status(400).json({ success: false, error: 'Missing blogId parameter' });
+        return;
+      }
+      
+      const blogs = dbStore.getBlogs() || [];
+      const blog = blogs.find(b => b.id === blogId);
+      
+      if (!blog) {
+        res.status(404).json({ success: false, error: 'Blog not found' });
+        return;
+      }
+      
+      const oldStatus = blog.status;
+      blog.status = status || 'Draft';
+      blog.updatedAt = new Date().toISOString();
+      if (blog.status === 'Published' && !blog.publishedAt) {
+        blog.publishedAt = new Date().toISOString();
+      }
+      
+      await dbStore.saveRecord('blogs', blog);
+
+      // Log activity
+      const log = {
+        id: 'log_' + Date.now(),
+        blogId: blog.id,
+        userId: 'admin_panel',
+        userEmail: 'mavanish24@gmail.com',
+        action: 'status_update',
+        details: `Updated status from "${oldStatus}" to "${blog.status}".`,
+        createdAt: new Date().toISOString()
+      };
+      await dbStore.saveRecord('blog_activity_logs', log);
+      
+      res.json({ success: true, message: `Guide successfully updated to ${blog.status}`, blog });
+    } catch (e: any) {
+      res.status(500).json({ success: false, error: e.message });
     }
   });
 
@@ -6006,6 +6069,48 @@ ${databaseContext}`;
     }
   });
 
+  app.delete('/api/admin/data/:collection', adminAuth, async (req, res) => {
+    try {
+      const { collection: col } = req.params;
+      const id = req.query.id as string;
+      if (!id) {
+        res.status(400).json({ success: false, error: 'Missing id parameter' });
+        return;
+      }
+
+      if (col === 'taxi_stands') {
+        const standsObj = readTaxiStands();
+        if (standsObj[id]) {
+          delete standsObj[id];
+          writeTaxiStands(standsObj);
+          res.json({ success: true, message: `Taxi stand "${id}" deleted successfully` });
+        } else {
+          res.status(404).json({ success: false, error: `Taxi stand "${id}" not found` });
+        }
+        return;
+      }
+
+      if (col === 'villages') {
+        const success = await dbStore.deleteRecord('destinations', id);
+        if (success) {
+          res.json({ success: true, message: `Village "${id}" deleted successfully` });
+        } else {
+          res.status(404).json({ success: false, error: `Village record inside destinations key with id "${id}" not found` });
+        }
+        return;
+      }
+
+      const success = await dbStore.deleteRecord(col, id);
+      if (success) {
+        res.json({ success: true, message: `Record "${id}" deleted successfully from ${col}` });
+      } else {
+        res.status(404).json({ success: false, error: `Record with id "${id}" not found or unsupported collection in ${col}` });
+      }
+    } catch (e: any) {
+      res.status(500).json({ success: false, error: e.message || 'Failed to delete admin record' });
+    }
+  });
+
   app.delete('/api/admin/data/:collection/:id', adminAuth, async (req, res) => {
     try {
       const { collection: col, id } = req.params;
@@ -6015,9 +6120,9 @@ ${databaseContext}`;
         if (standsObj[id]) {
           delete standsObj[id];
           writeTaxiStands(standsObj);
-          res.json({ success: true });
+          res.json({ success: true, message: `Taxi stand "${id}" deleted successfully` });
         } else {
-          res.status(404).json({ error: `Taxi stand "${id}" not found` });
+          res.status(404).json({ success: false, error: `Taxi stand "${id}" not found` });
         }
         return;
       }
@@ -6025,21 +6130,21 @@ ${databaseContext}`;
       if (col === 'villages') {
         const success = await dbStore.deleteRecord('destinations', id);
         if (success) {
-          res.json({ success: true });
+          res.json({ success: true, message: `Village "${id}" deleted successfully` });
         } else {
-          res.status(404).json({ error: `Village record inside destinations key with id "${id}" not found` });
+          res.status(404).json({ success: false, error: `Village record inside destinations key with id "${id}" not found` });
         }
         return;
       }
 
       const success = await dbStore.deleteRecord(col, id);
       if (success) {
-        res.json({ success: true });
+        res.json({ success: true, message: `Record "${id}" deleted successfully from ${col}` });
       } else {
-        res.status(404).json({ error: `Record with id "${id}" not found or unsupported collection in ${col}` });
+        res.status(404).json({ success: false, error: `Record with id "${id}" not found or unsupported collection in ${col}` });
       }
     } catch (e: any) {
-      res.status(500).json({ error: e.message || 'Failed to delete admin record' });
+      res.status(500).json({ success: false, error: e.message || 'Failed to delete admin record' });
     }
   });
 
