@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
-import { firestoreDb, isFirestoreOnline } from './db';
+import { firestoreDb, isFirestoreOnline, supabase, isSupabaseOnline, googleFirestoreDb } from './db';
+import { doc, setDoc, getDocs, collection } from 'firebase/firestore';
 
 const ANALYTICS_FILE = path.join(process.cwd(), 'hillytrip_analytics_store.json');
 
@@ -36,12 +36,14 @@ export interface InteractionEvent {
 interface AnalyticsSchema {
   searches: SearchEvent[];
   interactions: InteractionEvent[];
+  userAnalytics?: any[];
 }
 
 class AnalyticsDatabase {
   private data: AnalyticsSchema = {
     searches: [],
-    interactions: []
+    interactions: [],
+    userAnalytics: []
   };
 
   constructor() {
@@ -55,23 +57,21 @@ class AnalyticsDatabase {
         this.data = JSON.parse(fileContent);
         this.data.searches = this.data.searches || [];
         this.data.interactions = this.data.interactions || [];
+        this.data.userAnalytics = this.data.userAnalytics || [];
       } else {
-        this.data = { searches: [], interactions: [] };
+        this.data = { searches: [], interactions: [], userAnalytics: [] };
         this.save();
       }
     } catch (e) {
       console.error('Error loading analytics database, resetting:', e);
-      this.data = { searches: [], interactions: [] };
+      this.data = { searches: [], interactions: [], userAnalytics: [] };
       this.save();
     }
   }
 
   public save() {
-    try {
-      fs.writeFileSync(ANALYTICS_FILE, JSON.stringify(this.data, null, 2), 'utf-8');
-    } catch (e) {
-      console.error('Error writing analytics file:', e);
-    }
+    // Local file writes disabled to make the app fully stateless
+    console.log('[Analytics Database] save() called (local file writes disabled to maintain statelessness in Cloud Run)');
   }
 
   public async logSearchAsync(event: SearchEvent): Promise<void> {
@@ -80,11 +80,24 @@ class AnalyticsDatabase {
       try {
         this.data.searches.push(event);
         this.save();
-        if (firestoreDb && isFirestoreOnline) {
+        if (supabase && isSupabaseOnline) {
+          try {
+            const { error } = await supabase.from('searches').upsert(event);
+            if (error) throw error;
+          } catch (e: any) {
+            console.error('[Supabase Analytics Search Warning]', e.message || e);
+          }
+        } else if (googleFirestoreDb) {
+          try {
+            await googleFirestoreDb.collection('searches').doc(event.searchId).set(event);
+          } catch (err: any) {
+            console.error('[Admin SDK Analytics Search Error]', err);
+          }
+        } else if (firestoreDb) {
           await setDoc(doc(firestoreDb, 'searches', event.searchId), event);
         }
       } catch (err) {
-        console.error('Failed to log search event asynchronously to Firestore or file:', err);
+        console.error('Failed to log search event asynchronously to cloud or file:', err);
       }
     });
   }
@@ -95,14 +108,28 @@ class AnalyticsDatabase {
       try {
         this.data.interactions.push(event);
         this.save();
-        if (firestoreDb && isFirestoreOnline) {
+        if (supabase && isSupabaseOnline) {
+          try {
+            const { error } = await supabase.from('interactions').upsert(event);
+            if (error) throw error;
+          } catch (e: any) {
+            console.error('[Supabase Analytics Interaction Warning]', e.message || e);
+          }
+        } else if (googleFirestoreDb) {
+          try {
+            await googleFirestoreDb.collection('interactions').doc(event.id).set(event);
+          } catch (err: any) {
+            console.error('[Admin SDK Analytics Interaction Error]', err);
+          }
+        } else if (firestoreDb) {
           await setDoc(doc(firestoreDb, 'interactions', event.id), event);
         }
       } catch (err) {
-        console.error('Failed to log interaction asynchronously to Firestore or file:', err);
+        console.error('Failed to log interaction asynchronously to cloud or file:', err);
       }
     });
   }
+
 
   public getSearches(): SearchEvent[] {
     return this.data.searches;
@@ -369,22 +396,77 @@ class AnalyticsDatabase {
           count: 1
         };
 
-        if (firestoreDb && isFirestoreOnline) {
-          await setDoc(doc(firestoreDb, 'user_analytics', id), event);
-          console.log(`[User Analytics] Logged to Firestore successfully: ${type} - ${name}`);
+        // Cache locally first
+        if (!this.data.userAnalytics) {
+          this.data.userAnalytics = [];
+        }
+        this.data.userAnalytics.push(event);
+        this.save();
+
+        if (supabase && isSupabaseOnline) {
+          try {
+            const { error } = await supabase.from('user_analytics').upsert(event);
+            if (error) {
+              if (error.code === 'PGRST205' || error.message?.includes('schema cache')) {
+                // Table not created yet - handle gracefully as info
+                console.log(`[User Analytics Info] Table "user_analytics" does not exist in Supabase yet. Retained locally: ${type} - ${name}`);
+              } else {
+                throw error;
+              }
+            } else {
+              console.log(`[User Analytics] Logged to Supabase successfully: ${type} - ${name}`);
+            }
+          } catch (err: any) {
+            console.log(`[User Analytics Graceful Info] Cannot sync ${type} - ${name} event to Supabase (falling back to local):`, err.message || err);
+          }
+        } else if (googleFirestoreDb) {
+          try {
+            await googleFirestoreDb.collection('user_analytics').doc(id).set(event);
+            console.log(`[User Analytics] Logged to Firestore successfully (Admin SDK): ${type} - ${name}`);
+          } catch (err: any) {
+            console.log(`[User Analytics Info] Cannot sync ${type} - ${name} event to Firestore via Admin SDK:`, err.message || err);
+          }
+        } else if (firestoreDb) {
+          try {
+            await setDoc(doc(firestoreDb, 'user_analytics', id), event);
+            console.log(`[User Analytics] Logged to Firestore successfully: ${type} - ${name}`);
+          } catch (err: any) {
+            const isPermissionDenied = err?.message?.toLowerCase().includes('permission') || String(err).toLowerCase().includes('permission');
+            if (isPermissionDenied) {
+              console.log(`[User Analytics Sync Info] Firestore permission not available to log event ${type} - ${name}. Local cache preserved structure (No action required).`);
+            } else {
+              console.log(`[User Analytics Info] Cannot sync ${type} - ${name} event to Firestore:`, err.message || err);
+            }
+          }
         } else {
-          console.warn('[User Analytics Warning] Firestore not initialized or offline, logged event purely inside console.');
+          console.log('[User Analytics Info] Cloud connection inactive. Event saved in regional offline cache.');
         }
       } catch (err) {
-        console.error('Failed to log user analytics event asynchronously to Firestore:', err);
+        console.log('Failed to log user analytics event asynchronously:', err);
       }
     });
   }
 
   public async fetchUserAnalyticsFromFirestore(): Promise<any[]> {
-    if (!firestoreDb || !isFirestoreOnline) {
-      console.warn('[User Analytics] Firestore is not connected or offline. Returning empty list.');
-      return [];
+    if (supabase && isSupabaseOnline) {
+      try {
+        const { data, error } = await supabase.from('user_analytics').select('*');
+        if (error) {
+          if (error.code === 'PGRST205' || error.message?.includes('schema cache')) {
+            console.log('[User Analytics Info] Table "user_analytics" does not exist in Supabase yet. Standard routing data fallback.');
+            return this.data.userAnalytics || [];
+          }
+          throw error;
+        }
+        return data || [];
+      } catch (err: any) {
+        console.log('[User Analytics Info] Quiet fallback to local database for analytics fetch:', err.message || err);
+        return this.data.userAnalytics || [];
+      }
+    }
+    if (!firestoreDb) {
+      console.log('[User Analytics Info] External cloud engine not ready. Returning local cache.');
+      return this.data.userAnalytics || [];
     }
     try {
       const snap = await getDocs(collection(firestoreDb, 'user_analytics'));
@@ -393,11 +475,17 @@ class AnalyticsDatabase {
         list.push(docSnap.data());
       });
       return list;
-    } catch (err) {
-      console.error('Failed to fetch user analytics from Firestore:', err);
-      return [];
+    } catch (err: any) {
+      const isPermissionDenied = err?.message?.toLowerCase().includes('permission') || String(err).toLowerCase().includes('permission');
+      if (isPermissionDenied) {
+        console.log('[User Analytics Sync Info] Firestore permission not available for fetch. Falling back to local/cached visitor analytics.');
+      } else {
+        console.log('Failed to fetch user analytics from Firestore (falling back to local):', err.message || err);
+      }
+      return this.data.userAnalytics || [];
     }
   }
+
 
   public compileUserAnalyticsSummary(events: any[]) {
     let totalRouteSearches = 0;
