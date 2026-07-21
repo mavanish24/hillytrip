@@ -3,8 +3,9 @@
   "appId": "1:930292453548:web:aceb7f488b02fbd6dc0f09",
   "apiKey": "AIzaSyAvVc5O-eOoBA2p1-_IMcyfQSCKDzAujTs",
   "authDomain": "hillytrip-prod.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-30fca5dc-bfa2-4759-ba79-c6e5ec77d61e",
   "storageBucket": "hillytrip-prod.firebasestorage.app",
   "messagingSenderId": "930292453548",
-  "measurementId": ""
+  "measurementId": "",
+  "oAuthClientId": "930292453548-0mk90khti1g64thch6635dnuu19ao9ap.apps.googleusercontent.com",
+  "recaptchaSiteKey": ""
 }
