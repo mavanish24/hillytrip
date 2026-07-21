@@ -1,0 +1,1117 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Space Grotesk", var(--font-sans);
+  --font-serif: "Lora", Georgia, serif;
+  --font-serif-luxury: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+
+  /* Redefine standard font sizing utilities globally to scale up the typography of the entire app */
+  --font-size-xs: 13px;          /* 13px (metadata / labels) */
+  --font-size-sm: 15px;          /* 15px (table content / readable body) */
+  --font-size-base: 15.5px;      /* 15.5px (buttons & card labels) */
+  --font-size-lg: 16.5px;        /* 16.5px (table headings / small headings) */
+  --font-size-xl: 21px;          /* 21px (section headings) */
+  --font-size-2xl: 31px;         /* 31px (dashboard titles) */
+  --font-size-3xl: 34px;         /* 34px (card values / large numbers) */
+  --font-size-4xl: 40px;         /* 40px */
+  --font-size-5xl: 48px;         /* 48px */
+
+  /* Scale up standard spacing variables to expand card paddings, gaps, and whitespace globally */
+  --spacing-3: 0.875rem;         /* 14px (originally 12px) */
+  --spacing-4: 1.25rem;          /* 20px (originally 16px) */
+  --spacing-5: 1.625rem;         /* 26px (originally 20px) */
+  --spacing-6: 2rem;             /* 32px (originally 24px) */
+  --spacing-8: 2.5rem;           /* 40px (originally 32px) */
+  --spacing-10: 3rem;            /* 48px (originally 40px) */
+  --spacing-12: 3.5rem;          /* 56px (originally 48px) */
+}
+
+/* Centralized Typography Design Tokens */
+.text-dash-title {
+  font-size: 31px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.25 !important;
+}
+.text-section-heading {
+  font-size: 21px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.35 !important;
+}
+.text-card-value {
+  font-size: 34px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.15 !important;
+}
+.text-card-label {
+  font-size: 15.5px !important;
+  font-weight: 600 !important;
+}
+.text-table-heading {
+  font-size: 16.5px !important;
+  font-weight: 700 !important;
+}
+.text-table-content {
+  font-size: 15px !important;
+}
+.text-button {
+  font-size: 15.5px !important;
+  font-weight: 600 !important;
+}
+.text-metadata {
+  font-size: 13px !important;
+}
+
+/* Centralized spacing and card padding tokens */
+.card-padding {
+  padding: 1.75rem !important; /* Generous 28px padding for desktop and tablet readability */
+}
+@media (max-width: 640px) {
+  .card-padding {
+    padding: 1.25rem !important; /* 20px padding on mobile */
+  }
+}
+
+/* Perfect smooth theme transition animations for immersive color mood */
+body {
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Buttery-smooth mobile horizontal touch scrolling and pan-x pan-y configuration to prevent blocking vertical scroll */
+.overflow-x-auto {
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.overflow-y-auto {
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+* {
+  transition-property: color, background-color, border-color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Premium Preset Theme CSS Variable Bundles */
+
+/* 1. Slate Theme */
+.theme-slate-dark, html.theme-slate-dark, .theme-dark, html.theme-dark {
+  /* Light Mode values by default */
+  --surface: #ffffff;
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-widget: #f1f5f9;
+  --bg-divider: #e2e8f0;
+  --text-title: #0f172a;
+  --text-body: #334155;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+  --accent-color: #10b981;
+  --btn-bg: #10b981;
+  --btn-text: #ffffff;
+  --badge-bg: #e2e8f0;
+  --badge-text: #334155;
+  --link-color: #059669;
+  --hover-bg: #f1f5f9;
+  --input-bg: #ffffff;
+  --input-text: #0f172a;
+  --input-border: #cbd5e1;
+  --input-placeholder: #94a3b8;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(15, 23, 42, 0.85);
+  --hero-overlay: rgba(2, 6, 23, 0.4);
+  --hero-button-bg: rgba(15, 23, 42, 0.6);
+  --hero-button-text: #cbd5e1;
+  --theme-font-title: "Plus Jakarta Sans", sans-serif;
+  --theme-font-body: "Inter", sans-serif;
+}
+html.dark.theme-slate-dark, html.dark.theme-dark, .dark.theme-slate-dark, .dark.theme-dark, html.dark .theme-slate-dark, html.dark .theme-dark, .dark .theme-slate-dark, .dark .theme-dark, [data-theme="dark"] {
+  /* Dark Mode values */
+  --surface: #0f172a;
+  --bg-main: #020617;
+  --bg-card: #0f172a;
+  --bg-widget: #1e293b;
+  --bg-divider: #334155;
+  --text-title: #ffffff;
+  --text-body: #cbd5e1;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #1e293b;
+  --accent-color: #34d399;
+  --btn-bg: #10b981;
+  --btn-text: #ffffff;
+  --badge-bg: #1e293b;
+  --badge-text: #cbd5e1;
+  --link-color: #34d399;
+  --hover-bg: #1e293b;
+  --input-bg: #0f172a;
+  --input-text: #ffffff;
+  --input-border: #1e293b;
+  --input-placeholder: #64748b;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(15, 23, 42, 0.9);
+  --hero-overlay: rgba(2, 6, 23, 0.45);
+  --hero-button-bg: rgba(15, 23, 42, 0.7);
+  --hero-button-text: #f1f5f9;
+}
+
+/* 2. Mountain Blue Theme */
+.theme-mountain-blue, html.theme-mountain-blue, .theme-ocean, html.theme-ocean {
+  /* Light Mode values by default */
+  --bg-main: #f0f7ff;
+  --bg-card: #ffffff;
+  --bg-widget: #e0f2fe;
+  --bg-divider: #bae6fd;
+  --text-title: #0369a1;
+  --text-body: #0c4a6e;
+  --text-secondary: #0284c7;
+  --text-muted: #38bdf8;
+  --border-color: #bae6fd;
+  --accent-color: #0284c7;
+  --btn-bg: #0284c7;
+  --btn-text: #ffffff;
+  --badge-bg: #e0f2fe;
+  --badge-text: #0369a1;
+  --link-color: #0284c7;
+  --hover-bg: #e0f2fe;
+  --input-bg: #ffffff;
+  --input-text: #0c4a6e;
+  --input-border: #bae6fd;
+  --input-placeholder: #38bdf8;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(13, 18, 61, 0.85);
+  --hero-overlay: rgba(5, 10, 33, 0.4);
+  --hero-button-bg: rgba(13, 18, 61, 0.6);
+  --hero-button-text: #a5d3f7;
+  --theme-font-title: "Outfit", sans-serif;
+  --theme-font-body: "Outfit", sans-serif;
+}
+html.dark.theme-mountain-blue, html.dark.theme-ocean, .dark.theme-mountain-blue, .dark.theme-ocean, html.dark .theme-mountain-blue, html.dark .theme-ocean, .dark .theme-mountain-blue, .dark .theme-ocean {
+  /* Dark Mode values */
+  --bg-main: #050a21;
+  --bg-card: #0d123d;
+  --bg-widget: #1c225e;
+  --bg-divider: #363c8f;
+  --text-title: #38bdf8;
+  --text-body: #f0f7ff;
+  --text-secondary: #a5d3f7;
+  --text-muted: #cbd5e1;
+  --border-color: #252c6f;
+  --accent-color: #38bdf8;
+  --btn-bg: #38bdf8;
+  --btn-text: #050a21;
+  --badge-bg: #1c225e;
+  --badge-text: #f0f7ff;
+  --link-color: #38bdf8;
+  --hover-bg: #1c225e;
+  --input-bg: #0d123d;
+  --input-text: #f0f7ff;
+  --input-border: #252c6f;
+  --input-placeholder: #cbd5e1;
+  --hero-text: #38bdf8;
+  --hero-bg: rgba(13, 18, 61, 0.9);
+  --hero-overlay: rgba(5, 10, 33, 0.45);
+  --hero-button-bg: rgba(13, 18, 61, 0.7);
+  --hero-button-text: #f0f7ff;
+}
+
+/* 3. Forest Green Theme */
+.theme-forest-green, html.theme-forest-green, .theme-forest, html.theme-forest {
+  /* Light Mode values by default */
+  --bg-main: #f0fdf4;
+  --bg-card: #ffffff;
+  --bg-widget: #dcfce7;
+  --bg-divider: #bbf7d0;
+  --text-title: #15803d;
+  --text-body: #166534;
+  --text-secondary: #166534;
+  --text-muted: #14532d;
+  --border-color: #bbf7d0;
+  --accent-color: #166534;
+  --btn-bg: #166534;
+  --btn-text: #ffffff;
+  --badge-bg: #dcfce7;
+  --badge-text: #15803d;
+  --link-color: #166534;
+  --hover-bg: #dcfce7;
+  --input-bg: #ffffff;
+  --input-text: #166534;
+  --input-border: #bbf7d0;
+  --input-placeholder: #14532d;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(3, 54, 42, 0.85);
+  --hero-overlay: rgba(1, 29, 23, 0.4);
+  --hero-button-bg: rgba(3, 54, 42, 0.6);
+  --hero-button-text: #a7f3d0;
+  --theme-font-title: "Work Sans", sans-serif;
+  --theme-font-body: "Inter", sans-serif;
+}
+html.dark.theme-forest-green, html.dark.theme-forest, .dark.theme-forest-green, .dark.theme-forest, html.dark .theme-forest-green, html.dark .theme-forest, .dark .theme-forest-green, .dark .theme-forest {
+  /* Dark Mode values */
+  --bg-main: #011d17;
+  --bg-card: #03362a;
+  --bg-widget: #08523f;
+  --bg-divider: #107359;
+  --text-title: #34d399;
+  --text-body: #f0fdf4;
+  --text-secondary: #a7f3d0;
+  --text-muted: #cbd5e1;
+  --border-color: #0c4d3d;
+  --accent-color: #34d399;
+  --btn-bg: #34d399;
+  --btn-text: #011d17;
+  --badge-bg: #08523f;
+  --badge-text: #f0fdf4;
+  --link-color: #34d399;
+  --hover-bg: #08523f;
+  --input-bg: #03362a;
+  --input-text: #f0fdf4;
+  --input-border: #0c4d3d;
+  --input-placeholder: #cbd5e1;
+  --hero-text: #34d399;
+  --hero-bg: rgba(3, 54, 42, 0.9);
+  --hero-overlay: rgba(1, 29, 23, 0.45);
+  --hero-button-bg: rgba(3, 54, 42, 0.7);
+  --hero-button-text: #f0fdf4;
+}
+
+/* 4. Himalayan Night Theme */
+.theme-himalayan-night, html.theme-himalayan-night {
+  /* Light Mode values by default */
+  --bg-main: #fdf2f8;
+  --bg-card: #ffffff;
+  --bg-widget: #fce7f3;
+  --bg-divider: #fbcfe8;
+  --text-title: #be185d;
+  --text-body: #9d174d;
+  --text-secondary: #9d174d;
+  --text-muted: #831843;
+  --border-color: #fbcfe8;
+  --accent-color: #be185d;
+  --btn-bg: #be185d;
+  --btn-text: #ffffff;
+  --badge-bg: #fce7f3;
+  --badge-text: #be185d;
+  --link-color: #be185d;
+  --hover-bg: #fce7f3;
+  --input-bg: #ffffff;
+  --input-text: #9d174d;
+  --input-border: #fbcfe8;
+  --input-placeholder: #831843;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(17, 8, 44, 0.85);
+  --hero-overlay: rgba(3, 0, 18, 0.4);
+  --hero-button-bg: rgba(17, 8, 44, 0.6);
+  --hero-button-text: #e9d5ff;
+  --theme-font-title: "Space Grotesk", sans-serif;
+  --theme-font-body: "Inter", sans-serif;
+}
+html.dark.theme-himalayan-night, .dark.theme-himalayan-night, html.dark .theme-himalayan-night, .dark .theme-himalayan-night {
+  /* Dark Mode values */
+  --bg-main: #030012;
+  --bg-card: #11082c;
+  --bg-widget: #22124d;
+  --bg-divider: #3b1f7a;
+  --text-title: #f43f5e;
+  --text-body: #fdf2f8;
+  --text-secondary: #e9d5ff;
+  --text-muted: #d8b4fe;
+  --border-color: #2b155e;
+  --accent-color: #ec4899;
+  --btn-bg: #ec4899;
+  --btn-text: #030012;
+  --badge-bg: #22124d;
+  --badge-text: #fdf2f8;
+  --link-color: #ec4899;
+  --hover-bg: #22124d;
+  --input-bg: #11082c;
+  --input-text: #fdf2f8;
+  --input-border: #2b155e;
+  --input-placeholder: #d8b4fe;
+  --hero-text: #f43f5e;
+  --hero-bg: rgba(17, 8, 44, 0.9);
+  --hero-overlay: rgba(3, 0, 18, 0.45);
+  --hero-button-bg: rgba(17, 8, 44, 0.7);
+  --hero-button-text: #fdf2f8;
+}
+
+/* 5. Sunrise Gold Theme */
+.theme-sunrise-gold, html.theme-sunrise-gold, .theme-sunset, html.theme-sunset {
+  /* Light Mode values by default */
+  --bg-main: #fffbeb;
+  --bg-card: #ffffff;
+  --bg-widget: #fef3c7;
+  --bg-divider: #fde68a;
+  --text-title: #b45309;
+  --text-body: #92400e;
+  --text-secondary: #78350f;
+  --text-muted: #92400e;
+  --border-color: #fde68a;
+  --accent-color: #d97706;
+  --btn-bg: #d97706;
+  --btn-text: #ffffff;
+  --badge-bg: #fef3c7;
+  --badge-text: #b45309;
+  --link-color: #d97706;
+  --hover-bg: #fef3c7;
+  --input-bg: #ffffff;
+  --input-text: #92400e;
+  --input-border: #fde68a;
+  --input-placeholder: #b45309;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(44, 19, 3, 0.85);
+  --hero-overlay: rgba(19, 7, 1, 0.4);
+  --hero-button-bg: rgba(44, 19, 3, 0.6);
+  --hero-button-text: #fde047;
+  --theme-font-title: "Merriweather", serif;
+  --theme-font-body: "Lora", serif;
+}
+html.dark.theme-sunrise-gold, html.dark.theme-sunset, .dark.theme-sunrise-gold, .dark.theme-sunset, html.dark .theme-sunrise-gold, html.dark .theme-sunset, .dark .theme-sunrise-gold, .dark .theme-sunset {
+  /* Dark Mode values */
+  --bg-main: #130701;
+  --bg-card: #2c1303;
+  --bg-widget: #472205;
+  --bg-divider: #6a340a;
+  --text-title: #fbc02d;
+  --text-body: #fffbeb;
+  --text-secondary: #fde047;
+  --text-muted: #fcd34d;
+  --border-color: #3f1903;
+  --accent-color: #fb923c;
+  --btn-bg: #fb923c;
+  --btn-text: #130701;
+  --badge-bg: #472205;
+  --badge-text: #fffbeb;
+  --link-color: #fb923c;
+  --hover-bg: #472205;
+  --input-bg: #2c1303;
+  --input-text: #fffbeb;
+  --input-border: #3f1903;
+  --input-placeholder: #fcd34d;
+  --hero-text: #fbc02d;
+  --hero-bg: rgba(44, 19, 3, 0.9);
+  --hero-overlay: rgba(19, 7, 1, 0.45);
+  --hero-button-bg: rgba(44, 19, 3, 0.7);
+  --hero-button-text: #fffbeb;
+}
+
+/* 6. Alpine Purple Theme */
+.theme-alpine-purple, html.theme-alpine-purple, .theme-purple, html.theme-purple {
+  /* Light Mode values by default */
+  --bg-main: #faf5ff;
+  --bg-card: #ffffff;
+  --bg-widget: #f3e8ff;
+  --bg-divider: #e9d5ff;
+  --text-title: #6b21a8;
+  --text-body: #581c87;
+  --text-secondary: #581c87;
+  --text-muted: #4a044e;
+  --border-color: #e9d5ff;
+  --accent-color: #7c3aed;
+  --btn-bg: #7c3aed;
+  --btn-text: #ffffff;
+  --badge-bg: #f3e8ff;
+  --badge-text: #6b21a8;
+  --link-color: #7c3aed;
+  --hover-bg: #f3e8ff;
+  --input-bg: #ffffff;
+  --input-text: #581c87;
+  --input-border: #e9d5ff;
+  --input-placeholder: #4a044e;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(19, 9, 43, 0.85);
+  --hero-overlay: rgba(5, 2, 12, 0.4);
+  --hero-button-bg: rgba(19, 9, 43, 0.6);
+  --hero-button-text: #edf0ff;
+  --theme-font-title: "Manrope", sans-serif;
+  --theme-font-body: "Manrope", sans-serif;
+}
+html.dark.theme-alpine-purple, html.dark.theme-purple, .dark.theme-alpine-purple, .dark.theme-purple, html.dark .theme-alpine-purple, html.dark .theme-purple, .dark .theme-alpine-purple, .dark .theme-purple {
+  /* Dark Mode values */
+  --bg-main: #05020c;
+  --bg-card: #13092b;
+  --bg-widget: #23114d;
+  --bg-divider: #3f1f7e;
+  --text-title: #c084fc;
+  --text-body: #faf5ff;
+  --text-secondary: #edf0ff;
+  --text-muted: #d8b4fe;
+  --border-color: #24114d;
+  --accent-color: #c084fc;
+  --btn-bg: #c084fc;
+  --btn-text: #05020c;
+  --badge-bg: #23114d;
+  --badge-text: #faf5ff;
+  --link-color: #c084fc;
+  --hover-bg: #23114d;
+  --input-bg: #13092b;
+  --input-text: #faf5ff;
+  --input-border: #24114d;
+  --input-placeholder: #d8b4fe;
+  --hero-text: #c084fc;
+  --hero-bg: rgba(19, 9, 43, 0.9);
+  --hero-overlay: rgba(5, 2, 12, 0.45);
+  --hero-button-bg: rgba(19, 9, 43, 0.7);
+  --hero-button-text: #faf5ff;
+}
+
+/* 7. Mist Grey Theme */
+.theme-mist-grey, html.theme-mist-grey {
+  /* Light Mode values by default */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-widget: #f1f5f9;
+  --bg-divider: #e2e8f0;
+  --text-title: #334155;
+  --text-body: #475569;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+  --accent-color: #64748b;
+  --btn-bg: #64748b;
+  --btn-text: #ffffff;
+  --badge-bg: #f1f5f9;
+  --badge-text: #334155;
+  --link-color: #64748b;
+  --hover-bg: #f1f5f9;
+  --input-bg: #ffffff;
+  --input-text: #334155;
+  --input-border: #cbd5e1;
+  --input-placeholder: #64748b;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(24, 29, 41, 0.85);
+  --hero-overlay: rgba(12, 15, 22, 0.4);
+  --hero-button-bg: rgba(24, 29, 41, 0.6);
+  --hero-button-text: #cbd5e1;
+  --theme-font-title: "Lexend", sans-serif;
+  --theme-font-body: "Lexend", sans-serif;
+}
+html.dark.theme-mist-grey, .dark.theme-mist-grey, html.dark .theme-mist-grey, .dark .theme-mist-grey {
+  /* Dark Mode values */
+  --bg-main: #0c0f16;
+  --bg-card: #181d29;
+  --bg-widget: #293144;
+  --bg-divider: #44506c;
+  --text-title: #ffffff;
+  --text-body: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #e2e8f0;
+  --border-color: #222938;
+  --accent-color: #cbd5e1;
+  --btn-bg: #cbd5e1;
+  --btn-text: #0c0f16;
+  --badge-bg: #293144;
+  --badge-text: #f8fafc;
+  --link-color: #cbd5e1;
+  --hover-bg: #293144;
+  --input-bg: #181d29;
+  --input-text: #f8fafc;
+  --input-border: #222938;
+  --input-placeholder: #e2e8f0;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(24, 29, 41, 0.9);
+  --hero-overlay: rgba(12, 15, 22, 0.45);
+  --hero-button-bg: rgba(24, 29, 41, 0.7);
+  --hero-button-text: #f8fafc;
+}
+
+/* 8. River Teal Theme */
+.theme-river-teal, html.theme-river-teal {
+  /* Light Mode values by default */
+  --bg-main: #f0fdfa;
+  --bg-card: #ffffff;
+  --bg-widget: #ccfbf1;
+  --bg-divider: #99f6e4;
+  --text-title: #0f766e;
+  --text-body: #115e59;
+  --text-secondary: #115e59;
+  --text-muted: #134e4a;
+  --border-color: #99f6e4;
+  --accent-color: #0d9488;
+  --btn-bg: #0d9488;
+  --btn-text: #ffffff;
+  --badge-bg: #ccfbf1;
+  --badge-text: #0f766e;
+  --link-color: #0d9488;
+  --hover-bg: #ccfbf1;
+  --input-bg: #ffffff;
+  --input-text: #115e59;
+  --input-border: #99f6e4;
+  --input-placeholder: #134e4a;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(3, 42, 47, 0.85);
+  --hero-overlay: rgba(1, 19, 22, 0.4);
+  --hero-button-bg: rgba(3, 42, 47, 0.6);
+  --hero-button-text: #99f6e4;
+  --theme-font-title: "DM Sans", sans-serif;
+  --theme-font-body: "DM Sans", sans-serif;
+}
+html.dark.theme-river-teal, .dark.theme-river-teal, html.dark .theme-river-teal, .dark .theme-river-teal {
+  /* Dark Mode values */
+  --bg-main: #011316;
+  --bg-card: #032a2f;
+  --bg-widget: #073f47;
+  --bg-divider: #0e5b66;
+  --text-title: #2dd4bf;
+  --text-body: #f0fdfa;
+  --text-secondary: #99f6e4;
+  --text-muted: #e6fffa;
+  --border-color: #053b42;
+  --accent-color: #2dd4bf;
+  --btn-bg: #2dd4bf;
+  --btn-text: #011316;
+  --badge-bg: #073f47;
+  --badge-text: #f0fdfa;
+  --link-color: #2dd4bf;
+  --hover-bg: #073f47;
+  --input-bg: #032a2f;
+  --input-text: #f0fdfa;
+  --input-border: #053b42;
+  --input-placeholder: #e6fffa;
+  --hero-text: #2dd4bf;
+  --hero-bg: rgba(3, 42, 47, 0.9);
+  --hero-overlay: rgba(1, 19, 22, 0.45);
+  --hero-button-bg: rgba(3, 42, 47, 0.7);
+  --hero-button-text: #f0fdfa;
+}
+
+/* 9. Autumn Trail Theme */
+.theme-autumn-trail, html.theme-autumn-trail {
+  /* Light Mode values by default */
+  --bg-main: #fff7ed;
+  --bg-card: #ffffff;
+  --bg-widget: #ffedd5;
+  --bg-divider: #fed7aa;
+  --text-title: #c2410c;
+  --text-body: #9a3412;
+  --text-secondary: #7c2d12;
+  --text-muted: #9a3412;
+  --border-color: #fed7aa;
+  --accent-color: #ea580c;
+  --btn-bg: #ea580c;
+  --btn-text: #ffffff;
+  --badge-bg: #ffedd5;
+  --badge-text: #c2410c;
+  --link-color: #ea580c;
+  --hover-bg: #ffedd5;
+  --input-bg: #ffffff;
+  --input-text: #9a3412;
+  --input-border: #fed7aa;
+  --input-placeholder: #c2410c;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(43, 14, 4, 0.85);
+  --hero-overlay: rgba(18, 4, 1, 0.4);
+  --hero-button-bg: rgba(43, 14, 4, 0.6);
+  --hero-button-text: #ffedd5;
+  --theme-font-title: "Lora", serif;
+  --theme-font-body: "Lora", serif;
+}
+html.dark.theme-autumn-trail, .dark.theme-autumn-trail, html.dark .theme-autumn-trail, .dark .theme-autumn-trail {
+  /* Dark Mode values */
+  --bg-main: #120401;
+  --bg-card: #2b0e04;
+  --bg-widget: #471a0b;
+  --bg-divider: #6e2a14;
+  --text-title: #ff7a1a;
+  --text-body: #fff7ed;
+  --text-secondary: #ffedd5;
+  --text-muted: #fdba74;
+  --border-color: #3d1405;
+  --accent-color: #ff7a1a;
+  --btn-bg: #ff7a1a;
+  --btn-text: #120401;
+  --badge-bg: #471a0b;
+  --badge-text: #fff7ed;
+  --link-color: #ff7a1a;
+  --hover-bg: #471a0b;
+  --input-bg: #2b0e04;
+  --input-text: #fff7ed;
+  --input-border: #3d1405;
+  --input-placeholder: #fdba74;
+  --hero-text: #ff7a1a;
+  --hero-bg: rgba(43, 14, 4, 0.9);
+  --hero-overlay: rgba(18, 4, 1, 0.45);
+  --hero-button-bg: rgba(43, 14, 4, 0.7);
+  --hero-button-text: #fff7ed;
+}
+
+/* 10. Snow Peak Theme */
+.theme-snow-peak, html.theme-snow-peak {
+  /* Light Mode values by default */
+  --bg-main: #f1faee;
+  --bg-card: #ffffff;
+  --bg-widget: #e6f0fa;
+  --bg-divider: #a8dadc;
+  --text-title: #1d3557;
+  --text-body: #457b9d;
+  --text-secondary: #457b9d;
+  --text-muted: #1d3557;
+  --border-color: #a8dadc;
+  --accent-color: #e63946;
+  --btn-bg: #e63946;
+  --btn-text: #ffffff;
+  --badge-bg: #e6f0fa;
+  --badge-text: #1d3557;
+  --link-color: #e63946;
+  --hover-bg: #e6f0fa;
+  --input-bg: #ffffff;
+  --input-text: #457b9d;
+  --input-border: #a8dadc;
+  --input-placeholder: #1d3557;
+  --hero-text: #ffffff;
+  --hero-bg: rgba(12, 26, 44, 0.85);
+  --hero-overlay: rgba(5, 12, 24, 0.4);
+  --hero-button-bg: rgba(12, 26, 44, 0.6);
+  --hero-button-text: #a8dadc;
+  --theme-font-title: "Space Grotesk", sans-serif;
+  --theme-font-body: "Lexend", sans-serif;
+}
+html.dark.theme-snow-peak, .dark.theme-snow-peak, html.dark .theme-snow-peak, .dark .theme-snow-peak {
+  /* Dark Mode values */
+  --bg-main: #050c18;
+  --bg-card: #0c1a2c;
+  --bg-widget: #152a47;
+  --bg-divider: #2a4c7c;
+  --text-title: #f1faee;
+  --text-body: #ffffff;
+  --text-secondary: #a8dadc;
+  --text-muted: #e3f8f8;
+  --border-color: #142a42;
+  --accent-color: #e63946;
+  --btn-bg: #e63946;
+  --btn-text: #ffffff;
+  --badge-bg: #152a47;
+  --badge-text: #ffffff;
+  --link-color: #e63946;
+  --hover-bg: #152a47;
+  --input-bg: #0c1a2c;
+  --input-text: #ffffff;
+  --input-border: #142a42;
+  --input-placeholder: #e3f8f8;
+  --hero-text: #f1faee;
+  --hero-bg: rgba(12, 26, 44, 0.9);
+  --hero-overlay: rgba(5, 12, 24, 0.45);
+  --hero-button-bg: rgba(12, 26, 44, 0.7);
+  --hero-button-text: #ffffff;
+}
+
+/* Universal Typography Mappings */
+body, .font-sans, p, span, li, button, input, textarea, select, a {
+  font-family: var(--theme-font-body, "Inter", sans-serif) !important;
+}
+h1, h2, h3, h4, h5, h6, .font-display, .font-heading, [class*="font-extrabold"] {
+  font-family: var(--theme-font-title, "Space Grotesk", sans-serif) !important;
+}
+
+/* Automatic Hierarchy Alignment & Centralized Token Enforcer */
+
+/* Tier 1: Metadata (approx. 13px) */
+.text-metadata,
+[class*="text-[8px]"],
+[class*="text-[9px]"],
+[class*="text-[10px]"],
+[class*="text-[11px]"],
+[class*="text-[12px]"],
+[class*="text-xs"] {
+  font-size: 13px !important;
+}
+
+/* Tier 2: Table Content & Readable Body (approx. 15px) */
+.text-table-content,
+[class*="text-[13px]"],
+[class*="text-[14px]"],
+[class*="text-sm"] {
+  font-size: 15px !important;
+}
+
+/* Tier 3: Buttons & Card Labels (approx. 15-16px -> 15.5px) */
+.text-button,
+.text-card-label,
+[class*="text-[15px]"],
+[class*="text-[16px]"],
+[class*="text-base"] {
+  font-size: 15.5px !important;
+}
+
+/* Tier 4: Table Headings (approx. 16-17px -> 16.5px) */
+.text-table-heading,
+[class*="text-[17px]"],
+[class*="text-[18px]"],
+[class*="text-lg"] {
+  font-size: 16.5px !important;
+  font-weight: 700 !important;
+}
+
+/* Tier 5: Section Headings (approx. 20-22px -> 21px) */
+.text-section-heading,
+[class*="text-[19px]"],
+[class*="text-[20px]"],
+[class*="text-[21px]"],
+[class*="text-[22px]"],
+[class*="text-xl"] {
+  font-size: 21px !important;
+  font-weight: 700 !important;
+}
+
+/* Tier 6: Dashboard Titles (approx. 30-32px -> 31px) */
+.text-dash-title,
+[class*="text-[23px]"],
+[class*="text-[24px]"],
+[class*="text-[25px]"],
+[class*="text-[26px]"],
+[class*="text-[28px]"],
+[class*="text-[30px]"],
+[class*="text-2xl"] {
+  font-size: 31px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.25 !important;
+}
+
+/* Tier 7: Card Values & Massive Stats (approx. 32-36px -> 34px) */
+.text-card-value,
+[class*="text-[32px]"],
+[class*="text-[33px]"],
+[class*="text-[34px]"],
+[class*="text-[35px]"],
+[class*="text-[36px]"],
+[class*="text-3xl"] {
+  font-size: 34px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.15 !important;
+}
+
+/* Semantic Elements Styling */
+button, .btn, [class*="btn-"], [class*="button"] {
+  font-size: 15.5px !important;
+  font-weight: 600 !important;
+}
+
+th {
+  font-size: 16.5px !important;
+  font-weight: 700 !important;
+}
+
+td {
+  font-size: 15px !important;
+}
+
+/* Universal Layout & Color Override Rules (Automatic Theme Updates in Light & Dark Modes) */
+html, body {
+  background-color: var(--bg-main) !important;
+  color: var(--text-body) !important;
+}
+
+nav, header, footer {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Background overrides */
+.bg-white {
+  background-color: var(--bg-card) !important;
+}
+.bg-slate-50 {
+  background-color: var(--bg-main) !important;
+}
+.bg-slate-100 {
+  background-color: var(--bg-widget) !important;
+}
+.bg-slate-200 {
+  background-color: var(--bg-divider) !important;
+}
+.bg-slate-800 {
+  background-color: var(--bg-widget) !important;
+}
+.bg-slate-900 {
+  background-color: var(--bg-main) !important;
+}
+.bg-slate-950 {
+  background-color: var(--bg-main) !important;
+}
+
+.bg-slate-100\/50, .bg-slate-100\/80 {
+  background-color: var(--bg-widget) !important;
+  opacity: 0.8;
+}
+.bg-slate-50\/50, .bg-slate-50\/80 {
+  background-color: var(--bg-main) !important;
+  opacity: 0.8;
+}
+.bg-emerald-50, .bg-emerald-50\/10 {
+  background-color: var(--badge-bg) !important;
+  opacity: 0.15;
+}
+.bg-emerald-100 {
+  background-color: var(--badge-bg) !important;
+}
+.bg-amber-50 {
+  background-color: var(--badge-bg) !important;
+  opacity: 0.15;
+}
+.bg-amber-100 {
+  background-color: var(--badge-bg) !important;
+}
+.bg-rose-50 {
+  background-color: var(--badge-bg) !important;
+  opacity: 0.15;
+}
+.bg-indigo-50 {
+  background-color: var(--badge-bg) !important;
+  opacity: 0.15;
+}
+
+/* Border overrides */
+.border, .border-slate-50 {
+  border-color: var(--border-color) !important;
+}
+.border-slate-100 {
+  border-color: var(--border-color) !important;
+}
+.border-slate-200, .border-slate-200\/50, .border-slate-200\/60 {
+  border-color: var(--bg-divider) !important;
+}
+.border-slate-300 {
+  border-color: var(--border-color) !important;
+}
+.border-slate-800, .border-slate-800\/80 {
+  border-color: var(--border-color) !important;
+}
+.divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--border-color) !important;
+}
+.divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--bg-divider) !important;
+}
+
+/* Hover actions */
+.hover\:bg-slate-50:hover {
+  background-color: var(--bg-widget) !important;
+}
+.hover\:bg-slate-100:hover {
+  background-color: var(--bg-divider) !important;
+}
+.hover\:bg-emerald-50:hover {
+  background-color: var(--hover-bg) !important;
+}
+.group:hover .group-hover\:translate-x-1 {
+  transform: translateX(4px);
+}
+
+/* Text overrides mapping dynamically */
+.text-slate-950, .text-slate-900, .text-white {
+  color: var(--text-title) !important; /* Titles are bright */
+}
+.text-slate-800 {
+  color: var(--text-body) !important; /* Main user texts */
+}
+.text-slate-700 {
+  color: var(--text-secondary) !important; /* Secondary headers */
+}
+.text-slate-600 {
+  color: var(--text-secondary) !important; /* Descriptive bodies */
+}
+.text-slate-500, .text-slate-550, .text-slate-450 {
+  color: var(--text-muted) !important; /* Subtexts */
+}
+.text-slate-400 {
+  color: var(--input-placeholder) !important; /* Placeholders */
+}
+.text-slate-300 {
+  color: var(--border-color) !important;
+}
+
+/* Inputs, textareas, select elements */
+input, textarea, select {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+  border-color: var(--input-border) !important;
+}
+input::placeholder, textarea::placeholder {
+  color: var(--input-placeholder) !important;
+}
+select option {
+  background-color: var(--bg-card) !important;
+  color: var(--input-text) !important;
+}
+
+/* Accent texts overrides */
+.text-emerald-850, .text-emerald-800, .text-emerald-700, .text-emerald-600, .text-emerald-500 {
+  color: var(--accent-color) !important;
+}
+.text-amber-800 {
+  color: #fbbf24 !important;
+}
+.text-amber-900 {
+  color: #fde68a !important;
+}
+.text-rose-900 {
+  color: #fecdd3 !important;
+}
+.text-rose-800 {
+  color: #fb7185 !important;
+}
+
+/* Map adjustments for dark modes */
+#regional-links line {
+  stroke: var(--border-color) !important;
+}
+#regional-links {
+  opacity: 0.65 !important;
+}
+
+/* Toast styling override */
+#global-toast-notification {
+  background-color: var(--bg-card) !important;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Scrollbar updates */
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-widget);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-divider);
+}
+
+/* Surprise Me - Moving Clouds & Fog Animations */
+@keyframes cloud-drift-slow {
+  0% {
+    transform: translateX(-12%) translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateX(8%) translateY(-8px) scale(1.04);
+  }
+  100% {
+    transform: translateX(-12%) translateY(0px) scale(1);
+  }
+}
+
+@keyframes cloud-drift-fast {
+  0% {
+    transform: translateX(12%) translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateX(-8%) translateY(6px) scale(1.08);
+  }
+  100% {
+    transform: translateX(12%) translateY(0px) scale(1);
+  }
+}
+
+@keyframes pulse-fog {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.animate-cloud-slow {
+  animation: cloud-drift-slow 32s ease-in-out infinite;
+}
+
+.animate-cloud-fast {
+  animation: cloud-drift-fast 24s ease-in-out infinite;
+}
+
+.animate-pulse-fog {
+  animation: pulse-fog 10s ease-in-out infinite;
+}
+
+/* Premium luxury sheen and shimmer animations */
+@keyframes sheen {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(150%) skewX(-20deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.animate-sheen {
+  animation: sheen 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-shimmer {
+  animation: shimmer 2.5s infinite linear;
+}
+
+@keyframes whatsapp-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+  }
+  15% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
+  }
+  30% {
+    transform: scale(1);
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+  }
+}
+
+.animate-whatsapp-pulse {
+  animation: whatsapp-pulse 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Custom scrollbar utility for Notification Center */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.4);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.6);
+}
+
+@media (max-width: 768px) {
+  .custom-scrollbar {
+    scrollbar-width: none !important;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+
+

@@ -1,0 +1,128 @@
+{
+  "Darjeeling Motor Stand": {
+    "latitude": 27.0398,
+    "longitude": 88.2638,
+    "elevation": 2050,
+    "district": "Darjeeling",
+    "state": "West Bengal"
+  },
+  "Ghum Taxi Stand": {
+    "latitude": 27.0094,
+    "longitude": 88.2619,
+    "elevation": 2250,
+    "district": "Darjeeling",
+    "state": "West Bengal"
+  },
+  "Teesta Bazar Stand": {
+    "latitude": 27.0628,
+    "longitude": 88.4285,
+    "elevation": 150,
+    "district": "Darjeeling",
+    "state": "West Bengal"
+  },
+  "Takdah Club Stand": {
+    "latitude": 27.0382,
+    "longitude": 88.3615,
+    "elevation": 1550,
+    "district": "Darjeeling",
+    "state": "West Bengal"
+  },
+  "Takdah Jeep Stand": {
+    "latitude": 27.0421,
+    "longitude": 88.3644,
+    "elevation": 1600,
+    "district": "Darjeeling",
+    "state": "West Bengal"
+  },
+  "Tinchuley Junction Stand": {
+    "latitude": 27.0543,
+    "longitude": 88.3768,
+    "elevation": 1800,
+    "district": "Darjeeling",
+    "state": "West Bengal"
+  },
+  "Pelling Main Stand": {
+    "latitude": 27.3015,
+    "longitude": 88.2365,
+    "elevation": 2150,
+    "district": "Sikkim",
+    "state": "Sikkim"
+  },
+  "Lachung Local Stand": {
+    "latitude": 27.6892,
+    "longitude": 88.7431,
+    "elevation": 2900,
+    "district": "Sikkim",
+    "state": "Sikkim"
+  },
+  "Lachen Junction Stand": {
+    "latitude": 27.7163,
+    "longitude": 88.5518,
+    "elevation": 2750,
+    "district": "Sikkim",
+    "state": "Sikkim"
+  },
+  "Ravangla Main Stand": {
+    "latitude": 27.2045,
+    "longitude": 88.3639,
+    "elevation": 2200,
+    "district": "Sikkim",
+    "state": "Sikkim"
+  },
+  "Gangtok Taxi Stand": {
+    "latitude": 27.3294,
+    "longitude": 88.6122,
+    "elevation": 1650,
+    "district": "Sikkim",
+    "state": "Sikkim"
+  },
+  "Lava Jeep Stand": {
+    "latitude": 27.0864,
+    "longitude": 88.6657,
+    "elevation": 2100,
+    "district": "Kalimpong",
+    "state": "West Bengal"
+  },
+  "Lolegaon Motor Stand": {
+    "latitude": 27.0194,
+    "longitude": 88.5668,
+    "elevation": 1670,
+    "district": "Kalimpong",
+    "state": "West Bengal"
+  },
+  "Lataguri Junction Stand": {
+    "latitude": 26.7118,
+    "longitude": 88.7758,
+    "elevation": 80,
+    "district": "Jalpaiguri",
+    "state": "West Bengal"
+  },
+  "Hasimara Junction": {
+    "latitude": 26.7845,
+    "longitude": 89.3498,
+    "elevation": 110,
+    "district": "Alipurduar",
+    "state": "West Bengal"
+  },
+  "New Jalpaiguri Railway Station (NJP)": {
+    "latitude": 26.6836,
+    "longitude": 88.4419,
+    "elevation": 80,
+    "district": "Jalpaiguri",
+    "state": "West Bengal"
+  },
+  "Kalimpong Taxi Stand": {
+    "latitude": 27.0601,
+    "longitude": 88.4714,
+    "elevation": 1250,
+    "district": "Kalimpong",
+    "state": "West Bengal"
+  },
+  "Siliguri Junction Taxi Stand": {
+    "latitude": 26.7271,
+    "longitude": 88.4124,
+    "elevation": 110,
+    "district": "Darjeeling",
+    "state": "West Bengal"
+  }
+}

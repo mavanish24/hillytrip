@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authenticating with Google...</title>
+  <style>
+    body {
+      background-color: #030712;
+      color: #f3f4f6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .card {
+      background-color: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .logo-container {
+      width: 64px;
+      height: 64px;
+      background-color: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(16, 185, 129, 0.2);
+      border-top-color: #10b981;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 1.5rem auto 0;
+    }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 0 0 0.5rem;
+      color: #ffffff;
+      letter-spacing: -0.025em;
+    }
+    p {
+      color: #9ca3af;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo-container">
+      <!-- Shield/Lock Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </div>
+    <h2>Authenticating...</h2>
+    <p>We are securely connecting your Google Account. Returning you to HillyTrip shortly.</p>
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    (function() {
+      try {
+        const hash = window.location.hash;
+        if (!hash) {
+          // If loaded without hash, check search params (just in case)
+          const params = new URLSearchParams(window.location.search);
+          const error = params.get('error') || params.get('error_description');
+          if (error) {
+            console.error('OAuth redirect returned error:', error);
+            if (window.opener) {
+              window.opener.postMessage({
+                type: 'SUPABASE_OAUTH_FAILURE',
+                error: error
+              }, '*');
+            }
+          }
+          return;
+        }
+
+        if (window.opener) {
+          // Post the URL hash containing access_token & refresh_token back to the parent window
+          window.opener.postMessage({
+            type: 'SUPABASE_OAUTH_SUCCESS',
+            hash: hash
+          }, '*');
+          
+          // Keep window open briefly for user feedback, then close
+          setTimeout(function() {
+            window.close();
+          }, 800);
+        } else {
+          // Fallback if opened directly without opener
+          window.location.href = '/';
+        }
+      } catch (e) {
+        console.error('Error in Google Auth callback bridge:', e);
+      }
+    })();
+  </script>
+</body>
+</html>
