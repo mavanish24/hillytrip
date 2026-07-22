@@ -20,14 +20,22 @@ import {
   Activity,
   Heart
 } from 'lucide-react';
+<<<<<<< HEAD
 import { ClaimRequest, Inquiry, OwnershipHistory, PendingUpdate, Homestay, BookingLead, BookingStatusHistory, BookingActivityLog } from '../types';
+=======
+import { ClaimRequest, Inquiry, OwnershipHistory, PendingUpdate, Homestay } from '../types';
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
 interface AdminPartnerManagementTabProps {
   adminEmail: string;
 }
 
 export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerManagementTabProps) {
+<<<<<<< HEAD
   const [activeTab, setActiveTab] = useState<'claims' | 'updates' | 'applications' | 'inquiries' | 'ownership-history' | 'bookings'>('claims');
+=======
+  const [activeTab, setActiveTab] = useState<'claims' | 'updates' | 'applications' | 'inquiries' | 'ownership-history'>('claims');
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [loading, setLoading] = useState(false);
   
   // Data State
@@ -37,6 +45,7 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
   const [history, setHistory] = useState<OwnershipHistory[]>([]);
   const [dbHomestays, setDbHomestays] = useState<Homestay[]>([]);
 
+<<<<<<< HEAD
   // Booking Leads States
   const [bookingLeads, setBookingLeads] = useState<BookingLead[]>([]);
   const [bookingStatusHistories, setBookingStatusHistories] = useState<BookingStatusHistory[]>([]);
@@ -55,6 +64,11 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
   const [pendingPartners, setPendingPartners] = useState<any[]>([]);
   const [pendingContributors, setPendingContributors] = useState<any[]>([]);
   const [taxiOperators, setTaxiOperators] = useState<any[]>([]);
+=======
+  // Onboarding Applications State
+  const [pendingPartners, setPendingPartners] = useState<any[]>([]);
+  const [pendingContributors, setPendingContributors] = useState<any[]>([]);
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Actions remarks state
   const [remarks, setRemarks] = useState<{ [key: string]: string }>({});
@@ -107,6 +121,7 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
         setPendingPartners(appsJson.pendingPartners || []);
         setPendingContributors(appsJson.pendingContributors || []);
       }
+<<<<<<< HEAD
 
       // 7. Booking Leads
       const leadsRes = await fetch('/api/admin/data/booking_leads', {
@@ -154,6 +169,8 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
           setTaxiOperators(taxiOpsJson.data || []);
         }
       }
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch (err: any) {
       console.error('Failed to load partner administrative resources:', err);
     } finally {
@@ -196,6 +213,7 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
     }
   };
 
+<<<<<<< HEAD
   // Resolve Taxi Operator Onboarding / Account Action
   const handleResolveTaxiOperator = async (userId: string, action: 'approve' | 'reject' | 'suspend' | 'restore') => {
     setActionLoading(prev => ({ ...prev, [userId]: true }));
@@ -241,6 +259,8 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
     }
   };
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   // Approve/Reject Claim request
   const handleClaimAction = async (claimId: string, action: 'approve' | 'reject') => {
     const adminRemarks = remarks[claimId] || '';
@@ -300,6 +320,7 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
     }
   };
 
+<<<<<<< HEAD
   // Administrative Booking Actions
   const handleUpdateBookingStatus = async (leadId: string, action: string, note: string) => {
     setIsLeadActionSubmitting(true);
@@ -486,6 +507,8 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
     }
   };
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const getHomestayLabel = (homestayId: string) => {
     const found = dbHomestays.find(h => h.id === homestayId);
     return found ? found.name : homestayId;
@@ -526,7 +549,11 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
       </div>
 
       {/* ADMIN SUB-TABS */}
+<<<<<<< HEAD
       <div className="flex bg-slate-100 p-1 rounded-xl mb-6 max-w-4xl overflow-x-auto">
+=======
+      <div className="flex bg-slate-100 p-1 rounded-xl mb-6 max-w-2xl overflow-x-auto">
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         <button
           onClick={() => setActiveTab('claims')}
           className={`flex-1 py-2 px-3 whitespace-nowrap text-center rounded-lg font-bold transition-all cursor-pointer ${
@@ -560,6 +587,7 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
           Inquiries ({inquiries.length})
         </button>
         <button
+<<<<<<< HEAD
           onClick={() => setActiveTab('bookings')}
           className={`flex-1 py-2 px-3 whitespace-nowrap text-center rounded-lg font-bold transition-all cursor-pointer ${
             activeTab === 'bookings' ? 'bg-white text-emerald-800 shadow-xs' : 'text-slate-500 hover:text-slate-700'
@@ -568,6 +596,8 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
           Bookings & Journeys ({bookingLeads.length})
         </button>
         <button
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           onClick={() => setActiveTab('ownership-history')}
           className={`flex-1 py-2 px-3 whitespace-nowrap text-center rounded-lg font-bold transition-all cursor-pointer ${
             activeTab === 'ownership-history' ? 'bg-white text-emerald-800 shadow-xs' : 'text-slate-500 hover:text-slate-700'
@@ -953,6 +983,7 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
                   </div>
                 )}
               </div>
+<<<<<<< HEAD
 
               {/* Taxi Operator Onboarding requests */}
               <div className="pt-6 border-t border-slate-100">
@@ -1549,6 +1580,8 @@ export default function AdminPartnerManagementTab({ adminEmail }: AdminPartnerMa
                   </div>
                 )}
               </div>
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             </div>
           )}
 

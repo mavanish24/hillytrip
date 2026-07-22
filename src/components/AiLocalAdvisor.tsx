@@ -118,6 +118,7 @@ export default function AiLocalAdvisor({ name, category, description, destinatio
 
       {/* Header and badge */}
       <div className="flex items-center justify-between flex-wrap gap-4 mb-5 pb-5 border-b border-rose-100/10 dark:border-slate-800">
+<<<<<<< HEAD
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-md border border-slate-200/50 dark:border-slate-800 shrink-0 hidden sm:block">
             <img 
@@ -138,6 +139,18 @@ export default function AiLocalAdvisor({ name, category, description, destinatio
               Summon ancient legends, bespoke 2-day itineraries, packing prep, and coordinates of photographic secret spots.
             </p>
           </div>
+=======
+        <div>
+          <span className="inline-flex items-center gap-1.5 text-[10px] text-emerald-600 dark:text-emerald-400 font-extrabold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full uppercase tracking-wider mb-2 font-mono">
+            <Sparkles className="w-3.5 h-3.5 animate-pulse text-emerald-500" /> Free AI Guide
+          </span>
+          <h3 className="font-extrabold text-xl sm:text-2xl text-slate-905 dark:text-white flex items-center gap-2">
+            Himalayan Local AI Companion
+          </h3>
+          <p className="text-xs text-slate-505 dark:text-slate-400 mt-1">
+            Summon ancient legends, bespoke 2-day itineraries, packing prep, and coordinates of photographic secret spots.
+          </p>
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         </div>
       </div>
 

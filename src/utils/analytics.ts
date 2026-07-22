@@ -21,6 +21,7 @@ export function initGA(): void {
     return;
   }
 
+<<<<<<< HEAD
   // Only inject external Google Analytics scripts on the real production domain.
   // This completely eliminates cross-origin "Script error." occurrences in
   // sandboxes, automated test containers, preview domains, or local hosts.
@@ -45,14 +46,19 @@ export function initGA(): void {
     return;
   }
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   try {
     // 1. Inject gtag.js script dynamically
     const script = document.createElement('script');
     script.async = true;
+<<<<<<< HEAD
     script.crossOrigin = 'anonymous';
     script.onerror = (e) => {
       console.warn('[HillyTrip Analytics Warning] Google Analytics script loading was blocked or failed.', e);
     };
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     script.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
     document.head.appendChild(script);
 

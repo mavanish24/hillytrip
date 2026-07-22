@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { AutocompleteSelect } from './AutocompleteSelect';
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 import { 
   WifiOff, Signal, CloudLightning, ShieldAlert, CheckCircle2, Activity,
   Compass, Heart, AlertCircle, Droplets, PhoneCall, Plus, Trash2, 
@@ -545,8 +548,12 @@ export default function OfflineTravelHub({
                 <div className="space-y-4">
                   <div>
                     <label className="text-[10px] font-extrabold uppercase text-slate-400 block mb-1">Departure Hub Location</label>
+<<<<<<< HEAD
                     <AutocompleteSelect
                       id="departure-hub"
+=======
+                    <select
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                       value={startNode}
                       onChange={(e) => setStartNode(e.target.value)}
                       className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-205 dark:border-slate-800 p-3 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-100 cursor-pointer"
@@ -555,7 +562,11 @@ export default function OfflineTravelHub({
                       {Object.keys(NODE_COORDINATES).map(key => (
                         <option key={`start-${key}`} value={key}>{NODE_COORDINATES[key].label}</option>
                       ))}
+<<<<<<< HEAD
                     </AutocompleteSelect>
+=======
+                    </select>
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   </div>
 
                   <div className="flex justify-center">
@@ -566,8 +577,12 @@ export default function OfflineTravelHub({
 
                   <div>
                     <label className="text-[10px] font-extrabold uppercase text-slate-400 block mb-1">Destination Hub Location</label>
+<<<<<<< HEAD
                     <AutocompleteSelect
                       id="destination-hub"
+=======
+                    <select
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                       value={endNode}
                       onChange={(e) => setEndNode(e.target.value)}
                       className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-205 dark:border-slate-800 p-3 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-100 cursor-pointer"
@@ -576,7 +591,11 @@ export default function OfflineTravelHub({
                       {Object.keys(NODE_COORDINATES).map(key => (
                         <option key={`end-${key}`} value={key}>{NODE_COORDINATES[key].label}</option>
                       ))}
+<<<<<<< HEAD
                     </AutocompleteSelect>
+=======
+                    </select>
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   </div>
                 </div>
 
@@ -1057,8 +1076,12 @@ export default function OfflineTravelHub({
                 <div className="space-y-4 my-6">
                   <div>
                     <label className="text-[10px] font-extrabold uppercase text-slate-400 block mb-1">Your Closest Mountain Corridor</label>
+<<<<<<< HEAD
                     <AutocompleteSelect
                       id="sos-corridor"
+=======
+                    <select
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                       value={selectedSosHub}
                       onChange={(e) => setSelectedSosHub(e.target.value)}
                       className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-205 dark:border-slate-800 p-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 rounded-lg cursor-pointer"
@@ -1066,7 +1089,11 @@ export default function OfflineTravelHub({
                       {Object.keys(NODE_COORDINATES).map(k => (
                         <option key={`sos-hub-${k}`} value={k}>{NODE_COORDINATES[k].label}</option>
                       ))}
+<<<<<<< HEAD
                     </AutocompleteSelect>
+=======
+                    </select>
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   </div>
 
                   <div>

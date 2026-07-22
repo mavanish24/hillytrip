@@ -1,0 +1,189 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny catch-all safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- security authentication and roles verification helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == "amrkmurarka@gmail.com" ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && (
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "super_admin" ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+        ))
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- 1. Master traveling data collections: Public reads, Admin writes ---
+    match /hubs/{hubId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(hubId);
+    }
+
+    match /routes/{routeId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(routeId);
+    }
+
+    match /destinations/{destinationId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(destinationId);
+    }
+
+    match /attractions/{attractionId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(attractionId);
+    }
+
+    match /homestays/{homestayId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(homestayId);
+    }
+
+    match /drivers/{driverId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(driverId);
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(notificationId);
+    }
+
+    // --- 2. Crowd photo and exhibition uploads ---
+    match /images/{imageId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidId(imageId) && incoming().uploadedBy == request.auth.uid;
+      allow update, delete: if isAdmin() || (isSignedIn() && existing().uploadedBy == request.auth.uid && !incoming().diff(existing()).affectedKeys().hasAny(['status']));
+    }
+
+    // --- 3. Telemetry tracking, search events, and user activity records ---
+    match /searches/{searchId} {
+      allow create: if true;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /interactions/{interactionId} {
+      allow create: if true;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /user_analytics/{analyticsId} {
+      allow create: if true;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // --- 4. Customer leads entry and partner claims submissions ---
+    match /contributions/{contribId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /tripLeads/{leadId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /carLeads/{leadId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /inquiries/{inquiryId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /claim_requests/{claimId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /pending_updates/{updateId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /ownership_history/{historyId} {
+      allow create, read, update, delete: if isAdmin();
+    }
+
+    // --- 5. System permissions and administration roles (RBAC) ---
+    match /users/{userId} {
+      allow read: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
+      allow create: if isSignedIn() && request.auth.uid == userId && incoming().role == "user" && !incoming().keys().hasAny(['roles']);
+      allow update: if isAdmin() || (isSignedIn() && request.auth.uid == userId && !incoming().diff(existing()).affectedKeys().hasAny(['role', 'roles']));
+      allow delete: if isAdmin();
+    }
+
+    match /user_roles/{roleId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /roles/{roleId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /permissions/{permissionId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /role_permissions/{permId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /user_permissions/{permId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /audit_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+
+    // --- 6. Participating user comment lines and likes indicators ---
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid;
+      allow update, delete: if isAdmin() || (isSignedIn() && existing().userId == request.auth.uid);
+    }
+
+    match /likes/{likeId} {
+      allow read: if true;
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid;
+      allow update, delete: if isAdmin() || (isSignedIn() && existing().userId == request.auth.uid);
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isAdmin();
+    }
+  }
+}

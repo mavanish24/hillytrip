@@ -566,7 +566,11 @@ export const AdminCoverManagementTab: React.FC<AdminCoverManagementTabProps> = (
                   <th className="p-4 w-52">Primary Cover Showcase</th>
                   <th className="p-4 w-80">AI Description / Prompter</th>
                   <th className="p-4 w-28 text-center">Engine Status</th>
+<<<<<<< HEAD
                   <th className="p-4 w-52 text-right">Asset Editing Controls</th>
+=======
+                  <th className="p-4 w-52 text-right">Aerosol Sandbox Controls</th>
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">

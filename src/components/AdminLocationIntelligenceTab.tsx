@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   ChevronDown,
   ChevronUp,
+<<<<<<< HEAD
   Activity,
   Database,
   FileCode,
@@ -21,6 +22,9 @@ import {
   Play,
   Trash2,
   Search
+=======
+  Activity
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 } from "lucide-react";
 
 interface StatsData {
@@ -57,6 +61,7 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
   const [showLogs, setShowLogs] = useState(true);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [batchSizeLimit, setBatchSizeLimit] = useState<number>(3);
+<<<<<<< HEAD
   const [offlineMode, setOfflineMode] = useState<boolean>(false);
 
   // Himalayan Village Data Generator States
@@ -1014,6 +1019,11 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
     }
   };
 
+=======
+
+  const logsEndRef = useRef<HTMLDivElement | null>(null);
+
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const showNotify = (type: "success" | "error", message: string) => {
     setNotification({ type, message });
     setTimeout(() => {
@@ -1021,6 +1031,7 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
     }, 4500);
   };
 
+<<<<<<< HEAD
   const uniqueStandsFromVillages = () => {
     return Array.from(new Set(
       generatedVillagesArr
@@ -2234,6 +2245,8 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
     showNotify("success", "Successfully cleared the compiled cache, reset inputs, and selected Sikkim context! You are ready to start fresh.");
   };
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const fetchStats = async (isSilent = false) => {
     if (!isSilent) setLoading(true);
     try {
@@ -2274,7 +2287,11 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
     }
   }, [stats?.activeJob?.logs]);
 
+<<<<<<< HEAD
   const startBulkGeocode = async (customLimit?: number, customTargetIds?: string[], customOfflineOnly?: boolean) => {
+=======
+  const startBulkGeocode = async (customLimit?: number, customTargetIds?: string[]) => {
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     try {
       const res = await fetch("/api/admin/location-intelligence/geocode-bulk", {
         method: "POST",
@@ -2284,8 +2301,12 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
         },
         body: JSON.stringify({
           limit: customLimit,
+<<<<<<< HEAD
           targetIds: customTargetIds,
           offlineOnly: customOfflineOnly !== undefined ? customOfflineOnly : offlineMode
+=======
+          targetIds: customTargetIds
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         })
       });
       if (res.ok) {
@@ -2346,8 +2367,11 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
       if (res.ok) {
         const data = await res.json();
         showNotify("success", `Proximity network successfully realigned for ${data.count} records!`);
+<<<<<<< HEAD
         // Dispatch real-time DB change event for traveler app state sync
         window.dispatchEvent(new CustomEvent("hillytrip:db-updated"));
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         fetchStats();
       } else {
         showNotify("error", "Recalculation error returned from database server.");
@@ -2493,6 +2517,7 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* Smart CSV Autopilot Importer & Geocode-Resolver */}
           <div className="bg-gradient-to-br from-emerald-50/20 via-slate-50/20 to-indigo-50/20 border border-slate-200 rounded-3xl p-6 shadow-sm space-y-6">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-100 pb-5 gap-4">
@@ -3182,6 +3207,8 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
             )}
           </div>
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           {/* Bulk Runner Control Panel */}
           <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -3201,21 +3228,29 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
                   <select
                     value={batchSizeLimit}
                     onChange={(e) => setBatchSizeLimit(Number(e.target.value))}
+<<<<<<< HEAD
                     className="text-xs font-semibold bg-white border border-slate-200 px-2 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800"
+=======
+                    className="text-xs font-semibold bg-white border border-slate-200 px-2 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500"
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   >
                     <option value={3}>3 (Small Batch)</option>
                     <option value={5}>5 (Safe Batch)</option>
                     <option value={10}>10 (Standard)</option>
                     <option value={20}>20 (Large)</option>
+<<<<<<< HEAD
                     <option value={50}>50 (Medium)</option>
                     <option value={100}>100 (Chunk Size)</option>
                     <option value={250}>250 (Large Chunk)</option>
                     <option value={500}>500 (Pro Chunk)</option>
                     <option value={1000}>1000 (X-Large)</option>
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                     <option value={99999}>Full Bulk</option>
                   </select>
                 </div>
 
+<<<<<<< HEAD
                 <label className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 cursor-pointer shadow-2xs hover:bg-slate-100 transition">
                   <input
                     type="checkbox"
@@ -3226,6 +3261,8 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
                   <span>⚡ High-Speed Offline Mode</span>
                 </label>
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                 <div className="flex gap-2">
                   {stats?.activeJob?.status === "running" ? (
                     <button
@@ -3304,6 +3341,7 @@ export const AdminLocationIntelligenceTab: React.FC = () => {
             )}
           </div>
 
+<<<<<<< HEAD
           {/* Universal Location Intelligence Wizard */}
           <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
@@ -5250,6 +5288,8 @@ interface Homestay {
             </div>
           </div>
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           {/* Diagnostics Section */}
           <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -5287,7 +5327,11 @@ interface Homestay {
                           Approved {selectedIds.length} location records
                         </span>
                         <span className="text-xs text-emerald-700">
+<<<<<<< HEAD
                           {offlineMode ? "These records will be geocoded using high-speed local offline database in a controlled batch." : "These records will be geocoded using Google Gemini in a controlled batch."}
+=======
+                          These records will be geocoded using Google Gemini in a controlled batch.
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                         </span>
                       </div>
                     </div>
@@ -5304,11 +5348,14 @@ interface Homestay {
                           <option value={3}>3 (Small Batch)</option>
                           <option value={5}>5 (Safe Batch)</option>
                           <option value={10}>10 (Standard)</option>
+<<<<<<< HEAD
                           <option value={50}>50 (Medium)</option>
                           <option value={100}>100 (Chunk Size)</option>
                           <option value={250}>250 (Large Chunk)</option>
                           <option value={500}>500 (Pro Chunk)</option>
                           <option value={1000}>1000 (X-Large)</option>
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                         </select>
                       </div>
                       <button

@@ -80,11 +80,15 @@ function verifyToken(token: string): any {
 
 import { createServer as createViteServer } from 'vite';
 import { dbStore, supabase, isSupabaseOnline, writeToInteractions } from './src/server/db';
+<<<<<<< HEAD
 import { BookingService, BookingLifecycleService } from './src/server/services/BookingEngineService';
 import * as StorageService from './src/server/services/storageservice';
 import { EventBus, PreferenceService, NotificationCenterService } from './src/server/services/UNEEEngine';
 import { ReviewService, ReputationService, TrustScoreService, BadgeService, ModerationService, EligibilityService } from './src/server/services/UTREEngine';
 import { seedUPSE, PaymentService, SettlementService, CommissionService, RefundService, LedgerService } from './src/server/services/upse';
+=======
+import * as StorageService from './src/server/services/storageservice';
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 import { createClient } from '@supabase/supabase-js';
 import { analyticsDb } from './src/server/analyticsDb';
 import { sendEmail, generateBookingNotificationEmail } from './src/server/mailservice';
@@ -114,7 +118,11 @@ import {
   calculateUniversalVectors
 } from './src/server/locationIntelligence';
 import fs from 'fs';
+<<<<<<< HEAD
 import { UserRole, User, Role, Permission, RolePermission, UserPermission, AuditLog, ClaimRequest, OwnershipHistory, PendingUpdate, Inquiry, SiteSettings, ImageItem, ChatConversation, ChatMessage, ChatNotification, ConversationParticipant, LeadStatus } from './src/types';
+=======
+import { UserRole, User, Role, Permission, RolePermission, UserPermission, AuditLog, ClaimRequest, OwnershipHistory, PendingUpdate, Inquiry, SiteSettings, ImageItem, ChatConversation, ChatMessage, ChatNotification, ConversationParticipant } from './src/types';
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 import { DEFAULT_HOMESTAY_IMAGE } from './src/constants';
 import { setupDailyBlogScheduler, generateTravelGuide } from './src/server/bloggenerator';
 
@@ -251,11 +259,14 @@ async function startServer() {
   if (dbStore.initPromise) {
     dbStore.initPromise.then(() => {
       console.log("[Background Sync] Database synchronization completed successfully!");
+<<<<<<< HEAD
       try {
         seedUPSE();
       } catch (e) {
         console.error("[UPSE Engine Error] Failed to run seedUPSE:", e);
       }
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }).catch((err) => {
       console.error("[Background Sync ERROR] Database synchronization encountered an error:", err);
     });
@@ -9283,6 +9294,7 @@ ${databaseContext}`;
       };
       await dbStore.saveRecord('bookingStatusHistory', history);
 
+<<<<<<< HEAD
       // Publish booking.created event to UNEE EventBus
       try {
         const uEvent = EventBus.createEvent(
@@ -9310,6 +9322,8 @@ ${databaseContext}`;
         console.error('[UNEE EventBus] Failed to publish booking.created event:', evErr);
       }
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       // Create Customer notification
       const custNotification = {
         id: `notif-${Date.now()}-c`,
@@ -9403,6 +9417,7 @@ ${databaseContext}`;
 
   app.post('/api/bookings/create', async (req, res) => {
     try {
+<<<<<<< HEAD
       const result = await BookingService.createProvisionalBooking(req.body);
       if (!result.success) {
         res.status(400).json({ error: result.error });
@@ -9432,11 +9447,119 @@ ${databaseContext}`;
       }
 
       res.status(201).json({ success: true, booking: result.booking });
+=======
+      const {
+        customerName,
+        customerMobile,
+        customerEmail,
+        leadType,
+        checkInDate,
+        checkOutDate,
+        numberOfGuests,
+        specialRequest,
+        serviceId,
+        serviceName,
+        assignedPartnerId,
+        assignedPartnerName,
+        bookingAmount,
+        currency,
+        notes
+      } = req.body;
+
+      if (!customerName || !customerMobile || !leadType) {
+        res.status(400).json({ error: 'customerName, customerMobile, and leadType are required.' });
+        return;
+      }
+
+      const bookingId = `BK-${Math.floor(100000 + Math.random() * 900000)}`;
+
+      const lead = {
+        id: bookingId,
+        customerName,
+        customerMobile,
+        customerEmail: customerEmail || 'traveler@hillytrip.com',
+        leadType,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        checkInDate: checkInDate || new Date().toISOString().split('T')[0],
+        checkOutDate: checkOutDate || undefined,
+        numberOfGuests: Number(numberOfGuests) || 1,
+        specialRequest,
+        homestayId: leadType === 'homestay' ? serviceId : undefined,
+        homestayName: leadType === 'homestay' ? serviceName : undefined,
+        cabDriverId: leadType === 'taxi' ? serviceId : undefined,
+        cabDriverName: leadType === 'taxi' ? serviceName : undefined,
+        serviceId,
+        serviceName,
+        assignedPartnerId: assignedPartnerId || 'partner_hillytrip',
+        assignedPartnerName: assignedPartnerName || 'Local Operator',
+        bookingAmount: Number(bookingAmount) || 2500,
+        currency: currency || 'INR',
+        notes: notes || '',
+        contactRevealed: false
+      };
+
+      await dbStore.saveRecord('bookingLeads', lead);
+
+      // Record status history
+      const history = {
+        id: `h-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        leadId: bookingId,
+        oldStatus: null,
+        newStatus: 'pending',
+        changedBy: 'customer',
+        createdAt: new Date().toISOString(),
+        note: 'Booking request created successfully.'
+      };
+      await dbStore.saveRecord('bookingStatusHistory', history);
+
+      // Create Customer notification
+      await dbStore.saveRecord('bookingNotifications', {
+        id: `notif-${Date.now()}-c`,
+        userId: customerEmail || customerMobile,
+        role: 'customer',
+        leadId: bookingId,
+        title: `Booking Request Created - #${bookingId}`,
+        message: `Your booking request for "${serviceName || 'HillyTrip Service'}" has been successfully created! The operator will review it shortly.`,
+        category: 'booking_submitted',
+        isRead: false,
+        createdAt: new Date().toISOString()
+      });
+
+      // Create Partner notification
+      if (assignedPartnerId) {
+        await dbStore.saveRecord('bookingNotifications', {
+          id: `notif-${Date.now()}-p`,
+          userId: assignedPartnerId,
+          role: 'partner',
+          leadId: bookingId,
+          title: `New Booking Request - #${bookingId}`,
+          message: `You have received a new booking request for "${serviceName || 'HillyTrip Service'}". Tap to accept or reject.`,
+          category: 'booking_submitted',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      // Record Activity Log
+      await dbStore.saveRecord('bookingActivityLog', {
+        id: `log-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        leadId: bookingId,
+        activityType: 'create',
+        description: `Booking Created for ${serviceName || 'HillyTrip Service'} with status PENDING.`,
+        performedBy: 'System',
+        createdAt: new Date().toISOString()
+      });
+
+      res.status(201).json({ success: true, booking: lead });
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch (err: any) {
       res.status(500).json({ error: err.message || 'Failed to create booking' });
     }
   });
 
+<<<<<<< HEAD
   app.post('/api/bookings/draft', async (req, res) => {
     try {
       const draft = await BookingService.createDraft(req.body);
@@ -9451,6 +9574,10 @@ ${databaseContext}`;
       // Periodic-on-demand: Automatically check and expire elapsed reservation holds
       await BookingService.checkAndExpireReservations();
 
+=======
+  app.get('/api/booking-leads', (req, res) => {
+    try {
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       const { role, identifier, status } = req.query;
       let leads = dbStore.getBookingLeads();
 
@@ -9492,14 +9619,22 @@ ${databaseContext}`;
   app.post('/api/booking-leads/:id/status', async (req, res) => {
     try {
       const { id } = req.params;
+<<<<<<< HEAD
       const { action, status: targetStatusParam, note, userEmail, userRole } = req.body;
 
       if (!userRole) {
         res.status(400).json({ error: 'userRole is required.' });
+=======
+      const { action, note, userEmail, userRole } = req.body; // action: 'accept' | 'reject' | 'need_more_info' | 'confirm' | 'cancel' | 'complete'
+
+      if (!action || !userRole) {
+        res.status(400).json({ error: 'action and userRole are required.' });
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         return;
       }
 
       const leads = dbStore.getBookingLeads();
+<<<<<<< HEAD
       const lead = leads.find(l => l.id === id);
       if (!lead) {
         res.status(404).json({ error: 'Booking not found.' });
@@ -9541,10 +9676,208 @@ ${databaseContext}`;
         await dbStore.saveRecord('bookingLeads', transitionResult.booking);
       }
 
+=======
+      const leadIndex = leads.findIndex(l => l.id === id);
+      if (leadIndex === -1) {
+        res.status(404).json({ error: 'Lead not found.' });
+        return;
+      }
+
+      const lead = leads[leadIndex];
+      const oldStatus = lead.status;
+      let newStatus = oldStatus;
+      let contactRevealed = lead.contactRevealed;
+
+      // Status State Machine rules
+      if (action === 'accept') {
+        newStatus = 'accepted';
+        contactRevealed = true;
+      } else if (action === 'reject') {
+        newStatus = 'rejected';
+      } else if (action === 'need_more_info') {
+        newStatus = 'need_more_info';
+      } else if (action === 'confirm') {
+        newStatus = 'confirmed';
+      } else if (action === 'cancel') {
+        newStatus = 'cancelled';
+      } else if (action === 'complete') {
+        newStatus = 'completed';
+      }
+
+      // Update lead
+      const updatedLead = {
+        ...lead,
+        status: newStatus,
+        contactRevealed,
+        updatedAt: new Date().toISOString()
+      };
+
+      await dbStore.saveRecord('bookingLeads', updatedLead);
+
+      // Save History
+      const history = {
+        id: `h-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        leadId: id,
+        oldStatus,
+        newStatus,
+        changedBy: userRole,
+        changedById: userEmail,
+        createdAt: new Date().toISOString(),
+        note: note || `Lead status updated from ${oldStatus} to ${newStatus}`
+      };
+      await dbStore.saveRecord('bookingStatusHistory', history);
+
+      // Generate notifications
+      let partnerContact = 'HillyTrip Support';
+      if (lead.leadType === 'homestay' && lead.homestayId) {
+        const home = dbStore.getHomestays().find(h => h.id === lead.homestayId);
+        if (home) {
+          partnerContact = home.whatsappNumber || home.whatsapp || home.contact || 'HillyTrip Support';
+        }
+      } else if (lead.leadType === 'taxi' && lead.cabDriverId) {
+        const driver = dbStore.getDrivers().find(d => d.id === lead.cabDriverId);
+        if (driver) {
+          partnerContact = driver.whatsapp || driver.mobile || 'HillyTrip Support';
+        }
+      }
+
+      const customerIdentifier = lead.customerEmail || lead.customerMobile;
+
+      if (action === 'accept') {
+        // Customer notification
+        await dbStore.saveRecord('bookingNotifications', {
+          id: `notif-${Date.now()}-accept-c`,
+          userId: customerIdentifier,
+          role: 'customer',
+          leadId: id,
+          title: `Request Accepted! Contact Partner Now - #${id}`,
+          message: `Your booking request for "${lead.homestayName || 'Service'}" was accepted! You can call/WhatsApp them directly at ${partnerContact}.`,
+          category: 'accepted',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        });
+
+        // Partner notification
+        if (lead.assignedPartnerId) {
+          await dbStore.saveRecord('bookingNotifications', {
+            id: `notif-${Date.now()}-accept-p`,
+            userId: lead.assignedPartnerId,
+            role: 'partner',
+            leadId: id,
+            title: `Contact Unlocked - #${id}`,
+            message: `You accepted #${id}. Contact customer ${lead.customerName} at ${lead.customerMobile}.`,
+            category: 'accepted',
+            isRead: false,
+            createdAt: new Date().toISOString()
+          });
+        }
+      } else if (action === 'reject') {
+        await dbStore.saveRecord('bookingNotifications', {
+          id: `notif-${Date.now()}-reject-c`,
+          userId: customerIdentifier,
+          role: 'customer',
+          leadId: id,
+          title: `Booking Request Declined - #${id}`,
+          message: `Unfortunately, the partner was unable to accept your request for "${lead.homestayName || 'Service'}" at this time.`,
+          category: 'rejected',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        });
+      } else if (action === 'need_more_info') {
+        await dbStore.saveRecord('bookingNotifications', {
+          id: `notif-${Date.now()}-info-c`,
+          userId: customerIdentifier,
+          role: 'customer',
+          leadId: id,
+          title: `More Information Needed - #${id}`,
+          message: `The host sent a message regarding your booking request: "${note || 'Please check with us.'}"`,
+          category: 'need_more_info',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        });
+      } else if (action === 'confirm') {
+        // Notify both
+        await dbStore.saveRecord('bookingNotifications', {
+          id: `notif-${Date.now()}-conf-c`,
+          userId: customerIdentifier,
+          role: 'customer',
+          leadId: id,
+          title: `Booking Confirmed! - #${id}`,
+          message: `Your booking for "${lead.homestayName || 'Service'}" is confirmed. Enjoy your journey!`,
+          category: 'confirmed',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        });
+        if (lead.assignedPartnerId) {
+          await dbStore.saveRecord('bookingNotifications', {
+            id: `notif-${Date.now()}-conf-p`,
+            userId: lead.assignedPartnerId,
+            role: 'partner',
+            leadId: id,
+            title: `Booking Confirmed - #${id}`,
+            message: `The customer has confirmed booking #${id}. Prepare for their arrival!`,
+            category: 'confirmed',
+            isRead: false,
+            createdAt: new Date().toISOString()
+          });
+        }
+      } else if (action === 'cancel') {
+        // Notify the appropriate party
+        if (userRole === 'customer' && lead.assignedPartnerId) {
+          await dbStore.saveRecord('bookingNotifications', {
+            id: `notif-${Date.now()}-canc-p`,
+            userId: lead.assignedPartnerId,
+            role: 'partner',
+            leadId: id,
+            title: `Booking Cancelled - #${id}`,
+            message: `The customer cancelled booking #${id}.`,
+            category: 'cancelled',
+            isRead: false,
+            createdAt: new Date().toISOString()
+          });
+        } else {
+          await dbStore.saveRecord('bookingNotifications', {
+            id: `notif-${Date.now()}-canc-c`,
+            userId: customerIdentifier,
+            role: 'customer',
+            leadId: id,
+            title: `Booking Cancelled - #${id}`,
+            message: `Your booking request for "${lead.homestayName || 'Service'}" was cancelled.`,
+            category: 'cancelled',
+            isRead: false,
+            createdAt: new Date().toISOString()
+          });
+        }
+      } else if (action === 'complete') {
+        await dbStore.saveRecord('bookingNotifications', {
+          id: `notif-${Date.now()}-comp-c`,
+          userId: customerIdentifier,
+          role: 'customer',
+          leadId: id,
+          title: `How was your trip? - #${id}`,
+          message: `Your booking at "${lead.homestayName || 'Service'}" is marked as completed! Tap here to leave a review.`,
+          category: 'completed',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      // Log Activity
+      await dbStore.saveRecord('bookingActivityLog', {
+        id: `log-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        leadId: id,
+        activityType: 'status_change',
+        description: `Lead status changed from ${oldStatus} to ${newStatus} by ${userRole} (${userEmail}). Note: ${note || 'None'}`,
+        performedBy: userRole === 'partner' ? 'Partner' : userRole === 'customer' ? 'Customer' : 'Admin',
+        createdAt: new Date().toISOString()
+      });
+
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       // Async email dispatches on status update (non-blocking)
       try {
         const customerEmail = lead.customerEmail;
         const partnerId = lead.assignedPartnerId;
+<<<<<<< HEAD
         let partnerContact = 'HillyTrip Support';
 
         if (lead.leadType === 'homestay' && lead.homestayId) {
@@ -9566,11 +9899,25 @@ ${databaseContext}`;
         else if (nextStatus === 'cancelled') mappedEvent = 'cancelled';
         else if (nextStatus === 'completed') mappedEvent = 'completed';
         else if (nextStatus === 'need_more_info') mappedEvent = 'info_requested';
+=======
+
+        let mappedEvent: 'submitted' | 'accepted' | 'confirmed' | 'rejected' | 'cancelled' | 'completed' | 'info_requested' = 'submitted';
+        if (action === 'accept') mappedEvent = 'accepted';
+        else if (action === 'reject') mappedEvent = 'rejected';
+        else if (action === 'confirm') mappedEvent = 'confirmed';
+        else if (action === 'cancel') mappedEvent = 'cancelled';
+        else if (action === 'complete') mappedEvent = 'completed';
+        else if (action === 'need_more_info') mappedEvent = 'info_requested';
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
         // 1. Send Customer Email
         if (customerEmail && customerEmail.includes('@')) {
           const custMailData = generateBookingNotificationEmail({
+<<<<<<< HEAD
             lead: transitionResult.booking!,
+=======
+            lead: { ...updatedLead, homestayName: lead.homestayName || updatedLead.homestayName },
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             recipientRole: 'customer',
             eventType: mappedEvent,
             partnerContact,
@@ -9597,7 +9944,11 @@ ${databaseContext}`;
 
           if (partnerEmail && partnerEmail.includes('@')) {
             const partMailData = generateBookingNotificationEmail({
+<<<<<<< HEAD
               lead: transitionResult.booking!,
+=======
+              lead: { ...updatedLead, homestayName: lead.homestayName || updatedLead.homestayName },
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
               recipientRole: 'partner',
               eventType: mappedEvent,
               partnerContact,
@@ -9615,6 +9966,7 @@ ${databaseContext}`;
         console.error('Error dispatching status change email alerts:', mailErr);
       }
 
+<<<<<<< HEAD
       // Publish event to UNEE EventBus
       try {
         const bk = transitionResult.booking!;
@@ -9655,6 +10007,9 @@ ${databaseContext}`;
       }
 
       res.json({ success: true, lead: transitionResult.booking });
+=======
+      res.json({ success: true, lead: updatedLead });
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch (err: any) {
       res.status(500).json({ error: err.message || 'Failed to update status.' });
     }
@@ -9882,6 +10237,7 @@ ${databaseContext}`;
     }
   });
 
+<<<<<<< HEAD
   // ============================================================================
   // UNIVERSAL TRUST, REVIEWS & REPUTATION ENGINE (UTRE) ENDPOINTS
   // ============================================================================
@@ -10469,6 +10825,13 @@ ${databaseContext}`;
   // ==========================================
   // BACKWARD-COMPATIBLE WRAPPERS FOR OLD APIS
   // ==========================================
+=======
+  // ==========================================
+  // REVIEWS & OPERATOR REPUTATION SYSTEM APIs
+  // ==========================================
+
+  // GET: Fetch all reviews
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   app.get('/api/booking-reviews', (req, res) => {
     try {
       const reviews = dbStore.getBookingReviews();
@@ -10483,9 +10846,29 @@ ${databaseContext}`;
     }
   });
 
+<<<<<<< HEAD
   app.post('/api/booking-reviews', async (req, res) => {
     try {
       const { bookingId, rating, title, comment, wouldRecommend, tripExperience, vehicleCleanliness, driverBehaviour, punctuality, valueForMoney, photos } = req.body;
+=======
+  // POST: Create a review for a completed booking
+  app.post('/api/booking-reviews', async (req, res) => {
+    try {
+      const {
+        bookingId,
+        rating,
+        title,
+        comment,
+        wouldRecommend,
+        tripExperience,
+        vehicleCleanliness,
+        driverBehaviour,
+        punctuality,
+        valueForMoney,
+        photos
+      } = req.body;
+
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       if (!bookingId || !rating || !comment) {
         res.status(400).json({ error: 'Booking ID, rating, and comment are required.' });
         return;
@@ -10498,6 +10881,7 @@ ${databaseContext}`;
         return;
       }
 
+<<<<<<< HEAD
       // Format dimensions for dynamic UTRE
       const categoryRatings = {
         cleanliness: Number(vehicleCleanliness || rating),
@@ -10532,10 +10916,166 @@ ${databaseContext}`;
     }
   });
 
+=======
+      if (lead.status !== 'completed' && lead.status !== 'trip_info_shared') {
+        res.status(400).json({ error: 'Only completed bookings can receive reviews.' });
+        return;
+      }
+
+      const existingReviews = dbStore.getBookingReviews();
+      const alreadyReviewed = existingReviews.some((r: any) => r.bookingId === bookingId);
+      if (alreadyReviewed) {
+        res.status(400).json({ error: 'A review has already been submitted for this booking.' });
+        return;
+      }
+
+      const latestTrip = lead.tripInformationHistory?.find((t: any) => t.status === 'active') || lead.tripInformationHistory?.[lead.tripInformationHistory.length - 1];
+      const driverName = latestTrip?.driverName || lead.cabDriverName || 'Assigned Driver';
+      const routeStr = (lead.pickupLocation && lead.dropLocation) 
+        ? `${lead.pickupLocation} to ${lead.dropLocation}` 
+        : lead.serviceName || 'HillyTrip Ride';
+
+      const newReview: any = {
+        id: `rev-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        bookingId,
+        travellerId: lead.customerEmail || lead.customerMobile || 'anonymous_traveller',
+        travellerName: lead.customerName || 'Anonymous Traveller',
+        operatorId: lead.assignedPartnerId || 'partner_hillytrip',
+        operatorName: lead.assignedPartnerName || 'HillyTrip Operator',
+        driverName,
+        route: routeStr,
+        rating: Number(rating),
+        title: title || '',
+        comment,
+        wouldRecommend: !!wouldRecommend,
+        tripExperience: Number(tripExperience || rating),
+        vehicleCleanliness: Number(vehicleCleanliness || rating),
+        driverBehaviour: Number(driverBehaviour || rating),
+        punctuality: Number(punctuality || rating),
+        valueForMoney: Number(valueForMoney || rating),
+        photos: Array.isArray(photos) ? photos.slice(0, 5) : [],
+        status: 'active',
+        reported: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      await dbStore.saveRecord('bookingReviews', newReview);
+
+      const customerIdentifier = lead.customerEmail || lead.customerMobile;
+      if (customerIdentifier) {
+        await dbStore.saveRecord('bookingNotifications', {
+          id: `notif-${Date.now()}-rev-sub`,
+          userId: customerIdentifier,
+          role: 'customer',
+          leadId: bookingId,
+          title: '⭐ Review Submitted Successfully',
+          message: `Thank you for sharing your journey feedback for booking #${bookingId}! Your rating helps build trust.`,
+          category: 'completed',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      const operatorIdentifier = lead.assignedPartnerId;
+      if (operatorIdentifier) {
+        await dbStore.saveRecord('bookingNotifications', {
+          id: `notif-${Date.now()}-rev-rec`,
+          userId: operatorIdentifier,
+          role: 'partner',
+          leadId: bookingId,
+          title: '⭐ New Review Received',
+          message: `A traveler left a ${rating}-star review for trip #${bookingId}. Tap to view and reply.`,
+          category: 'completed',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      res.status(201).json({ success: true, review: newReview });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || 'Failed to submit review.' });
+    }
+  });
+
+  // PUT: Update review (with 7-day restriction)
+  app.put('/api/booking-reviews/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const {
+        rating,
+        title,
+        comment,
+        wouldRecommend,
+        tripExperience,
+        vehicleCleanliness,
+        driverBehaviour,
+        punctuality,
+        valueForMoney,
+        photos
+      } = req.body;
+
+      const reviews = dbStore.getBookingReviews();
+      const reviewIndex = reviews.findIndex((r: any) => r.id === id);
+      if (reviewIndex === -1) {
+        res.status(404).json({ error: 'Review not found.' });
+        return;
+      }
+
+      const review = reviews[reviewIndex];
+
+      const createdAtTime = new Date(review.createdAt).getTime();
+      const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+      const nowTime = Date.now();
+      if ((nowTime - createdAtTime) > sevenDaysMs) {
+        res.status(400).json({ error: 'Review is locked. Edits are only permitted within 7 days of submission.' });
+        return;
+      }
+
+      const updatedReview = {
+        ...review,
+        rating: rating !== undefined ? Number(rating) : review.rating,
+        title: title !== undefined ? title : review.title,
+        comment: comment !== undefined ? comment : review.comment,
+        wouldRecommend: wouldRecommend !== undefined ? !!wouldRecommend : review.wouldRecommend,
+        tripExperience: tripExperience !== undefined ? Number(tripExperience) : review.tripExperience,
+        vehicleCleanliness: vehicleCleanliness !== undefined ? Number(vehicleCleanliness) : review.vehicleCleanliness,
+        driverBehaviour: driverBehaviour !== undefined ? Number(driverBehaviour) : review.driverBehaviour,
+        punctuality: punctuality !== undefined ? Number(punctuality) : review.punctuality,
+        valueForMoney: valueForMoney !== undefined ? Number(valueForMoney) : review.valueForMoney,
+        photos: Array.isArray(photos) ? photos.slice(0, 5) : review.photos,
+        updatedAt: new Date().toISOString()
+      };
+
+      await dbStore.saveRecord('bookingReviews', updatedReview);
+
+      if (review.operatorId) {
+        await dbStore.saveRecord('bookingNotifications', {
+          id: `notif-${Date.now()}-rev-upd`,
+          userId: review.operatorId,
+          role: 'partner',
+          leadId: review.bookingId,
+          title: '⭐ Review Updated by Traveller',
+          message: `The traveler updated their review for booking #${review.bookingId}. Tap to view.`,
+          category: 'completed',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      res.json({ success: true, review: updatedReview });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || 'Failed to update review.' });
+    }
+  });
+
+  // POST: Add/Edit Operator reply (one reply only, editable)
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   app.post('/api/booking-reviews/:id/reply', async (req, res) => {
     try {
       const { id } = req.params;
       const { replyText } = req.body;
+<<<<<<< HEAD
       const updated = await ReviewService.submitOwnerResponse(id, {
         replyText,
         responderName: 'Operator Reply'
@@ -10546,10 +11086,44 @@ ${databaseContext}`;
     }
   });
 
+=======
+
+      if (!replyText || !replyText.trim()) {
+        res.status(400).json({ error: 'Reply text is required.' });
+        return;
+      }
+
+      const reviews = dbStore.getBookingReviews();
+      const reviewIndex = reviews.findIndex((r: any) => r.id === id);
+      if (reviewIndex === -1) {
+        res.status(404).json({ error: 'Review not found.' });
+        return;
+      }
+
+      const review = reviews[reviewIndex];
+
+      const updatedReview = {
+        ...review,
+        operatorReply: replyText,
+        operatorReplyCreatedAt: review.operatorReplyCreatedAt || new Date().toISOString(),
+        operatorReplyUpdatedAt: new Date().toISOString()
+      };
+
+      await dbStore.saveRecord('bookingReviews', updatedReview);
+
+      res.json({ success: true, review: updatedReview });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || 'Failed to save reply.' });
+    }
+  });
+
+  // POST: Report review for moderation
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   app.post('/api/booking-reviews/:id/report', async (req, res) => {
     try {
       const { id } = req.params;
       const { reason, comment } = req.body;
+<<<<<<< HEAD
       const updated = await ModerationService.reportReview(id, 'system', reason || 'Other', comment);
       res.json({ success: true, review: updated });
     } catch (err: any) {
@@ -10557,10 +11131,43 @@ ${databaseContext}`;
     }
   });
 
+=======
+
+      if (!reason) {
+        res.status(400).json({ error: 'Report reason is required.' });
+        return;
+      }
+
+      const reviews = dbStore.getBookingReviews();
+      const reviewIndex = reviews.findIndex((r: any) => r.id === id);
+      if (reviewIndex === -1) {
+        res.status(404).json({ error: 'Review not found.' });
+        return;
+      }
+
+      const review = reviews[reviewIndex];
+      const updatedReview = {
+        ...review,
+        reported: true,
+        reportReason: reason,
+        reportComment: comment || ''
+      };
+
+      await dbStore.saveRecord('bookingReviews', updatedReview);
+
+      res.json({ success: true, message: 'Review reported for moderation.' });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || 'Failed to report review.' });
+    }
+  });
+
+  // PUT: Moderation action (hide, restore, delete)
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   app.put('/api/booking-reviews/:id/moderate', async (req, res) => {
     try {
       const { id } = req.params;
       const { action } = req.body;
+<<<<<<< HEAD
       await ModerationService.resolveModeration({
         reviewId: id,
         moderatorId: 'admin_moderator',
@@ -10573,6 +11180,43 @@ ${databaseContext}`;
     }
   });
 
+=======
+
+      if (!['hide', 'restore', 'delete'].includes(action)) {
+        res.status(400).json({ error: 'Invalid moderation action.' });
+        return;
+      }
+
+      const reviews = dbStore.getBookingReviews();
+      const reviewIndex = reviews.findIndex((r: any) => r.id === id);
+      if (reviewIndex === -1) {
+        res.status(404).json({ error: 'Review not found.' });
+        return;
+      }
+
+      const review = reviews[reviewIndex];
+
+      if (action === 'delete') {
+        await dbStore.deleteRecord('bookingReviews', id);
+        res.json({ success: true, action: 'delete', message: 'Review deleted successfully.' });
+      } else {
+        const updatedReview = {
+          ...review,
+          status: action === 'hide' ? 'hidden' : 'active',
+          reported: action === 'restore' ? false : review.reported,
+          reportReason: action === 'restore' ? undefined : review.reportReason,
+          reportComment: action === 'restore' ? undefined : review.reportComment
+        };
+        await dbStore.saveRecord('bookingReviews', updatedReview);
+        res.json({ success: true, action, review: updatedReview });
+      }
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || 'Failed to moderate review.' });
+    }
+  });
+
+  // POST: Photo upload endpoint for reviews
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   app.post('/api/booking-reviews/upload', async (req, res) => {
     try {
       const { base64, filename, mimeType } = req.body;
@@ -11587,18 +12231,55 @@ ${databaseContext}`;
   });
 
   // ========================================================
+<<<<<<< HEAD
   // UNIVERSAL NOTIFICATION & EVENT ENGINE (UNEE) ENDPOINTS
+=======
+  // UNIVERSAL NOTIFICATION ENGINE (UNE) API ENDPOINTS
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   // ========================================================
 
   // Get user notification preferences
   app.get('/api/une/preferences', (req, res) => {
     try {
+<<<<<<< HEAD
       const userId = req.query.userId as string;
+=======
+      const { userId } = req.query;
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       if (!userId) {
         res.status(400).json({ error: 'userId is required' });
         return;
       }
+<<<<<<< HEAD
       const prefs = PreferenceService.getPreferences(userId);
+=======
+      
+      const rawData = (dbStore as any).data;
+      if (!rawData.unePreferences) {
+        rawData.unePreferences = [];
+      }
+      
+      let prefs = rawData.unePreferences.find((p: any) => p.userId === userId);
+      if (!prefs) {
+        prefs = {
+          userId,
+          taxi: true,
+          homestays: true,
+          bookings: true,
+          messages: true,
+          reviews: true,
+          marketing: true,
+          announcements: true,
+          channels: {
+            inApp: true,
+            browserPush: true,
+            email: true,
+            whatsapp: false,
+            sms: false
+          }
+        };
+      }
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       res.json({ success: true, preferences: prefs });
     } catch (e: any) {
       res.status(500).json({ error: e.message });
@@ -11613,14 +12294,37 @@ ${databaseContext}`;
         res.status(400).json({ error: 'userId and preferences are required' });
         return;
       }
+<<<<<<< HEAD
       const updated = PreferenceService.savePreferences(userId, preferences);
       res.json({ success: true, preferences: updated });
+=======
+      
+      const rawData = (dbStore as any).data;
+      if (!rawData.unePreferences) {
+        rawData.unePreferences = [];
+      }
+      
+      const idx = rawData.unePreferences.findIndex((p: any) => p.userId === userId);
+      const updatedPrefs = { ...preferences, userId };
+      if (idx >= 0) {
+        rawData.unePreferences[idx] = updatedPrefs;
+      } else {
+        rawData.unePreferences.push(updatedPrefs);
+      }
+      
+      dbStore.save();
+      res.json({ success: true, preferences: updatedPrefs });
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch (e: any) {
       res.status(500).json({ error: e.message });
     }
   });
 
+<<<<<<< HEAD
   // Aggregate, normalize, and group notifications (UNEE Gateway)
+=======
+  // Aggregate and normalize all notifications for a user (UNE Gateway)
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   app.get('/api/une/notifications', (req, res) => {
     try {
       const userId = req.query.userId as string;
@@ -11630,6 +12334,7 @@ ${databaseContext}`;
         return;
       }
 
+<<<<<<< HEAD
       const category = (req.query.category || 'all') as string;
       const status = (req.query.status || 'all') as any;
       const query = req.query.query as string;
@@ -11643,6 +12348,156 @@ ${databaseContext}`;
       });
 
       res.json({ success: true, notifications: list });
+=======
+      // Load user preferences
+      const rawData = (dbStore as any).data;
+      if (!rawData.unePreferences) rawData.unePreferences = [];
+      let prefs = rawData.unePreferences.find((p: any) => p.userId === userId);
+      if (!prefs) {
+        prefs = { taxi: true, homestays: true, bookings: true, messages: true, reviews: true, marketing: true, announcements: true };
+      }
+
+      const normalizedList: any[] = [];
+
+      // 1. AppNotifications (General/Admin Announcements)
+      if (prefs.announcements !== false) {
+        const appNotifs = dbStore.getAppNotifications().filter(n => n.status === 'published');
+        appNotifs.forEach(n => {
+          let category: string = 'announcements';
+          if (n.type === 'route_alert') category = 'taxi';
+          else if (n.type === 'homestay_added') category = 'homestays';
+          
+          let priority = 'normal';
+          if (n.priority === 'urgent') priority = 'critical';
+          else if (n.priority === 'important') priority = 'high';
+
+          normalizedList.push({
+            id: n.id,
+            userId: 'all',
+            title: n.title,
+            message: n.message,
+            type: n.type || 'announcement',
+            category,
+            priority,
+            isRead: false, // will handle isRead locally/federated via readIds
+            isArchived: false,
+            isDeleted: false,
+            createdAt: n.createdAt,
+            actionUrl: n.type === 'homestay_added' ? '/homestays' : n.type === 'route_alert' ? '/routes' : undefined,
+            actionLabel: n.type === 'homestay_added' ? 'View Homestays' : n.type === 'route_alert' ? 'View Routes' : undefined,
+            metadata: { imageUrl: n.imageUrl, routeName: (n as any).routeName, routeStatus: (n as any).routeStatus }
+          });
+        });
+      }
+
+      // 2. BookingNotifications
+      const bookingNotifs = dbStore.getBookingNotifications().filter(n => n.userId && n.userId.toLowerCase() === userId.toLowerCase());
+      bookingNotifs.forEach(n => {
+        // Map category
+        let category: string = 'bookings';
+        const msgLower = (n.message || '').toLowerCase();
+        const titleLower = (n.title || '').toLowerCase();
+        
+        if (msgLower.includes('taxi') || titleLower.includes('taxi') || msgLower.includes('quote') || titleLower.includes('quote')) {
+          category = 'taxi';
+        } else if (msgLower.includes('homestay') || titleLower.includes('homestay') || msgLower.includes('room') || titleLower.includes('room')) {
+          category = 'homestays';
+        } else if (msgLower.includes('tour') || titleLower.includes('tour') || msgLower.includes('package') || titleLower.includes('package')) {
+          category = 'tour';
+        } else if (msgLower.includes('ticket') || titleLower.includes('ticket') || msgLower.includes('support') || titleLower.includes('support')) {
+          category = 'support';
+        }
+
+        // Apply filters based on category preference
+        if (category === 'taxi' && prefs.taxi === false) return;
+        if (category === 'homestays' && prefs.homestays === false) return;
+        if (category === 'bookings' && prefs.bookings === false) return;
+
+        let priority = 'normal';
+        if (n.category === 'reminder' || n.category === 'system' || msgLower.includes('urgent') || msgLower.includes('immediate')) {
+          priority = 'high';
+        }
+
+        normalizedList.push({
+          id: n.id,
+          userId: n.userId,
+          role: n.role,
+          title: n.title,
+          message: n.message,
+          type: n.category || 'booking_update',
+          category,
+          priority,
+          isRead: n.isRead,
+          isArchived: false,
+          isDeleted: false,
+          createdAt: n.createdAt,
+          actionUrl: n.leadId ? `/booking/${n.leadId}` : undefined,
+          actionLabel: 'Open Booking',
+          metadata: { leadId: n.leadId }
+        });
+      });
+
+      // 3. ChatNotifications
+      if (prefs.messages !== false) {
+        const chatNotifs = dbStore.getChatNotifications().filter(n => n.receiver_id === userId);
+        chatNotifs.forEach(n => {
+          normalizedList.push({
+            id: n.id,
+            userId: n.receiver_id,
+            title: n.title,
+            message: n.body,
+            type: n.type || 'new_message',
+            category: 'messages',
+            priority: 'high',
+            isRead: n.is_read,
+            isArchived: false,
+            isDeleted: false,
+            createdAt: n.created_at,
+            actionUrl: n.reference_id ? `open_chat_${n.reference_id}` : undefined,
+            actionLabel: 'View Message',
+            metadata: { conversationId: n.reference_id }
+          });
+        });
+      }
+
+      // 4. PhotoNotifications (generic notifications)
+      const genericNotifs = dbStore.getNotifications().filter(n => n.userId === userId);
+      genericNotifs.forEach(n => {
+        let category = 'system';
+        if (n.type && (n.type.includes('review') || n.message.toLowerCase().includes('review'))) {
+          category = 'reviews';
+        }
+        
+        if (category === 'reviews' && prefs.reviews === false) return;
+
+        normalizedList.push({
+          id: n.id,
+          userId: n.userId,
+          title: n.title,
+          message: n.message,
+          type: n.type || 'generic',
+          category,
+          priority: 'normal',
+          isRead: n.isRead,
+          isArchived: false,
+          isDeleted: false,
+          createdAt: n.createdAt,
+          actionUrl: undefined,
+          actionLabel: undefined,
+          metadata: {}
+        });
+      });
+
+      // Grouping and sorting logic on the backend (helps performance)
+      // Sort: critical first, then newest
+      normalizedList.sort((a, b) => {
+        if (a.priority === 'critical' && b.priority !== 'critical') return -1;
+        if (a.priority !== 'critical' && b.priority === 'critical') return 1;
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+
+      res.json({ success: true, notifications: normalizedList });
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch (e: any) {
       res.status(500).json({ error: e.message });
     }
@@ -11652,7 +12507,10 @@ ${databaseContext}`;
   app.post('/api/une/notifications/:id/read', async (req, res) => {
     try {
       const { id } = req.params;
+<<<<<<< HEAD
       let marked = false;
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       
       // 1. Try booking notifications
       const bookingNotifs = dbStore.getBookingNotifications();
@@ -11660,7 +12518,12 @@ ${databaseContext}`;
       if (bIndex >= 0) {
         bookingNotifs[bIndex].isRead = true;
         await dbStore.saveRecord('bookingNotifications', bookingNotifs[bIndex]);
+<<<<<<< HEAD
         marked = true;
+=======
+        res.json({ success: true, source: 'booking' });
+        return;
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       }
 
       // 2. Try chat notifications
@@ -11669,15 +12532,24 @@ ${databaseContext}`;
       if (cNotif) {
         cNotif.is_read = true;
         dbStore.updateChatNotifications(chatNotifs);
+<<<<<<< HEAD
         marked = true;
       }
 
       // 3. Try generic notifications
+=======
+        res.json({ success: true, source: 'chat' });
+        return;
+      }
+
+      // 3. Try photo notifications (generic)
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       const genericNotifs = dbStore.getNotifications();
       const gNotif = genericNotifs.find(n => n.id === id);
       if (gNotif) {
         gNotif.isRead = true;
         dbStore.updateNotifications(genericNotifs);
+<<<<<<< HEAD
         marked = true;
       }
 
@@ -11686,15 +12558,29 @@ ${databaseContext}`;
       } else {
         res.status(404).json({ error: 'Notification not found in any source table' });
       }
+=======
+        res.json({ success: true, source: 'generic' });
+        return;
+      }
+
+      res.status(404).json({ error: 'Notification not found in any source table' });
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch (e: any) {
       res.status(500).json({ error: e.message });
     }
   });
 
+<<<<<<< HEAD
   // Mark all aggregated notifications as read for a user
   app.post('/api/une/notifications/read-all', async (req, res) => {
     try {
       const { userId } = req.body;
+=======
+  // Mark all aggregated notifications as read in all source tables for a user
+  app.post('/api/une/notifications/read-all', async (req, res) => {
+    try {
+      const { userId, role } = req.body;
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       if (!userId) {
         res.status(400).json({ error: 'userId is required' });
         return;
@@ -11746,7 +12632,11 @@ ${databaseContext}`;
     }
   });
 
+<<<<<<< HEAD
   // UNE Event Simulator endpoint - Refactored to leverage EventBus and Event Models
+=======
+  // UNE Event Simulator endpoint to create test notifications and messages in realtime
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   app.post('/api/une/simulate', async (req, res) => {
     try {
       const { eventType, userId, role } = req.body;
@@ -11758,6 +12648,7 @@ ${databaseContext}`;
       const timestamp = new Date().toISOString();
       const randomId = `sim_${Math.floor(1000 + Math.random() * 9000)}`;
 
+<<<<<<< HEAD
       let resolvedEventType = 'booking.created';
       let sourceModule: any = 'booking';
       let entityType: any = 'booking';
@@ -11945,19 +12836,171 @@ ${databaseContext}`;
       // Perform Dual-Chat database mock if chat type is simulated
       if (shouldMockChat) {
         const convId = `conv_sim_${randomId}`;
+=======
+      // Setup simulated notification based on eventType
+      let title = '';
+      let message = '';
+      let category: 'booking_submitted' | 'accepted' | 'rejected' | 'need_more_info' | 'confirmed' | 'cancelled' | 'completed' | 'expired' | 'reminder' | 'system' = 'system';
+      let source: 'booking' | 'chat' | 'generic' = 'booking';
+      
+      switch (eventType) {
+        // Taxi Events
+        case 'taxi_quote_request':
+          title = '🚕 New Taxi Quote Request';
+          message = 'A traveller has requested a taxi quote for route: Manali to Rohtang Pass.';
+          category = 'booking_submitted';
+          break;
+        case 'taxi_quote_received':
+          title = '💰 Taxi Quote Received';
+          message = 'Operator HillyCabs has offered a revised quote of ₹3,500 for your Manali sightseeing trip.';
+          category = 'need_more_info';
+          break;
+        case 'taxi_quote_revised':
+          title = '⚡ Taxi Quotation Revised';
+          message = 'Your taxi quote request has been updated with a special discount of 10%!';
+          category = 'reminder';
+          break;
+        case 'taxi_quote_accepted':
+          title = '✅ Taxi Quote Accepted!';
+          message = 'Your taxi quote for ₹3,500 has been accepted. Operator is preparing details.';
+          category = 'accepted';
+          break;
+        case 'taxi_booking_confirmed':
+          title = '🎉 Taxi Booking Confirmed';
+          message = 'Your ride has been officially confirmed! Booking ID: HTX-8274. Driver contact details shared.';
+          category = 'confirmed';
+          break;
+        case 'taxi_driver_assigned':
+          title = '🧑‍✈️ Driver Assigned';
+          message = 'Driver Sunil Kumar (HP-01-A-1234) has been assigned to your taxi booking HTX-8274.';
+          category = 'system';
+          break;
+        case 'taxi_trip_started':
+          title = '🗺️ Taxi Trip Started';
+          message = 'Your ride from Manali is now underway. Have a safe and happy journey!';
+          category = 'system';
+          break;
+        case 'taxi_trip_completed':
+          title = '⭐ Trip Completed!';
+          message = 'Your trip with Sunil Kumar has finished. Please rate your driver and leave a review.';
+          category = 'completed';
+          break;
+
+        // Homestay Events
+        case 'homestay_enquiry':
+          title = '🏡 New Homestay Enquiry';
+          message = 'Traveller John Doe requested details about room availability at Orchard Retreat.';
+          category = 'need_more_info';
+          break;
+        case 'homestay_booking_request':
+          title = '🔔 Homestay Booking Request';
+          message = 'New booking request received for Orchard Retreat: 3 Nights (July 15 - July 18).';
+          category = 'booking_submitted';
+          break;
+        case 'homestay_booking_confirmed':
+          title = '🏡 Homestay Booking Confirmed';
+          message = 'Your stay reservation at Orchard Retreat is confirmed! Check-in instructions are ready.';
+          category = 'confirmed';
+          break;
+        case 'homestay_booking_cancelled':
+          title = '❌ Homestay Stay Cancelled';
+          message = 'Your reservation at Alpine Heights has been cancelled. Refund initiated.';
+          category = 'cancelled';
+          break;
+
+        // Tour Events
+        case 'tour_enquiry':
+          title = '⛰️ Tour Package Enquiry';
+          message = 'A traveler wants custom pricing for the 5-Day Leh Ladakh Adventure package.';
+          category = 'need_more_info';
+          break;
+        case 'tour_booking':
+          title = '🎒 Tour Booking Submitted';
+          message = 'Your booking for the 5-Day Leh Ladakh Adventure has been submitted for operator review.';
+          category = 'booking_submitted';
+          break;
+
+        // Support Events
+        case 'support_ticket_created':
+          title = '🎫 Support Ticket Created';
+          message = 'Ticket #7281: "Unable to complete payment" is created. Our support team will reply shortly.';
+          category = 'system';
+          break;
+        case 'support_ticket_replied':
+          title = '💬 Support Reply Received';
+          message = 'Agent Vikram replied to your support ticket: "I have reset the payment gateway...';
+          category = 'need_more_info';
+          break;
+
+        // General Events
+        case 'general_message':
+          title = '💬 New Message from Operator';
+          message = 'Hello! Yes, the homestay has private parking and high-speed Wi-Fi available.';
+          source = 'chat';
+          break;
+        case 'general_mention':
+          title = '📣 You were mentioned';
+          message = 'Admin mentioned you in the operator announcement list regarding monsoon guidelines.';
+          source = 'generic';
+          break;
+        case 'general_review':
+          title = '⭐ New Review Received';
+          message = 'A traveller left a 5-star review: "Amazing service and beautiful views!"';
+          source = 'generic';
+          break;
+        case 'general_verification':
+          title = '🛡️ Profile Verified Successfully';
+          message = 'Congratulations! Your partner identity verification documents have been fully approved.';
+          source = 'generic';
+          break;
+        case 'general_announcement':
+          title = '📢 Monsoon Advisory Announcement';
+          message = 'Admin advisory: Standard safety protocols active for Rohtang pass and Solang valley.';
+          source = 'generic';
+          break;
+        
+        default:
+          title = '🔔 System Notification';
+          message = 'You have a new action required on the HillyTrip platform.';
+          category = 'system';
+      }
+
+      // Save notification to its correct DB table
+      if (source === 'booking') {
+        const notifRecord = {
+          id: `bnotif_${Date.now()}_${randomId}`,
+          userId: userId,
+          role: role || 'customer',
+          leadId: `lead_${randomId}`,
+          title,
+          message,
+          category,
+          isRead: false,
+          createdAt: timestamp
+        };
+        await dbStore.saveRecord('bookingNotifications', notifRecord);
+      } else if (source === 'chat') {
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         const chatNotifs = dbStore.getChatNotifications();
         const chatRecord = {
           id: `cnotif_${Date.now()}_${randomId}`,
           receiver_id: userId,
           type: 'booking_enquiry',
+<<<<<<< HEAD
           reference_id: convId,
           title: '💬 New Message from Operator',
           body: chatBody,
+=======
+          reference_id: `conv_sim_${randomId}`,
+          title,
+          body: message,
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           is_read: false,
           created_at: timestamp
         };
         dbStore.updateChatNotifications([...chatNotifs, chatRecord]);
 
+<<<<<<< HEAD
         const conversations = dbStore.getConversations();
         const newConv = {
           id: convId,
@@ -11981,21 +13024,75 @@ ${databaseContext}`;
           { conversation_id: convId, user_id: userId, role: 'traveler' },
           { conversation_id: convId, user_id: 'support_agent_sim', role: 'admin' }
         ]);
+=======
+        // Also mock a message in the conversation to make it dual-purpose (real chat message!)
+        const convId = `conv_sim_${randomId}`;
+        const conversations = dbStore.getConversations();
+        const existingConv = conversations.find(c => c.listing_id === `sim_${randomId}`);
+        if (!existingConv) {
+          const newConv = {
+            id: convId,
+            listing_type: 'support',
+            listing_id: `sim_${randomId}`,
+            listingName: 'HillyTrip Live Support & Testing',
+            created_at: timestamp,
+            updated_at: timestamp,
+            last_message_at: timestamp,
+            is_archived: false,
+            is_resolved: false,
+            is_reported: false,
+            is_pinned: false,
+            last_message: message
+          };
+          dbStore.updateConversations([...conversations, newConv]);
+
+          const participants = dbStore.getConversationParticipants();
+          dbStore.updateConversationParticipants([
+            ...participants,
+            { conversation_id: convId, user_id: userId, role: 'traveler' },
+            { conversation_id: convId, user_id: 'support_agent_sim', role: 'admin' }
+          ]);
+        }
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
         const messages = dbStore.getChatMessages();
         const msgRecord = {
           id: `msg_${Date.now()}`,
           conversation_id: convId,
           sender_id: 'support_agent_sim',
+<<<<<<< HEAD
           message: chatBody,
+=======
+          message,
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           is_seen: false,
           created_at: timestamp,
           delivered_at: timestamp
         };
         dbStore.updateChatMessages([...messages, msgRecord]);
+<<<<<<< HEAD
       }
 
       res.json({ success: true, message: `Simulated event ${eventType} published via UNEE EventBus successfully!` });
+=======
+      } else {
+        // Source generic
+        const genericNotifs = dbStore.getNotifications();
+        const genericRecord = {
+          id: `gnotif_${Date.now()}_${randomId}`,
+          userId: userId,
+          title,
+          message,
+          type: eventType,
+          isRead: false,
+          createdAt: timestamp
+        };
+        genericNotifs.push(genericRecord);
+        dbStore.updateNotifications(genericNotifs);
+      }
+
+      res.json({ success: true, message: `Simulated event ${eventType} triggered successfully!` });
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch (e: any) {
       res.status(500).json({ error: e.message });
     }

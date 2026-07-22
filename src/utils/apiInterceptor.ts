@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { db, auth, collection, getDocs, doc, getDoc, setDoc, deleteDoc, query, where } from './firebase';
 const initialHubs: any[] = [];
 const initialDestinations: any[] = [];
@@ -18,6 +19,91 @@ async function checkBackendStatus() {
 
 
 
+=======
+import { db, auth } from './firebase';
+import { 
+  collection, 
+  getDocs, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  deleteDoc, 
+  query, 
+  where 
+} from 'firebase/firestore';
+import { 
+  initialHubs, 
+  initialDestinations, 
+  initialAttractions, 
+  initialHomestays, 
+  initialRoutes 
+} from '../data/initialData';
+import { Hub, Route, Destination, Attraction, Homestay, ImageItem, Contribution, TripLead, CarLead, Driver } from '../types';
+import { DEFAULT_HOMESTAY_IMAGE } from '../constants';
+
+let useStaticFallback = (() => {
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    if (
+      host.includes('netlify') || 
+      host.includes('github') || 
+      host.includes('vercel') || 
+      host.includes('pages.dev') ||
+      host.includes('hillytrip') ||
+      host === 'hillytrip.com' ||
+      host === 'www.hillytrip.com'
+    ) {
+      console.log('[HillyTrip API Interceptor] Detected static platform hosting synchronously. Enabling client-side Firestore sandbox mode.');
+      return true;
+    }
+  }
+  return false;
+})();
+
+// Determine if we should redirect API requests to direct Firestore
+async function checkBackendStatus() {
+  if (useStaticFallback) {
+    return;
+  }
+  // If hosted on netlify, bypass and fallback immediately
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    if (
+      host.includes('netlify') || 
+      host.includes('github') || 
+      host.includes('vercel') || 
+      host.includes('pages.dev') ||
+      host.includes('hillytrip') ||
+      host === 'hillytrip.com' ||
+      host === 'www.hillytrip.com'
+    ) {
+      console.log('[HillyTrip API Interceptor] Detected static platform hosting. Enabling client-side Firestore sandbox mode.');
+      useStaticFallback = true;
+      return;
+    }
+  }
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
+    const res = await (window as any).originalFetch('/api/hubs', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    
+    // If we receive index.html content instead of JSON, we are on a static site routing fallback
+    const contentType = res.headers.get('content-type') || '';
+    if (!res.ok || contentType.includes('text/html')) {
+      useStaticFallback = true;
+      console.log('[HillyTrip API Interceptor] Express server unreachable or returned HTML. Switching to client-side Firestore sandbox mode.');
+    } else {
+      console.log('[HillyTrip API Interceptor] Connected to active back-end Express server.');
+    }
+  } catch (err) {
+    useStaticFallback = true;
+    console.log('[HillyTrip API Interceptor] backend probe failed, falling back to direct Firestore:', err);
+  }
+}
+
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 // Memory caching for lists to minimize network latency and Firebase reads
 const clientCache: Record<string, any[]> = {};
 
@@ -33,6 +119,7 @@ async function fetchCollection<T>(colName: string, fallbackData: T[]): Promise<T
     });
     
     if (items.length > 0) {
+<<<<<<< HEAD
       const toIdSlugLocal = (text: any): string => {
         if (text === undefined || text === null) return '';
         const str = String(text);
@@ -61,6 +148,10 @@ async function fetchCollection<T>(colName: string, fallbackData: T[]): Promise<T
       const deduplicatedItems = Array.from(stageMap.values()) as T[];
       clientCache[colName] = deduplicatedItems;
       return deduplicatedItems;
+=======
+      clientCache[colName] = items;
+      return items;
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
   } catch (e) {
     console.warn(`[Firestore Get Warning] Could not fetch ${colName} from Firestore:`, e);
@@ -89,6 +180,7 @@ function runClientSearchPathfinder(hubs: Hub[], routes: Route[], fromHubId: stri
 
   if (!fromHub || !toHub) return [];
 
+<<<<<<< HEAD
   // Helper distance function
   const getDistKm = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
@@ -121,6 +213,8 @@ function runClientSearchPathfinder(hubs: Hub[], routes: Route[], fromHubId: stri
     return null;
   };
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   // Find direct routes
   const directRoutes = routes.filter(r => 
     (r.fromHubId === fromHubId && r.toHubId === toHubId) ||
@@ -245,6 +339,7 @@ function runClientSearchPathfinder(hubs: Hub[], routes: Route[], fromHubId: stri
     });
   });
 
+<<<<<<< HEAD
   const hasReservedAlready = results.some(r => r.route.type === 'Reserved Car');
   if (fromHub && toHub && fromHub.id !== toHub.id && !hasReservedAlready) {
     const coordsA = getCoords(fromHub);
@@ -283,6 +378,8 @@ function runClientSearchPathfinder(hubs: Hub[], routes: Route[], fromHubId: stri
     }
   }
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   return results;
 }
 
@@ -353,6 +450,7 @@ async function handleMockApiRequest(url: string, options?: RequestInit): Promise
 
   try {
     // ---------------- MOCK AUTHENTICATION ROUTING ----------------
+<<<<<<< HEAD
     if (method === 'POST' && pathName === '/api/auth/demo-login') {
       const body = parseBody();
       const { role } = body;
@@ -448,6 +546,8 @@ async function handleMockApiRequest(url: string, options?: RequestInit): Promise
       });
     }
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     if (method === 'POST' && pathName === '/api/auth/login') {
       const body = parseBody();
       const { email, password } = body;
@@ -861,6 +961,7 @@ async function handleMockApiRequest(url: string, options?: RequestInit): Promise
 
     if (method === 'GET' && pathName === '/api/destinations') {
       const data = await fetchCollection<Destination>('destinations', initialDestinations);
+<<<<<<< HEAD
       const defaultPlaceholderImg = "photo-1544735716-392fe2489ffa";
       
       const mapped = data.map(d => {
@@ -879,10 +980,14 @@ async function handleMockApiRequest(url: string, options?: RequestInit): Promise
         return d;
       });
       return jsonResponse(mapped);
+=======
+      return jsonResponse(data);
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
 
     if (method === 'GET' && pathName === '/api/attractions') {
       const data = await fetchCollection<Attraction>('attractions', initialAttractions);
+<<<<<<< HEAD
       const defaultPlaceholderImg = "photo-1544735716-392fe2489ffa";
       
       const mapped = data.map(a => {
@@ -901,6 +1006,9 @@ async function handleMockApiRequest(url: string, options?: RequestInit): Promise
         return a;
       });
       return jsonResponse(mapped);
+=======
+      return jsonResponse(data);
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
 
     if (method === 'GET' && pathName === '/api/homestays') {
@@ -1586,6 +1694,7 @@ async function handleMockApiRequest(url: string, options?: RequestInit): Promise
 const nativeFetchStr = 'fetch';
 const nativeFetch = typeof window !== 'undefined' ? window[nativeFetchStr] : undefined;
 
+<<<<<<< HEAD
 if (typeof window !== 'undefined') {
   const currentFetch = window.fetch;
   if (currentFetch && !(currentFetch as any).isHillyTrip) {
@@ -1637,10 +1746,15 @@ function getBackendUrl(urlString: string): string {
   }
 
   return urlString;
+=======
+if (typeof window !== 'undefined' && !(window as any).originalFetch) {
+  (window as any).originalFetch = nativeFetch;
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 export async function hillyTripFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   const urlString = typeof input === 'string' ? input : (input instanceof URL ? input.toString() : (input as Request).url);
+<<<<<<< HEAD
   
   let origFetch = (window as any).originalFetch || nativeFetch;
   if (origFetch && (origFetch as any).isHillyTrip) {
@@ -1649,6 +1763,9 @@ export async function hillyTripFetch(input: RequestInfo | URL, init?: RequestIni
   if (!origFetch || origFetch === hillyTripFetch) {
     origFetch = (window as any)._hillyTripRealNativeFetch || window.constructor?.prototype?.fetch;
   }
+=======
+  const origFetch = (window as any).originalFetch || nativeFetch;
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Automatically inject currently authenticated user email into back-office requests
   let modifiedInit = init;
@@ -1668,17 +1785,39 @@ export async function hillyTripFetch(input: RequestInfo | URL, init?: RequestIni
     if (useStaticFallback) {
       return handleMockApiRequest(urlString, modifiedInit);
     } else {
+<<<<<<< HEAD
       const targetUrl = getBackendUrl(urlString);
       // Direct live fetch with no fallback to client-side mocks
       return origFetch(targetUrl, modifiedInit);
+=======
+      try {
+        const originalResp = await origFetch(urlString, modifiedInit);
+        
+        // Verify if response is valid JSON (sometimes static hosts serve index.html with 200 OK or 302 for missing routes)
+        const contentType = originalResp.headers.get('content-type') || '';
+        if (contentType.includes('text/html')) {
+          useStaticFallback = true;
+          console.log('[HillyTrip API Interceptor] HTML output from back-end detected. Switching to client-side Firestore sandbox mode dynamically.');
+          return handleMockApiRequest(urlString, modifiedInit);
+        }
+        return originalResp;
+      } catch (err) {
+        useStaticFallback = true;
+        console.warn('[HillyTrip API Interceptor] Original fetch failed due to networking issue. Switching to client-side Firestore sandbox mode:', err);
+        return handleMockApiRequest(urlString, modifiedInit);
+      }
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
   }
   
   return origFetch(input, init);
 }
 
+<<<<<<< HEAD
 (hillyTripFetch as any).isHillyTrip = true;
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 // Intercept window.fetch securely and transparently if writable
 if (typeof window !== 'undefined') {
   try {

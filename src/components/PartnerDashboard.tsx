@@ -25,7 +25,11 @@ import {
   Briefcase
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+<<<<<<< HEAD
 import { ClaimRequest, Inquiry, PendingUpdate, Homestay, User as UserType, BookingLead, BookingActivityLog } from '../types';
+=======
+import { ClaimRequest, Inquiry, PendingUpdate, Homestay, User as UserType } from '../types';
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
 interface PartnerDashboardProps {
   user: UserType | null;
@@ -43,13 +47,18 @@ export default function PartnerDashboard({
   reloadDb 
 }: PartnerDashboardProps) {
   
+<<<<<<< HEAD
   const [activeSubTab, setActiveSubTab] = useState<'overview' | 'claims' | 'listings' | 'inquiries' | 'leads'>('overview');
+=======
+  const [activeSubTab, setActiveSubTab] = useState<'overview' | 'claims' | 'listings' | 'inquiries'>('overview');
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [loading, setLoading] = useState(false);
   
   // Data States
   const [claims, setClaims] = useState<ClaimRequest[]>([]);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [pendingUpdates, setPendingUpdates] = useState<PendingUpdate[]>([]);
+<<<<<<< HEAD
   
   // Booking Leads Management States
   const [bookingLeads, setBookingLeads] = useState<BookingLead[]>([]);
@@ -59,6 +68,8 @@ export default function PartnerDashboard({
   const [isLeadActionSubmitting, setIsLeadActionSubmitting] = useState(false);
   const [leadsFilter, setLeadsFilter] = useState<'all' | 'new' | 'accepted' | 'completed' | 'cancelled_or_rejected'>('all');
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [dashboardStats, setDashboardStats] = useState({
     ownedCount: 0,
     pendingClaims: 0,
@@ -118,6 +129,7 @@ export default function PartnerDashboard({
         setInquiries(inqJson.inquiries || []);
       }
 
+<<<<<<< HEAD
       // Booking Leads
       const leadsRes = await fetch(`/api/booking-leads?role=partner&identifier=${encodeURIComponent(emailId)}`);
       const leadsJson = await leadsRes.json();
@@ -125,6 +137,8 @@ export default function PartnerDashboard({
         setBookingLeads(leadsJson.leads || []);
       }
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       // Pending updates
       const upRes = await fetch(`/api/partner/updates?partnerUserId=${encodeURIComponent(emailId)}`);
       const upJson = await upRes.json();
@@ -143,6 +157,7 @@ export default function PartnerDashboard({
     }
   };
 
+<<<<<<< HEAD
   const fetchLeadLogs = async (leadId: string) => {
     try {
       const res = await fetch(`/api/booking-leads/${leadId}/activity-log`);
@@ -228,6 +243,8 @@ export default function PartnerDashboard({
     }
   };
 
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   useEffect(() => {
     fetchPartnerData();
   }, [user]);
@@ -539,6 +556,7 @@ export default function PartnerDashboard({
         >
           Direct Inquiries Inbox ({inquiries.length})
         </button>
+<<<<<<< HEAD
         <button
           onClick={() => setActiveSubTab('leads')}
           className={`py-3 px-6 -mb-px text-xs font-black uppercase tracking-wider border-b-2 font-mono whitespace-nowrap cursor-pointer ${
@@ -549,6 +567,8 @@ export default function PartnerDashboard({
         >
           💼 Booking Leads ({bookingLeads.length})
         </button>
+=======
+>>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       </div>
 
       {/* RENDER ACTIVE TAB */}
