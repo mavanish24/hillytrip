@@ -114,7 +114,7 @@ export async function geocodeLocationGemini(query: string, defaultFallback?: Cac
   try {
     const responseText = await executeGeminiOperation(async (ai) => {
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.5-flash",
         contents: `Retrieve highly precise geographical coordinates (latitude and longitude), district, state, and country for: "${query}". Respond ONLY with valid JSON conforming strictly to the requested schema. Ensure mountain region coordinates are highly accurate.`,
         config: {
           temperature: 0.0,
@@ -338,7 +338,7 @@ export async function generateAttractionDescriptionGemini(name: string, category
   try {
     const text = await executeGeminiOperation(async (ai) => {
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.5-flash",
         contents: `Write a beautiful, proper, and engaging travel description (2 to 3 lines, around 30 to 50 words) for the Himalayan tourist sightseeing spot: "${name}" (which is a "${category}") located near "${destinationName}" in "${region}", North-East India (Darjeeling/Sikkim area). Mention its panoramic views, tranquil beauty, cultural or natural traits, and Kanchenjunga visibility if applicable. Do not use quotes, intro greetings, markdown styling, or text wrapping: output only the raw plain description.`,
         config: {
           temperature: 0.7,
@@ -2210,7 +2210,7 @@ export async function bulkGenerateVillageMetadata(villages: string[], defaultReg
     try {
       responseText = await executeGeminiOperation(async (ai) => {
         const response = await ai.models.generateContent({
-          model: "gemini-3.5-flash",
+          model: "gemini-2.5-flash",
           contents: `You are an expert GIS and Himalayan regional geodatabase compiler.
 Generate structured location metadata for the following villages/settlements in the Eastern Himalayas, India:
 Names: ${villages.join(", ")}
@@ -2339,7 +2339,7 @@ export async function bulkGenerateAttractionsAndHomestays(destinationId: string)
   try {
     responseText = await executeGeminiOperation(async (ai) => {
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.5-flash",
         contents: `You are an expert travel writer and Himalayan hospitality intelligence compiler.
 Generate highly realistic local tourist attractions and homestays for the village of: "${name}" (Region: ${region}, State: ${state}).
 
@@ -2566,7 +2566,7 @@ export async function discoverComprehensiveAttractionsGemini(destinationId: stri
   try {
     responseText = await executeGeminiOperation(async (ai) => {
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.5-flash",
         contents: `Find all verifiable tourist attractions associated with "${name}" (Region: ${region}, State: ${state}, India).
 
 Include:
@@ -2749,7 +2749,7 @@ export async function discoverUniversalVillageIntelligence(village: string, dist
   try {
     responseText = await executeGeminiOperation(async (ai) => {
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.5-flash",
         contents: `You are an expert Himalayan geographer and tourism research assistant.
 Perform a thorough, comprehensive lookup for the village "${village}" located in District/Region "${district || 'Himalayan hills'}", State "${state || 'West Bengal/Sikkim'}", India.
 

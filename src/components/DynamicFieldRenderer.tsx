@@ -30,6 +30,7 @@ import {
 import { BusinessField } from '../types/businessOnboarding';
 import { masterData } from '../data/masterData';
 import { validateField } from '../utils/validationService';
+import RoomCategoryManager from './RoomCategoryManager';
 
 interface DynamicFieldRendererProps {
   field: BusinessField;
@@ -503,6 +504,32 @@ export default function DynamicFieldRenderer({
             />
             <span className="absolute right-3.5 text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-900 border px-2 py-0.5 rounded">INR</span>
           </div>
+        )}
+
+        {/* Percentage Input */}
+        {field.type === 'percentage' && (
+          <div className="relative flex items-center">
+            <input
+              type="number"
+              min={0}
+              max={100}
+              placeholder={field.placeholder || "30"}
+              value={value !== undefined ? value : ''}
+              onChange={(e) => onChange(e.target.value)}
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600/25 text-slate-800 dark:text-white transition duration-200 pr-12 font-bold"
+            />
+            <span className="absolute right-3.5 text-xs font-black text-slate-500 bg-slate-200 dark:bg-slate-800 px-2 py-1 rounded-lg">
+              %
+            </span>
+          </div>
+        )}
+
+        {/* Room Categories Manager Component */}
+        {field.type === 'room_categories' && (
+          <RoomCategoryManager
+            value={value || []}
+            onChange={(val) => onChange(val)}
+          />
         )}
 
         {/* 13. Dynamic Rating system (Stars) */}

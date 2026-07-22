@@ -1,44 +1,19 @@
 import React, { useState, useEffect, useRef, DragEvent, ChangeEvent } from 'react';
-<<<<<<< HEAD
 import { motion } from 'motion/react';
 import { Camera, UploadCloud, FileImage, Sparkles, LogIn, Loader2, CheckCircle2, AlertCircle, Info, Heart, Download, ChevronLeft, ChevronRight, Share2, MessageSquare } from 'lucide-react';
-=======
-import { Camera, UploadCloud, FileImage, Sparkles, LogIn, Loader2, CheckCircle2, AlertCircle, Info, Heart, Download, ChevronLeft, ChevronRight } from 'lucide-react';
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 import { compressAndConvertToWebP } from '../utils/imageOptimizer';
 import { uploadImageToFirebase } from '../utils/firebase';
 import { hillyTripFetch } from '../utils/apiInterceptor';
 import { DEFAULT_HOMESTAY_IMAGE } from '../constants';
-<<<<<<< HEAD
 import { ImageItem } from '../types';
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
 const fetch = hillyTripFetch;
 
 
-<<<<<<< HEAD
 interface ImageGallerySystemProps {
   entityType: 'destination' | 'attraction';
   entityId: string;
   parentDestinationId?: string | null;
-=======
-interface ImageItem {
-  id: string;
-  destinationId: string | null;
-  attractionId: string | null;
-  url: string;
-  uploadedBy: string;
-  uploadDate: string;
-  status: 'Pending' | 'Approved' | 'Rejected';
-  caption: string;
-  altText: string;
-}
-
-interface ImageGallerySystemProps {
-  entityType: 'destination' | 'attraction';
-  entityId: string;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   staticGallery: string[];
   activePhotos: ImageItem[];
   user: any; // Auth user
@@ -49,23 +24,17 @@ interface ImageGallerySystemProps {
   setNotification: (notif: { type: 'success' | 'error', message: string } | null) => void;
   likes?: any[];
   onToggleLike?: (contentId: string, contentType: 'destination' | 'attraction' | 'photo') => Promise<void>;
-<<<<<<< HEAD
   comments?: any[];
   onAddComment?: (contentId: string, contentType: 'destination' | 'attraction' | 'photo', text: string) => Promise<void>;
   onDeleteComment?: (commentId: string) => Promise<void>;
   initialSelectedPhotoUrl?: string;
   onClearInitialSelectedPhotoUrl?: () => void;
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 export default function ImageGallerySystem({
   entityType,
   entityId,
-<<<<<<< HEAD
   parentDestinationId = null,
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   staticGallery = [],
   activePhotos = [],
   user,
@@ -75,25 +44,18 @@ export default function ImageGallerySystem({
   onPhotoUpdated,
   setNotification,
   likes = [],
-<<<<<<< HEAD
   onToggleLike,
   comments = [],
   onAddComment,
   onDeleteComment,
   initialSelectedPhotoUrl,
   onClearInitialSelectedPhotoUrl
-=======
-  onToggleLike
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }: ImageGallerySystemProps) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [caption, setCaption] = useState('');
   const [altText, setAltText] = useState('');
-<<<<<<< HEAD
   const [localPhotoCommentText, setLocalPhotoCommentText] = useState('');
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [isProcessing, setIsProcessing] = useState(false);
   const [webpBlob, setWebpBlob] = useState<Blob | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
@@ -107,7 +69,6 @@ export default function ImageGallerySystem({
   const [editingAltTextText, setEditingAltTextText] = useState('');
   const [isSavingCaption, setIsSavingCaption] = useState(false);
 
-<<<<<<< HEAD
   const handlePhotoCommentSubmit = async () => {
     if (!localPhotoCommentText.trim() || !onAddComment || !selectedPhotoForViewer) return;
     try {
@@ -118,8 +79,6 @@ export default function ImageGallerySystem({
     }
   };
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   // Combine all photos (static + dynamic) for seamless lightbox swipe/arrow navigation
   const allViewerItems = [
     ...staticGallery.map((imgUrl, idx) => ({
@@ -171,7 +130,6 @@ export default function ImageGallerySystem({
     };
   }, [selectedPhotoForViewer, allViewerItems]);
 
-<<<<<<< HEAD
   useEffect(() => {
     if (initialSelectedPhotoUrl) {
       const matchedPhoto = allViewerItems.find(item => item.url === initialSelectedPhotoUrl);
@@ -187,8 +145,6 @@ export default function ImageGallerySystem({
     }
   }, [initialSelectedPhotoUrl, allViewerItems, onClearInitialSelectedPhotoUrl]);
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 1. Drag & Drop events
@@ -275,7 +231,6 @@ export default function ImageGallerySystem({
       // Upload binary to Firebase Storage and receive URL
       const secureDownloadUrl = await uploadImageToFirebase(webpBlob, targetName);
 
-<<<<<<< HEAD
       if (isAdmin) {
         // Save database record with appropriate statuses
         const metaPayload = {
@@ -338,43 +293,6 @@ export default function ImageGallerySystem({
           type: 'success',
           message: 'Thank you! Your photo has been submitted successfully and is awaiting admin approval. It will appear after verification.'
         });
-=======
-      // Save database record with appropriate statuses
-      const metaPayload = {
-        destinationId: entityType === 'destination' ? entityId : null,
-        attractionId: entityType === 'attraction' ? entityId : null,
-        url: secureDownloadUrl,
-        uploadedBy: user?.displayName || user?.email || 'Registered Traveler',
-        status: isAdmin ? 'Approved' : 'Pending', // Admins bypass the moderation queue
-        caption: caption.trim() || 'HillyTrip scenic view',
-        altText: altText.trim() || 'Indian Hills and regional Darjeeling panoramic views',
-        userId: user?.uid || user?.email || 'anonymous'
-      };
-
-      const response = await fetch('/api/images', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(metaPayload)
-      });
-
-      if (!response.ok) {
-        const errJson = await response.json();
-        throw new Error(errJson.error || 'Server rejected metadata persistence.');
-      }
-
-      const resBody = await response.json();
-      
-      setUploadStatus('success');
-      setNotification({
-        type: 'success',
-        message: isAdmin 
-          ? 'Successfully uploaded direct-to-gallery as administrator.' 
-          : 'Scenic picture uploaded to administrator review queue!'
-      });
-
-      if (resBody.image) {
-        onPhotoUploaded(resBody.image);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       }
 
       // Reset states
@@ -451,7 +369,6 @@ export default function ImageGallerySystem({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {/* Seeded default fallback images with Lazy-Load support */}
         {staticGallery.map((imgUrl, idx) => (
-<<<<<<< HEAD
           <motion.div 
             key={`static-${idx}`} 
             id={`gallery-static-card-${idx}`} 
@@ -459,11 +376,6 @@ export default function ImageGallerySystem({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: (idx % 4) * 0.06 }}
             whileHover={{ y: -4, scale: 1.015, transition: { duration: 0.2 } }}
-=======
-          <div 
-            key={`static-${idx}`} 
-            id={`gallery-static-card-${idx}`} 
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             onClick={() => {
               const matchedShowcase = allViewerItems.find(item => item.url === imgUrl);
               setSelectedPhotoForViewer(matchedShowcase || { url: imgUrl, isStatic: true, caption: 'Official Showcase View', altText: `${entityType === 'destination' ? 'Destination' : 'Attraction'} premium scenic highlight view`, uploadedBy: 'HillyTrip Guides', uploadDate: '' });
@@ -471,11 +383,7 @@ export default function ImageGallerySystem({
               setEditingAltTextText(`${entityType === 'destination' ? 'Destination' : 'Attraction'} premium scenic highlight view`);
               setIsEditingCaption(false);
             }}
-<<<<<<< HEAD
             className="group relative aspect-square rounded-2xl overflow-hidden bg-slate-200 border border-slate-105 shadow-xs cursor-pointer"
-=======
-            className="group relative aspect-square rounded-2xl overflow-hidden bg-slate-200 border border-slate-105 shadow-xs hover:scale-[1.02] transition-all cursor-pointer"
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             title="Click to view photo"
           >
             <img 
@@ -488,7 +396,6 @@ export default function ImageGallerySystem({
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
               <span className="text-[10px] text-white font-medium">Official Photo</span>
             </div>
-<<<<<<< HEAD
           </motion.div>
         ))}
 
@@ -504,30 +411,13 @@ export default function ImageGallerySystem({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: ((staticGallery.length + idx) % 4) * 0.06 }}
               whileHover={{ y: -4, scale: 1.015, transition: { duration: 0.2 } }}
-=======
-          </div>
-        ))}
-
-        {/* Dynamic active user approved images with lazy loading */}
-        {activePhotos.map((photo) => {
-          const isLikedByCurrentUser = user && likes.some((l) => l.id === `${user.uid}_${photo.id}`);
-          const totalPhotoLikes = likes.filter((l) => l.contentId === photo.id).length;
-          return (
-            <div 
-              key={photo.id} 
-              id={`gallery-photo-card-${photo.id}`} 
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
               onClick={() => {
                 setSelectedPhotoForViewer({ ...photo, isStatic: false });
                 setEditingCaptionText(photo.caption || '');
                 setEditingAltTextText(photo.altText || '');
                 setIsEditingCaption(false);
               }}
-<<<<<<< HEAD
               className="group relative aspect-square rounded-2xl overflow-hidden bg-white border border-slate-250 shadow-xs cursor-pointer"
-=======
-              className="group relative aspect-square rounded-2xl overflow-hidden bg-white border border-slate-250 shadow-xs hover:scale-[1.02] transition-all cursor-pointer"
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
               title="Click to view and edit caption"
             >
               <img 
@@ -566,11 +456,7 @@ export default function ImageGallerySystem({
                 <span className="text-slate-300 text-[9px] truncate">By {photo.uploadedBy}</span>
                 <span className="text-emerald-400 text-[8px] tracking-wider uppercase font-semibold mt-0.5" title={photo.altText}>SEO Alt: {photo.altText.substring(0, 30)}...</span>
               </div>
-<<<<<<< HEAD
             </motion.div>
-=======
-            </div>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           );
         })}
         
@@ -890,7 +776,6 @@ export default function ImageGallerySystem({
                   )}
                 </div>
 
-<<<<<<< HEAD
                 {/* Photo Engagement Panel (Like, Share, and Comments inside Lightbox) */}
                 <div className="space-y-4 pt-2 border-t border-slate-100 dark:border-slate-800">
                   <div className="flex items-center gap-4">
@@ -1002,8 +887,6 @@ export default function ImageGallerySystem({
                   </div>
                 </div>
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                 <div className="border-t border-slate-120 dark:border-slate-800/80 pt-4 space-y-3 font-mono text-xs">
                   <div className="flex justify-between">
                     <span className="text-slate-400">Contributed By</span>

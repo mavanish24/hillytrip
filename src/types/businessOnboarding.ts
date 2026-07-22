@@ -31,7 +31,10 @@ export type BusinessFieldType =
   | 'pan_number'
   | 'aadhaar_number'
   | 'license_number'
-  | 'coordinates';
+  | 'coordinates'
+  | 'percentage'
+  | 'room_categories'
+  | 'time_picker';
 
 export interface VisibilityCondition {
   fieldId: string;

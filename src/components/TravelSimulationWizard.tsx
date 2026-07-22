@@ -6,6 +6,7 @@ import {
   Map, Star, Home, ArrowUpRight, CheckSquare, ListPlus
 } from 'lucide-react';
 import { Hub, Destination, Attraction, Homestay, Route } from '../types';
+import { getItemSlug } from '../utils/slug';
 
 interface TravelSimulationWizardProps {
   hubs: Hub[];
@@ -517,7 +518,7 @@ export default function TravelSimulationWizard({
                     {results.destinationsList.map((dest) => (
                       <div 
                         key={dest.id}
-                        onClick={() => onNavigate(`#/destination/${dest.id}`)}
+                        onClick={() => onNavigate(`#/destination/${getItemSlug(dest)}`)}
                         className="group flex gap-3.5 bg-slate-850/50 hover:bg-slate-800/80 border border-slate-800 hover:border-emerald-500/35 p-3.5 rounded-2xl transition duration-200 cursor-pointer"
                       >
                         <div className="w-20 h-20 rounded-xl overflow-hidden bg-slate-800 shrink-0 relative">
@@ -610,7 +611,7 @@ export default function TravelSimulationWizard({
                   {results.attractionsList.map((attr) => (
                     <div 
                       key={attr.id}
-                      onClick={() => onNavigate(`#/attraction/${attr.id}`)}
+                      onClick={() => onNavigate(`#/attraction/${getItemSlug(attr)}`)}
                       className="bg-slate-850/60 hover:bg-slate-800 border border-slate-800/80 hover:border-sky-505 p-3 rounded-xl transition text-center cursor-pointer group"
                     >
                       <span className="text-xl">

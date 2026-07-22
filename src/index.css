@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
-=======
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 @import "tailwindcss";
 
 @theme {
@@ -10,7 +6,6 @@
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-display: "Space Grotesk", var(--font-sans);
   --font-serif: "Lora", Georgia, serif;
-<<<<<<< HEAD
   --font-serif-luxury: "Cormorant Garamond", "Playfair Display", Georgia, serif;
 
   /* Redefine standard font sizing utilities globally to scale up the typography of the entire app */
@@ -80,8 +75,6 @@
   .card-padding {
     padding: 1.25rem !important; /* 20px padding on mobile */
   }
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* Perfect smooth theme transition animations for immersive color mood */
@@ -112,7 +105,6 @@ body {
 
 /* Premium Preset Theme CSS Variable Bundles */
 
-<<<<<<< HEAD
 /* 1. Slate Theme */
 .theme-slate-dark, html.theme-slate-dark, .theme-dark, html.theme-dark {
   /* Light Mode values by default */
@@ -148,16 +140,11 @@ body {
 html.dark.theme-slate-dark, html.dark.theme-dark, .dark.theme-slate-dark, .dark.theme-dark, html.dark .theme-slate-dark, html.dark .theme-dark, .dark .theme-slate-dark, .dark .theme-dark, [data-theme="dark"] {
   /* Dark Mode values */
   --surface: #0f172a;
-=======
-/* 1. Slate Dark (Default) Base Theme */
-.theme-slate-dark, html.theme-slate-dark, .theme-dark, html.theme-dark {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #020617;
   --bg-card: #0f172a;
   --bg-widget: #1e293b;
   --bg-divider: #334155;
   --text-title: #ffffff;
-<<<<<<< HEAD
   --text-body: #cbd5e1;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
@@ -178,20 +165,10 @@ html.dark.theme-slate-dark, html.dark.theme-dark, .dark.theme-slate-dark, .dark.
   --hero-overlay: rgba(2, 6, 23, 0.45);
   --hero-button-bg: rgba(15, 23, 42, 0.7);
   --hero-button-text: #f1f5f9;
-=======
-  --text-body: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --border-color: #1e293b;
-  --accent-color: #10b981;
-  --theme-font-title: "Plus Jakarta Sans", sans-serif;
-  --theme-font-body: "Inter", sans-serif;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* 2. Mountain Blue Theme */
 .theme-mountain-blue, html.theme-mountain-blue, .theme-ocean, html.theme-ocean {
-<<<<<<< HEAD
   /* Light Mode values by default */
   --bg-main: #f0f7ff;
   --bg-card: #ffffff;
@@ -223,8 +200,6 @@ html.dark.theme-slate-dark, html.dark.theme-dark, .dark.theme-slate-dark, .dark.
 }
 html.dark.theme-mountain-blue, html.dark.theme-ocean, .dark.theme-mountain-blue, .dark.theme-ocean, html.dark .theme-mountain-blue, html.dark .theme-ocean, .dark .theme-mountain-blue, .dark .theme-ocean {
   /* Dark Mode values */
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #050a21;
   --bg-card: #0d123d;
   --bg-widget: #1c225e;
@@ -235,7 +210,6 @@ html.dark.theme-mountain-blue, html.dark.theme-ocean, .dark.theme-mountain-blue,
   --text-muted: #cbd5e1;
   --border-color: #252c6f;
   --accent-color: #38bdf8;
-<<<<<<< HEAD
   --btn-bg: #38bdf8;
   --btn-text: #050a21;
   --badge-bg: #1c225e;
@@ -251,15 +225,10 @@ html.dark.theme-mountain-blue, html.dark.theme-ocean, .dark.theme-mountain-blue,
   --hero-overlay: rgba(5, 10, 33, 0.45);
   --hero-button-bg: rgba(13, 18, 61, 0.7);
   --hero-button-text: #f0f7ff;
-=======
-  --theme-font-title: "Outfit", sans-serif;
-  --theme-font-body: "Outfit", sans-serif;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* 3. Forest Green Theme */
 .theme-forest-green, html.theme-forest-green, .theme-forest, html.theme-forest {
-<<<<<<< HEAD
   /* Light Mode values by default */
   --bg-main: #f0fdf4;
   --bg-card: #ffffff;
@@ -291,8 +260,6 @@ html.dark.theme-mountain-blue, html.dark.theme-ocean, .dark.theme-mountain-blue,
 }
 html.dark.theme-forest-green, html.dark.theme-forest, .dark.theme-forest-green, .dark.theme-forest, html.dark .theme-forest-green, html.dark .theme-forest, .dark .theme-forest-green, .dark .theme-forest {
   /* Dark Mode values */
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #011d17;
   --bg-card: #03362a;
   --bg-widget: #08523f;
@@ -303,7 +270,6 @@ html.dark.theme-forest-green, html.dark.theme-forest, .dark.theme-forest-green, 
   --text-muted: #cbd5e1;
   --border-color: #0c4d3d;
   --accent-color: #34d399;
-<<<<<<< HEAD
   --btn-bg: #34d399;
   --btn-text: #011d17;
   --badge-bg: #08523f;
@@ -319,15 +285,10 @@ html.dark.theme-forest-green, html.dark.theme-forest, .dark.theme-forest-green, 
   --hero-overlay: rgba(1, 29, 23, 0.45);
   --hero-button-bg: rgba(3, 54, 42, 0.7);
   --hero-button-text: #f0fdf4;
-=======
-  --theme-font-title: "Work Sans", sans-serif;
-  --theme-font-body: "Inter", sans-serif;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* 4. Himalayan Night Theme */
 .theme-himalayan-night, html.theme-himalayan-night {
-<<<<<<< HEAD
   /* Light Mode values by default */
   --bg-main: #fdf2f8;
   --bg-card: #ffffff;
@@ -359,8 +320,6 @@ html.dark.theme-forest-green, html.dark.theme-forest, .dark.theme-forest-green, 
 }
 html.dark.theme-himalayan-night, .dark.theme-himalayan-night, html.dark .theme-himalayan-night, .dark .theme-himalayan-night {
   /* Dark Mode values */
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #030012;
   --bg-card: #11082c;
   --bg-widget: #22124d;
@@ -371,7 +330,6 @@ html.dark.theme-himalayan-night, .dark.theme-himalayan-night, html.dark .theme-h
   --text-muted: #d8b4fe;
   --border-color: #2b155e;
   --accent-color: #ec4899;
-<<<<<<< HEAD
   --btn-bg: #ec4899;
   --btn-text: #030012;
   --badge-bg: #22124d;
@@ -387,15 +345,10 @@ html.dark.theme-himalayan-night, .dark.theme-himalayan-night, html.dark .theme-h
   --hero-overlay: rgba(3, 0, 18, 0.45);
   --hero-button-bg: rgba(17, 8, 44, 0.7);
   --hero-button-text: #fdf2f8;
-=======
-  --theme-font-title: "Space Grotesk", sans-serif;
-  --theme-font-body: "Inter", sans-serif;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* 5. Sunrise Gold Theme */
 .theme-sunrise-gold, html.theme-sunrise-gold, .theme-sunset, html.theme-sunset {
-<<<<<<< HEAD
   /* Light Mode values by default */
   --bg-main: #fffbeb;
   --bg-card: #ffffff;
@@ -427,8 +380,6 @@ html.dark.theme-himalayan-night, .dark.theme-himalayan-night, html.dark .theme-h
 }
 html.dark.theme-sunrise-gold, html.dark.theme-sunset, .dark.theme-sunrise-gold, .dark.theme-sunset, html.dark .theme-sunrise-gold, html.dark .theme-sunset, .dark .theme-sunrise-gold, .dark .theme-sunset {
   /* Dark Mode values */
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #130701;
   --bg-card: #2c1303;
   --bg-widget: #472205;
@@ -439,7 +390,6 @@ html.dark.theme-sunrise-gold, html.dark.theme-sunset, .dark.theme-sunrise-gold, 
   --text-muted: #fcd34d;
   --border-color: #3f1903;
   --accent-color: #fb923c;
-<<<<<<< HEAD
   --btn-bg: #fb923c;
   --btn-text: #130701;
   --badge-bg: #472205;
@@ -455,15 +405,10 @@ html.dark.theme-sunrise-gold, html.dark.theme-sunset, .dark.theme-sunrise-gold, 
   --hero-overlay: rgba(19, 7, 1, 0.45);
   --hero-button-bg: rgba(44, 19, 3, 0.7);
   --hero-button-text: #fffbeb;
-=======
-  --theme-font-title: "Merriweather", serif;
-  --theme-font-body: "Lora", serif;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* 6. Alpine Purple Theme */
 .theme-alpine-purple, html.theme-alpine-purple, .theme-purple, html.theme-purple {
-<<<<<<< HEAD
   /* Light Mode values by default */
   --bg-main: #faf5ff;
   --bg-card: #ffffff;
@@ -495,8 +440,6 @@ html.dark.theme-sunrise-gold, html.dark.theme-sunset, .dark.theme-sunrise-gold, 
 }
 html.dark.theme-alpine-purple, html.dark.theme-purple, .dark.theme-alpine-purple, .dark.theme-purple, html.dark .theme-alpine-purple, html.dark .theme-purple, .dark .theme-alpine-purple, .dark .theme-purple {
   /* Dark Mode values */
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #05020c;
   --bg-card: #13092b;
   --bg-widget: #23114d;
@@ -507,7 +450,6 @@ html.dark.theme-alpine-purple, html.dark.theme-purple, .dark.theme-alpine-purple
   --text-muted: #d8b4fe;
   --border-color: #24114d;
   --accent-color: #c084fc;
-<<<<<<< HEAD
   --btn-bg: #c084fc;
   --btn-text: #05020c;
   --badge-bg: #23114d;
@@ -523,15 +465,10 @@ html.dark.theme-alpine-purple, html.dark.theme-purple, .dark.theme-alpine-purple
   --hero-overlay: rgba(5, 2, 12, 0.45);
   --hero-button-bg: rgba(19, 9, 43, 0.7);
   --hero-button-text: #faf5ff;
-=======
-  --theme-font-title: "Manrope", sans-serif;
-  --theme-font-body: "Manrope", sans-serif;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* 7. Mist Grey Theme */
 .theme-mist-grey, html.theme-mist-grey {
-<<<<<<< HEAD
   /* Light Mode values by default */
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
@@ -563,8 +500,6 @@ html.dark.theme-alpine-purple, html.dark.theme-purple, .dark.theme-alpine-purple
 }
 html.dark.theme-mist-grey, .dark.theme-mist-grey, html.dark .theme-mist-grey, .dark .theme-mist-grey {
   /* Dark Mode values */
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #0c0f16;
   --bg-card: #181d29;
   --bg-widget: #293144;
@@ -575,7 +510,6 @@ html.dark.theme-mist-grey, .dark.theme-mist-grey, html.dark .theme-mist-grey, .d
   --text-muted: #e2e8f0;
   --border-color: #222938;
   --accent-color: #cbd5e1;
-<<<<<<< HEAD
   --btn-bg: #cbd5e1;
   --btn-text: #0c0f16;
   --badge-bg: #293144;
@@ -591,15 +525,10 @@ html.dark.theme-mist-grey, .dark.theme-mist-grey, html.dark .theme-mist-grey, .d
   --hero-overlay: rgba(12, 15, 22, 0.45);
   --hero-button-bg: rgba(24, 29, 41, 0.7);
   --hero-button-text: #f8fafc;
-=======
-  --theme-font-title: "Lexend", sans-serif;
-  --theme-font-body: "Lexend", sans-serif;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* 8. River Teal Theme */
 .theme-river-teal, html.theme-river-teal {
-<<<<<<< HEAD
   /* Light Mode values by default */
   --bg-main: #f0fdfa;
   --bg-card: #ffffff;
@@ -631,8 +560,6 @@ html.dark.theme-mist-grey, .dark.theme-mist-grey, html.dark .theme-mist-grey, .d
 }
 html.dark.theme-river-teal, .dark.theme-river-teal, html.dark .theme-river-teal, .dark .theme-river-teal {
   /* Dark Mode values */
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #011316;
   --bg-card: #032a2f;
   --bg-widget: #073f47;
@@ -643,7 +570,6 @@ html.dark.theme-river-teal, .dark.theme-river-teal, html.dark .theme-river-teal,
   --text-muted: #e6fffa;
   --border-color: #053b42;
   --accent-color: #2dd4bf;
-<<<<<<< HEAD
   --btn-bg: #2dd4bf;
   --btn-text: #011316;
   --badge-bg: #073f47;
@@ -659,15 +585,10 @@ html.dark.theme-river-teal, .dark.theme-river-teal, html.dark .theme-river-teal,
   --hero-overlay: rgba(1, 19, 22, 0.45);
   --hero-button-bg: rgba(3, 42, 47, 0.7);
   --hero-button-text: #f0fdfa;
-=======
-  --theme-font-title: "DM Sans", sans-serif;
-  --theme-font-body: "DM Sans", sans-serif;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* 9. Autumn Trail Theme */
 .theme-autumn-trail, html.theme-autumn-trail {
-<<<<<<< HEAD
   /* Light Mode values by default */
   --bg-main: #fff7ed;
   --bg-card: #ffffff;
@@ -699,8 +620,6 @@ html.dark.theme-river-teal, .dark.theme-river-teal, html.dark .theme-river-teal,
 }
 html.dark.theme-autumn-trail, .dark.theme-autumn-trail, html.dark .theme-autumn-trail, .dark .theme-autumn-trail {
   /* Dark Mode values */
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #120401;
   --bg-card: #2b0e04;
   --bg-widget: #471a0b;
@@ -711,7 +630,6 @@ html.dark.theme-autumn-trail, .dark.theme-autumn-trail, html.dark .theme-autumn-
   --text-muted: #fdba74;
   --border-color: #3d1405;
   --accent-color: #ff7a1a;
-<<<<<<< HEAD
   --btn-bg: #ff7a1a;
   --btn-text: #120401;
   --badge-bg: #471a0b;
@@ -727,15 +645,10 @@ html.dark.theme-autumn-trail, .dark.theme-autumn-trail, html.dark .theme-autumn-
   --hero-overlay: rgba(18, 4, 1, 0.45);
   --hero-button-bg: rgba(43, 14, 4, 0.7);
   --hero-button-text: #fff7ed;
-=======
-  --theme-font-title: "Lora", serif;
-  --theme-font-body: "Lora", serif;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 /* 10. Snow Peak Theme */
 .theme-snow-peak, html.theme-snow-peak {
-<<<<<<< HEAD
   /* Light Mode values by default */
   --bg-main: #f1faee;
   --bg-card: #ffffff;
@@ -767,8 +680,6 @@ html.dark.theme-autumn-trail, .dark.theme-autumn-trail, html.dark .theme-autumn-
 }
 html.dark.theme-snow-peak, .dark.theme-snow-peak, html.dark .theme-snow-peak, .dark .theme-snow-peak {
   /* Dark Mode values */
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   --bg-main: #050c18;
   --bg-card: #0c1a2c;
   --bg-widget: #152a47;
@@ -779,7 +690,6 @@ html.dark.theme-snow-peak, .dark.theme-snow-peak, html.dark .theme-snow-peak, .d
   --text-muted: #e3f8f8;
   --border-color: #142a42;
   --accent-color: #e63946;
-<<<<<<< HEAD
   --btn-bg: #e63946;
   --btn-text: #ffffff;
   --badge-bg: #152a47;
@@ -801,28 +711,10 @@ html.dark.theme-snow-peak, .dark.theme-snow-peak, html.dark .theme-snow-peak, .d
 body, .font-sans, p, span, li, button, input, textarea, select, a {
   font-family: var(--theme-font-body, "Inter", sans-serif) !important;
 }
-=======
-  --theme-font-title: "Space Grotesk", sans-serif;
-  --theme-font-body: "Lexend", sans-serif;
-}
-
-/* General Dark and Custom Color Theme Mappings */
-.dark, [data-theme="dark"], html.dark {
-  background-color: var(--bg-main, #020617) !important;
-  color: var(--text-body, #f1f5f9) !important;
-}
-
-/* Apply theme-specific typography at runtime to all elements */
-body, .font-sans, p, span, li, button, input, textarea, select, a {
-  font-family: var(--theme-font-body, "Inter", sans-serif) !important;
-}
-
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 h1, h2, h3, h4, h5, h6, .font-display, .font-heading, [class*="font-extrabold"] {
   font-family: var(--theme-font-title, "Space Grotesk", sans-serif) !important;
 }
 
-<<<<<<< HEAD
 /* Automatic Hierarchy Alignment & Centralized Token Enforcer */
 
 /* Tier 1: Metadata (approx. 13px) */
@@ -1016,91 +908,10 @@ nav, header, footer {
   background-color: var(--hover-bg) !important;
 }
 .group:hover .group-hover\:translate-x-1 {
-=======
-/* Navbars / sticky headers */
-.dark nav {
-  background-color: var(--bg-card, #0f172a) !important;
-  border-color: var(--border-color, #1e293b) !important;
-}
-
-/* Background overrides */
-.dark .bg-white {
-  background-color: var(--bg-card, #0f172a) !important;
-}
-.dark .bg-slate-50 {
-  background-color: var(--bg-main, #020617) !important;
-}
-.dark .bg-slate-100 {
-  background-color: var(--bg-widget, #1e293b) !important;
-}
-.dark .bg-slate-200 {
-  background-color: var(--bg-divider, #334155) !important;
-}
-.dark .bg-slate-100\/50 {
-  background-color: rgba(30, 41, 59, 0.5) !important;
-}
-.dark .bg-slate-50\/50 {
-  background-color: rgba(2, 6, 23, 0.5) !important;
-}
-.dark .bg-emerald-50 {
-  background-color: rgba(16, 185, 129, 0.08) !important;
-}
-.dark .bg-emerald-100 {
-  background-color: rgba(16, 185, 129, 0.15) !important;
-}
-.dark .bg-amber-50 {
-  background-color: rgba(245, 158, 11, 0.08) !important;
-}
-.dark .bg-amber-100 {
-  background-color: rgba(245, 158, 11, 0.15) !important;
-}
-.dark .bg-rose-50 {
-  background-color: rgba(244, 63, 94, 0.08) !important;
-}
-.dark .bg-indigo-50 {
-  background-color: rgba(99, 102, 241, 0.08) !important;
-}
-
-/* Border overrides */
-.dark .border-slate-50 {
-  border-color: var(--bg-card, #0f172a) !important;
-}
-.dark .border-slate-100 {
-  border-color: var(--border-color, #1e293b) !important;
-}
-.dark .border-slate-200 {
-  border-color: var(--bg-divider, #334155) !important;
-}
-.dark .border-slate-200\/50 {
-  border-color: var(--bg-divider, #334155) !important;
-}
-.dark .border-slate-300 {
-  border-color: var(--border-color, #475569) !important;
-}
-.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
-  border-color: var(--border-color, #1e293b) !important;
-}
-.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
-  border-color: var(--bg-divider, #334155) !important;
-}
-
-/* Hover actions */
-.dark .hover\:bg-slate-50:hover {
-  background-color: var(--bg-widget, #1e293b) !important;
-}
-.dark .hover\:bg-slate-100:hover {
-  background-color: var(--bg-divider, #334155) !important;
-}
-.dark .hover\:bg-emerald-50:hover {
-  background-color: rgba(16, 185, 129, 0.12) !important;
-}
-.dark .group:hover .group-hover\:translate-x-1 {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   transform: translateX(4px);
 }
 
 /* Text overrides mapping dynamically */
-<<<<<<< HEAD
 .text-slate-950, .text-slate-900, .text-white {
   color: var(--text-title) !important; /* Titles are bright */
 }
@@ -1151,87 +962,18 @@ select option {
   color: #fecdd3 !important;
 }
 .text-rose-800 {
-=======
-.dark .text-slate-900 {
-  color: var(--text-title, #f8fafc) !important; /* Titles are bright */
-}
-.dark .text-slate-800 {
-  color: var(--text-body, #f1f5f9) !important; /* Main user texts */
-}
-.dark .text-slate-700 {
-  color: var(--text-secondary, #cbd5e1) !important; /* Secondary headers */
-}
-.dark .text-slate-600 {
-  color: var(--text-secondary, #cbd5e1) !important; /* Descriptive bodies */
-}
-.dark .text-slate-500 {
-  color: var(--text-muted, #94a3b8) !important; /* Subtexts */
-}
-.dark .text-slate-400 {
-  color: var(--text-muted, #64748b) !important; /* Placeholders */
-}
-.dark .text-slate-300 {
-  color: var(--border-color, #334155) !important;
-}
-
-/* Inputs, textareas, select elements */
-.dark input, .dark textarea, .dark select {
-  background-color: var(--bg-widget, #0f172a) !important;
-  color: #ffffff !important;
-  border-color: var(--border-color, #334155) !important;
-}
-.dark input::placeholder, .dark textarea::placeholder {
-  color: var(--text-muted, #64748b) !important;
-}
-.dark select option {
-  background-color: var(--bg-card, #0f172a) !important;
-  color: #ffffff !important;
-}
-
-/* Accent texts overrides */
-.dark .text-emerald-850, .dark .text-emerald-800 {
-  color: var(--text-title, #34d399) !important;
-}
-.dark .text-emerald-900 {
-  color: var(--text-secondary, #a7f3d0) !important;
-}
-.dark .text-emerald-700 {
-  color: var(--accent-color, #10b981) !important;
-}
-.dark .text-emerald-600 {
-  color: var(--text-title, #34d399) !important;
-}
-.dark .text-amber-800 {
-  color: #fbbf24 !important;
-}
-.dark .text-amber-900 {
-  color: #fde68a !important;
-}
-.dark .text-rose-900 {
-  color: #fecdd3 !important;
-}
-.dark .text-rose-800 {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   color: #fb7185 !important;
 }
 
 /* Map adjustments for dark modes */
-<<<<<<< HEAD
 #regional-links line {
   stroke: var(--border-color) !important;
 }
 #regional-links {
-=======
-.dark #regional-links line {
-  stroke: var(--border-color, #1e293b) !important;
-}
-.dark #regional-links {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   opacity: 0.65 !important;
 }
 
 /* Toast styling override */
-<<<<<<< HEAD
 #global-toast-notification {
   background-color: var(--bg-card) !important;
   box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3) !important;
@@ -1373,22 +1115,3 @@ select option {
 
 
 
-=======
-.dark #global-toast-notification {
-  background-color: var(--bg-card, #0f172a) !important;
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.6) !important;
-  border-color: var(--border-color, #1e293b) !important;
-}
-
-/* Scrollbar updates */
-.dark ::-webkit-scrollbar-track {
-  background: var(--bg-main, #020617);
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: var(--bg-widget, #1e293b);
-  border-radius: 5px;
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-divider, #334155);
-}
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8

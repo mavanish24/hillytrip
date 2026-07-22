@@ -21,12 +21,7 @@ import {
   LogIn
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-<<<<<<< HEAD
 import { collection, doc, setDoc, query, orderBy, onSnapshot, updateDoc, deleteDoc, db, auth } from '../utils/firebase';
-=======
-import { collection, doc, setDoc, query, orderBy, onSnapshot, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db, auth } from '../utils/firebase';
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 import { PlatformReview } from '../types';
 
 enum OperationType {
@@ -97,7 +92,6 @@ export default function ReviewCenter({ user, onLogin, isAdmin }: ReviewCenterPro
   const [categoryFilter, setCategoryFilter] = useState<PlatformReview['category'] | 'All'>('All');
   const [activeTab, setActiveTab] = useState<'testimonials' | 'adminDesk'>('testimonials');
 
-<<<<<<< HEAD
   // Reporting states
   const [reportingReview, setReportingReview] = useState<PlatformReview | null>(null);
   const [reportReason, setReportReason] = useState('');
@@ -106,8 +100,6 @@ export default function ReviewCenter({ user, onLogin, isAdmin }: ReviewCenterPro
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
   const [reportSuccessMsg, setReportSuccessMsg] = useState<string | null>(null);
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   // Pre-populate fields when user state changes
   useEffect(() => {
     if (user) {
@@ -241,7 +233,6 @@ export default function ReviewCenter({ user, onLogin, isAdmin }: ReviewCenterPro
     }
   };
 
-<<<<<<< HEAD
   const handleOpenReportModal = (review: PlatformReview) => {
     setReportingReview(review);
     setReportReason('');
@@ -286,8 +277,6 @@ export default function ReviewCenter({ user, onLogin, isAdmin }: ReviewCenterPro
     }
   };
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   // Calculations for aggregate metrics
   const activeReviews = reviews.filter(r => r.status === 'Approved' || isAdmin);
   const approvedReviews = reviews.filter(r => r.status === 'Approved');
@@ -881,7 +870,6 @@ export default function ReviewCenter({ user, onLogin, isAdmin }: ReviewCenterPro
                           {formatDate(r.createdAt)}
                         </span>
 
-<<<<<<< HEAD
                         <div className="flex items-center gap-3">
                           {r.wouldRecommend && (
                             <span className="text-emerald-600 dark:text-emerald-450 flex items-center gap-1 font-extrabold">
@@ -900,14 +888,6 @@ export default function ReviewCenter({ user, onLogin, isAdmin }: ReviewCenterPro
                             <span>Report</span>
                           </button>
                         </div>
-=======
-                        {r.wouldRecommend && (
-                          <span className="text-emerald-600 dark:text-emerald-450 flex items-center gap-1 font-extrabold">
-                            <ThumbsUp className="w-3 h-3 fill-emerald-100 dark:fill-transparent" />
-                            Highly Recommends
-                          </span>
-                        )}
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                       </div>
                     </motion.div>
                   );
@@ -917,7 +897,6 @@ export default function ReviewCenter({ user, onLogin, isAdmin }: ReviewCenterPro
           </div>
         </div>
       )}
-<<<<<<< HEAD
       {/* Traveler Feedback Reporting Modal */}
       {reportingReview && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 overflow-y-auto">
@@ -1011,8 +990,6 @@ export default function ReviewCenter({ user, onLogin, isAdmin }: ReviewCenterPro
           </div>
         </div>
       )}
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     </div>
   );
 }

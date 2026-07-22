@@ -6,6 +6,7 @@ import {
   Check, Share2, Send, Bookmark, Flag, Calendar
 } from 'lucide-react';
 import { Destination, Attraction, Homestay, Route, Driver, Hub, ImageItem } from '../types';
+import { getItemSlug } from '../utils/slug';
 import { FeatureCarousel } from './FeatureCarousel';
 import { ExperienceCarousel } from './ExperienceCarousel';
 import { UniversalCarousel } from './UniversalCarousel';
@@ -427,9 +428,9 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
     }
 
     if (selected.type === 'destination') {
-      navigate(`#/destination/${selected.id}`);
+      navigate(`#/destination/${getItemSlug(selected)}`);
     } else {
-      navigate(`#/attraction/${selected.id}`);
+      navigate(`#/attraction/${getItemSlug(selected)}`);
     }
   };
 
@@ -639,7 +640,7 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
               return (
                 <div 
                   key={d.id}
-                  onClick={() => navigate(`#/destination/${d.id}`)}
+                  onClick={() => navigate(`#/destination/${getItemSlug(d)}`)}
                   className="w-full h-[410px] sm:h-[430px] group rounded-2xl bg-white dark:bg-slate-950 border border-slate-200/80 dark:border-slate-850/80 shadow-xs hover:shadow-xl hover:border-slate-300 dark:hover:border-slate-850 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out flex flex-col justify-between overflow-hidden cursor-pointer"
                 >
                   {/* Image Area with enhanced clarity */}
@@ -793,7 +794,7 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
 
                     <div>
                       <button
-                        onClick={() => navigate(`#/destination/${spotDest.id}`)}
+                        onClick={() => navigate(`#/destination/${getItemSlug(spotDest)}`)}
                         className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-950 hover:bg-emerald-600 dark:bg-slate-100 dark:hover:bg-emerald-500 text-white dark:text-slate-900 dark:hover:text-white font-extrabold px-8 py-4 rounded-2xl shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer text-xs tracking-wider uppercase font-mono"
                       >
                         Explore Destination <ChevronRight className="w-4 h-4" />
@@ -847,7 +848,7 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
               return (
                 <div 
                   key={g.id}
-                  onClick={() => navigate(`#/destination/${g.id}`)}
+                  onClick={() => navigate(`#/destination/${getItemSlug(g)}`)}
                   className="w-full h-[390px] sm:h-[410px] group rounded-2xl bg-white dark:bg-slate-950 border border-slate-200/80 dark:border-slate-850/80 shadow-xs hover:shadow-xl hover:shadow-rose-500/5 hover:border-rose-500/30 dark:hover:border-rose-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out flex flex-col justify-between overflow-hidden cursor-pointer"
                 >
                   <div className="relative h-44 shrink-0 overflow-hidden bg-slate-900">
@@ -979,7 +980,9 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
                       <span 
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate(`#/destination/${photo.destinationId}`);
+                          const destObj = destinations.find(d => d.id === photo.destinationId);
+                          const destSlug = destObj ? getItemSlug(destObj) : getItemSlug(photo.destinationName);
+                          navigate(`#/destination/${destSlug}`);
                         }}
                         className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/45 hover:bg-black/60 border border-white/15 backdrop-blur-md text-[9px] font-black text-emerald-300 hover:text-emerald-200 uppercase tracking-widest cursor-pointer transition-colors shadow-sm"
                       >
@@ -1207,7 +1210,7 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
                             <span>📍</span> {parentDest ? parentDest.name : "High Ridges"} rural stay
                           </div>
                           <h3 
-                            onClick={() => navigate(`#/homestay/${home.id}`)}
+                            onClick={() => navigate(`#/homestay/${getItemSlug(home)}`)}
                             className="font-display font-black text-base sm:text-lg text-slate-900 dark:text-white mt-1.5 line-clamp-1 hover:text-amber-500 dark:hover:text-amber-400 cursor-pointer transition-colors"
                           >
                             {home.name}
@@ -1217,28 +1220,35 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
                           </p>
                         </div>
 
-                        {/* CTAs for conversion */}
+                        {/* Closed Marketplace In-Platform CTAs */}
                         <div className="mt-4 pt-4 border-t border-slate-150 dark:border-slate-850 flex gap-2 shrink-0">
-                          {/* WhatsApp CTA */}
-                          <a
-                            href={`https://wa.me/${formatWhatsAppNumber(home.contact || '9876543210')}?text=Hi, I am interested in inquiring about booking ${encodeURIComponent(home.name)} via the HillyTrip portal.`}
-                            onClick={(e) => handleContactAction(e, 'WhatsApp', `https://wa.me/${formatWhatsAppNumber(home.contact || '9876543210')}?text=Hi, I am interested in inquiring about booking ${encodeURIComponent(home.name)} via the HillyTrip portal.`)}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex-1 py-2.5 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-850 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-800/80 rounded-xl text-center font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-[0.97]"
+                          {/* Enquire CTA */}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              const slug = getItemSlug(home);
+                              if (navigate) navigate(`#/enquire?listingType=homestay&listingId=${slug}`);
+                              else window.location.hash = `#/enquire?listingType=homestay&listingId=${slug}`;
+                            }}
+                            className="flex-1 py-2.5 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-850 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800/80 rounded-xl text-center font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                           >
-                            <MessageCircle className="w-3.5 h-3.5 fill-emerald-500/10" />
-                            <span>WhatsApp</span>
-                          </a>
+                            <MessageCircle className="w-3.5 h-3.5 text-emerald-500" />
+                            <span>Enquire</span>
+                          </button>
 
-                          {/* Call CTA */}
-                          <a
-                            href={`tel:${home.contact || '9876543210'}`}
-                            onClick={(e) => handleContactAction(e, 'Call', `tel:${home.contact || '9876543210'}`)}
-                            className="flex-1 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 hover:text-white rounded-xl text-center font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all duration-200 shadow-md shadow-amber-500/10 hover:shadow-amber-500/20 active:scale-[0.97]"
+                          {/* Book Now CTA */}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (navigate) navigate(`#/homestay/${getItemSlug(home)}`);
+                              else window.location.hash = `#/homestay/${getItemSlug(home)}`;
+                            }}
+                            className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-center font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-600/10 cursor-pointer"
                           >
-                            <span>Call Host</span>
-                          </a>
+                            <span>Book Now</span>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -1603,7 +1613,9 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
 
           const handleShare = (e?: React.MouseEvent) => {
             if (e) e.stopPropagation();
-            const shareUrl = `${window.location.origin}/#/destination/${photo.destinationId}`;
+            const destObj = destinations.find(d => d.id === photo.destinationId);
+            const slug = destObj ? getItemSlug(destObj) : getItemSlug({ id: photo.destinationId, name: photo.destinationName });
+            const shareUrl = `${window.location.origin}/#/destination/${slug}`;
             navigator.clipboard.writeText(shareUrl).then(() => {
               setCopiedId(photo.id);
               showPremiumToast('Moments link copied to clipboard!', 'success');
@@ -1832,7 +1844,9 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
                           onClick={(e) => {
                             e.stopPropagation();
                             setActiveLightboxIndex(null);
-                            navigate(`#/destination/${photo.destinationId}`);
+                            const destObj = destinations.find(d => d.id === photo.destinationId);
+                            const slug = destObj ? getItemSlug(destObj) : getItemSlug({ id: photo.destinationId, name: photo.destinationName });
+                            navigate(`#/destination/${slug}`);
                           }}
                           className="text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer flex items-center gap-1 bg-black/25 hover:bg-black/40 px-2 py-0.5 rounded-md border border-white/5 shadow-sm"
                         >
@@ -1844,7 +1858,9 @@ export const HomepageView: React.FC<HomepageViewProps> = ({
                               e.stopPropagation();
                               if (photo.attractionId) {
                                 setActiveLightboxIndex(null);
-                                navigate(`#/attraction/${photo.attractionId}`);
+                                const attrObj = attractions.find(a => a.id === photo.attractionId);
+                                const slug = attrObj ? getItemSlug(attrObj) : getItemSlug({ id: photo.attractionId, name: photo.attractionName });
+                                navigate(`#/attraction/${slug}`);
                               }
                             }}
                             className="text-sky-400 hover:text-sky-300 transition-colors cursor-pointer flex items-center gap-1 bg-black/25 hover:bg-black/40 px-2 py-0.5 rounded-md border border-white/5 shadow-sm"

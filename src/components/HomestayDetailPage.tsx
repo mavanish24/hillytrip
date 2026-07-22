@@ -4,10 +4,11 @@ import {
   Calendar, Users, Coffee, Check, ChevronDown, ChevronUp, Map, 
   ExternalLink, RefreshCw, Send, CheckCircle, Flame, Compass, 
   Utensils, Info, Clock, AlertTriangle, MessageSquare, Camera, Smile,
-  Wifi, Zap, Car, Languages, Accessibility, ShieldAlert, HeartHandshake, EyeOff
+  Wifi, Zap, Car, Languages, Accessibility, ShieldAlert, HeartHandshake, EyeOff, ShieldCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Homestay, Destination, Attraction, RoomCategory, RoomImage, HomestayGallery, HomestayReview } from '../types';
+import { getItemSlug } from '../utils/slug';
 
 interface HomestayDetailPageProps {
   activeHomeDetail: {
@@ -170,7 +171,7 @@ export const HomestayDetailPage: React.FC<HomestayDetailPageProps> = ({
 
   // Handle Share copy link
   const handleShare = () => {
-    const shareUrl = `${window.location.origin}${window.location.pathname}#/homestay/${homestay.id}`;
+    const shareUrl = `${window.location.origin}${window.location.pathname}#/homestay/${getItemSlug(homestay)}`;
     navigator.clipboard.writeText(shareUrl).then(() => {
       setCopiedLink(true);
       setTimeout(() => setCopiedLink(false), 3000);
@@ -810,60 +811,7 @@ export const HomestayDetailPage: React.FC<HomestayDetailPageProps> = ({
                   <span>{am}</span>
                 </div>
               ))}
-            </div>
-          </section>
-
-          {/* 8. MEALS & KITCHEN */}
-          <section id="meals-section" className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/60 dark:border-slate-850 shadow-xs space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400 font-mono block">
-                  🍛 CULINARY EXPERIENCES
-                </span>
-                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mt-1">
-                  Wood-Fired Organic Meals
-                </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Harvested from backyard orchards and cooked with ancestral local spices.
-                </p>
-              </div>
-              <span className="self-start sm:self-auto bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase px-3 py-1 rounded-full font-mono">
-                🍳 Farm-To-Table
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-850 rounded-2xl flex gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                  <Coffee className="w-5 h-5" />
-                </div>
-                <div className="space-y-1 text-xs">
-                  <h4 className="font-extrabold text-slate-850 dark:text-slate-200">Local Himalayan Breakfast</h4>
-                  <p className="text-slate-500 dark:text-slate-400 leading-relaxed">
-                    Complimentary breakfast including warm ginger tea, fresh whole-wheat flatbreads, organic potato stew, and freshly squeezed mountain honey.
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-850 rounded-2xl flex gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-                  <Utensils className="w-5 h-5" />
-                </div>
-                <div className="space-y-1 text-xs">
-                  <h4 className="font-extrabold text-slate-850 dark:text-slate-200">Wood-Fired Traditional Thali</h4>
-                  <p className="text-slate-500 dark:text-slate-400 leading-relaxed">
-                    Lunch and dinner feature hand-pounded red rice, local black lentils cooked on charcoal, organic mountain ferns (Saag), and homemade pickle.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-150 dark:border-slate-850 flex items-center gap-3">
-              <Flame className="w-5 h-5 text-amber-500 shrink-0" />
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                <strong className="text-slate-850 dark:text-slate-200">Clay Stove Cooking:</strong> All hot meals are prepared in the traditional Himalayan fireplace. This gives a distinct wood-smoky aroma to curries and breads that is impossible to replicate on commercial gas burners.
-              </p>
-            </div>
+               </div>
           </section>
 
           {/* 9. POLICIES & HOUSE RULES */}
@@ -1708,50 +1656,100 @@ export const HomestayDetailPage: React.FC<HomestayDetailPageProps> = ({
 
           </section>
 
-          {/* 14. CONTACT INFORMATION */}
+          {/* 14. HOST CONTACT & SECURITY SECTION */}
           <section id="contact-section" className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/60 dark:border-slate-850 shadow-xs space-y-4">
             <div>
               <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400 font-mono block">
-                📞 DIRECT HOST ACCESS
+                🔒 HOST CONTACT & SECURITY
               </span>
               <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mt-1">
-                Contact & Directions Info
+                Property Access & Coordination
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-150 dark:border-slate-850 space-y-2">
-                <div className="flex items-center gap-2 font-black text-slate-800 dark:text-slate-200">
-                  <Phone className="w-4 h-4 text-emerald-600" />
-                  <span>Direct Mobile Dialing</span>
+            {bookingInquirySent ? (
+              /* UNLOCKED HOST CONTACT - VISIBLE ONLY AFTER BOOKING CONFIRMATION */
+              <div className="bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-2xl p-5 space-y-4 animate-fade-in">
+                <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300 font-extrabold text-sm">
+                  <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                  <span>Host Contact Unlocked (Booking Confirmed)</span>
                 </div>
-                <p className="text-slate-500">Contact the farm host directly to coordinate check-in and luggage support:</p>
-                <a 
-                  href={`tel:${homestay.contact}`} 
-                  onClick={(e) => handleContactAction(e, 'Call', `tel:${homestay.contact}`)}
-                  className="inline-block text-emerald-600 dark:text-emerald-400 font-extrabold font-mono hover:underline"
-                >
-                  {homestay.contact || '+91 98765 43210'}
-                </a>
-              </div>
 
-              <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-150 dark:border-slate-850 space-y-2">
-                <div className="flex items-center gap-2 font-black text-slate-800 dark:text-slate-200">
-                  <Utensils className="w-4 h-4 text-emerald-600" />
-                  <span>Customize Mountain Meals</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-emerald-100 dark:border-emerald-900/40 space-y-2">
+                    <p className="text-[10px] font-mono font-bold text-slate-400 uppercase">Host Name</p>
+                    <p className="font-extrabold text-slate-900 dark:text-white text-sm">{homestay.ownerName || 'Gurung Family Host'}</p>
+                    <p className="text-[11px] text-slate-500">Contact directly for check-in time and baggage coordination:</p>
+                    <div className="pt-1 flex items-center gap-2">
+                      <a 
+                        href={`tel:${homestay.contact}`} 
+                        className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-lg transition inline-flex items-center gap-1.5 shadow-xs"
+                      >
+                        <Phone className="w-3.5 h-3.5" />
+                        <span>Call Host</span>
+                      </a>
+                      <span className="font-mono font-bold text-slate-700 dark:text-slate-200">{homestay.contact || '+91 98320 12455'}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-emerald-100 dark:border-emerald-900/40 space-y-2">
+                    <p className="text-[10px] font-mono font-bold text-slate-400 uppercase">Property Address & Navigation</p>
+                    <p className="font-bold text-slate-800 dark:text-slate-200 leading-snug">{homestay.address || 'Takdah Cantonment, Darjeeling, West Bengal'}</p>
+                    <a 
+                      href={`https://maps.google.com/?q=${encodeURIComponent(homestay.address || homestay.name)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-extrabold text-xs hover:underline pt-1"
+                    >
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>Open in Google Maps Navigation</span>
+                    </a>
+                  </div>
                 </div>
-                <p className="text-slate-500">Contact host over WhatsApp to share meal preferences (Veg/Non-Veg, Mild Spices):</p>
-                <a 
-                  href={`https://wa.me/${homestay.contact?.replace(/[^0-9]/g, '') || '919876543210'}`}
-                  onClick={(e) => handleContactAction(e, 'WhatsApp', `https://wa.me/${homestay.contact?.replace(/[^0-9]/g, '') || '919876543210'}`)}
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="inline-block text-emerald-600 dark:text-emerald-400 font-extrabold font-mono hover:underline"
-                >
-                  Chat with Host on WhatsApp
-                </a>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-emerald-200/60 dark:border-emerald-900/40 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono font-bold text-[10px] uppercase text-slate-400">Emergency Contact:</span>
+                    <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{homestay.emergencyContact || homestay.contact || '+91 98320 99999'}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono font-bold text-[10px] uppercase text-slate-400">Best Contact Hours:</span>
+                    <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{(homestay as any).bestContactHours || '7:00 AM - 9:30 PM'}</span>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              /* PRE-BOOKING PROTECTED MARKETPLACE GUARANTEE */
+              <div className="p-5 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-150 dark:border-slate-850 space-y-3">
+                <div className="flex items-center gap-2 text-slate-900 dark:text-white font-extrabold text-xs">
+                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                  <span>Closed Marketplace Communication &amp; Protection</span>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-sans">
+                  To protect your payment, ensure moneyback guarantees, and prevent off-platform fraudulent requests, all pre-booking inquiries, customized quotes, and room reservations are handled strictly within HillyTrip In-App Messaging.
+                </p>
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const roomParam = selectedRoomCategory?.room_name ? `&roomName=${encodeURIComponent(selectedRoomCategory.room_name)}` : '';
+                      const dateParam = bookingDate ? `&checkIn=${encodeURIComponent(bookingDate)}` : '';
+                      const guestParam = bookingGuests ? `&guests=${bookingGuests}` : '';
+                      const targetUrl = `#/enquire?listingType=homestay&listingId=${getItemSlug(homestay)}${roomParam}${dateParam}${guestParam}`;
+                      if (navigate) navigate(targetUrl);
+                      else window.location.hash = targetUrl;
+                    }}
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer flex items-center gap-2 shadow-xs"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Enquire via HillyTrip Inbox</span>
+                  </button>
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    Direct phone &amp; map location will automatically unlock here upon booking confirmation.
+                  </span>
+                </div>
+              </div>
+            )}
           </section>
 
         </div>
@@ -1963,7 +1961,7 @@ export const HomestayDetailPage: React.FC<HomestayDetailPageProps> = ({
             {nearbyAttractions.map((attr) => (
               <div 
                 key={attr.id}
-                onClick={() => navigate(`#/attraction/${attr.id}`)}
+                onClick={() => navigate(`#/attraction/${getItemSlug(attr)}`)}
                 className="w-64 shrink-0 bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-850 hover:border-emerald-500 transition shadow-2xs snap-start cursor-pointer group"
               >
                 <div className="h-40 relative overflow-hidden">
@@ -2016,7 +2014,7 @@ export const HomestayDetailPage: React.FC<HomestayDetailPageProps> = ({
               <div 
                 key={home.id}
                 onClick={() => {
-                  navigate(`#/homestay/${home.id}`);
+                  navigate(`#/homestay/${getItemSlug(home)}`);
                   // Force page refresh or reload route
                   window.location.reload();
                 }}
@@ -2068,7 +2066,7 @@ export const HomestayDetailPage: React.FC<HomestayDetailPageProps> = ({
             <div 
               key={home.id}
               onClick={() => {
-                navigate(`#/homestay/${home.id}`);
+                navigate(`#/homestay/${getItemSlug(home)}`);
                 window.location.reload();
               }}
               className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-850 hover:border-emerald-500 transition shadow-2xs cursor-pointer group"

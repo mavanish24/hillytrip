@@ -402,17 +402,10 @@ export default function AdminNotificationsTab({ adminEmail }: AdminNotifications
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-<<<<<<< HEAD
           {filteredNotifications.map((notif, idx) => (
             <div 
               key={notif.id ? `notif-${notif.id}-${idx}` : `notif-idx-${idx}`}
               id={`notif-card-${notif.id || idx}`}
-=======
-          {filteredNotifications.map((notif) => (
-            <div 
-              key={notif.id}
-              id={`notif-card-${notif.id}`}
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
               className="bg-white rounded-xl border border-slate-100 hover:border-slate-200 shadow-sm hover:shadow-md transition duration-200 overflow-hidden flex flex-col"
             >
               {/* TOP HEADER */}

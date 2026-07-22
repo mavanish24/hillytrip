@@ -46,7 +46,7 @@ Premium travel photography of Deolo Hill, Kalimpong, panoramic Himalayan viewpoi
 }
 
 /**
- * Generates a prompt using gemini-3.5-flash
+ * Generates a prompt using gemini-2.5-flash
  */
 export async function generateCoverPrompt(record: any, type: "destination" | "attraction"): Promise<string> {
   try {
@@ -54,7 +54,7 @@ export async function generateCoverPrompt(record: any, type: "destination" | "at
     
     const generatedText = await executeGeminiOperation(async (ai) => {
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.5-flash",
         contents: promptQuery,
       });
       return response.text || "";
@@ -264,7 +264,7 @@ export async function askAiTravelGuide(
   try {
     const textResult = await executeGeminiOperation(async (ai) => {
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.5-flash",
         contents: prompt,
       });
       return response.text || "";

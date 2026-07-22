@@ -10,7 +10,6 @@
   "categories": ["travel", "navigation"],
   "icons": [
     {
-<<<<<<< HEAD
       "src": "/hillytrip_logo.png",
       "sizes": "512x512",
       "type": "image/png",
@@ -26,23 +25,6 @@
       "src": "/hillytrip_logo.png",
       "sizes": "512x512",
       "type": "image/png",
-=======
-      "src": "/hillytrip_logo.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
-      "purpose": "any"
-    },
-    {
-      "src": "/hillytrip_logo.jpg",
-      "sizes": "192x192",
-      "type": "image/jpeg",
-      "purpose": "any"
-    },
-    {
-      "src": "/hillytrip_logo.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       "purpose": "maskable"
     }
   ],
@@ -52,22 +34,14 @@
       "short_name": "Plan Trip",
       "description": "Design your custom Himalayan mountain trip",
       "url": "/plan-my-trip",
-<<<<<<< HEAD
       "icons": [{ "src": "/hillytrip_logo.png", "sizes": "192x192" }]
-=======
-      "icons": [{ "src": "/hillytrip_logo.jpg", "sizes": "192x192" }]
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     },
     {
       "name": "Book a Car",
       "short_name": "Book Car",
       "description": "Hire expert local Himalayan drivers",
       "url": "/book-car",
-<<<<<<< HEAD
       "icons": [{ "src": "/hillytrip_logo.png", "sizes": "192x192" }]
-=======
-      "icons": [{ "src": "/hillytrip_logo.jpg", "sizes": "192x192" }]
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
   ]
 }

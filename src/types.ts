@@ -1,6 +1,7 @@
 export interface Hub {
   id: string;
   name: string;
+  slug?: string;
   type: 'main_hub' | 'sightseeing_hub' | 'sub_hub';
   latitude?: number;
   longitude?: number;
@@ -11,14 +12,11 @@ export interface Hub {
 
 export interface Route {
   id: string;
+  slug?: string;
   fromHubId: string;
   toHubId: string;
   path: string[]; // e.g. ["NJP", "Kalimpong", "Pedong", "Rishop"]
-<<<<<<< HEAD
   type: 'Direct' | 'Indirect' | 'Reserved' | 'Reserved Car';
-=======
-  type: 'Direct' | 'Indirect';
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   fareMin: number;
   fareMax: number;
   timeMin: number; // in minutes
@@ -29,8 +27,9 @@ export interface Route {
 }
 
 export interface Destination {
-  id: string; // matches Slug
+  id: string; // matches Slug or ID
   name: string;
+  slug?: string;
   description: string;
   tourismType: string;
   bestSeason: string;
@@ -49,18 +48,16 @@ export interface Destination {
   country?: string;
   nearestHubId?: string;
   distanceFromHub?: number;
-  nearbyAttractions?: { id: string; name: string; distance: number }[];
-  nearbyHomestays?: { id: string; name: string; distance: number }[];
-  nearbyDestinations?: { id: string; name: string; distance: number; image?: string; tourismType?: string }[];
-<<<<<<< HEAD
+  nearbyAttractions?: { id: string; name: string; distance: number; slug?: string }[];
+  nearbyHomestays?: { id: string; name: string; distance: number; slug?: string }[];
+  nearbyDestinations?: { id: string; name: string; distance: number; image?: string; tourismType?: string; slug?: string }[];
   nearestTaxiStand?: string;
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 export interface Attraction {
   id: string;
   name: string;
+  slug?: string;
   category: 'Viewpoint' | 'Monastery' | 'Waterfall' | 'Lake' | 'Trek' | 'Village';
   destinationId: string;
   description: string;
@@ -86,6 +83,7 @@ export interface Attraction {
 export interface Homestay {
   id: string;
   name: string;
+  slug?: string;
   destinationId: string;
   priceMin: number;
   priceMax: number;
@@ -117,7 +115,6 @@ export interface Homestay {
   breakfastIncluded?: 'Included' | 'Not Included' | string;
   lunchAvailable?: boolean;
   dinnerAvailable?: boolean;
-<<<<<<< HEAD
   experiences?: string[];
   collections?: string[];
   seasons?: string[];
@@ -297,8 +294,6 @@ export interface HomestayReview {
   travelerPhotos?: string[];
   isVerified?: boolean;
   createdAt: string;
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 export interface Driver {
@@ -321,11 +316,7 @@ export interface ImageItem {
   url: string;
   destinationId?: string | null;
   attractionId?: string | null;
-<<<<<<< HEAD
   entityType?: 'destination' | 'attraction' | 'homestay' | 'route' | 'website' | 'weather' | 'seasonal' | 'ai-generated' | 'avatar' | 'community';
-=======
-  entityType?: 'destination' | 'attraction' | 'homestay';
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   entityId?: string;
   uploadedBy: string;
   uploadDate: string;
@@ -334,7 +325,6 @@ export interface ImageItem {
   altText: string;
   userId?: string | null;
   rejectionReason?: string | null;
-<<<<<<< HEAD
   
   // Storage metadata
   bucketId?: string;
@@ -357,8 +347,6 @@ export interface ImageItem {
   // Video fields
   isVideo?: boolean;
   posterUrl?: string;
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 export interface Contribution {
@@ -429,7 +417,6 @@ export interface UserRole {
 
 export interface User {
   id: string;
-<<<<<<< HEAD
   uid?: string;
   email: string;
   name: string;
@@ -440,12 +427,6 @@ export interface User {
   themeMode?: 'light' | 'dark' | null;
   passwordHash: string; // Hashed password placeholder
   role: 'super_admin' | 'admin' | 'moderator' | 'partner' | 'traveler' | 'contributor' | 'taxi_operator'; // legacy single role compatibility
-=======
-  email: string;
-  name: string;
-  passwordHash: string; // Hashed password placeholder
-  role: 'super_admin' | 'admin' | 'moderator' | 'partner' | 'traveler' | 'contributor'; // legacy single role compatibility
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   roles?: string[]; // Multiple roles as part of the unified system
   status: 'active' | 'disabled';
   emailVerified: boolean;
@@ -462,7 +443,6 @@ export interface User {
   contributorReason?: string;
   contributorExperience?: string;
   contributorStatus?: 'none' | 'pending' | 'approved' | 'rejected';
-<<<<<<< HEAD
   taxiOperatorStatus?: 'draft' | 'submitted' | 'pending' | 'verified' | 'rejected' | 'suspended';
   taxiOperatorDetails?: {
     businessName: string;
@@ -492,8 +472,6 @@ export interface User {
     serviceCoverageUpdatedAt?: string;
     serviceCoverageUpdatedBy?: string;
   };
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 export interface Role {
@@ -542,11 +520,8 @@ export interface PhotoContribution {
   approvedBy?: string | null;
   approvedAt?: string | null;
   rejectionReason?: string | null;
-<<<<<<< HEAD
   attractionId?: string | null;
   caption?: string | null;
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }
 
 export interface PhotoNotification {
@@ -639,7 +614,6 @@ export interface PlatformReview {
   createdAt: string;
 }
 
-<<<<<<< HEAD
 export interface BookingReview {
   id: string;
   bookingId: string;
@@ -1172,8 +1146,6 @@ export * from './types_taxi';
 
 
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
 
 

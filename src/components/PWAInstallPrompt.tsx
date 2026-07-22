@@ -113,11 +113,7 @@ export default function PWAInstallPrompt({ themeMode }: PWAInstallPromptProps) {
             <div className="flex gap-4 items-start">
               <div className="bg-gradient-to-tr from-slate-100 to-slate-200 p-1.5 rounded-2xl flex-shrink-0 shadow-lg border border-slate-200/50">
                 <img 
-<<<<<<< HEAD
                   src="/hillytrip_logo.jpg?v=2" 
-=======
-                  src="/hillytrip_logo.jpg" 
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   alt="HillyTrip" 
                   className="w-12 h-12 object-cover rounded-xl"
                   referrerPolicy="no-referrer"

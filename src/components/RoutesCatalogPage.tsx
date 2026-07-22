@@ -5,6 +5,7 @@ import {
   Clock, RotateCcw, Flame, Tag, Layers, Star, Info
 } from 'lucide-react';
 import { Route, Hub, Destination, Attraction } from '../types';
+import { getItemSlug } from '../utils/slug';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import PremiumRouteCard from './PremiumRouteCard';
 import IntelligentRoutePlanner from './IntelligentRoutePlanner';
@@ -304,7 +305,11 @@ export default function RoutesCatalogPage({
         alert('Origin and destination points must be different.');
         return;
       }
-      navigate(`#/route/${searchFrom}-to-${searchTo}`);
+      const fromHub = hubs.find(h => h.id === searchFrom);
+      const toHub = hubs.find(h => h.id === searchTo);
+      const fromSlug = fromHub ? getItemSlug(fromHub) : getItemSlug(searchFrom);
+      const toSlugStr = toHub ? getItemSlug(toHub) : getItemSlug(searchTo);
+      navigate(`#/route/${fromSlug}-to-${toSlugStr}`);
     }
   };
 

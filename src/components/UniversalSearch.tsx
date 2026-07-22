@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { getItemSlug } from '../utils/slug';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Search, ArrowLeft, Mic, X, Clock, Sparkles, MapPin, Home, 
@@ -307,7 +308,7 @@ export function UniversalSearch({
         },
         latitude: c.lat,
         longitude: c.lng,
-        detailsUrl: `#/destination/${d.id}`,
+        detailsUrl: `#/destination/${getItemSlug(d)}`,
         description: d.description || 'Stunning Himalayan ridge destination offering panoramic views.'
       });
     });
@@ -341,7 +342,7 @@ export function UniversalSearch({
         },
         latitude: c.lat + 0.01,
         longitude: c.lng - 0.01,
-        detailsUrl: `#/attraction/${a.id}`,
+        detailsUrl: `#/attraction/${getItemSlug(a)}`,
         description: a.description || 'Iconic sightseeing venue with breathtaking mountain landscapes.'
       });
     });
@@ -377,7 +378,7 @@ export function UniversalSearch({
         },
         latitude: c.lat + 0.005,
         longitude: c.lng + 0.005,
-        detailsUrl: `#/homestay/${h.id}`,
+        detailsUrl: `#/homestay/${getItemSlug(h)}`,
         description: `Experience authentic local hospitality with warm rooms and custom farm-to-table meals run by local families.`
       });
     });

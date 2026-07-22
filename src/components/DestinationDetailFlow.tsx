@@ -28,6 +28,7 @@ import { DEFAULT_HOMESTAY_IMAGE } from '../constants';
 import { TravelerReviewsSection } from './TravelerReviewsSection';
 import CommentsSection from './CommentsSection';
 import { compressAndConvertToWebP } from '../utils/imageOptimizer';
+import { getItemSlug } from '../utils/slug';
 import { uploadImageToFirebase } from '../utils/firebase';
 import { hillyTripFetch } from '../utils/apiInterceptor';
 import { UniversalCarousel } from './UniversalCarousel';
@@ -793,7 +794,7 @@ export const DestinationDetailFlow: React.FC<DestinationDetailFlowProps> = ({
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              navigate(`#/attraction/${att.id}`);
+                              navigate(`#/attraction/${getItemSlug(att)}`);
                             }}
                             className="bg-white/95 dark:bg-slate-900/95 hover:bg-white dark:hover:bg-slate-800 text-slate-705 dark:text-slate-200 p-1.5 rounded-full shadow-md transition hover:scale-105 cursor-pointer flex items-center justify-center gap-1 border border-slate-200 dark:border-slate-800"
                           >
@@ -815,7 +816,7 @@ export const DestinationDetailFlow: React.FC<DestinationDetailFlowProps> = ({
                           <p className="text-slate-505 dark:text-slate-400 text-xs leading-relaxed line-clamp-2">{att.description}</p>
                         </div>
                         <button 
-                          onClick={() => navigate(`#/attraction/${att.id}`)}
+                          onClick={() => navigate(`#/attraction/${getItemSlug(att)}`)}
                           className="w-full bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-[11px] font-bold py-2 mt-3 rounded-lg border border-slate-200 dark:border-slate-800 cursor-pointer text-center transition"
                         >
                           Explore Attraction Details
@@ -858,7 +859,7 @@ export const DestinationDetailFlow: React.FC<DestinationDetailFlowProps> = ({
                           <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed line-clamp-3">{att.description}</p>
                         </div>
                         <button 
-                          onClick={() => navigate(`#/attraction/${att.id}`)}
+                          onClick={() => navigate(`#/attraction/${getItemSlug(att)}`)}
                           className="w-full bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-white text-xs font-bold py-2.5 mt-4 rounded-xl border border-slate-200 dark:border-slate-800 cursor-pointer text-center transition"
                         >
                           Explore Attraction Details
@@ -1478,7 +1479,11 @@ export const DestinationDetailFlow: React.FC<DestinationDetailFlowProps> = ({
                 return (
                   <button
                     key={rt.id}
-                    onClick={() => navigate(`#/route/${rt.fromHubId}-to-${rt.toHubId}`)}
+                    onClick={() => {
+                      const fromSlug = fromH ? getItemSlug(fromH) : getItemSlug(rt.fromHubId);
+                      const toSlugStr = toH ? getItemSlug(toH) : getItemSlug(rt.toHubId);
+                      navigate(`#/route/${fromSlug}-to-${toSlugStr}`);
+                    }}
                     className="w-full text-left bg-slate-50 dark:bg-slate-950 hover:bg-emerald-50 dark:hover:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-xs transition-all flex flex-col sm:flex-row justify-between sm:items-center gap-3 cursor-pointer shadow-3xs"
                   >
                     <div className="space-y-1">
@@ -1615,7 +1620,7 @@ export const DestinationDetailFlow: React.FC<DestinationDetailFlowProps> = ({
                       </div>
 
                       <button 
-                        onClick={() => navigate(`#/homestay/${home.id}`)}
+                        onClick={() => navigate(`#/homestay/${getItemSlug(home)}`)}
                         className="w-full bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/10 dark:text-emerald-400 text-emerald-850 text-xs font-black py-2.5 rounded-xl cursor-pointer text-center transition border border-emerald-100 dark:border-emerald-900 shrink-0"
                       >
                         Book Room / View Details &rarr;
@@ -1699,7 +1704,7 @@ export const DestinationDetailFlow: React.FC<DestinationDetailFlowProps> = ({
                       </div>
 
                       <button 
-                        onClick={() => navigate(`#/homestay/${home.id}`)}
+                        onClick={() => navigate(`#/homestay/${getItemSlug(home)}`)}
                         className="w-full bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/10 dark:text-emerald-400 text-emerald-800 text-xs font-bold py-3 rounded-xl cursor-pointer text-center transition border border-emerald-100 dark:border-emerald-900"
                       >
                         Instant Book / Room Inquiry &rarr;

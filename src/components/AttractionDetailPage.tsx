@@ -45,6 +45,7 @@ import {
   UploadCloud
 } from 'lucide-react';
 import { Attraction, Destination, Homestay, Driver, ImageItem, Route } from '../types';
+import { getItemSlug } from '../utils/slug';
 import { db, doc, setDoc } from '../utils/firebase';
 import ImageGallerySystem from './ImageGallerySystem';
 import { compressAndConvertToWebP } from '../utils/imageOptimizer';
@@ -789,7 +790,7 @@ function AttractionDetailPageInner({
 
   // Copy shareable link
   const handleCopyLink = () => {
-    const link = `${window.location.origin}/#/attraction/${encodeURIComponent(attraction.id)}`;
+    const link = `${window.location.origin}/#/attraction/${getItemSlug(attraction)}`;
     navigator.clipboard.writeText(link);
     setCopiedLink(true);
     setNotification({
@@ -911,7 +912,7 @@ function AttractionDetailPageInner({
             <div className="flex flex-wrap items-center gap-2">
               {destination && (
                 <button 
-                  onClick={() => navigate(`#/destination/${destination.id}`)}
+                  onClick={() => navigate(`#/destination/${getItemSlug(destination)}`)}
                   className="group flex items-center gap-1 bg-white/10 hover:bg-emerald-600/35 border border-white/20 px-3 py-1.5 rounded-full text-slate-200 hover:text-white text-xs font-bold transition cursor-pointer backdrop-blur-md shadow-xs"
                 >
                   <MapPin className="w-3.5 h-3.5 text-emerald-400 group-hover:animate-bounce" />
@@ -1017,7 +1018,7 @@ function AttractionDetailPageInner({
                   >
                     <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider block px-2.5 pb-1 border-b border-slate-100 dark:border-slate-800">Choose platform</span>
                     <a 
-                      href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out ${attraction.name} in ${destination?.name || 'the Himalayas'} on HillyTrip: ${window.location.origin}/#/attraction/${attraction.id}`)}`}
+                      href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out ${attraction.name} in ${destination?.name || 'the Himalayas'} on HillyTrip: ${window.location.origin}/#/attraction/${getItemSlug(attraction)}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 p-2 rounded-xl text-[11px] font-bold text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-slate-800 hover:text-emerald-600 cursor-pointer transition-colors"
@@ -1027,7 +1028,7 @@ function AttractionDetailPageInner({
                       <span>WhatsApp Share</span>
                     </a>
                     <a 
-                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${window.location.origin}/#/attraction/${attraction.id}`)}`}
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${window.location.origin}/#/attraction/${getItemSlug(attraction)}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 p-2 rounded-xl text-[11px] font-bold text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-blue-600 cursor-pointer transition-colors"
@@ -1455,7 +1456,7 @@ function AttractionDetailPageInner({
                 <button 
                   onClick={() => {
                     if (destination) {
-                      navigate(`#/destination/${destination.id}`);
+                      navigate(`#/destination/${getItemSlug(destination)}`);
                       setNotification({
                         type: 'info',
                         message: `🏡 Showing verified homestays located in and around ${destination.name}!`
@@ -1537,7 +1538,7 @@ function AttractionDetailPageInner({
                           </div>
                           <button 
                             onClick={() => {
-                              navigate(`#/attraction/${encodeURIComponent(item.id)}`);
+                              navigate(`#/attraction/${getItemSlug(item)}`);
                               window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                             className="w-full bg-slate-900 hover:bg-slate-950 dark:bg-slate-800 dark:hover:bg-slate-750 text-white font-black text-[10px] py-2.5 rounded-xl cursor-pointer transition uppercase tracking-wider leading-none"
@@ -1600,7 +1601,7 @@ function AttractionDetailPageInner({
                           className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-200/60 shadow-3xs" 
                         />
                         <div className="min-w-0 flex-1">
-                          <h5 className="font-extrabold text-sm text-slate-900 dark:text-white truncate hover:text-emerald-600 transition cursor-pointer" onClick={() => navigate(`#/homestay/${hs.id}`)}>
+                          <h5 className="font-extrabold text-sm text-slate-900 dark:text-white truncate hover:text-emerald-600 transition cursor-pointer" onClick={() => navigate(`#/homestay/${getItemSlug(hs)}`)}>
                             {hs.name}
                           </h5>
                           <p className="text-xs text-emerald-705 dark:text-emerald-400 font-black font-mono mt-0.5">
@@ -1612,24 +1613,31 @@ function AttractionDetailPageInner({
                         </div>
                       </div>
 
-                      {/* Direct WhatsApp/Call booking actions */}
+                      {/* Closed Marketplace In-Platform CTAs */}
                       <div className="grid grid-cols-2 gap-2 border-t border-slate-200/50 dark:border-slate-800/60 pt-3 shrink-0">
-                        <a 
-                          href={`https://api.whatsapp.com/send?phone=${hs.whatsappNumber || hs.contact || '9876543210'}&text=${encodeURIComponent(`Hi, I saw your homestay "${hs.name}" on HillyTrip. I am planning to visit "${attraction.name}" and would love to enquire about availability.`)}`}
-                          onClick={(e) => handleContactAction(e, 'WhatsApp', `https://api.whatsapp.com/send?phone=${hs.whatsappNumber || hs.contact || '9876543210'}&text=${encodeURIComponent(`Hi, I saw your homestay "${hs.name}" on HillyTrip. I am planning to visit "${attraction.name}" and would love to enquire about availability.`)}`)}
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[10px] py-2.5 rounded-xl text-center flex items-center justify-center gap-1.5 transition leading-none uppercase tracking-wider font-mono cursor-pointer active:scale-95 shadow-sm"
+                        <button 
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const slug = getItemSlug(hs);
+                            if (navigate) navigate(`#/enquire?listingType=homestay&listingId=${slug}`);
+                            else window.location.hash = `#/enquire?listingType=homestay&listingId=${slug}`;
+                          }}
+                          className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-[10px] py-2.5 rounded-xl text-center flex items-center justify-center gap-1.5 transition leading-none uppercase tracking-wider font-mono cursor-pointer shadow-xs"
                         >
-                          <MessageCircle className="w-3.5 h-3.5 fill-white text-emerald-600" /> WhatsApp
-                        </a>
-                        <a 
-                          href={`tel:${hs.mobile || hs.contact || '9876543210'}`}
-                          onClick={(e) => handleContactAction(e, 'Call', `tel:${hs.mobile || hs.contact || '9876543210'}`)}
-                          className="bg-slate-900 hover:bg-slate-950 dark:bg-slate-800 dark:hover:bg-slate-750 text-white font-extrabold text-[10px] py-2.5 rounded-xl text-center flex items-center justify-center gap-1.5 transition leading-none uppercase tracking-wider font-mono cursor-pointer active:scale-95 shadow-sm border border-slate-850 dark:border-slate-700"
+                          <MessageCircle className="w-3.5 h-3.5 text-emerald-500" /> Enquire
+                        </button>
+                        <button 
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (navigate) navigate(`#/homestay/${getItemSlug(hs)}`);
+                            else window.location.hash = `#/homestay/${getItemSlug(hs)}`;
+                          }}
+                          className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[10px] py-2.5 rounded-xl text-center flex items-center justify-center gap-1.5 transition leading-none uppercase tracking-wider font-mono cursor-pointer shadow-xs"
                         >
-                          <Phone className="w-3.5 h-3.5" /> Call Host
-                        </a>
+                          Book Now
+                        </button>
                       </div>
                     </div>
                   )}
@@ -1707,24 +1715,30 @@ function AttractionDetailPageInner({
                         </div>
                       </div>
 
-                      {/* Direct WhatsApp/Call action */}
+                      {/* Closed Marketplace In-Platform CTAs */}
                       <div className="grid grid-cols-2 gap-2 border-t border-slate-200/50 dark:border-slate-800/60 pt-3 shrink-0">
-                        <a 
-                          href={`https://api.whatsapp.com/send?phone=${drv.whatsapp || drv.mobile || '9876543210'}&text=${encodeURIComponent(`Hi Driver ${drv.name}, I found your cab on HillyTrip. I am planning to visit "${attraction.name}" and would love to hire your taxi.`)}`}
-                          onClick={(e) => handleContactAction(e, 'WhatsApp', `https://api.whatsapp.com/send?phone=${drv.whatsapp || drv.mobile || '9876543210'}&text=${encodeURIComponent(`Hi Driver ${drv.name}, I found your cab on HillyTrip. I am planning to visit "${attraction.name}" and would love to hire your taxi.`)}`)}
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[10px] py-2.5 rounded-xl text-center flex items-center justify-center gap-1.5 transition leading-none uppercase tracking-wider font-mono cursor-pointer active:scale-95 shadow-sm"
+                        <button 
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (navigate) navigate(`#/enquire?listingType=taxi_operator&listingId=${drv.id}`);
+                            else window.location.hash = `#/enquire?listingType=taxi_operator&listingId=${drv.id}`;
+                          }}
+                          className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-[10px] py-2.5 rounded-xl text-center flex items-center justify-center gap-1.5 transition leading-none uppercase tracking-wider font-mono cursor-pointer shadow-xs"
                         >
-                          <MessageCircle className="w-3.5 h-3.5 fill-white text-emerald-600" /> WhatsApp
-                        </a>
-                        <a 
-                          href={`tel:${drv.mobile || '9876543210'}`}
-                          onClick={(e) => handleContactAction(e, 'Call', `tel:${drv.mobile || '9876543210'}`)}
-                          className="bg-slate-900 hover:bg-slate-950 dark:bg-slate-800 dark:hover:bg-slate-750 text-white font-extrabold text-[10px] py-2.5 rounded-xl text-center flex items-center justify-center gap-1.5 transition leading-none uppercase tracking-wider font-mono cursor-pointer active:scale-95 shadow-sm border border-slate-850 dark:border-slate-700"
+                          <MessageCircle className="w-3.5 h-3.5 text-emerald-500" /> Enquire
+                        </button>
+                        <button 
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (navigate) navigate(`#/business/${drv.id}`);
+                            else window.location.hash = `#/business/${drv.id}`;
+                          }}
+                          className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[10px] py-2.5 rounded-xl text-center flex items-center justify-center gap-1.5 transition leading-none uppercase tracking-wider font-mono cursor-pointer shadow-xs"
                         >
-                          <Phone className="w-3.5 h-3.5" /> Call Driver
-                        </a>
+                          Book Taxi
+                        </button>
                       </div>
                     </div>
                   )}
@@ -2275,7 +2289,7 @@ function AttractionDetailPageInner({
                       </div>
                       <button 
                         onClick={() => {
-                          navigate(`#/attraction/${encodeURIComponent(item.id)}`);
+                          navigate(`#/attraction/${getItemSlug(item)}`);
                           window.scrollTo({ top: 0, behavior: 'smooth' });
                         }}
                         className="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-250 font-extrabold text-[10px] py-2.5 rounded-xl cursor-pointer transition uppercase tracking-wider leading-none mt-4"
@@ -2327,7 +2341,7 @@ function AttractionDetailPageInner({
                       </div>
                       <button 
                         onClick={() => {
-                          navigate(`#/attraction/${encodeURIComponent(item.id)}`);
+                          navigate(`#/attraction/${getItemSlug(item)}`);
                           window.scrollTo({ top: 0, behavior: 'smooth' });
                         }}
                         className="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-250 font-extrabold text-[10px] py-2.5 rounded-xl cursor-pointer transition uppercase tracking-wider leading-none mt-4"

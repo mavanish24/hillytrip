@@ -49,7 +49,6 @@ export default function SearchableCombobox({
   const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-<<<<<<< HEAD
   // Safely sanitize the incoming options list to prevent any runtime property crashes
   const safeOptions = useMemo(() => {
     if (!Array.isArray(options)) return [];
@@ -59,21 +58,12 @@ export default function SearchableCombobox({
   // Synchronize internal input text with external value selection (e.g. from state change)
   useEffect(() => {
     const selectedOption = safeOptions.find((o) => o.id === value);
-=======
-  // Synchronize internal input text with external value selection (e.g. from state change)
-  useEffect(() => {
-    const selectedOption = options.find((o) => o.id === value);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     if (selectedOption) {
       setInputValue(selectedOption.name);
     } else {
       setInputValue('');
     }
-<<<<<<< HEAD
   }, [value, safeOptions]);
-=======
-  }, [value, options]);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Handle clicking outside of the dropdown to close it
   useEffect(() => {
@@ -81,21 +71,13 @@ export default function SearchableCombobox({
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
         // Reset input to matching selected value if they blur without selecting
-<<<<<<< HEAD
         const selectedOption = safeOptions.find((o) => o.id === value);
-=======
-        const selectedOption = options.find((o) => o.id === value);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         setInputValue(selectedOption ? selectedOption.name : '');
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-<<<<<<< HEAD
   }, [value, safeOptions]);
-=======
-  }, [value, options]);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Debounce input value for search performance (120ms for slick responsiveness)
   const debouncedSearchTerm = useDebounce(inputValue, 120);
@@ -104,7 +86,6 @@ export default function SearchableCombobox({
   // Support matching from the beginning and middle, match case-insensitively
   const filteredOptions = useMemo(() => {
     // If input is exactly matching the selected option's name, show full list on dropdown focus
-<<<<<<< HEAD
     const selectedOption = safeOptions.find((o) => o.id === value);
     if (selectedOption && inputValue === selectedOption.name && !isOpen) {
       return safeOptions.slice(0, 10);
@@ -112,24 +93,11 @@ export default function SearchableCombobox({
 
     if (!inputValue.trim()) {
       return safeOptions.slice(0, 10);
-=======
-    const selectedOption = options.find((o) => o.id === value);
-    if (selectedOption && inputValue === selectedOption.name && !isOpen) {
-      return options.slice(0, 10);
-    }
-
-    if (!inputValue.trim()) {
-      return options.slice(0, 10);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
 
     const term = inputValue.toLowerCase().trim();
     // Search both beginning and middle of destination names
-<<<<<<< HEAD
     const matched = safeOptions.filter((o) => o.name.toLowerCase().includes(term));
-=======
-    const matched = options.filter((o) => o.name.toLowerCase().includes(term));
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     
     // Sort so that options starting with the search term appear first, then contains
     const sorted = [...matched].sort((a, b) => {
@@ -141,16 +109,11 @@ export default function SearchableCombobox({
     });
 
     return sorted.slice(0, 10);
-<<<<<<< HEAD
   }, [inputValue, safeOptions, value, isOpen]);
-=======
-  }, [inputValue, options, value, isOpen]);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Keep highlighted index within bounds of filtered items
   useEffect(() => {
     if (filteredOptions.length === 0) {
-<<<<<<< HEAD
       if (highlightedIndex !== -1) {
         setHighlightedIndex(-1);
       }
@@ -158,13 +121,6 @@ export default function SearchableCombobox({
       setHighlightedIndex(filteredOptions.length - 1);
     }
   }, [filteredOptions.length, highlightedIndex]);
-=======
-      setHighlightedIndex(-1);
-    } else if (highlightedIndex >= filteredOptions.length) {
-      setHighlightedIndex(filteredOptions.length - 1);
-    }
-  }, [filteredOptions, highlightedIndex]);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Highlight matching characters elegantly
   const highlightMatches = (text: string, search: string) => {

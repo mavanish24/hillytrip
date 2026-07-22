@@ -6,6 +6,7 @@ import {
 import { Destination, Attraction, Homestay } from '../types';
 import { UniversalCarousel } from './UniversalCarousel';
 import { getAltInfo } from '../utils/routeHelpers';
+import { getItemSlug } from '../utils/slug';
 
 interface DestinationsCatalogViewProps {
   destinations: Destination[];
@@ -590,7 +591,7 @@ export function DestinationsCatalogView({
         className={`${
           isCarousel ? 'w-[280px] sm:w-[320px] md:w-[290px] shrink-0' : 'w-full'
         } bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800/80 flex flex-col h-[465px] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:border-emerald-500/20 dark:hover:border-emerald-500/20 hover:-translate-y-1.5 transition-all duration-300 ease-out group cursor-pointer text-left`}
-        onClick={() => navigate(`#/destination/${dest.id}`)}
+        onClick={() => navigate(`#/destination/${getItemSlug(dest)}`)}
       >
         {/* Cinematic Hero Image (60% height) */}
         <div className="h-[279px] bg-slate-100 dark:bg-slate-950 relative overflow-hidden shrink-0">
@@ -672,7 +673,7 @@ export function DestinationsCatalogView({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`#/destination/${dest.id}`);
+              navigate(`#/destination/${getItemSlug(dest)}`);
             }}
             className="w-full bg-transparent border border-emerald-500/25 dark:border-emerald-500/35 hover:border-emerald-500/60 dark:hover:border-emerald-500/60 text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 font-extrabold py-2.5 px-4 rounded-xl text-xs cursor-pointer tracking-wider text-center flex items-center justify-center gap-1.5 uppercase font-mono shadow-[0_0_12px_rgba(16,185,129,0.02)] hover:shadow-[0_0_15px_rgba(16,185,129,0.12)] hover:-translate-y-[2px] transition-all duration-350 ease-out group/btn select-none"
           >
@@ -1043,7 +1044,9 @@ export function DestinationsCatalogView({
 
   // Handle share link copy helper
   const handleCopyLink = (destId: string) => {
-    const link = `${window.location.origin}/#/destination/${destId}`;
+    const destObj = destinations.find(d => d.id === destId);
+    const slug = destObj ? getItemSlug(destObj) : destId;
+    const link = `${window.location.origin}/#/destination/${slug}`;
     navigator.clipboard.writeText(link);
     if (setNotification) {
       setNotification({
@@ -1138,7 +1141,7 @@ export function DestinationsCatalogView({
                     <div 
                       key={d.id}
                       onClick={() => {
-                        navigate(`#/destination/${d.id}`);
+                        navigate(`#/destination/${getItemSlug(d)}`);
                         setShowSuggestions(false);
                       }}
                       className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer transition-colors"
@@ -1584,7 +1587,7 @@ export function DestinationsCatalogView({
                     </button>
                     
                     <button
-                      onClick={() => navigate(`#/destination/${activeMapDest.id}`)}
+                      onClick={() => navigate(`#/destination/${getItemSlug(activeMapDest)}`)}
                       className="flex-1 bg-slate-950 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-1.5 cursor-pointer uppercase transition-all shadow-sm"
                     >
                       Open Destination Page <ChevronRight className="w-4 h-4" />

@@ -11,8 +11,8 @@ let supabaseAdminInstance: any = null;
 export function getSupabaseAdminClient() {
   if (supabaseAdminInstance) return supabaseAdminInstance;
   
-  const supabaseUrl = process.env.SUPABASE_URL || '';
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_KEY || '';
   
   if (!supabaseServiceKey) {
     console.warn('[StorageService Warning] SUPABASE_SERVICE_ROLE_KEY is not configured in environment variables.');
@@ -582,7 +582,7 @@ export function getPublicUrl(bucketId: string, path: string): string {
   const resolvedBucketId = mapBucketToBucketName(bucketId);
   const supabaseAdmin = getSupabaseAdminClient();
   if (!supabaseAdmin) {
-    const supabaseUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
+    const supabaseUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
     return `${supabaseUrl}/storage/v1/object/public/${resolvedBucketId}/${path}`;
   }
   return supabaseAdmin.storage.from(resolvedBucketId).getPublicUrl(path).data.publicUrl;

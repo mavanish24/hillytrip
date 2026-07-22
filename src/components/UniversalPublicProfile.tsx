@@ -1396,13 +1396,48 @@ export default function UniversalPublicProfile({
               </div>
             </div>
 
-            {/* Dynamic CTA determined purely by config */}
-            <button
-              onClick={() => setCtaModalOpen(true)}
-              className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider py-3.5 rounded-2xl transition cursor-pointer text-center shadow-lg hover:shadow-emerald-500/10"
-            >
-              {bookingCtaLabel}
-            </button>
+            {/* Dynamic CTA determined by business booking preference mode */}
+            <div className="space-y-2">
+              {(activeBusiness.bookingPreference === 'temporarily_closed') ? (
+                <div className="w-full bg-slate-800 text-slate-400 font-black text-xs text-center uppercase tracking-wider py-3.5 rounded-2xl border border-slate-700">
+                  Currently Not Accepting Bookings
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2.5">
+                  {(!activeBusiness.bookingPreference || activeBusiness.bookingPreference === 'direct_booking' || activeBusiness.bookingPreference === 'both') && (
+                    <button
+                      onClick={() => setCtaModalOpen(true)}
+                      className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider py-3.5 rounded-2xl transition cursor-pointer text-center shadow-lg hover:shadow-emerald-500/10"
+                    >
+                      {bookingCtaLabel}
+                    </button>
+                  )}
+
+                  {(activeBusiness.bookingPreference === 'message_before_booking' || activeBusiness.bookingPreference === 'both') && (
+                    <button
+                      onClick={() => {
+                        if (onNavigate) onNavigate('#/messages');
+                        else window.location.hash = '#/messages';
+                      }}
+                      className="w-full bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-black text-xs uppercase tracking-wider py-3.5 rounded-2xl transition cursor-pointer text-center flex items-center justify-center gap-2"
+                    >
+                      <MessageSquare className="w-4 h-4 text-emerald-400" />
+                      <span>Message Business</span>
+                    </button>
+                  )}
+
+                  {activeBusiness.bookingPreference === 'booking_request' && (
+                    <button
+                      onClick={() => setCtaModalOpen(true)}
+                      className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider py-3.5 rounded-2xl transition cursor-pointer text-center shadow-lg flex items-center justify-center gap-2"
+                    >
+                      <Clock className="w-4 h-4 text-slate-950" />
+                      <span>Request Booking</span>
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Offers/Coupons future-ready */}
             <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800 text-xs space-y-2">
@@ -1422,42 +1457,38 @@ export default function UniversalPublicProfile({
             </div>
           </div>
 
-          {/* 2. CONTACT DETAILS & HOURS OF OPERATION */}
+          {/* 2. CONTACT DIRECTORY (INTERNAL MESSAGING ONLY) */}
           <div className="bg-white dark:bg-slate-950 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-850 space-y-6">
             <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-              <Phone className="w-4 h-4 text-emerald-500" />
-              <span>Contact Directory</span>
+              <MessageSquare className="w-4 h-4 text-emerald-500" />
+              <span>Closed Marketplace Messaging</span>
             </h3>
 
             <div className="space-y-4 text-xs">
-              <a 
-                href={`tel:${activeBusiness.contact.phone}`}
-                className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-150 dark:border-slate-800 hover:border-indigo-500/40 transition cursor-pointer"
-              >
-                <Phone className="w-4 h-4 text-slate-400" />
-                <div>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase">Phone Call</p>
-                  <p className="font-bold text-slate-800 dark:text-white font-mono">{activeBusiness.contact.phone}</p>
+              <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-150 dark:border-slate-800 space-y-2">
+                <div className="flex items-center gap-2 text-slate-900 dark:text-white font-black">
+                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                  <span>HillyTrip On-Platform Security</span>
                 </div>
-              </a>
-
-              <a 
-                href={`https://wa.me/${activeBusiness.contact.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-150 dark:border-slate-800 hover:border-emerald-500/40 transition cursor-pointer"
-              >
-                <Check className="w-4 h-4 text-emerald-500" />
-                <div>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase">WhatsApp Message</p>
-                  <p className="font-bold text-emerald-500 font-mono">Chat Online 24/7</p>
-                </div>
-              </a>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                  For your safety and booking protection, all communications, inquiries, custom quotations, and payments are conducted securely within HillyTrip's messaging system.
+                </p>
+                <button
+                  onClick={() => {
+                    if (onNavigate) onNavigate('#/messages');
+                    else window.location.hash = '#/messages';
+                  }}
+                  className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs py-2.5 rounded-xl transition cursor-pointer flex items-center justify-center gap-2 shadow-md"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Message Host via HillyTrip Inbox</span>
+                </button>
+              </div>
 
               <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-150 dark:border-slate-800">
                 <Clock className="w-4 h-4 text-slate-400 mt-0.5" />
                 <div>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase">Business Hours</p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase">Operating Hours</p>
                   <p className="font-bold text-slate-700 dark:text-slate-300 font-mono">{activeBusiness.businessHours}</p>
                 </div>
               </div>
@@ -1607,50 +1638,43 @@ export default function UniversalPublicProfile({
 
               <div className="space-y-1.5">
                 <span className="text-[10px] bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                  Verified Connect Gateway
+                  HillyTrip Platform Protection
                 </span>
                 <h4 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-wider">
-                  Contact host: {activeBusiness.ownerName}
+                  Contact Business: {activeBusiness.name}
                 </h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal">
-                  You are opening a direct, zero-commission verified link with {activeBusiness.name}.
+                  All enquiries, price quotes, and bookings remain inside HillyTrip for your safety, moneyback guarantee, and instant response tracking.
                 </p>
               </div>
 
-              <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-150 dark:border-slate-800 text-xs space-y-2">
-                <p className="font-bold uppercase text-[10px] text-slate-400">Direct Inquiries Directory</p>
-                <div className="space-y-1.5">
-                  <p className="flex justify-between">
-                    <span className="text-slate-400">WhatsApp Dispatch:</span>
-                    <a href={`https://wa.me/${activeBusiness.contact.whatsapp}`} target="_blank" rel="noopener noreferrer" className="font-mono text-emerald-500 hover:underline font-bold">
-                      {activeBusiness.contact.phone}
-                    </a>
-                  </p>
-                  <p className="flex justify-between">
-                    <span className="text-slate-400">Direct Desk Phone:</span>
-                    <a href={`tel:${activeBusiness.contact.phone}`} className="font-mono text-indigo-500 hover:underline font-bold">
-                      {activeBusiness.contact.phone}
-                    </a>
-                  </p>
-                  <p className="flex justify-between">
-                    <span className="text-slate-400">Official Web Desk:</span>
-                    <span className="font-mono text-slate-600 dark:text-slate-300 font-bold">{activeBusiness.contact.website}</span>
-                  </p>
+              <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-150 dark:border-slate-800 text-xs space-y-3">
+                <div className="flex items-center gap-2 text-emerald-500 font-extrabold text-xs">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Closed Marketplace In-App Messaging</span>
                 </div>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Send a direct message to {activeBusiness.ownerName}. The host will receive an instant notification in their HillyTrip Business Control Center and respond with availability or a custom quote.
+                </p>
               </div>
 
               <div className="space-y-3">
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider text-center">Or launch direct telephone route</p>
-                <a
-                  href={`tel:${activeBusiness.contact.phone}`}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider py-3.5 rounded-xl block text-center transition shadow-lg shadow-emerald-500/15"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCtaModalOpen(false);
+                    if (onNavigate) onNavigate('#/messages');
+                    else window.location.hash = '#/messages';
+                  }}
+                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider py-3.5 rounded-xl text-center transition shadow-lg shadow-emerald-500/15 cursor-pointer flex items-center justify-center gap-2"
                 >
-                  Call {activeBusiness.ownerName} Now
-                </a>
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Open In-App Chat with Host</span>
+                </button>
               </div>
 
               <p className="text-[9px] text-slate-400 text-center leading-normal">
-                🛡️ HillyTrip Guarantee: We enforce zero commercial commissions on phone transactions to foster sustainable community host growth.
+                🛡️ HillyTrip Protection: Direct phone numbers and precise pickup/location details will unlock in your Traveler Dashboard automatically once your reservation is confirmed.
               </p>
             </motion.div>
           </div>

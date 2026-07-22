@@ -25,11 +25,8 @@ import {
   Briefcase
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-<<<<<<< HEAD
 import { ClaimRequest, Inquiry, PendingUpdate, Homestay, User as UserType, BookingLead, BookingActivityLog } from '../types';
-=======
-import { ClaimRequest, Inquiry, PendingUpdate, Homestay, User as UserType } from '../types';
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
+import { getItemSlug } from '../utils/slug';
 
 interface PartnerDashboardProps {
   user: UserType | null;
@@ -47,18 +44,13 @@ export default function PartnerDashboard({
   reloadDb 
 }: PartnerDashboardProps) {
   
-<<<<<<< HEAD
   const [activeSubTab, setActiveSubTab] = useState<'overview' | 'claims' | 'listings' | 'inquiries' | 'leads'>('overview');
-=======
-  const [activeSubTab, setActiveSubTab] = useState<'overview' | 'claims' | 'listings' | 'inquiries'>('overview');
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [loading, setLoading] = useState(false);
   
   // Data States
   const [claims, setClaims] = useState<ClaimRequest[]>([]);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [pendingUpdates, setPendingUpdates] = useState<PendingUpdate[]>([]);
-<<<<<<< HEAD
   
   // Booking Leads Management States
   const [bookingLeads, setBookingLeads] = useState<BookingLead[]>([]);
@@ -68,8 +60,6 @@ export default function PartnerDashboard({
   const [isLeadActionSubmitting, setIsLeadActionSubmitting] = useState(false);
   const [leadsFilter, setLeadsFilter] = useState<'all' | 'new' | 'accepted' | 'completed' | 'cancelled_or_rejected'>('all');
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [dashboardStats, setDashboardStats] = useState({
     ownedCount: 0,
     pendingClaims: 0,
@@ -105,7 +95,11 @@ export default function PartnerDashboard({
     amenitiesInput: '',
     breakfastIncluded: 'Included',
     lunchAvailable: false,
-    dinnerAvailable: false
+    dinnerAvailable: false,
+    bookingPreference: 'both',
+    emergencyContact: '+91 98320 99999',
+    preferredLanguage: 'English, Hindi, Nepali',
+    bestContactHours: '8:00 AM - 9:00 PM'
   });
 
   // Fetch partner-related records
@@ -129,7 +123,6 @@ export default function PartnerDashboard({
         setInquiries(inqJson.inquiries || []);
       }
 
-<<<<<<< HEAD
       // Booking Leads
       const leadsRes = await fetch(`/api/booking-leads?role=partner&identifier=${encodeURIComponent(emailId)}`);
       const leadsJson = await leadsRes.json();
@@ -137,8 +130,6 @@ export default function PartnerDashboard({
         setBookingLeads(leadsJson.leads || []);
       }
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       // Pending updates
       const upRes = await fetch(`/api/partner/updates?partnerUserId=${encodeURIComponent(emailId)}`);
       const upJson = await upRes.json();
@@ -157,7 +148,6 @@ export default function PartnerDashboard({
     }
   };
 
-<<<<<<< HEAD
   const fetchLeadLogs = async (leadId: string) => {
     try {
       const res = await fetch(`/api/booking-leads/${leadId}/activity-log`);
@@ -243,8 +233,6 @@ export default function PartnerDashboard({
     }
   };
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   useEffect(() => {
     fetchPartnerData();
   }, [user]);
@@ -323,7 +311,11 @@ export default function PartnerDashboard({
       amenitiesInput: hs.amenities ? hs.amenities.join(', ') : '',
       breakfastIncluded: hs.breakfastIncluded || 'Included',
       lunchAvailable: hs.lunchAvailable || false,
-      dinnerAvailable: hs.dinnerAvailable || false
+      dinnerAvailable: hs.dinnerAvailable || false,
+      bookingPreference: hs.bookingPreference || 'both',
+      emergencyContact: hs.emergencyContact || '+91 98320 99999',
+      preferredLanguage: hs.preferredLanguage || 'English, Hindi, Nepali',
+      bestContactHours: hs.bestContactHours || '8:00 AM - 9:00 PM'
     });
   };
 
@@ -556,7 +548,6 @@ export default function PartnerDashboard({
         >
           Direct Inquiries Inbox ({inquiries.length})
         </button>
-<<<<<<< HEAD
         <button
           onClick={() => setActiveSubTab('leads')}
           className={`py-3 px-6 -mb-px text-xs font-black uppercase tracking-wider border-b-2 font-mono whitespace-nowrap cursor-pointer ${
@@ -567,8 +558,6 @@ export default function PartnerDashboard({
         >
           💼 Booking Leads ({bookingLeads.length})
         </button>
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       </div>
 
       {/* RENDER ACTIVE TAB */}
@@ -703,7 +692,7 @@ export default function PartnerDashboard({
 
                         <div className="bg-slate-50 border-t border-slate-100 px-5 py-3 flex gap-3 justify-end">
                           <button
-                            onClick={() => navigate(`#/homestay/${hs.id}`)}
+                            onClick={() => navigate(`#/homestay/${getItemSlug(hs)}`)}
                             className="bg-white border border-slate-200 text-slate-700 hover:text-slate-900 font-bold px-3 py-1.5 rounded-lg text-xs cursor-pointer"
                           >
                             Preview Listing Page
@@ -759,7 +748,10 @@ export default function PartnerDashboard({
                         </div>
                         <div className="shrink-0 flex items-center gap-2">
                           <button
-                            onClick={() => navigate(`#/homestay/${clm.homestayId}`)}
+                            onClick={() => {
+                              const targetHs = dbHomestays.find(h => h.id === clm.homestayId);
+                              navigate(`#/homestay/${targetHs ? getItemSlug(targetHs) : getItemSlug(clm.homestayId)}`);
+                            }}
                             className="bg-slate-100 text-slate-700 hover:bg-slate-200 font-extrabold px-3 py-1.5 rounded-lg text-xs cursor-pointer"
                           >
                             Explore Property
@@ -1206,11 +1198,70 @@ export default function PartnerDashboard({
                   </div>
                 </div>
 
+                <div className="bg-slate-50 border border-slate-200/60 p-4 rounded-xl mt-2 text-left space-y-3">
+                  <span className="text-slate-700 font-extrabold text-sm block">🔒 Booking Preferences &amp; Closed Marketplace Configuration</span>
+                  <p className="text-[11px] text-slate-500 leading-snug">
+                    Configure how travelers can book or contact your business. Direct contact information is securely hidden pre-booking and automatically unlocked for confirmed travelers.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                    <div>
+                      <label className="block text-slate-650 text-xs font-bold mb-1">Booking Method Preference</label>
+                      <select
+                        value={updateForm.bookingPreference}
+                        onChange={(e) => setUpdateForm({ ...updateForm, bookingPreference: e.target.value })}
+                        className="w-full bg-white border border-slate-205 rounded-lg p-2 text-xs font-semibold focus:outline-emerald-600 focus:ring-1"
+                      >
+                        <option value="direct_booking">Direct Booking [ Book Now ]</option>
+                        <option value="message_before_booking">Message Before Booking [ Enquire ]</option>
+                        <option value="both">Both [ Book Now + Enquire ]</option>
+                        <option value="booking_request">Booking Request (Requires Host Approval)</option>
+                        <option value="temporarily_closed">Temporarily Closed [ Not Accepting Bookings ]</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-650 text-xs font-bold mb-1">Post-Booking Emergency Contact</label>
+                      <input
+                        type="text"
+                        placeholder="+91 98320 XXXXX"
+                        value={updateForm.emergencyContact}
+                        onChange={(e) => setUpdateForm({ ...updateForm, emergencyContact: e.target.value })}
+                        className="w-full bg-white border border-slate-205 rounded-lg p-2 text-xs font-semibold"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-slate-650 text-xs font-bold mb-1">Preferred Communication Languages</label>
+                      <input
+                        type="text"
+                        placeholder="English, Hindi, Nepali, Bengali"
+                        value={updateForm.preferredLanguage}
+                        onChange={(e) => setUpdateForm({ ...updateForm, preferredLanguage: e.target.value })}
+                        className="w-full bg-white border border-slate-205 rounded-lg p-2 text-xs font-semibold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-650 text-xs font-bold mb-1">Best Contact Hours (Post-Booking)</label>
+                      <input
+                        type="text"
+                        placeholder="7:00 AM - 9:30 PM"
+                        value={updateForm.bestContactHours}
+                        onChange={(e) => setUpdateForm({ ...updateForm, bestContactHours: e.target.value })}
+                        className="w-full bg-white border border-slate-205 rounded-lg p-2 text-xs font-semibold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <button
                   type="submit"
                   className="w-full bg-emerald-600 text-white font-black py-3 rounded-xl hover:bg-emerald-700 transition cursor-pointer font-sans"
                 >
-                  Save Draft & Submit to Review Desk
+                  Save Draft &amp; Submit to Review Desk
                 </button>
               </form>
             </motion.div>

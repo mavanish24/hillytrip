@@ -11,6 +11,7 @@ import {
   ChevronDown, ChevronUp, Star
 } from 'lucide-react';
 import { Route, Hub, Destination, Attraction, Homestay, User } from '../types';
+import { getItemSlug } from '../utils/slug';
 import { motion } from 'motion/react';
 import { 
   WeatherAnimationsStyle, SunraysAnimation, RainAnimation, SnowAnimation, 
@@ -1052,7 +1053,7 @@ export default function RouteDetailsPage({
                   </div>
                   <div className="p-4 pt-0">
                     <button
-                      onClick={() => navigate(`#/destinations/${dest.id}`)}
+                      onClick={() => navigate(`#/destination/${getItemSlug(dest)}`)}
                       className="w-full py-2 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 text-[10px] font-black uppercase tracking-wider rounded-xl transition duration-150 flex items-center justify-center gap-1.5 border border-emerald-500/15 cursor-pointer"
                     >
                       <span>Explore Destination</span>
@@ -1126,7 +1127,7 @@ export default function RouteDetailsPage({
                       <span className="text-[9px] text-slate-500 font-mono">/night</span>
                     </div>
                     <button
-                      onClick={() => navigate(`#/homestays/${home.id}`)}
+                      onClick={() => navigate(`#/homestay/${getItemSlug(home)}`)}
                       className="px-4 py-2 bg-emerald-400 hover:bg-emerald-350 text-slate-950 text-xs font-black uppercase tracking-wider rounded-xl transition duration-150 flex items-center gap-1 shadow-md cursor-pointer"
                     >
                       <span>Book</span>

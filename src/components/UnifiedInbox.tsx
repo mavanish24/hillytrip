@@ -6,6 +6,7 @@ import {
   ChevronDown, ChevronUp, Sliders, DollarSign, Award, ThumbsUp, ThumbsDown, Compass
 } from 'lucide-react';
 import { User, ChatConversation, ChatMessage } from '../types';
+import { getItemSlug } from '../utils/slug';
 
 // Future-Ready Multi-Domain Negotiation Action Configurations
 const DOMAINS_DATA = {
@@ -238,6 +239,18 @@ export default function UnifiedInbox({ currentUser, onClose }: UnifiedInboxProps
       try {
         const parsed = JSON.parse(messageText);
         if (parsed && parsed.isTripInfoCard) {
+          return parsed;
+        }
+      } catch (e) {}
+    }
+    return null;
+  };
+
+  const parseEnquiryCard = (messageText: string) => {
+    if (messageText && messageText.startsWith('{') && messageText.endsWith('}')) {
+      try {
+        const parsed = JSON.parse(messageText);
+        if (parsed && (parsed.isEnquiryCard || parsed.category)) {
           return parsed;
         }
       } catch (e) {}
@@ -838,6 +851,36 @@ export default function UnifiedInbox({ currentUser, onClose }: UnifiedInboxProps
               </button>
             </div>
 
+            {/* STICKY DIRECT BOOKING CTA BANNER IN CHAT */}
+            {activeConv && activeConv.listing_id && (
+              <div className="bg-emerald-600 text-white px-6 py-2.5 flex items-center justify-between shrink-0 shadow-xs border-b border-emerald-700">
+                <div className="flex items-center gap-2 text-xs font-bold">
+                  <Sparkles className="w-4 h-4 text-emerald-200 shrink-0" />
+                  <span className="truncate">Ready to confirm your dates at {activeConv.listingName || 'this business'}?</span>
+                </div>
+                <button
+                  onClick={() => {
+                    const type = activeConv.listing_type || 'homestay';
+                    const slugOrId = activeConv.listing_slug || getItemSlug(activeConv.listingName) || activeConv.listing_id;
+                    if (type === 'homestay') {
+                      window.location.hash = `#/homestay/${slugOrId}`;
+                    } else if (type === 'taxi') {
+                      window.location.hash = `#/taxi/${slugOrId}`;
+                    } else if (type === 'tour' || type === 'package') {
+                      window.location.hash = `#/package/${slugOrId}`;
+                    } else {
+                      window.location.hash = `#/business/${slugOrId}`;
+                    }
+                    if (onClose) onClose();
+                  }}
+                  className="bg-white hover:bg-emerald-50 text-emerald-950 font-black text-xs px-3.5 py-1.5 rounded-xl transition cursor-pointer shadow-xs flex items-center gap-1 shrink-0"
+                >
+                  <span>Book Now</span>
+                  <Compass className="w-3.5 h-3.5 text-emerald-700" />
+                </button>
+              </div>
+            )}
+
             {/* PINNED TRIP DETAILS PANEL */}
             {(() => {
               const latestTrip = getLatestTripCard();
@@ -887,6 +930,7 @@ export default function UnifiedInbox({ currentUser, onClose }: UnifiedInboxProps
                 messages.map((m, idx) => {
                   const isOwn = m.sender_id === currentUser.id;
                   const tripCard = parseTripInfoCard(m.message);
+                  const enquiryCard = parseEnquiryCard(m.message);
                   
                   return (
                     <div 
@@ -901,8 +945,71 @@ export default function UnifiedInbox({ currentUser, onClose }: UnifiedInboxProps
                       )}
 
                       {/* Content Bubble */}
-                      <div className="space-y-1">
-                        {tripCard ? (
+                      <div className="space-y-1 text-left w-full">
+                        {enquiryCard ? (
+                          /* Render Structured Pre-Booking Enquiry Card */
+                          <div className="p-4 sm:p-5 rounded-3xl border border-emerald-200 dark:border-emerald-900/40 bg-emerald-50/80 dark:bg-emerald-950/40 text-slate-900 dark:text-white space-y-3 shadow-xs relative overflow-hidden">
+                            <div className="flex items-center justify-between gap-2 border-b border-emerald-200/80 dark:border-emerald-900/50 pb-2">
+                              <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-600 text-white px-2.5 py-1 rounded-full shadow-2xs flex items-center gap-1">
+                                <span>📋</span>
+                                <span>Enquiry: {enquiryCard.category || 'General'}</span>
+                              </span>
+
+                              <span className="text-[9px] font-mono text-emerald-700 dark:text-emerald-400 font-extrabold flex items-center gap-1">
+                                <Shield className="w-3 h-3" />
+                                Pre-Booking Enquiry
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white/90 dark:bg-slate-900/90 p-2.5 rounded-2xl border border-emerald-100 dark:border-emerald-900/30 text-[11px]">
+                              {enquiryCard.checkIn && (
+                                <div>
+                                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase block">Check-in</span>
+                                  <span className="font-extrabold text-slate-800 dark:text-slate-200">{enquiryCard.checkIn}</span>
+                                </div>
+                              )}
+                              {enquiryCard.checkOut && (
+                                <div>
+                                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase block">Check-out</span>
+                                  <span className="font-extrabold text-slate-800 dark:text-slate-200">{enquiryCard.checkOut}</span>
+                                </div>
+                              )}
+                              {enquiryCard.guests && (
+                                <div>
+                                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase block">Guests</span>
+                                  <span className="font-extrabold text-slate-800 dark:text-slate-200">{enquiryCard.guests} Persons</span>
+                                </div>
+                              )}
+                              {enquiryCard.selectedRoom && (
+                                <div>
+                                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase block">Selected Option</span>
+                                  <span className="font-extrabold text-slate-800 dark:text-slate-200 truncate block">{enquiryCard.selectedRoom}</span>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="bg-white/95 dark:bg-slate-900/95 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-900/30 text-xs leading-relaxed text-slate-800 dark:text-slate-100 font-medium whitespace-pre-wrap">
+                              {enquiryCard.message}
+                            </div>
+
+                            <div className="flex items-center justify-between pt-1 text-[10px] font-mono text-slate-500">
+                              <span>Sent via HillyTrip Pre-Booking Desk</span>
+                              <button
+                                onClick={() => {
+                                  const type = activeConv.listing_type || 'homestay';
+                                  const slugOrId = activeConv.listing_slug || getItemSlug(activeConv.listingName) || activeConv.listing_id;
+                                  if (type === 'homestay') window.location.hash = `#/homestay/${slugOrId}`;
+                                  else if (type === 'taxi') window.location.hash = `#/taxi/${slugOrId}`;
+                                  else if (type === 'tour') window.location.hash = `#/package/${slugOrId}`;
+                                  else window.location.hash = `#/business/${slugOrId}`;
+                                }}
+                                className="text-emerald-600 dark:text-emerald-400 font-black hover:underline flex items-center gap-0.5 cursor-pointer"
+                              >
+                                <span>Direct Booking Page →</span>
+                              </button>
+                            </div>
+                          </div>
+                        ) : tripCard ? (
                           /* Render System-generated Trip Information Card */
                           <div className={`p-5 rounded-3xl border text-left ${
                             tripCard.status === 'active' 

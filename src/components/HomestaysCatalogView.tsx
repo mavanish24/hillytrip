@@ -7,6 +7,7 @@ import {
   Leaf, Home
 } from 'lucide-react';
 import { Homestay, Destination } from '../types';
+import { getItemSlug } from '../utils/slug';
 import { motion, AnimatePresence } from 'motion/react';
 import { UniversalCarousel } from './UniversalCarousel';
 
@@ -1304,7 +1305,7 @@ export default function HomestaysCatalogView({
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-10px" }}
                         transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.3) }}
-                        onClick={() => navigate(`#/homestay/${h.id}`)}
+                        onClick={() => navigate(`#/homestay/${getItemSlug(h)}`)}
                         className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:shadow-xl transition-all duration-300 flex flex-col h-full group cursor-pointer relative"
                       >
                         {/* Cover Image & Badges */}
@@ -1403,21 +1404,32 @@ export default function HomestaysCatalogView({
                               <span className="text-[9px] text-slate-400">({h.reviewCount})</span>
                             </div>
 
-                            {/* Quick Contact buttons */}
+                            {/* In-Platform Booking & Inquiry Actions */}
                             <div className="flex items-center gap-1.5">
                               <button
-                                onClick={(e) => handleWhatsAppClick(e, h)}
-                                className="p-2 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-lg hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 dark:hover:text-white transition cursor-pointer"
-                                title="Chat on WhatsApp"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const slug = getItemSlug(h);
+                                  if (navigate) navigate(`#/enquire?listingType=homestay&listingId=${slug}`);
+                                  else window.location.hash = `#/enquire?listingType=homestay&listingId=${slug}`;
+                                }}
+                                className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg transition cursor-pointer flex items-center gap-1"
+                                title="Enquire via HillyTrip Messaging"
                               >
-                                <MessageSquareIcon className="w-4 h-4" />
+                                <MessageSquareIcon className="w-3.5 h-3.5 text-emerald-500" />
+                                <span>Enquire</span>
                               </button>
                               <button
-                                onClick={(e) => handleCallClick(e, h)}
-                                className="p-2 bg-sky-50 dark:bg-sky-950/30 text-sky-650 dark:text-sky-400 border border-sky-100 dark:border-sky-900/30 rounded-lg hover:bg-sky-650 hover:text-white dark:hover:bg-sky-650 dark:hover:text-white transition cursor-pointer"
-                                title="Call Host"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const slug = getItemSlug(h);
+                                  if (navigate) navigate(`#/homestay/${slug}`);
+                                  else window.location.hash = `#/homestay/${slug}`;
+                                }}
+                                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-lg transition cursor-pointer shadow-xs hover:shadow"
+                                title="Book Now"
                               >
-                                <Phone className="w-4 h-4" />
+                                <span>Book Now</span>
                               </button>
                             </div>
                           </div>

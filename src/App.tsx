@@ -1,17 +1,10 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { 
   Search, ArrowRight, MapPin, Compass, Sparkles, Home, Shield, Calendar, BookOpen,
-=======
-import React, { useState, useEffect } from 'react';
-import { 
-  Search, ArrowRight, MapPin, Compass, Sparkles, Home, Shield, Calendar, 
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   Users, Wallet, Car, MessageCircle, AlertCircle, Camera, CheckCircle, 
   Trash2, Filter, Loader2, RefreshCw, ChevronRight, ChevronDown, ChevronUp, Info, PlusCircle, ArrowLeft,
   UploadCloud, CheckCircle2, Save, FileSpreadsheet, Plus, X, Edit2, Undo2, Zap, Bell, Heart, Share2, MessageSquare, Bookmark,
   Facebook, Instagram, Youtube, CheckSquare, Clock, Eye, Flame, Shuffle, Award, ChevronLeft, List, WifiOff,
-<<<<<<< HEAD
   User as UserIcon, Activity, TrendingUp, BarChart3, Sliders, Navigation
 } from 'lucide-react';
 import Navbar from './components/Navbar';
@@ -20,6 +13,7 @@ import UserProfileSystem from './components/UserProfileSystem';
 import SettingsModule from './components/SettingsModule';
 import BusinessModule from './components/BusinessModule';
 import UniversalInventoryEngineView from './components/UniversalInventoryEngineView';
+import BusinessOS from './components/BusinessOS';
 import UniversalPublicProfile from './components/UniversalPublicProfile';
 import ErrorBoundary from './components/ErrorBoundary';
 import SearchableCombobox from './components/SearchableCombobox';
@@ -47,23 +41,8 @@ import { compressAndConvertToWebP } from './utils/imageOptimizer';
 import { hillyTripFetch } from './utils/apiInterceptor';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import TravelSimulationWizard from './components/TravelSimulationWizard';
+import PreBookingEnquiryModal from './components/PreBookingEnquiryModal';
 import { AnimatedLogo } from './components/AnimatedLogo';
-=======
-  User as UserIcon
-} from 'lucide-react';
-import Navbar from './components/Navbar';
-import SearchableCombobox from './components/SearchableCombobox';
-import { Hub, Route, Destination, Attraction, Homestay, RouteSearchResult, TripLead, CarLead, Contribution, ImageItem, User } from './types';
-import { DEFAULT_HOMESTAY_IMAGE } from './constants';
-import { motion } from 'motion/react';
-import { initialHubs, initialDestinations, initialAttractions, initialHomestays, initialRoutes } from './data/initialData';
-import { onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
-import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
-import { auth, googleSignIn, logout, uploadImageToFirebase, db } from './utils/firebase';
-import { compressAndConvertToWebP } from './utils/imageOptimizer';
-import { hillyTripFetch } from './utils/apiInterceptor';
-import PWAInstallPrompt from './components/PWAInstallPrompt';
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 import { 
   initGA, 
   trackPageView, 
@@ -80,7 +59,6 @@ import {
 const ImageGallerySystem = React.lazy(() => import('./components/ImageGallerySystem'));
 const CommentsSection = React.lazy(() => import('./components/CommentsSection'));
 const AdminNotificationsTab = React.lazy(() => import('./components/AdminNotificationsTab'));
-<<<<<<< HEAD
 const AdminReportsTab = React.lazy(() => import('./components/AdminReportsTab'));
 const AiLocalAdvisor = React.lazy(() => import('./components/AiLocalAdvisor'));
 const PartnerDashboard = React.lazy(() => import('./components/PartnerDashboard'));
@@ -90,6 +68,7 @@ const AdminTaxiMarketplaceTab = React.lazy(() => import('./components/AdminTaxiM
 const OfflineTravelHub = React.lazy(() => import('./components/OfflineTravelHub'));
 const ReviewCenter = React.lazy(() => import('./components/ReviewCenter'));
 import { TravelerReviewsSection } from './components/TravelerReviewsSection';
+import { getItemSlug } from './utils/slug';
 import { DestinationDetailFlow } from './components/DestinationDetailFlow';
 import { HomestayDetailPage } from './components/HomestayDetailPage';
 import ContributorProfile from './components/ContributorProfile';
@@ -117,18 +96,10 @@ const IntelligentRoutePlanner = React.lazy(() => import('./components/Intelligen
 const LiveTransitBulletin = React.lazy(() => import('./components/LiveTransitBulletin'));
 const SurvivalIndex = React.lazy(() => import('./components/SurvivalIndex'));
 const ExplorerBadges = React.lazy(() => import('./components/ExplorerBadges'));
-=======
-const AiLocalAdvisor = React.lazy(() => import('./components/AiLocalAdvisor'));
-const PartnerDashboard = React.lazy(() => import('./components/PartnerDashboard'));
-const AdminPartnerManagementTab = React.lazy(() => import('./components/AdminPartnerManagementTab'));
-const OfflineTravelHub = React.lazy(() => import('./components/OfflineTravelHub'));
-const ReviewCenter = React.lazy(() => import('./components/ReviewCenter'));
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
 const AdminCoverManagementTab = React.lazy(() => 
   import('./components/AdminCoverManagementTab').then(module => ({ default: module.AdminCoverManagementTab }))
 );
-<<<<<<< HEAD
 const AdminHomepageContentTab = React.lazy(() => 
   import('./components/AdminHomepageContentTab').then(module => ({ default: module.AdminHomepageContentTab }))
 );
@@ -160,14 +131,6 @@ const toSlug = (text: any): string => {
     .replace(/^-+|-+$/g, '');
 };
 
-=======
-const AdminLocationIntelligenceTab = React.lazy(() => 
-  import('./components/AdminLocationIntelligenceTab').then(module => ({ default: module.AdminLocationIntelligenceTab }))
-);
-
-const fetch = hillyTripFetch;
-
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 const safeSrc = (url?: string, fallback: string = DEFAULT_HOMESTAY_IMAGE) => {
   if (!url || typeof url !== 'string' || url.trim() === '') return fallback;
   return url;
@@ -192,7 +155,6 @@ const formatWhatsAppNumber = (contactStr: string | null | undefined): string => 
   return phone;
 };
 
-<<<<<<< HEAD
 const calculateDistanceInKm = (lat1?: number, lon1?: number, lat2?: number, lon2?: number): number | null => {
   if (lat1 === undefined || lon1 === undefined || lat2 === undefined || lon2 === undefined) return null;
   if (lat1 === null || lon1 === null || lat2 === null || lon2 === null) return null;
@@ -218,8 +180,6 @@ const calculateDistanceInKm = (lat1?: number, lon1?: number, lat2?: number, lon2
   return Number(d.toFixed(2));
 };
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 enum OperationType {
   CREATE = 'create',
   UPDATE = 'update',
@@ -351,14 +311,9 @@ const UNIQUE_REGIONAL_NODES = [
   { id: 'rishop', x: 440, y: 90, isMajor: true, label: "Rishop" },
 ];
 
-<<<<<<< HEAD
 const getStopCoords = (stopName: string | null | undefined) => {
   if (!stopName) return null;
   const norm = String(stopName).toLowerCase().trim();
-=======
-const getStopCoords = (stopName: string) => {
-  const norm = stopName.toLowerCase().trim();
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   if (NODE_COORDINATES[norm]) return NODE_COORDINATES[norm];
   for (const key of Object.keys(NODE_COORDINATES)) {
     if (norm.includes(key) || key.includes(norm)) {
@@ -387,7 +342,6 @@ const getPaginationRange = (current: number, total: number) => {
   return range;
 };
 
-<<<<<<< HEAD
 export const AVAILABLE_THEMES = PRESETS.map(t => ({
   id: t.id,
   name: t.name,
@@ -395,26 +349,11 @@ export const AVAILABLE_THEMES = PRESETS.map(t => ({
   color: t.light.primaryColor,
   emoji: t.emoji
 }));
-=======
-export const AVAILABLE_THEMES = [
-  { id: 'slate', name: 'Slate Dark (Default)', class: 'theme-slate-dark', color: '#020617', emoji: '🌑' },
-  { id: 'mountain-blue', name: 'Mountain Blue', class: 'theme-mountain-blue', color: '#070f2b', emoji: '⛰️' },
-  { id: 'forest-green', name: 'Forest Green', class: 'theme-forest-green', color: '#022c22', emoji: '🌲' },
-  { id: 'himalayan-night', name: 'Himalayan Night', class: 'theme-himalayan-night', color: '#05021a', emoji: '🌌' },
-  { id: 'sunrise-gold', name: 'Sunrise Gold', class: 'theme-sunrise-gold', color: '#1c0d02', emoji: '🌅' },
-  { id: 'alpine-purple', name: 'Alpine Purple', class: 'theme-alpine-purple', color: '#090514', emoji: '🪻' },
-  { id: 'mist-grey', name: 'Mist Grey', class: 'theme-mist-grey', color: '#121824', emoji: '🌫️' },
-  { id: 'river-teal', name: 'River Teal', class: 'theme-river-teal', color: '#011e22', emoji: '🧼' },
-  { id: 'autumn-trail', name: 'Autumn Trail', class: 'theme-autumn-trail', color: '#1c0802', emoji: '🍂' },
-  { id: 'snow-peak', name: 'Snow Peak', class: 'theme-snow-peak', color: '#091424', emoji: '🏔️' },
-];
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
 interface ScrollAnimatedSectionProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
-<<<<<<< HEAD
   id?: string;
 }
 
@@ -422,13 +361,6 @@ const ScrollAnimatedSection: React.FC<ScrollAnimatedSectionProps> = ({ children,
   return (
     <motion.div
       id={id}
-=======
-}
-
-const ScrollAnimatedSection: React.FC<ScrollAnimatedSectionProps> = ({ children, className = '', delay = 0 }) => {
-  return (
-    <motion.div
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
@@ -490,7 +422,6 @@ const getCategoryHighlights = (category: string, name: string) => {
   }
 };
 
-<<<<<<< HEAD
 interface BreadcrumbItem {
   name: string;
   path: string;
@@ -542,8 +473,6 @@ function SEOBreadcrumbs({ items, navigate }: { items: BreadcrumbItem[]; navigate
   );
 }
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 export default function App() {
   const [currentHash, setCurrentHash] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -556,7 +485,6 @@ export default function App() {
     }
     return '/';
   });
-<<<<<<< HEAD
   let tempPath = currentHash.startsWith('#') ? currentHash.substring(1) : (currentHash || '/');
   // Normalize legacy singular routes to canonical plural routes for SEO/canonical structure
   if (tempPath.startsWith('/destination/') && tempPath !== '/destination') {
@@ -588,6 +516,11 @@ export default function App() {
   const [simulatedEmail, setSimulatedEmail] = useState('');
   const [simulatedName, setSimulatedName] = useState('');
   const [simulatedLoading, setSimulatedLoading] = useState(false);
+
+  // Pre-Booking Enquiry Modal states
+  const [enquireBusiness, setEnquireBusiness] = useState<any | null>(null);
+  const [enquireModalOpen, setEnquireModalOpen] = useState(false);
+  const [enquireBookingDetails, setEnquireBookingDetails] = useState<any>({});
 
   const registerActiveTab = currentPath === '/register/driver' ? 'driver' : 'homestay';
   
@@ -625,60 +558,24 @@ export default function App() {
       if (saved && AVAILABLE_THEMES.some(t => t.id === saved)) return saved;
     }
     return 'signature';
-=======
-  const currentPath = currentHash.startsWith('#') ? currentHash.substring(1) : (currentHash || '/');
-  const [footerModalType, setFooterModalType] = useState<string | null>(null);
-  const registerActiveTab = currentPath === '/register/driver' ? 'driver' : 'homestay';
-  
-  // Theme management (Standard Basic Themes + Gesture Double-click Premium Palettes)
-  const [theme, setTheme] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('hillytrip-theme');
-      if (saved && AVAILABLE_THEMES.some(t => t.id === saved)) return saved;
-    }
-    return 'slate';
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   });
 
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('hillytrip-theme-mode');
       if (saved === 'light' || saved === 'dark') return saved;
-<<<<<<< HEAD
       
       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       return systemPrefersDark ? 'dark' : 'light';
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
     return 'dark'; // Slate Dark (Default) is dark-first
   });
 
   useEffect(() => {
-<<<<<<< HEAD
-=======
-    const root = window.document.documentElement;
-    // Remove all previous theme classes
-    const oldClasses = [
-      'dark', 'theme-light', 'theme-dark', 'theme-forest', 'theme-sunset', 'theme-purple', 'theme-ocean',
-      ...AVAILABLE_THEMES.map(t => t.class)
-    ];
-    root.classList.remove(...oldClasses);
-    
-    // Find absolute theme config
-    const activeConfig = AVAILABLE_THEMES.find(t => t.id === theme) || AVAILABLE_THEMES[0];
-    root.classList.add(activeConfig.class);
-    
-    if (themeMode === 'dark') {
-      root.classList.add('dark');
-    }
-    
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     localStorage.setItem('hillytrip-theme', theme);
     localStorage.setItem('hillytrip-theme-mode', themeMode);
   }, [theme, themeMode]);
 
-<<<<<<< HEAD
   const [showFloatingWidgets, setShowFloatingWidgets] = useState(false);
 
   useEffect(() => {
@@ -704,12 +601,6 @@ export default function App() {
         if (Array.isArray(parsed)) return parsed;
       }
       return [];
-=======
-  const [hubs, setHubs] = useState<Hub[]>(() => {
-    try {
-      const c = localStorage.getItem('hillytrip_cached_hubs');
-      return c ? JSON.parse(c) : [];
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return [];
     }
@@ -717,15 +608,11 @@ export default function App() {
   const [destinations, setDestinations] = useState<Destination[]>(() => {
     try {
       const c = localStorage.getItem('hillytrip_cached_destinations');
-<<<<<<< HEAD
       if (c) {
         const parsed = JSON.parse(c);
         if (Array.isArray(parsed)) return parsed;
       }
       return [];
-=======
-      return c ? JSON.parse(c) : [];
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return [];
     }
@@ -733,15 +620,11 @@ export default function App() {
   const [attractions, setAttractions] = useState<Attraction[]>(() => {
     try {
       const c = localStorage.getItem('hillytrip_cached_attractions');
-<<<<<<< HEAD
       if (c) {
         const parsed = JSON.parse(c);
         if (Array.isArray(parsed)) return parsed;
       }
       return [];
-=======
-      return c ? JSON.parse(c) : [];
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return [];
     }
@@ -749,7 +632,6 @@ export default function App() {
   const [attractionStats, setAttractionStats] = useState<Record<string, number>>(() => {
     try {
       const c = localStorage.getItem('hillytrip_cached_attraction_stats');
-<<<<<<< HEAD
       if (c) {
         const parsed = JSON.parse(c);
         if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
@@ -757,9 +639,6 @@ export default function App() {
         }
       }
       return {};
-=======
-      return c ? JSON.parse(c) : {};
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return {};
     }
@@ -767,31 +646,87 @@ export default function App() {
   const [homestays, setHomestays] = useState<Homestay[]>(() => {
     try {
       const c = localStorage.getItem('hillytrip_cached_homestays');
-<<<<<<< HEAD
       if (c) {
         const parsed = JSON.parse(c);
         if (Array.isArray(parsed)) return parsed;
       }
       return [];
-=======
-      return c ? JSON.parse(c) : [];
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return [];
     }
   });
+
+  // Detect #/messages or #/enquire with query parameters to launch Pre-Booking Enquiry modal automatically
+  useEffect(() => {
+    if (currentPath.startsWith('/messages') || currentPath.startsWith('/enquire')) {
+      const hashPart = window.location.hash || '';
+      const queryStr = hashPart.includes('?') ? hashPart.split('?')[1] : window.location.search.replace('?', '');
+      const searchParams = new URLSearchParams(queryStr);
+
+      const lType = searchParams.get('listingType');
+      const lId = searchParams.get('listingId');
+
+      if (lType && lId) {
+        const checkIn = searchParams.get('checkIn') || '';
+        const checkOut = searchParams.get('checkOut') || '';
+        const guests = searchParams.get('guests') || '';
+        const roomName = searchParams.get('roomName') || '';
+
+        let bName = 'HillyTrip Business';
+        let bImg = 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=400&q=80';
+        let destName = 'Himalayan Region';
+
+        if (lType === 'homestay') {
+          const found = (homestays || []).find((h: any) => h.id === lId || h.slug === lId || getItemSlug(h) === lId);
+          if (found) {
+            bName = found.name;
+            if (found.images && found.images.length > 0) bImg = found.images[0];
+            destName = found.address || destName;
+          } else {
+            bName = 'HillyTrip Verified Homestay';
+          }
+        } else if (lType === 'taxi_operator' || lType === 'taxi') {
+          bName = 'HillyTrip Taxi Stand Operator';
+          bImg = 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=400&q=80';
+          destName = 'Darjeeling & Sikkim Corridor';
+        } else if (lType === 'tour_operator' || lType === 'tour' || lType === 'package') {
+          bName = 'HillyTrip Mountain Tour Operator';
+          bImg = 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80';
+          destName = 'High Himalayan Trails';
+        } else if (lType === 'restaurant') {
+          bName = 'HillyTrip Alpine Dining & Cafe';
+          bImg = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80';
+          destName = 'Mall Road';
+        }
+
+        setEnquireBusiness({
+          id: lId,
+          name: bName,
+          type: lType,
+          destination: destName,
+          rating: 4.9,
+          image: bImg
+        });
+
+        setEnquireBookingDetails({
+          checkIn,
+          checkOut,
+          guests,
+          roomName
+        });
+
+        setEnquireModalOpen(true);
+      }
+    }
+  }, [currentPath, homestays]);
   const [drivers, setDrivers] = useState<any[]>(() => {
     try {
       const c = localStorage.getItem('hillytrip_cached_drivers');
-<<<<<<< HEAD
       if (c) {
         const parsed = JSON.parse(c);
         if (Array.isArray(parsed)) return parsed;
       }
       return [];
-=======
-      return c ? JSON.parse(c) : [];
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return [];
     }
@@ -799,15 +734,11 @@ export default function App() {
   const [routes, setRoutes] = useState<Route[]>(() => {
     try {
       const c = localStorage.getItem('hillytrip_cached_routes');
-<<<<<<< HEAD
       if (c) {
         const parsed = JSON.parse(c);
         if (Array.isArray(parsed)) return parsed;
       }
       return [];
-=======
-      return c ? JSON.parse(c) : [];
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return [];
     }
@@ -815,21 +746,14 @@ export default function App() {
   
   // Loading & Global alerts
   const [loading, setLoading] = useState(false);
-<<<<<<< HEAD
   const [notification, setNotification] = useState<{ type: 'success' | 'error' | 'info', message: string } | null>(null);
-=======
-  const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Home search state
   const [searchFrom, setSearchFrom] = useState('');
   const [searchTo, setSearchTo] = useState('');
-<<<<<<< HEAD
   const [homeSearchQuery, setHomeSearchQuery] = useState('');
   const [showHomeSuggestions, setShowHomeSuggestions] = useState(false);
   const [searchTab, setSearchTab] = useState<'all' | 'destinations' | 'attractions' | 'routes' | 'homestays'>('all');
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Hidden Gems search & filter state
   const [gemSearch, setGemSearch] = useState('');
@@ -839,7 +763,6 @@ export default function App() {
   const [user, setUser] = useState<User | null>(() => {
     try {
       const persistedUser = localStorage.getItem('hillytrip_user_session');
-<<<<<<< HEAD
       if (persistedUser) {
         const parsed = JSON.parse(persistedUser);
         if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
@@ -847,9 +770,6 @@ export default function App() {
         }
       }
       return null;
-=======
-      return persistedUser ? JSON.parse(persistedUser) : null;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return null;
     }
@@ -859,18 +779,14 @@ export default function App() {
     setUser(u);
     if (u) {
       localStorage.setItem('hillytrip_user_session', JSON.stringify(u));
-<<<<<<< HEAD
       if (u.themeMode === 'light' || u.themeMode === 'dark') {
         setThemeMode(u.themeMode);
       }
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } else {
       localStorage.removeItem('hillytrip_user_session');
     }
   };
 
-<<<<<<< HEAD
   // Sync themeMode with database profile
   useEffect(() => {
     if (user && user.email) {
@@ -886,15 +802,12 @@ export default function App() {
     }
   }, [themeMode, user?.email]);
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   // Unified Profile state hooks
   const [travelerLeads, setTravelerLeads] = useState<{ trips: any[], cars: any[] } | null>(null);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [editProfileName, setEditProfileName] = useState('');
   const [editProfileMobile, setEditProfileMobile] = useState('');
   const [editProfilePassword, setEditProfilePassword] = useState('');
-<<<<<<< HEAD
 
   // Premium DIY Itinerary planner & Community Bulletin States
   const [activePlanTab, setActivePlanTab] = useState<'diy' | 'intelligence' | 'inquiry'>('diy');
@@ -1018,9 +931,6 @@ export default function App() {
     });
   };
 
-=======
-  
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [partnerListings, setPartnerListings] = useState<{ homestays: any[], drivers: any[] } | null>(null);
   const [loadingPartnerListings, setLoadingPartnerListings] = useState(false);
   const [partnerInquiries, setPartnerInquiries] = useState<any[]>([]);
@@ -1035,11 +945,8 @@ export default function App() {
   const [loadingAdminData, setLoadingAdminData] = useState(false);
   const [likes, setLikes] = useState<any[]>([]);
   const [comments, setComments] = useState<any[]>([]);
-<<<<<<< HEAD
   const [reviews, setReviews] = useState<any[]>([]);
   const [shareDropdownOpen, setShareDropdownOpen] = useState(false);
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Offline status tracking for remote mountain regions
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
@@ -1075,7 +982,6 @@ export default function App() {
   const [adminEmail, setAdminEmail] = useState(localStorage.getItem('hillytrip_admin_email') || '');
   const [adminUser, setAdminUser] = useState<any>(() => {
     try {
-<<<<<<< HEAD
       const persisted = localStorage.getItem('hillytrip_admin_user');
       if (persisted) {
         const parsed = JSON.parse(persisted);
@@ -1084,25 +990,18 @@ export default function App() {
         }
       }
       return null;
-=======
-      return JSON.parse(localStorage.getItem('hillytrip_admin_user') || 'null');
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return null;
     }
   });
   const [adminPermissions, setAdminPermissions] = useState<string[]>(() => {
     try {
-<<<<<<< HEAD
       const persisted = localStorage.getItem('hillytrip_admin_permissions');
       if (persisted) {
         const parsed = JSON.parse(persisted);
         if (Array.isArray(parsed)) return parsed;
       }
       return [];
-=======
-      return JSON.parse(localStorage.getItem('hillytrip_admin_permissions') || '[]');
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return [];
     }
@@ -1144,7 +1043,6 @@ export default function App() {
   const [adminDrivers, setAdminDrivers] = useState<any[]>([]);
   const [adminHomestays, setAdminHomestays] = useState<any[]>([]);
   const [regSuccess, setRegSuccess] = useState<any>(null);
-<<<<<<< HEAD
   const [registerHomestayImage, setRegisterHomestayImage] = useState<string>('');
   const [adminActiveTab, setAdminActiveTab] = useState<'stats' | 'leads' | 'car-leads' | 'contributions' | 'add-data' | 'bulk-import' | 'images' | 'analytics' | 'registrations' | 'admin_management' | 'audit_logs' | 'photo_approvals' | 'location-intelligence' | 'partner-management' | 'homepage_content' | 'business_control' | 'app_notifications' | 'system_reports' | 'cover_management' | 'brand_management' | 'travel_guides' | 'homestay_management' | 'media_library' | 'taxi-marketplace' | 'storage_manager'>('stats');
   const [expandedGroup, setExpandedGroup] = useState<string | null>('monitoring');
@@ -1152,11 +1050,6 @@ export default function App() {
   const [adminUserAnalyticsLoading, setAdminUserAnalyticsLoading] = useState(false);
   const [adminDashboardConfigurations, setAdminDashboardConfigurations] = useState<any[]>([]);
   const [adminFeatureFlags, setAdminFeatureFlags] = useState<any[]>([]);
-=======
-  const [adminActiveTab, setAdminActiveTab] = useState<'stats' | 'leads' | 'car-leads' | 'contributions' | 'add-data' | 'bulk-import' | 'images' | 'analytics' | 'registrations' | 'admin_management' | 'audit_logs' | 'photo_approvals' | 'location-intelligence' | 'partner-management'>('stats');
-  const [adminUserAnalytics, setAdminUserAnalytics] = useState<any>(null);
-  const [adminUserAnalyticsLoading, setAdminUserAnalyticsLoading] = useState(false);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Traveller Photo Contribution & Approval System state
   const [photoSubTab, setPhotoSubTab] = useState<'upload' | 'history' | 'notifications'>('upload');
@@ -1176,15 +1069,12 @@ export default function App() {
 
   // Filtering / Sorting for Admin Dashboard
   const [adminSearchTerm, setAdminSearchTerm] = useState<string>('');
-<<<<<<< HEAD
   const [attractionVideoError, setAttractionVideoError] = useState(false);
   const [isAttractionsMounted, setIsAttractionsMounted] = useState(false);
 
   useEffect(() => {
     setIsAttractionsMounted(true);
   }, []);
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [adminStatusFilter, setAdminStatusFilter] = useState<string>('All');
   const [adminSortField, setAdminSortField] = useState<'uploadedAt' | 'travellerName'>('uploadedAt');
   const [adminSortOrder, setAdminSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -1205,7 +1095,6 @@ export default function App() {
   const [profileConfirmPassword, setProfileConfirmPassword] = useState('');
   const [profileName, setProfileName] = useState('');
   const [profileMobile, setProfileMobile] = useState('');
-<<<<<<< HEAD
   const [profileUsername, setProfileUsername] = useState('');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
@@ -1222,10 +1111,6 @@ export default function App() {
     travel_alerts: true
   });
   const [isSignUp, setIsSignUp] = useState(false);
-=======
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [authLoading, setAuthLoading] = useState(false);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [activeRoleTab, setActiveRoleTab] = useState<'traveler' | 'partner' | 'contributor'>('traveler');
 
   // Applications form states
@@ -1272,7 +1157,6 @@ export default function App() {
   const [activeAttrDetail, setActiveAttrDetail] = useState<any>(null);
   const [activeHomeDetail, setActiveHomeDetail] = useState<any>(null);
   const [activePhotos, setActivePhotos] = useState<ImageItem[]>([]);
-<<<<<<< HEAD
   const [publicPhotos, setPublicPhotos] = useState<ImageItem[]>([]);
   const [mostSearchedToday, setMostSearchedToday] = useState<any[]>(() => {
     try {
@@ -1282,12 +1166,6 @@ export default function App() {
         if (Array.isArray(parsed)) return parsed;
       }
       return [];
-=======
-  const [mostSearchedToday, setMostSearchedToday] = useState<any[]>(() => {
-    try {
-      const c = localStorage.getItem('hillytrip_cached_most_searched_today');
-      return c ? JSON.parse(c) : [];
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return [];
     }
@@ -1295,7 +1173,6 @@ export default function App() {
   const [destinationStats, setDestinationStats] = useState<Record<string, number>>(() => {
     try {
       const c = localStorage.getItem('hillytrip_cached_destination_stats');
-<<<<<<< HEAD
       if (c) {
         const parsed = JSON.parse(c);
         if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
@@ -1303,9 +1180,6 @@ export default function App() {
         }
       }
       return {};
-=======
-      return c ? JSON.parse(c) : {};
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch {
       return {};
     }
@@ -1313,17 +1187,12 @@ export default function App() {
 
   // Collapse and view-all toggles for Destination Detail layout
   const [destAttractionsExpanded, setDestAttractionsExpanded] = useState(false);
-<<<<<<< HEAD
   const [selectedPhotoFromMomentsUrl, setSelectedPhotoFromMomentsUrl] = useState<string | null>(null);
   const [activeMomentsTab, setActiveMomentsTab] = useState<'liked' | 'latest' | 'popular'>('liked');
   const [destLodgingExpanded, setDestLodgingExpanded] = useState(false);
   const [destTransitExpanded, setDestTransitExpanded] = useState(false);
   const [formRating, setFormRating] = useState(5);
   const [formRecommends, setFormRecommends] = useState(true);
-=======
-  const [destLodgingExpanded, setDestLodgingExpanded] = useState(false);
-  const [destTransitExpanded, setDestTransitExpanded] = useState(false);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [destCommentsExpanded, setDestCommentsExpanded] = useState(false);
   const [attrCommentsExpanded, setAttrCommentsExpanded] = useState(false);
   const [submittingAttrLead, setSubmittingAttrLead] = useState(false);
@@ -1344,7 +1213,6 @@ export default function App() {
     setCurrentHash(cleanPath);
   };
 
-<<<<<<< HEAD
   // Taxi operator dashboard route guard
   useEffect(() => {
     if (currentPath.startsWith('/taxi/dashboard')) {
@@ -1364,8 +1232,6 @@ export default function App() {
     }
   }, [currentPath, user]);
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   // Smooth scroll carousel helper
   const scrollCarousel = (id: string, direction: 'left' | 'right') => {
     const el = document.getElementById(id);
@@ -1385,7 +1251,6 @@ export default function App() {
 
   const deduplicate = <T extends { id: string }>(arr: T[]): T[] => {
     if (!Array.isArray(arr)) return [];
-<<<<<<< HEAD
     
     const toIdSlug = (text: any): string => {
       if (text === undefined || text === null) return '';
@@ -1413,26 +1278,12 @@ export default function App() {
     });
     
     return Array.from(stageMap.values());
-=======
-    const seen = new Set<string>();
-    return arr.filter(item => {
-      if (!item || !item.id) return false;
-      const key = String(item.id).toLowerCase().trim();
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   };
 
   // Load baseline app data from API
   const fetchBaselineData = async () => {
     try {
-<<<<<<< HEAD
       const safeFetchJson = async (url: string, fallback: any[] = []) => {
-=======
-      const safeFetchJson = async (url: string, fallback: any[]) => {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         try {
           const res = await fetch(url);
           if (!res.ok) {
@@ -1441,7 +1292,6 @@ export default function App() {
           }
           const contentType = res.headers.get('content-type') || '';
           if (!contentType.includes('application/json')) {
-<<<<<<< HEAD
             console.warn(`[API Baseline] non-json response for ${url}, returning empty.`);
             return [];
           }
@@ -1455,38 +1305,15 @@ export default function App() {
         } catch (err) {
           console.warn(`[API Baseline] error fetching ${url}, returning empty:`, err);
           return [];
-=======
-            console.warn(`[API Baseline] non-json response for ${url}, using static fallback.`);
-            return fallback;
-          }
-          const text = await res.text();
-          if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
-            console.warn(`[API Baseline] HTML returned instead of JSON for ${url}, using static fallback.`);
-            return fallback;
-          }
-          const data = JSON.parse(text);
-          return Array.isArray(data) ? data : fallback;
-        } catch (err) {
-          console.warn(`[API Baseline] error fetching ${url}, using static fallback:`, err);
-          return fallback;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         }
       };
 
       const [rHubs, rDests, rAtts, rHomes, rRoutes] = await Promise.all([
-<<<<<<< HEAD
         safeFetchJson('/api/hubs'),
         safeFetchJson('/api/destinations'),
         safeFetchJson('/api/attractions'),
         safeFetchJson('/api/homestays'),
         safeFetchJson('/api/routes'),
-=======
-        safeFetchJson('/api/hubs', initialHubs),
-        safeFetchJson('/api/destinations', initialDestinations),
-        safeFetchJson('/api/attractions', initialAttractions),
-        safeFetchJson('/api/homestays', initialHomestays),
-        safeFetchJson('/api/routes', initialRoutes),
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       ]);
 
       const cleanHubs = deduplicate(rHubs);
@@ -1502,7 +1329,6 @@ export default function App() {
       setRoutes(cleanRoutes);
 
       // Save to cache
-<<<<<<< HEAD
       const safeSetLocalStorage = (key: string, data: any) => {
         try {
           localStorage.setItem(key, JSON.stringify(data));
@@ -1545,17 +1371,6 @@ export default function App() {
       safeSetLocalStorage('hillytrip_cached_attractions', cleanAtts);
       safeSetLocalStorage('hillytrip_cached_homestays', cleanHomes);
       safeSetLocalStorage('hillytrip_cached_routes', cleanRoutes);
-=======
-      try {
-        localStorage.setItem('hillytrip_cached_hubs', JSON.stringify(cleanHubs));
-        localStorage.setItem('hillytrip_cached_destinations', JSON.stringify(cleanDests));
-        localStorage.setItem('hillytrip_cached_attractions', JSON.stringify(cleanAtts));
-        localStorage.setItem('hillytrip_cached_homestays', JSON.stringify(cleanHomes));
-        localStorage.setItem('hillytrip_cached_routes', JSON.stringify(cleanRoutes));
-      } catch (err) {
-        console.error('LocalStorage write failed:', err);
-      }
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch (e) {
       console.error('Error loading baseline application data:', e);
       // Suppress noisy alert if we already have cache loaded
@@ -1580,7 +1395,6 @@ export default function App() {
       })
       .catch(e => console.error('Error loading drivers deferred:', e));
 
-<<<<<<< HEAD
     // 1b. Fetch public approved images (non-critical)
     fetch('/api/images?status=Approved')
       .then(res => res.json())
@@ -1591,8 +1405,6 @@ export default function App() {
       })
       .catch(e => console.error('Error loading public images deferred:', e));
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     // 2. Fetch public search statistics
     fetch('/api/analytics/most-searched')
       .then(res => res.json())
@@ -1645,7 +1457,6 @@ export default function App() {
 
   useEffect(() => {
     fetchBaselineData();
-<<<<<<< HEAD
 
     // Register custom listener for real-time Location Intelligence CSV updates
     const handleDbUpdate = () => {
@@ -1654,21 +1465,15 @@ export default function App() {
     };
     window.addEventListener("hillytrip:db-updated", handleDbUpdate);
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     // Defer non-critical load by 800ms to allow rendering critical components instantly
     const timer = setTimeout(() => {
       fetchDeferredData();
     }, 800);
-<<<<<<< HEAD
 
     return () => {
       clearTimeout(timer);
       window.removeEventListener("hillytrip:db-updated", handleDbUpdate);
     };
-=======
-    return () => clearTimeout(timer);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   }, []);
 
   // Photo Contribution & Notification synchronization
@@ -1690,11 +1495,7 @@ export default function App() {
         setPhotoContributions(data);
       }
     } catch (e) {
-<<<<<<< HEAD
       console.warn('[fetchUserPhotoData expected transient networking info]', e);
-=======
-      console.error('[fetchUserPhotoData error]', e);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
   };
 
@@ -1829,22 +1630,13 @@ export default function App() {
         fetchTravelerLeads();
       } else if (activeRoleTab === 'partner') {
         fetchPartnerState();
-<<<<<<< HEAD
       } else if ((activeRoleTab as string) === 'admin' || (activeRoleTab as string) === 'super_admin') {
-=======
-      } else if (activeRoleTab === 'admin' || activeRoleTab === 'super_admin') {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         fetchAdminPanelState();
       }
     }
   }, [user, activeRoleTab]);
 
-<<<<<<< HEAD
   const submitPhotoContributionInner = async () => {
-=======
-  const handlePhotoContributionSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     if (!photoUploadedUrl) {
       setNotification({ type: 'error', message: 'Please select and upload a scenic photo from your device!' });
       return;
@@ -1893,7 +1685,6 @@ export default function App() {
     }
   };
 
-<<<<<<< HEAD
   const handlePhotoContributionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     executeProtectedAction('upload community photos', () => {
@@ -1904,11 +1695,6 @@ export default function App() {
   const [currentUserRole, setCurrentUserRole] = useState<'super_admin' | 'admin' | 'moderator' | null>(null);
 
   const checkAdminRights = async (email: string, retryCount = 0) => {
-=======
-  const [currentUserRole, setCurrentUserRole] = useState<'admin' | 'moderator' | null>(null);
-
-  const checkAdminRights = async (email: string) => {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     if (!email) {
       setIsAdmin(false);
       setCurrentUserRole(null);
@@ -1916,12 +1702,9 @@ export default function App() {
     }
     try {
       const response = await fetch(`/api/check-admin-role?email=${encodeURIComponent(email)}`);
-<<<<<<< HEAD
       if (!response.ok) {
         throw new Error(`HTTP status ${response.status}`);
       }
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       const data = await response.json();
       if (data.isAdmin) {
         setIsAdmin(true);
@@ -1931,7 +1714,6 @@ export default function App() {
         setCurrentUserRole(null);
       }
     } catch (e) {
-<<<<<<< HEAD
       if (retryCount < 3) {
         const delay = Math.pow(2, retryCount) * 1000;
         console.warn(`Error checking admin status (attempt ${retryCount + 1} failed). Retrying in ${delay}ms...`, e);
@@ -2007,38 +1789,19 @@ export default function App() {
             console.error('Failed to notify opener window:', e);
           }
         }
-=======
-      console.error('Error checking admin status:', e);
-      setIsAdmin(false);
-      setCurrentUserRole(null);
-    }
-  };
-
-  // Set up Firebase Authentication active state listener
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-      if (firebaseUser?.email) {
-        checkAdminRights(firebaseUser.email);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       } else {
         setIsAdmin(false);
         setCurrentUserRole(null);
       }
     });
-<<<<<<< HEAD
 
     return () => {
       window.removeEventListener('message', handleMessage);
       window.removeEventListener('hillytrip_iframe_login_required', handleIframeLoginRequired);
-=======
-    return () => {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       if (unsubscribe) unsubscribe();
     };
   }, []);
 
-<<<<<<< HEAD
   // Standalone window login companion helper
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -2112,10 +1875,6 @@ export default function App() {
   }, [user, pendingAction]);
 
   useEffect(() => {
-=======
-  // Subscriptions for likes and comments
-  useEffect(() => {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     const unsubscribeLikes = onSnapshot(collection(db, 'likes'), (snapshot) => {
       const items: any[] = [];
       snapshot.forEach((doc) => {
@@ -2138,7 +1897,6 @@ export default function App() {
       console.warn("Error loading real-time comments:", error);
     });
 
-<<<<<<< HEAD
     const unsubscribeReviews = onSnapshot(collection(db, 'reviews'), (snapshot) => {
       const items: any[] = [];
       snapshot.forEach((doc) => {
@@ -2155,11 +1913,6 @@ export default function App() {
       if (unsubscribeLikes) unsubscribeLikes();
       if (unsubscribeComments) unsubscribeComments();
       if (unsubscribeReviews) unsubscribeReviews();
-=======
-    return () => {
-      if (unsubscribeLikes) unsubscribeLikes();
-      if (unsubscribeComments) unsubscribeComments();
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     };
   }, []);
 
@@ -2167,7 +1920,6 @@ export default function App() {
   const [savedPlaces, setSavedPlaces] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('hillytrip_saved_places');
-<<<<<<< HEAD
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -2175,25 +1927,17 @@ export default function App() {
         }
       }
       return [];
-=======
-      return saved ? JSON.parse(saved) : [];
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } catch (e) {
       return [];
     }
   });
 
   useEffect(() => {
-<<<<<<< HEAD
     localStorage.setItem('hillytrip_saved_places', JSON.stringify(Array.isArray(savedPlaces) ? savedPlaces : []));
-=======
-    localStorage.setItem('hillytrip_saved_places', JSON.stringify(savedPlaces));
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   }, [savedPlaces]);
 
   const isItemSaved = (id: string) => {
     if (!id) return false;
-<<<<<<< HEAD
     const list = Array.isArray(savedPlaces) ? savedPlaces : [];
     return list.includes(id);
   };
@@ -2449,12 +2193,6 @@ export default function App() {
   };
 
   const handleToggleSave = withAuthentication('save places', async (id: string, type: 'destination' | 'attraction' | 'homestay') => {
-=======
-    return savedPlaces.includes(id);
-  };
-
-  const handleToggleSave = async (id: string, type: 'destination' | 'attraction' | 'homestay') => {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     if (!id) return;
     const isSaved = isItemSaved(id);
     
@@ -2468,7 +2206,6 @@ export default function App() {
 
     if (!isSaved) {
       if (type === 'destination') {
-<<<<<<< HEAD
         const d = destinations.find(x => (x?.id || '') === id || toSlug(x?.id) === toSlug(id));
         if (d) trackSaveDestination(id, d.name || '', 'destination');
       } else if (type === 'attraction') {
@@ -2477,16 +2214,6 @@ export default function App() {
       } else if (type === 'homestay') {
         const h = homestays.find(x => (x?.id || '') === id || toSlug(x?.id) === toSlug(id));
         if (h) trackSaveDestination(id, h.name || '', 'homestay');
-=======
-        const d = destinations.find(x => x.id === id);
-        if (d) trackSaveDestination(id, d.name, 'destination');
-      } else if (type === 'attraction') {
-        const a = attractions.find(x => x.id === id);
-        if (a) trackSaveDestination(id, a.name, 'attraction');
-      } else if (type === 'homestay') {
-        const h = homestays.find(x => x.id === id);
-        if (h) trackSaveDestination(id, h.name, 'homestay');
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       }
     }
 
@@ -2494,21 +2221,10 @@ export default function App() {
       type: 'success',
       message: isSaved ? 'Removed from Saved Places!' : '🔖 Saved to your local collection!'
     });
-<<<<<<< HEAD
   }, false, 'SAVE');
 
   const toggleLike = withAuthentication('like', async (contentId: string, contentType: 'destination' | 'attraction' | 'photo') => {
     const likeId = `${user!.uid}_${contentId}`;
-=======
-  };
-
-  const toggleLike = async (contentId: string, contentType: 'destination' | 'attraction' | 'photo') => {
-    if (!user) {
-      setNotification({ type: 'error', message: '🔐 Please sign in with Google to like!' });
-      return;
-    }
-    const likeId = `${user.uid}_${contentId}`;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     const docRef = doc(db, 'likes', likeId);
     const alreadyLiked = likes.some((l) => l.id === likeId);
     
@@ -2520,11 +2236,7 @@ export default function App() {
     } else {
       setLikes(prev => [...prev, {
         id: likeId,
-<<<<<<< HEAD
         userId: user!.uid,
-=======
-        userId: user.uid,
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         contentId,
         contentType,
         timestamp: new Date().toISOString()
@@ -2533,19 +2245,11 @@ export default function App() {
 
     // Track GA4 like custom events
     if (contentType === 'destination') {
-<<<<<<< HEAD
       const d = destinations.find(x => (x?.id || '') === contentId || toSlug(x?.id) === toSlug(contentId));
       if (d) trackLikeDestination(contentId, d.name || '', !alreadyLiked, 'destination');
     } else if (contentType === 'attraction') {
       const a = attractions.find(x => (x?.id || '') === contentId || toSlug(x?.id) === toSlug(contentId));
       if (a) trackLikeDestination(contentId, a.name || '', !alreadyLiked, 'attraction');
-=======
-      const d = destinations.find(x => x.id === contentId);
-      if (d) trackLikeDestination(contentId, d.name, !alreadyLiked, 'destination');
-    } else if (contentType === 'attraction') {
-      const a = attractions.find(x => x.id === contentId);
-      if (a) trackLikeDestination(contentId, a.name, !alreadyLiked, 'attraction');
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
 
     try {
@@ -2554,11 +2258,7 @@ export default function App() {
       } else {
         await setDoc(docRef, {
           id: likeId,
-<<<<<<< HEAD
           userId: user!.uid,
-=======
-          userId: user.uid,
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           contentId,
           contentType,
           timestamp: new Date().toISOString()
@@ -2570,31 +2270,16 @@ export default function App() {
       setNotification({ type: 'error', message: 'Failed to update like status.' });
       handleFirestoreError(error, alreadyLiked ? OperationType.DELETE : OperationType.WRITE, `likes/${likeId}`);
     }
-<<<<<<< HEAD
   }, false, 'LIKE');
 
   const addCommentAction = withAuthentication('comment', async (contentId: string, contentType: 'destination' | 'attraction' | 'photo', text: string) => {
-=======
-  };
-
-  const addCommentAction = async (contentId: string, contentType: 'destination' | 'attraction', text: string) => {
-    if (!user) {
-      setNotification({ type: 'error', message: '🔐 Please sign in to comment!' });
-      return;
-    }
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     if (!text.trim()) return;
     
     const commentId = `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const newComment = {
       id: commentId,
-<<<<<<< HEAD
       userId: user!.uid,
       userName: user!.displayName || user!.email || 'Registered Traveler',
-=======
-      userId: user.uid,
-      userName: user.displayName || user.email || 'Registered Traveler',
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       contentId,
       contentType,
       text: text.trim(),
@@ -2614,11 +2299,7 @@ export default function App() {
       setNotification({ type: 'error', message: 'Failed to submit comment.' });
       handleFirestoreError(error, OperationType.WRITE, `comments/${commentId}`);
     }
-<<<<<<< HEAD
   }, false, 'COMMENT');
-=======
-  };
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   const deleteCommentAction = async (commentId: string) => {
     const previousComments = [...comments];
@@ -2637,7 +2318,6 @@ export default function App() {
     }
   };
 
-<<<<<<< HEAD
   const addReviewAction = withAuthentication('submit review', async (destinationId: string, rating: number, title: string, content: string, visitDate: string, recommends: boolean) => {
     if (!title.trim() || !content.trim() || !visitDate) {
       setNotification({ type: 'error', message: 'Please fill in all review fields.' });
@@ -2703,12 +2383,6 @@ export default function App() {
     // Password strength check (min 8 characters)
     if (profilePassword.length < 8) {
       setNotification({ type: 'error', message: 'Password must be at least 8 characters long.' });
-=======
-  const handleProfileRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profileEmail || !profilePassword || !profileName) {
-      setNotification({ type: 'error', message: 'Please pack in all required (*) registration details!' });
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       return;
     }
     if (profilePassword !== profileConfirmPassword) {
@@ -2717,7 +2391,6 @@ export default function App() {
     }
     setAuthLoading(true);
     try {
-<<<<<<< HEAD
       const res = await signUpWithEmailAndPassword(profileEmail, profileUsername, profileName, profilePassword);
       if (res?.user) {
         setNotification({ 
@@ -2731,28 +2404,6 @@ export default function App() {
     } catch (err: any) {
       console.error('[Register Err]', err);
       setNotification({ type: 'error', message: err?.message || 'Failed to complete registration.' });
-=======
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: profileEmail,
-          password: profilePassword,
-          confirmPassword: profileConfirmPassword,
-          name: profileName,
-          mobile: profileMobile
-        })
-      });
-      const data = await res.json();
-      if (data.success && data.user) {
-        setNotification({ type: 'success', message: 'Success! Your account is registered. Log in to start your secure session.' });
-        setIsSignUp(false);
-      } else {
-        setNotification({ type: 'error', message: data.error || 'Failed to complete registration.' });
-      }
-    } catch (err: any) {
-      setNotification({ type: 'error', message: err.message || 'Backoffice registry transport error.' });
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } finally {
       setAuthLoading(false);
     }
@@ -2766,7 +2417,6 @@ export default function App() {
     }
     setAuthLoading(true);
     try {
-<<<<<<< HEAD
       const res = await signInWithEmailAndPassword(profileEmail, profilePassword);
       if (res?.user) {
         setNotification({ 
@@ -2923,35 +2573,6 @@ export default function App() {
       setIsResetPasswordMode(false);
     } catch (err: any) {
       setNotification({ type: 'error', message: err?.message || 'Failed to update password.' });
-=======
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: profileEmail,
-          password: profilePassword
-        })
-      });
-      const data = await res.json();
-      if (data.success && data.user) {
-        handleSetUser(data.user);
-        // Synchronize active workspace
-        const rolesList = data.user.roles || [data.user.role || 'traveler'];
-        if (rolesList.includes('admin') || rolesList.includes('super_admin')) {
-          setIsAdmin(true);
-        }
-        if (rolesList.includes(activeRoleTab)) {
-          // keep tab
-        } else {
-          setActiveRoleTab(rolesList[0] as any);
-        }
-        setNotification({ type: 'success', message: `Successfully authorized. Welcome back, ${data.user.name}!` });
-      } else {
-        setNotification({ type: 'error', message: data.error || 'Could not verify user email / password match.' });
-      }
-    } catch (err: any) {
-      setNotification({ type: 'error', message: err.message || 'Authentication server offline.' });
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } finally {
       setAuthLoading(false);
     }
@@ -3071,7 +2692,6 @@ export default function App() {
     }
   };
 
-<<<<<<< HEAD
   const handleIframeDemoLogin = async (demoRole: 'traveler' | 'partner' | 'admin') => {
     try {
       const response = await fetch('/api/auth/demo-login', {
@@ -3181,28 +2801,6 @@ export default function App() {
     }
 
     setShowGoogleSimulator(true);
-=======
-  const handleUserLogin = async () => {
-    try {
-      const res = await googleSignIn();
-      if (res?.user) {
-        setUser(res.user);
-        if (res.user.email) {
-          await checkAdminRights(res.user.email);
-        }
-        setNotification({
-          type: 'success',
-          message: `Logged in safely: ${res.user.displayName || res.user.email} (synced successfully)`
-        });
-      }
-    } catch (error: any) {
-      console.error('Google authorization flow failure:', error);
-      setNotification({
-        type: 'error',
-        message: error?.message || 'Login cancelled or Google Auth failed.'
-      });
-    }
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   };
 
   const handleUserLogout = async () => {
@@ -3260,14 +2858,8 @@ export default function App() {
       setLoading(true);
       
       const localSearchRoutes = (fromHubId: string, toHubId: string): RouteSearchResult[] => {
-<<<<<<< HEAD
         const currentHubs = hubs || [];
         const currentRoutes = routes || [];
-=======
-        // Fall back to initial static arrays if state is still loading/empty
-        const currentHubs = hubs && hubs.length > 0 ? hubs : initialHubs;
-        const currentRoutes = routes && routes.length > 0 ? routes : initialRoutes;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
         const hubsMap = new Map<string, Hub>();
         currentHubs.forEach(h => hubsMap.set(h.id.toLowerCase().trim(), h));
@@ -3377,13 +2969,8 @@ export default function App() {
 
           const neighbors = adj.get(curr) || [];
           for (const r of neighbors) {
-<<<<<<< HEAD
             const nextHub = (r.toHubId || '').toLowerCase().trim();
             const visitedInCurrentPath = pathRoutes.some(pr => (pr.fromHubId || '').toLowerCase().trim() === nextHub) || (curr === nextHub);
-=======
-            const nextHub = r.toHubId.toLowerCase().trim();
-            const visitedInCurrentPath = pathRoutes.some(pr => pr.fromHubId.toLowerCase().trim() === nextHub) || (curr === nextHub);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             if (visitedInCurrentPath) continue;
             queue.push([nextHub, [...pathRoutes, r]]);
           }
@@ -3398,13 +2985,8 @@ export default function App() {
           let allVerified = true;
 
           const hops = p.map(route => {
-<<<<<<< HEAD
             const fh: Hub = hubsMap.get((route.fromHubId || '').toLowerCase().trim()) || { id: route.fromHubId || '', name: route.fromHubId || '', type: 'sub_hub' };
             const th: Hub = hubsMap.get((route.toHubId || '').toLowerCase().trim()) || { id: route.toHubId || '', name: route.toHubId || '', type: 'sub_hub' };
-=======
-            const fh = hubsMap.get(route.fromHubId.toLowerCase().trim())!;
-            const th = hubsMap.get(route.toHubId.toLowerCase().trim())!;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             totalFareMin += route.fareMin;
             totalFareMax += route.fareMax;
             totalTimeMin += route.timeMin;
@@ -3456,7 +3038,6 @@ export default function App() {
       try {
         if (currentPath === '' || currentPath === '/' || currentPath === '#/') {
           // Home
-<<<<<<< HEAD
         } else if (currentPath.startsWith('/routes/')) {
           // 7. Diagnostic logging: received slug
           console.log('[Route Diagnostic] received slug:', currentPath);
@@ -3505,14 +3086,6 @@ export default function App() {
             }
           }
 
-=======
-        } else if (currentPath.startsWith('/route/')) {
-          // 7. Diagnostic logging: received slug
-          console.log('[Route Diagnostic] received slug:', currentPath);
-          const rawRouteSlug = currentPath.replace('/route/', '').replace('#/route/', '');
-          const decodedRouteSlug = decodeURIComponent(rawRouteSlug);
-
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           // 5. Log required diagnostics
           console.log('[Route Detail Diagnostic] raw URL parameter:', rawRouteSlug);
           console.log('[Route Detail Diagnostic] decoded parameter:', decodedRouteSlug);
@@ -3525,11 +3098,7 @@ export default function App() {
             console.log('[Route Diagnostic] parsed source:', fromId);
             console.log('[Route Diagnostic] parsed destination:', toId);
 
-<<<<<<< HEAD
             // Fetch latest hubs to ensure up-to-date mapping
-=======
-            // Fetch latest hubs to ensure up-to-date mapping, fallback to initialHubs
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             let allHubsList: Hub[] = [];
             try {
               const hubsRes = await fetch('/api/hubs');
@@ -3540,11 +3109,7 @@ export default function App() {
               console.error('[Route Parser] Error loading hubs:', err);
             }
             if (!Array.isArray(allHubsList) || allHubsList.length === 0) {
-<<<<<<< HEAD
               allHubsList = hubs || [];
-=======
-              allHubsList = hubs.length > 0 ? hubs : initialHubs;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             }
 
             // Slug-to-Hub ID Resolution function
@@ -3552,16 +3117,9 @@ export default function App() {
               const clean = slugName.trim().toLowerCase();
               if (!clean) return '';
 
-<<<<<<< HEAD
               const currentHubs = hubs || [];
               const currentDests = destinations || [];
               const currentAttrs = attractions || [];
-=======
-              // Static equivalents fallbacks
-              const currentHubs = hubs && hubs.length > 0 ? hubs : initialHubs;
-              const currentDests = destinations && destinations.length > 0 ? destinations : initialDestinations;
-              const currentAttrs = attractions && attractions.length > 0 ? attractions : initialAttractions;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
               // Strict custom slugify helper for comparisons
               const getSlug = (text: string): string => {
@@ -3584,24 +3142,15 @@ export default function App() {
               if (clean === 'lava' || cleanSlug === 'lava') return 'Lava';
 
               // 3. Support case-insensitive matching on ID first
-<<<<<<< HEAD
               const byId = allHubsList.find(h => (h?.id || '').toLowerCase() === clean || getSlug(h?.id || '') === cleanSlug);
               if (byId) return byId.id;
 
               // 6. If a slug matches a hub name, automatically resolve it
               const byName = allHubsList.find(h => (h?.name || '').toLowerCase() === clean || getSlug(h?.name || '') === cleanSlug);
-=======
-              const byId = allHubsList.find(h => h.id.toLowerCase() === clean || getSlug(h.id) === cleanSlug);
-              if (byId) return byId.id;
-
-              // 6. If a slug matches a hub name, automatically resolve it
-              const byName = allHubsList.find(h => h.name.toLowerCase() === clean || getSlug(h.name) === cleanSlug);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
               if (byName) return byName.id;
 
               // Check if matches a destination's name, ID or slug, and resolve to nearestHubId
               const byDest = currentDests.find(d => 
-<<<<<<< HEAD
                 (d?.id || '').toLowerCase() === clean || 
                 getSlug(d?.id || '') === cleanSlug || 
                 (d?.name || '').toLowerCase() === clean || 
@@ -3609,21 +3158,11 @@ export default function App() {
               );
               if (byDest && byDest.nearestHubId) {
                 const nearHub = allHubsList.find(h => (h?.id || '').toLowerCase() === (byDest.nearestHubId || '').toLowerCase().trim());
-=======
-                d.id.toLowerCase() === clean || 
-                getSlug(d.id) === cleanSlug || 
-                d.name.toLowerCase() === clean || 
-                getSlug(d.name) === cleanSlug
-              );
-              if (byDest && byDest.nearestHubId) {
-                const nearHub = allHubsList.find(h => h.id.toLowerCase() === byDest.nearestHubId.toLowerCase().trim());
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                 if (nearHub) return nearHub.id;
               }
 
               // Check if matches an attraction's name, ID or slug
               const byAttr = currentAttrs.find(a => 
-<<<<<<< HEAD
                 (a?.id || '').toLowerCase() === clean || 
                 getSlug(a?.id || '') === cleanSlug || 
                 (a?.name || '').toLowerCase() === clean || 
@@ -3632,27 +3171,13 @@ export default function App() {
               if (byAttr) {
                 if (byAttr.nearestHubId) {
                   const nearHub = allHubsList.find(h => (h?.id || '').toLowerCase() === (byAttr.nearestHubId || '').toLowerCase().trim());
-=======
-                a.id.toLowerCase() === clean || 
-                getSlug(a.id) === cleanSlug || 
-                a.name.toLowerCase() === clean || 
-                getSlug(a.name) === cleanSlug
-              );
-              if (byAttr) {
-                if (byAttr.nearestHubId) {
-                  const nearHub = allHubsList.find(h => h.id.toLowerCase() === byAttr.nearestHubId.toLowerCase().trim());
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   if (nearHub) return nearHub.id;
                 }
                 // Fallback to parent destination's nearestHubId
                 if (byAttr.destinationId) {
                   const parentDest = currentDests.find(d => d.id === byAttr.destinationId);
                   if (parentDest && parentDest.nearestHubId) {
-<<<<<<< HEAD
                     const nearHub = allHubsList.find(h => (h?.id || '').toLowerCase() === (parentDest.nearestHubId || '').toLowerCase().trim());
-=======
-                    const nearHub = allHubsList.find(h => h.id.toLowerCase() === parentDest.nearestHubId.toLowerCase().trim());
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                     if (nearHub) return nearHub.id;
                   }
                 }
@@ -3660,17 +3185,10 @@ export default function App() {
 
               // Check substring fuzzy matching on hubs as last resort
               const fuzzyHub = allHubsList.find(h => 
-<<<<<<< HEAD
                 (h?.name || '').toLowerCase().includes(clean) || 
                 clean.includes((h?.name || '').toLowerCase()) ||
                 getSlug(h?.name || '').includes(cleanSlug) ||
                 cleanSlug.includes(getSlug(h?.name || ''))
-=======
-                h.name.toLowerCase().includes(clean) || 
-                clean.includes(h.name.toLowerCase()) ||
-                getSlug(h.name).includes(cleanSlug) ||
-                cleanSlug.includes(getSlug(h.name))
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
               );
               if (fuzzyHub) return fuzzyHub.id;
 
@@ -3777,7 +3295,6 @@ export default function App() {
               }
             }
           }
-<<<<<<< HEAD
         } else if (currentPath.startsWith('/destinations/')) {
           const rawDestId = currentPath.replace('/destinations/', '').replace('#/destinations/', '').replace('/destination/', '').replace('#/destination/', '');
           const decodedDestId = decodeURIComponent(rawDestId);
@@ -3802,12 +3319,6 @@ export default function App() {
             }
           }
 
-=======
-        } else if (currentPath.startsWith('/destination/')) {
-          const rawDestId = currentPath.replace('/destination/', '').replace('#/destination/', '');
-          const decodedDestId = decodeURIComponent(rawDestId);
-
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           // Reset expanded toggles for clean page load
           setDestAttractionsExpanded(false);
           setDestLodgingExpanded(false);
@@ -3881,25 +3392,15 @@ export default function App() {
           if (!fetchedDetail) {
             console.log('[Route Parser] Constructing destination details from local database lists.');
             const localDest = destinations.find(d => 
-<<<<<<< HEAD
               (d?.id || '').toLowerCase() === (decodedDestId || '').toLowerCase() || 
               (d?.name || '').toLowerCase() === (decodedDestId || '').toLowerCase()
-=======
-              d.id.toLowerCase() === decodedDestId.toLowerCase() || 
-              d.name.toLowerCase() === decodedDestId.toLowerCase()
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             );
             if (localDest) {
               const localAttractions = attractions.filter(a => a.destinationId === localDest.id);
               const localHomestays = homestays.filter(h => h.destinationId === localDest.id && h.status !== 'Pending' && h.status !== 'Rejected');
               const matchingHubs = hubs.filter(h => 
-<<<<<<< HEAD
                 (h?.name || '').toLowerCase().includes((localDest.name || '').toLowerCase()) || 
                 (localDest.name || '').toLowerCase().includes((h?.name || '').toLowerCase())
-=======
-                h.name.toLowerCase().includes(localDest.name.toLowerCase()) || 
-                localDest.name.toLowerCase().includes(h.name.toLowerCase())
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
               );
               const hubIds = matchingHubs.map(h => h.id);
               const localRoutes = routes.filter(r => 
@@ -3916,7 +3417,6 @@ export default function App() {
               setLoading(false);
             }
           }
-<<<<<<< HEAD
         } else if (currentPath.startsWith('/attractions/')) {
           const rawAttrId = currentPath.replace('/attractions/', '').replace('#/attractions/', '').replace('/attraction/', '').replace('#/attraction/', '');
           const decodedAttrId = decodeURIComponent(rawAttrId);
@@ -3941,12 +3441,6 @@ export default function App() {
             }
           }
 
-=======
-        } else if (currentPath.startsWith('/attraction/')) {
-          const rawAttrId = currentPath.replace('/attraction/', '').replace('#/attraction/', '');
-          const decodedAttrId = decodeURIComponent(rawAttrId);
-
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           // Reset attraction details interactive states
           setAttrCommentsExpanded(false);
           setAttrLeadSuccess(false);
@@ -4017,13 +3511,8 @@ export default function App() {
           if (!fetchedAttr) {
             console.log('[Route Parser] Constructing attraction details from local database lists.');
             const localAttr = attractions.find(a => 
-<<<<<<< HEAD
               (a?.id || '').toLowerCase() === (decodedAttrId || '').toLowerCase() || 
               (a?.name || '').toLowerCase() === (decodedAttrId || '').toLowerCase()
-=======
-              a.id.toLowerCase() === decodedAttrId.toLowerCase() || 
-              a.name.toLowerCase() === decodedAttrId.toLowerCase()
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             );
             if (localAttr) {
               const destination = destinations.find(d => d.id === localAttr.destinationId);
@@ -4041,7 +3530,6 @@ export default function App() {
               setLoading(false);
             }
           }
-<<<<<<< HEAD
         } else if (currentPath.startsWith('/homestays/')) {
           const rawHomeId = currentPath.replace('/homestays/', '').replace('#/homestays/', '').replace('/homestay/', '').replace('#/homestay/', '');
           const decodedHomeId = decodeURIComponent(rawHomeId);
@@ -4066,12 +3554,6 @@ export default function App() {
             }
           }
 
-=======
-        } else if (currentPath.startsWith('/homestay/')) {
-          const rawHomeId = currentPath.replace('/homestay/', '').replace('#/homestay/', '');
-          const decodedHomeId = decodeURIComponent(rawHomeId);
-
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           // 5. Log required diagnostics
           console.log('[Homestay Detail Diagnostic] raw URL parameter:', rawHomeId);
           console.log('[Homestay Detail Diagnostic] decoded parameter:', decodedHomeId);
@@ -4124,13 +3606,8 @@ export default function App() {
           if (!fetchedHome) {
             console.log('[Route Parser] Constructing homestay details from local database lists.');
             const localHome = homestays.find(h => 
-<<<<<<< HEAD
               (h?.id || '').toLowerCase() === (decodedHomeId || '').toLowerCase() || 
               (h?.name || '').toLowerCase() === (decodedHomeId || '').toLowerCase()
-=======
-              h.id.toLowerCase() === decodedHomeId.toLowerCase() || 
-              h.name.toLowerCase() === decodedHomeId.toLowerCase()
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             );
             if (localHome) {
               const destination = destinations.find(d => d.id === localHome.destinationId);
@@ -4161,55 +3638,26 @@ export default function App() {
 
   // Client-Side SEO Management hook
   useEffect(() => {
-<<<<<<< HEAD
-=======
-    const toSlug = (text: string): string => {
-      if (!text) return '';
-      return text
-        .toLowerCase()
-        .replace(/[^a-z0-9\s_'-]/g, '')
-        .trim()
-        .replace(/[\s_']+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-+|-+$/g, '');
-    };
-
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     let title = "HillyTrip - India's Intelligent Mountain Travel Network";
     let desc = "India's Intelligent Mountain Travel Network - Your comprehensive travel intelligence platform for Himalayan routes, attractions, and eco-homestays.";
     let imageUrl = "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800&auto=format&fit=crop";
     let schemaObj: any = null;
 
-<<<<<<< HEAD
     if (currentPath.startsWith('/destinations/')) {
       const p = currentPath.replace('/destinations/', '').replace('#/destinations/', '').replace('/destination/', '').replace('#/destination/', '');
       const d = destinations.find(x => (x?.id || '') === p || toSlug(x?.id) === toSlug(p) || toSlug(x?.name) === toSlug(p));
       if (d) {
         title = `${d.name || ''} - Travel Guide | HilliTrip`;
         desc = `${d.name || ''} Travel Guide: Explore this pristine ${d.tourismType || 'village'} in ${d.district || ''}, ${d.state || ''}. Best season to visit is ${d.bestSeason || 'any season'}. ${d.description || ''}`.substring(0, 155);
-=======
-    if (currentPath.startsWith('/destination/')) {
-      const p = currentPath.replace('/destination/', '').replace('#/destination/', '');
-      const d = destinations.find(x => x.id === p || toSlug(x.id) === toSlug(p) || toSlug(x.name) === toSlug(p));
-      if (d) {
-        title = `${d.name} - Travel Guide | HilliTrip`;
-        desc = `${d.name} Travel Guide: Explore this pristine ${d.tourismType || 'village'} in ${d.district || ''}, ${d.state || ''}. Best season to visit is ${d.bestSeason || 'any season'}. ${d.description || ''}`.substring(0, 155);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         imageUrl = d.image || imageUrl;
 
         // Structured data Place Schema
         schemaObj = {
           "@context": "https://schema.org",
           "@type": "Place",
-<<<<<<< HEAD
           "name": d.name || '',
           "description": d.description || '',
           "image": d.image || '',
-=======
-          "name": d.name,
-          "description": d.description,
-          "image": d.image,
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           "address": {
             "@type": "PostalAddress",
             "addressLocality": d.district || '',
@@ -4218,36 +3666,21 @@ export default function App() {
           }
         };
       }
-<<<<<<< HEAD
     } else if (currentPath.startsWith('/attractions/')) {
       const p = currentPath.replace('/attractions/', '').replace('#/attractions/', '').replace('/attraction/', '').replace('#/attraction/', '');
       const a = attractions.find(x => (x?.id || '') === p || toSlug(x?.id) === toSlug(p) || toSlug(x?.name) === toSlug(p));
       if (a) {
         title = `${a.name || ''} - Travel Guide | HilliTrip`;
         desc = `Discover ${a.name || ''}, a cozy ${a.category || 'Sightseeing Spot'} attraction in ${a.district || ''}, ${a.state || ''}. Key highlights: ${a.description || ''}`.substring(0, 155);
-=======
-    } else if (currentPath.startsWith('/attraction/')) {
-      const p = currentPath.replace('/attraction/', '').replace('#/attraction/', '');
-      const a = attractions.find(x => x.id === p || toSlug(x.id) === toSlug(p) || toSlug(x.name) === toSlug(p));
-      if (a) {
-        title = `${a.name} - Travel Guide | HilliTrip`;
-        desc = `Discover ${a.name}, a cozy ${a.category || 'Sightseeing Spot'} attraction in ${a.district || ''}, ${a.state || ''}. Key highlights: ${a.description || ''}`.substring(0, 155);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         imageUrl = a.image || imageUrl;
 
         // Structured TouristAttraction Schema
         schemaObj = {
           "@context": "https://schema.org",
           "@type": "TouristAttraction",
-<<<<<<< HEAD
           "name": a.name || '',
           "description": a.description || '',
           "image": a.image || '',
-=======
-          "name": a.name,
-          "description": a.description,
-          "image": a.image,
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           "address": {
             "@type": "PostalAddress",
             "addressLocality": a.district || '',
@@ -4256,15 +3689,9 @@ export default function App() {
           }
         };
       }
-<<<<<<< HEAD
     } else if (currentPath.startsWith('/homestays/')) {
       const p = currentPath.replace('/homestays/', '').replace('#/homestays/', '').replace('/homestay/', '').replace('#/homestay/', '');
       const h = homestays.find(x => (x?.id || '') === p || toSlug(x?.id) === toSlug(p) || toSlug(x?.name) === toSlug(p));
-=======
-    } else if (currentPath.startsWith('/homestay/')) {
-      const p = currentPath.replace('/homestay/', '').replace('#/homestay/', '');
-      const h = homestays.find(x => x.id === p || toSlug(x.id) === toSlug(p) || toSlug(x.name) === toSlug(p));
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       if (h) {
         title = `${h.name} - Photos, Contact & Details | HilliTrip`;
         const bStatus = h.breakfastIncluded === 'Not Included' ? 'Breakfast exl' : 'Breakfast included';
@@ -4297,17 +3724,12 @@ export default function App() {
     } else if (currentPath === '/contribute') {
       title = "Help Document Himalayan Eco-Villages - Contribute Photos | HilliTrip";
       desc = "Add pristine photos, unexplored scenic base coordinates, travel guides, and mountain lodge locations to help sustainable travel communities.";
-<<<<<<< HEAD
     } else if (currentPath.split('?')[0] === '/destinations') {
-=======
-    } else if (currentPath === '/destinations') {
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       title = "Himalayan Base Villages & Tea Garden Hubs | HilliTrip";
       desc = "Explore HillyTrip's directory of beautiful off-the-grid base villages, offbeat locations, secret hill sanctuaries, and eco-retreat hubs.";
     } else if (currentPath === '/attractions') {
       title = "Scenic Sightseeing Views, Treks & High-Altitude Passes | HilliTrip";
       desc = "Discover pristine waterfalls, monasteries, sunrise viewpoints, forests, rhododendron nature parks, and hidden trekking routes in the Himalayas.";
-<<<<<<< HEAD
     } else if (currentPath.startsWith('/routes/')) {
       const p = currentPath.replace('/routes/', '').replace('#/routes/', '').replace('/route/', '').replace('#/route/', '');
       let rt = routes.find(x => (x?.id || '').toLowerCase() === p.toLowerCase() || toSlug(x?.id) === toSlug(p));
@@ -4341,8 +3763,6 @@ export default function App() {
           "distance": `${rt.distance || ''} km`
         };
       }
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
 
     if (desc.length > 165) {
@@ -4410,11 +3830,7 @@ export default function App() {
 
     // Capture manual pageview on route shifts
     trackPageView(currentPath);
-<<<<<<< HEAD
   }, [currentPath, destinations, attractions, homestays, routes, hubs]);
-=======
-  }, [currentPath, destinations, attractions, homestays]);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Track Destination detailed view custom events
   useEffect(() => {
@@ -4459,7 +3875,6 @@ export default function App() {
     }
   }, [adminActiveTab, isAdmin]);
 
-<<<<<<< HEAD
   useEffect(() => {
     if (['stats', 'analytics', 'audit_logs'].includes(adminActiveTab)) {
       setExpandedGroup('monitoring');
@@ -4474,8 +3889,6 @@ export default function App() {
     }
   }, [adminActiveTab]);
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const getAdminHeaders = (extra = {}) => {
     return {
       'x-admin-email': adminEmail || localStorage.getItem('hillytrip_admin_email') || '',
@@ -4487,7 +3900,6 @@ export default function App() {
 
   const hasClientPermission = (permissionId: string): boolean => {
     const email = adminEmail || localStorage.getItem('hillytrip_admin_email') || '';
-<<<<<<< HEAD
     const userEmail = user?.email || '';
     if (
       email === 'mavanish24@gmail.com' || 
@@ -4497,14 +3909,10 @@ export default function App() {
     ) {
       return true;
     }
-=======
-    if (email === 'mavanish24@gmail.com') return true;
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     if (adminUser?.role === 'super_admin') return true;
     return adminPermissions.includes(permissionId);
   };
 
-<<<<<<< HEAD
   // Automatically authenticate as super admin if logged in as admin emails in primary user session
   useEffect(() => {
     const userEmail = user?.email || '';
@@ -4546,12 +3954,6 @@ export default function App() {
     }
     if (!adminLoginPassword) {
       setNotification({ type: 'error', message: 'Password is required.' });
-=======
-  const handleAdminEmailLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!adminEmail || !adminLoginPassword) {
-      setNotification({ type: 'error', message: 'Email and password are required.' });
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       return;
     }
     try {
@@ -4653,7 +4055,6 @@ export default function App() {
   const loadAdminDashboard = async () => {
     try {
       const headers = getAdminHeaders();
-<<<<<<< HEAD
       const safeFetch = async (url: string, defaultValue: any) => {
         try {
           const res = await fetch(url, { headers });
@@ -4691,37 +4092,13 @@ export default function App() {
       setAdminPhotoConts(rPhotoConts || []);
       setAdminDashboardConfigurations(rDashConfigs || []);
       setAdminFeatureFlags(rFeatureFlags || []);
-=======
-      const [rStats, rTrips, rCars, rConts, rImgs, rDrivers, rHomestays, rPhotoConts] = await Promise.all([
-        fetch('/api/admin/stats', { headers }).then(res => res.json()),
-        fetch('/api/admin/leads/trip', { headers }).then(res => res.json()),
-        fetch('/api/admin/leads/car', { headers }).then(res => res.json()),
-        fetch('/api/admin/contributions', { headers }).then(res => res.json()),
-        fetch('/api/admin/images', { headers }).then(res => res.json()),
-        fetch('/api/admin/drivers', { headers }).then(res => res.json()),
-        fetch('/api/admin/data/homestays', { headers }).then(res => res.json()),
-        fetch('/api/admin/photo-contributions', { headers }).then(res => res.json()).catch(() => [])
-      ]);
-      setAdminStats(rStats);
-      setAdminTripLeads(rTrips);
-      setAdminCarLeads(rCars);
-      setAdminContributions(rConts);
-      setAdminImages(rImgs);
-      setAdminDrivers(rDrivers || []);
-      setAdminHomestays(rHomestays || []);
-      setAdminPhotoConts(rPhotoConts || []);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       
       // Auto-fetch management panel data if user is authorized
       if (hasClientPermission('manage_users') || hasClientPermission('view_analytics')) {
         loadAdminManagementData();
       }
     } catch (e) {
-<<<<<<< HEAD
       console.warn('Silent fallback for secure administrative backoffice credentials loading.');
-=======
-      console.error('Unauthorized or corrupt backoffice session.', e);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     }
   };
 
@@ -4729,7 +4106,6 @@ export default function App() {
     try {
       setAdminManagementLoading(true);
       const headers = getAdminHeaders();
-<<<<<<< HEAD
       const safeFetch = async (url: string, defaultValue: any) => {
         try {
           const res = await fetch(url, { headers });
@@ -4751,24 +4127,12 @@ export default function App() {
         safeFetch('/api/admin/audit-logs', [])
       ]);
 
-=======
-      const [rUsers, rRoles, rPerms, rLogs] = await Promise.all([
-        fetch('/api/admin/users', { headers }).then(res => res.json()),
-        fetch('/api/admin/roles', { headers }).then(res => res.json()),
-        fetch('/api/admin/permissions', { headers }).then(res => res.json()),
-        fetch('/api/admin/audit-logs', { headers }).then(res => res.json())
-      ]);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       if (Array.isArray(rUsers)) setAllAdminUsers(rUsers);
       if (Array.isArray(rRoles)) setAllRoles(rRoles);
       if (Array.isArray(rPerms)) setAllPermissions(rPerms);
       if (Array.isArray(rLogs)) setAllAuditLogs(rLogs);
     } catch (e) {
-<<<<<<< HEAD
       console.warn('Silent administration management fetch coverage fallback applied.');
-=======
-      console.error('Error loading admin management data:', e);
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     } finally {
       setAdminManagementLoading(false);
     }
@@ -4850,11 +4214,7 @@ export default function App() {
       priceMin: Number(formData.get('priceMin')) || 1200,
       priceMax: Number(formData.get('priceMax')) || 2400,
       amenities: formData.getAll('amenities'),
-<<<<<<< HEAD
       images: registerHomestayImage || undefined
-=======
-      images: formData.get('images') ? formData.get('images') : undefined
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     };
 
     try {
@@ -4871,10 +4231,7 @@ export default function App() {
           name: payload.ownerName as string,
           id: data.homestay.id
         });
-<<<<<<< HEAD
         setRegisterHomestayImage('');
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         formElement.reset();
       } else {
         setNotification({ type: 'error', message: data.error || 'Failed to submit registration.' });
@@ -5118,7 +4475,6 @@ export default function App() {
         priceMin: Number(data.get('priceMin')),
         priceMax: Number(data.get('priceMax')),
         contact: data.get('contact'),
-<<<<<<< HEAD
         amenities: (data.get('amenities') as string)?.split(',').map(s => s.trim()).filter(Boolean),
         image: contribUploadedUrl || data.get('image'),
         tagline: data.get('tagline') || '',
@@ -5159,10 +4515,6 @@ export default function App() {
         wheelchairAccessible: data.get('wheelchairAccessible') === 'on' || data.get('wheelchairAccessible') === 'true',
         groundFloorRooms: data.get('groundFloorRooms') === 'on' || data.get('groundFloorRooms') === 'true',
         emergencyContact: data.get('emergencyContact') || ''
-=======
-        amenities: (data.get('amenities') as string)?.split(',').map(s => s.trim()),
-        image: contribUploadedUrl || data.get('image'),
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       };
     } else if (selectedContribType === 'correct_route') {
       details = {
@@ -5303,27 +4655,7 @@ export default function App() {
               )}
             </div>
 
-<<<<<<< HEAD
             {/* Manual URL input fallback option removed for security and native experience */}
-=======
-            {/* Manual URL input fallback option */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                <div className="w-full border-t border-slate-205" />
-              </div>
-              <div className="relative flex justify-center text-xs">
-                <span className="bg-slate-50 px-2 text-slate-400 font-bold uppercase text-[9px] tracking-wider">Or paste direct photo URL</span>
-              </div>
-            </div>
-
-            <input 
-              key={`url-contrib-${inputName}`}
-              name={inputName}
-              type="url" 
-              placeholder="https://images.unsplash.com/photo-..." 
-              className="w-full p-2.5 text-xs bg-white border border-slate-200 rounded-lg focus:ring-1 focus:ring-emerald-500 font-mono"
-            />
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           </div>
         )}
       </div>
@@ -5758,7 +5090,6 @@ export default function App() {
 
   const getStarterSkeleton = (col: string) => {
     switch (col) {
-<<<<<<< HEAD
       case 'taxi_stands':
         return {
           id: "Darjeeling Taxi Stand",
@@ -5786,8 +5117,6 @@ export default function App() {
           country: "India",
           nearestTaxiStand: "Darjeeling Taxi Stand"
         };
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       case 'hubs':
         return { id: "rimbick", name: "Rimbick Village", type: "sub_hub" };
       case 'routes':
@@ -5907,13 +5236,10 @@ export default function App() {
         url = '/api/admin/contributions';
       } else if (collectionName === 'images') {
         url = '/api/admin/images';
-<<<<<<< HEAD
       } else if (collectionName === 'taxi_stands') {
         url = '/api/admin/data/taxi_stands';
       } else if (collectionName === 'villages') {
         url = '/api/admin/data/villages';
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       } else {
         url = `/api/${collectionName}`;
       }
@@ -6160,7 +5486,6 @@ export default function App() {
     if (collection === 'car_leads') {
       cleanPayload.passengers = Number(cleanPayload.passengers || 1);
     }
-<<<<<<< HEAD
     if (collection === 'taxi_stands') {
       cleanPayload.latitude = Number(cleanPayload.latitude || 0);
       cleanPayload.longitude = Number(collection === 'taxi_stands' ? cleanPayload.longitude : 0);
@@ -6173,8 +5498,6 @@ export default function App() {
       cleanPayload.latitude = Number(cleanPayload.latitude || 0);
       cleanPayload.longitude = Number(cleanPayload.longitude || 0);
     }
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
     return cleanPayload;
   };
 
@@ -6479,7 +5802,6 @@ export default function App() {
   // Helper lists of categories
   const attractionCategories = ['Viewpoint', 'Monastery', 'Waterfall', 'Lake', 'Trek', 'Village'];
   const [attractionFilter, setAttractionFilter] = useState<string>('All');
-<<<<<<< HEAD
   const [attractionSelectedState, setAttractionSelectedState] = useState<string>('All');
   const [attractionSelectedDistrict, setAttractionSelectedDistrict] = useState<string>('All');
   const [attractionSelectedDestination, setAttractionSelectedDestination] = useState<string>('All');
@@ -6499,15 +5821,12 @@ export default function App() {
       attractionObserverRef.current = observer;
     }
   }, []);
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   // Dynamic Destination Discovery States
   const [destSearchQuery, setDestSearchQuery] = useState('');
   const [showDestSuggestions, setShowDestSuggestions] = useState(false);
   const [surpriseDest, setSurpriseDest] = useState<any | null>(null);
   const [destBrowsePage, setDestBrowsePage] = useState(1);
-<<<<<<< HEAD
   const [destBrowseSort, setDestBrowseSort] = useState<'name' | 'newest' | 'views' | 'trending' | 'likes'>('name');
   const [destTypeFilter, setDestTypeFilter] = useState<string>('All');
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'map'>('grid');
@@ -6515,11 +5834,6 @@ export default function App() {
   const [destSelectedDistrict, setDestSelectedDistrict] = useState('All');
   const [destSelectedExperience, setDestSelectedExperience] = useState('All');
   const [destSelectedCategory, setDestSelectedCategory] = useState('All');
-=======
-  const [destBrowseSort, setDestBrowseSort] = useState<'name' | 'newest' | 'views' | 'trending'>('name');
-  const [destTypeFilter, setDestTypeFilter] = useState<string>('All');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
   useEffect(() => {
     if (destinations.length > 0 && !surpriseDest) {
@@ -6530,7 +5844,6 @@ export default function App() {
 
   // Dynamic Attraction Discovery States
   const [attractionSearchQuery, setAttractionSearchQuery] = useState('');
-<<<<<<< HEAD
   const [debouncedAttractionSearchQuery, setDebouncedAttractionSearchQuery] = useState('');
   const [liveAttractions, setLiveAttractions] = useState<any[]>([]);
   const [isLoadingLiveAttractions, setIsLoadingLiveAttractions] = useState(false);
@@ -6576,8 +5889,6 @@ export default function App() {
     };
   }, [debouncedAttractionSearchQuery]);
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   const [surpriseAttraction, setSurpriseAttraction] = useState<any | null>(null);
   const [browsePage, setBrowsePage] = useState(1);
   const [browseSort, setBrowseSort] = useState<'name' | 'newest' | 'views' | 'explored'>('name');
@@ -6589,11 +5900,8 @@ export default function App() {
     }
   }, [attractions, surpriseAttraction]);
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
   // Search logic for routes
   const handleRouteSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -6605,16 +5913,23 @@ export default function App() {
       setNotification({ type: 'error', message: 'Origin and target hubs must be distinct locations.' });
       return;
     }
-    navigate(`#/route/${searchFrom}-to-${searchTo}`);
+    const fromH = hubs.find(h => h.id === searchFrom);
+    const toH = hubs.find(h => h.id === searchTo);
+    const fromSlug = fromH ? getItemSlug(fromH) : getItemSlug(searchFrom);
+    const toSlugStr = toH ? getItemSlug(toH) : getItemSlug(searchTo);
+    navigate(`#/route/${fromSlug}-to-${toSlugStr}`);
   };
 
   const clickQuickSearchRoute = (fromId: string, toId: string) => {
     setSearchFrom(fromId);
     setSearchTo(toId);
-    navigate(`#/route/${fromId}-to-${toId}`);
+    const fromH = hubs.find(h => h.id === fromId);
+    const toH = hubs.find(h => h.id === toId);
+    const fromSlug = fromH ? getItemSlug(fromH) : getItemSlug(fromId);
+    const toSlugStr = toH ? getItemSlug(toH) : getItemSlug(toId);
+    navigate(`#/route/${fromSlug}-to-${toSlugStr}`);
   };
 
-<<<<<<< HEAD
   const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   if (params && params.get('trigger_iframe_auth') === 'true') {
     const handleStandaloneGoogleSignIn = async () => {
@@ -6817,17 +6132,10 @@ export default function App() {
       <div className={`min-h-screen flex flex-col transition-colors duration-200 ${
         themeMode === 'dark' ? 'bg-slate-950 text-slate-100 dark' : 'bg-slate-50 text-slate-800'
       }`} id="hillytrip-root">
-=======
-  return (
-    <div className={`min-h-screen flex flex-col transition-colors duration-200 ${
-      themeMode === 'dark' ? 'bg-slate-950 text-slate-100 dark' : 'bg-slate-50 text-slate-800'
-    }`} id="hillytrip-root">
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       {/* Dynamic Toast Alerts */}
       {notification && (
         <div 
           id="global-toast-notification"
-<<<<<<< HEAD
           className={`fixed top-24 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-[9999] flex items-center gap-3 p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.15)] border-2 backdrop-blur-md animate-bounce ${
             notification.type === 'success' 
               ? 'bg-emerald-50/95 border-emerald-400 text-emerald-900' 
@@ -6844,16 +6152,6 @@ export default function App() {
             <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
           )}
           <span className="text-xs sm:text-sm font-medium flex-1 min-w-0 break-words">{notification.message}</span>
-=======
-          className={`fixed top-24 right-4 z-[9999] flex items-center gap-3 p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.15)] border-2 backdrop-blur-md animate-bounce ${
-            notification.type === 'success' 
-              ? 'bg-emerald-50/95 border-emerald-400 text-emerald-900' 
-              : 'bg-rose-50/95 border-rose-400 text-rose-900'
-          }`}
-        >
-          {notification.type === 'success' ? <CheckCircle className="w-5 h-5 text-emerald-600" /> : <AlertCircle className="w-5 h-5 text-rose-600" />}
-          <span className="text-sm font-medium">{notification.message}</span>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         </div>
       )}
 
@@ -6873,24 +6171,16 @@ export default function App() {
         themeMode={themeMode}
         setThemeMode={setThemeMode}
         isAdmin={isAdmin}
-<<<<<<< HEAD
         activeRoleTab={activeRoleTab}
         setActiveRoleTab={setActiveRoleTab}
         setNotification={setNotification}
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       />
 
       {/* Primary View Router Grid */}
       <main className="flex-grow">
         <React.Suspense fallback={
-<<<<<<< HEAD
           <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 p-8 text-center">
             <AnimatedLogo variant="icon" size="sm" className="animate-pulse" />
-=======
-          <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3 p-8">
-            <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             <p className="text-[10px] text-slate-400 font-extrabold font-mono tracking-widest uppercase animate-pulse">Loading View...</p>
           </div>
         }>
@@ -6898,7 +6188,6 @@ export default function App() {
         {/* ========================================================
             1. HOME VIEW
             ======================================================== */}
-<<<<<<< HEAD
         {(currentPath === "" || currentPath === "/") && (
           <div id="home-view" className="animate-fade-in">
             {/* Complete premium automated, database-driven discovery homepage */}
@@ -6969,10 +6258,6 @@ export default function App() {
               </div>
             </div>
 
-=======
-        {(currentPath === '' || currentPath === '/') && (
-          <div id="home-view" className="animate-fade-in">
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             {/* Redesigned Mobile-First Hero Section */}
             {(() => {
               const getMostSearchedWithFallbacks = () => {
@@ -7159,11 +6444,8 @@ export default function App() {
               );
             })()}
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             {/* Quick Helper Banner */}
             <div className="bg-sky-50/50 dark:bg-sky-500/5 border-b border-sky-100/30 py-4 px-4 text-center">
               <p className="text-sky-850 dark:text-sky-300 text-xs md:text-sm font-semibold flex items-center justify-center gap-1.5 flex-wrap">
@@ -7224,7 +6506,7 @@ export default function App() {
                     ) : (
                       <div className="flex gap-6 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-805 -mx-4 px-4 sm:mx-0 sm:px-0">
                         {featuredItems.map((item) => {
-                          const detailUrl = item.itemType === 'destination' ? `#/destination/${item.id}` : `#/attraction/${item.id}`;
+                          const detailUrl = item.itemType === 'destination' ? `#/destination/${getItemSlug(item)}` : `#/attraction/${getItemSlug(item)}`;
                           return (
                             <div 
                               key={`${item.itemType}-${item.id}`}
@@ -7333,7 +6615,7 @@ export default function App() {
                             <div
                               key={item.id}
                               id={`featured-attraction-card-${item.id}`}
-                              onClick={() => navigate(`#/attraction/${item.id}`)}
+                              onClick={() => navigate(`#/attraction/${getItemSlug(item)}`)}
                               className="bg-white dark:bg-slate-900/85 rounded-2xl overflow-hidden shadow-xs border border-slate-200/50 dark:border-slate-800/60 hover:shadow-lg hover:border-emerald-250 dark:hover:border-emerald-500/20 transition-all duration-350 group flex flex-col h-full cursor-pointer snap-center shrink-0 sm:shrink min-w-[280px] w-[80vw] sm:w-auto"
                             >
                               <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0">
@@ -7418,7 +6700,7 @@ export default function App() {
                           <div
                             key={item.id}
                             id={`loved-destination-card-${item.id}`}
-                            onClick={() => navigate(`#/destination/${item.id}`)}
+                            onClick={() => navigate(`#/destination/${getItemSlug(item)}`)}
                             className="bg-white dark:bg-slate-900/85 rounded-2xl overflow-hidden shadow-xs border border-slate-200/50 dark:border-slate-800/60 hover:shadow-lg hover:border-red-200 dark:hover:border-red-500/25 transition-all duration-350 group flex flex-col h-full cursor-pointer snap-center shrink-0 sm:shrink min-w-[280px] w-[80vw] sm:w-auto"
                           >
                             <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0">
@@ -7511,7 +6793,7 @@ export default function App() {
                             <div
                               key={item.id}
                               id={`popular-destination-card-${item.id}`}
-                              onClick={() => navigate(`#/destination/${item.id}`)}
+                              onClick={() => navigate(`#/destination/${getItemSlug(item)}`)}
                               className="bg-white dark:bg-slate-900/85 rounded-2xl overflow-hidden shadow-xs border border-slate-200/50 dark:border-slate-800/60 hover:shadow-lg hover:border-sky-100 dark:hover:border-sky-500/20 transition-all duration-350 group flex flex-col h-full cursor-pointer snap-center shrink-0 sm:shrink min-w-[280px] w-[80vw] sm:w-auto"
                             >
                               <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0">
@@ -7594,605 +6876,12 @@ export default function App() {
               </div>
             </div>
 
-<<<<<<< HEAD
-=======
-          </div>
-        )}
-
-        {/* ========================================================
-            2. ROUTE RESULT VIEW
-            ======================================================== */}
-        {currentPath.startsWith('/route/') && (
-          <div id="route-result-view" className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 animate-fade-in">
-            {loading ? (
-              <div className="text-center py-16 flex flex-col items-center justify-center gap-4">
-                <Loader2 className="w-12 h-12 text-emerald-600 animate-spin" />
-                <p className="text-slate-500 font-medium animate-pulse">Running recursive pathfinding over graph nodes...</p>
-              </div>
-            ) : (
-              <div>
-                <button 
-                  onClick={() => navigate('#/')}
-                  className="mb-6 flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:text-emerald-800 cursor-pointer"
-                >
-                  <ArrowLeft className="w-4 h-4" /> Back to Search Router
-                </button>
-
-                <div className="bg-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-md border-b-4 border-emerald-500 mb-8">
-                  <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 border-b border-slate-800 pb-5 mb-5">
-                    <div>
-                      <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/25 uppercase">
-                        Route Search Results
-                      </span>
-                      <h2 className="text-3xl font-extrabold tracking-tight mt-2 flex items-center gap-2">
-                        {hubs.find(h => h.id === searchFrom)?.name} 
-                        <ArrowRight className="w-6 h-6 text-emerald-400" /> 
-                        {hubs.find(h => h.id === searchTo)?.name}
-                      </h2>
-                    </div>
-                    {activeRouteResults.length > 0 && (
-                      <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-xl text-right">
-                        <p className="text-xs text-slate-400">Database Search Result Status</p>
-                        <p className="text-sm font-bold text-emerald-400">{activeRouteResults.length} Path(s) Found</p>
-                      </div>
-                    )}
-                  </div>
-
-                  {activeRouteResults.length === 0 ? (
-                    <div className="bg-slate-800/50 p-8 rounded-2xl text-center">
-                      <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
-                      <h4 className="font-bold text-lg mb-1">No Direct Or Calculated Graph Path Found</h4>
-                      <p className="text-slate-400 text-sm max-w-md mx-auto mb-4">
-                        We did not discover an official route or active intermediate multi-hop path. Please suggest a route connection or map update.
-                      </p>
-                      <button 
-                        onClick={() => navigate('#/contribute')}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer"
-                      >
-                        File missing route contributor data
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="max-w-4xl mx-auto space-y-6">
-                      {/* Left: Route cards */}
-                      <div className="w-full space-y-6">
-                        {(() => {
-                          const shortestRouteIdx = activeRouteResults.length > 0
-                            ? activeRouteResults.reduce((minIdx, current, idx, arr) => {
-                                const cMin = (current.route && current.route.timeMin !== undefined) ? current.route.timeMin : Infinity;
-                                const mMin = (arr[minIdx] && arr[minIdx].route && arr[minIdx].route.timeMin !== undefined) ? arr[minIdx].route.timeMin : Infinity;
-                                return cMin < mMin ? idx : minIdx;
-                              }, 0)
-                            : 0;
-
-                          const routesMapped = activeRouteResults.map((route, idx) => ({ route, idx }));
-                          const routesToRender = showAllRoutes 
-                            ? routesMapped 
-                            : (routesMapped.length > 0 ? [routesMapped[shortestRouteIdx]] : []);
-
-                          return (
-                            <>
-                              <div className="flex items-center justify-between">
-                                <p className="text-xs uppercase font-extrabold text-slate-400 tracking-wider">
-                                  {showAllRoutes ? "All Discovered routes" : "Ultimate Shortest route"}
-                                </p>
-                                <span className="text-[10px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 font-extrabold py-1 px-2.5 rounded uppercase">
-                                  {showAllRoutes ? `${activeRouteResults.length} Paths Discovered` : "Shortest Option"}
-                                </span>
-                              </div>
-
-                              {routesToRender.map(({ route: resItem, idx: index }) => {
-                                const isActive = selectedRouteIdx === index;
-                                const isShortestGlobal = index === shortestRouteIdx;
-                                return (
-                                  <div 
-                                    key={index}
-                                    onClick={() => setSelectedRouteIdx(index)}
-                                    className={`text-left p-6 rounded-2xl border-2 transition duration-200 cursor-pointer relative overflow-hidden ${
-                                      isActive 
-                                        ? 'bg-slate-800 border-emerald-500 shadow-lg shadow-emerald-500/10' 
-                                        : 'bg-slate-800/40 border-slate-700/60 hover:border-slate-600'
-                                    }`}
-                                  >
-                                    {/* Shortest Badge inside card */}
-                                    {isShortestGlobal && (
-                                      <div className="absolute top-0 right-0 bg-emerald-500 text-slate-950 font-black text-[9px] uppercase tracking-widest px-3 py-1 rounded-bl-xl font-mono shadow-sm">
-                                        ⚡ Shortest Route
-                                      </div>
-                                    )}
-
-                                    <div className="flex justify-between items-center gap-2 mb-4">
-                                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wider uppercase ${
-                                        resItem.route.type === 'Direct' 
-                                          ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' 
-                                          : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                                      }`}>
-                                        {resItem.route.type} Connection
-                                      </span>
-                                      
-                                      <div className="flex items-center gap-2 pr-12">
-                                        {isActive && (
-                                          <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-1">
-                                            <CheckCircle className="w-3.5 h-3.5" /> Map Visualized
-                                          </span>
-                                        )}
-                                        {resItem.route.verified ? (
-                                          <span className="bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 px-2 py-0.5 rounded-md text-[10px] font-bold">Verified Direct</span>
-                                        ) : (
-                                          <span className="bg-slate-500/10 text-slate-300 px-2 py-0.5 rounded-md text-[10px]">Unverified Draft</span>
-                                        )}
-                                      </div>
-                                    </div>
-
-                                    {/* Pathway visual stopovers */}
-                                    <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-800 mb-4 font-sans">
-                                      <div className="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-2">Calculated Transit stops</div>
-                                      <div className="flex flex-wrap items-center gap-2">
-                                        {resItem.route.path.map((stop, stopIdx) => (
-                                          <React.Fragment key={stopIdx}>
-                                            {stopIdx > 0 && <ChevronRight className="w-4 h-4 text-emerald-400" />}
-                                            <span className={`border text-xs font-semibold px-2.5 py-1 rounded-sm ${
-                                              stopIdx === 0 
-                                                ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' 
-                                                : stopIdx === resItem.route.path.length - 1
-                                                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 font-bold'
-                                                  : 'bg-slate-800 border-slate-700 text-slate-200'
-                                            }`}>
-                                              {stop}
-                                            </span>
-                                          </React.Fragment>
-                                        ))}
-                                      </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-3 gap-2.5 text-center font-sans">
-                                      <div className="bg-slate-900/40 p-2.5 rounded-xl border border-slate-800">
-                                        <span className="text-[9px] uppercase text-slate-400 font-bold block mb-0.5 whitespace-nowrap">Est. Fare range</span>
-                                        <span className="text-base font-extrabold text-amber-400 font-sans">₹{resItem.route.fareMin} - ₹{resItem.route.fareMax}</span>
-                                      </div>
-                                      <div className="bg-slate-900/40 p-2.5 rounded-xl border border-slate-800">
-                                        <span className="text-[9px] uppercase text-slate-400 font-bold block mb-0.5 whitespace-nowrap">Duration time</span>
-                                        <span className="text-base font-extrabold text-emerald-400 font-sans">{Math.round(resItem.route.timeMin / 60 * 10) / 10}h - {Math.round(resItem.route.timeMax / 60 * 10) / 10}h</span>
-                                      </div>
-                                      <div className="bg-slate-900/40 p-2.5 rounded-xl border border-slate-800">
-                                        <span className="text-[9px] uppercase text-slate-400 font-bold block mb-0.5 whitespace-nowrap">Distance</span>
-                                        <span className="text-base font-extrabold text-sky-400 font-sans">{resItem.route.distance ? `${resItem.route.distance} km` : 'N/A'}</span>
-                                      </div>
-                                    </div>
-
-                                    {/* Google Maps Live GPS Navigation Link */}
-                                    <div className="mt-4 pt-4 border-t border-slate-700/40 flex flex-col sm:flex-row justify-between items-center gap-3">
-                                      <div className="text-left w-full sm:w-auto">
-                                        <p className="text-[10px] uppercase text-emerald-400 font-extrabold tracking-widest font-mono">Live GPS Navigation</p>
-                                        <p className="text-xs text-slate-300 font-medium">Auto-generate turn-by-turn route on Google Maps</p>
-                                      </div>
-                                      <a
-                                        href={(() => {
-                                          const path = resItem.route.path || [];
-                                          if (path.length === 0) return '#';
-                                          const origin = path[0];
-                                          const destination = path[path.length - 1];
-                                          const waypoints = path.slice(1, -1).join('|');
-                                          const baseUrl = "https://www.google.com/maps/dir/?api=1";
-                                          const params = [
-                                            `origin=${encodeURIComponent(origin + ', India')}`,
-                                            `destination=${encodeURIComponent(destination + ', India')}`,
-                                            `travelmode=driving`
-                                          ];
-                                          if (waypoints) {
-                                            params.push(`waypoints=${encodeURIComponent(waypoints.split('|').map(w => w + ', India').join('|'))}`);
-                                          }
-                                          return `${baseUrl}&${params.join('&')}`;
-                                        })()}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          const fromName = hubs.find(h => h.id === resItem.route.fromHubId)?.name || resItem.route.fromHubId;
-                                          const toName = hubs.find(h => h.id === resItem.route.toHubId)?.name || resItem.route.toHubId;
-                                          trackNavigateGoogleMaps(`${fromName} to ${toName}`, resItem.route.latitude, resItem.route.longitude);
-                                        }}
-                                        className="w-full sm:w-auto px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs tracking-wider uppercase rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 cursor-pointer select-none"
-                                      >
-                                        <Compass className="w-4 h-4" />
-                                        <span>Navigate with Google Maps</span>
-                                      </a>
-                                    </div>
-
-                                    {/* Real-time multi hop hop indicators structure */}
-                                    {resItem.hops && resItem.hops.length > 0 && (
-                                      <div className="mt-4 border-t border-slate-700/50 pt-4 text-left">
-                                        <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-sans">Hops Detail Trace (Multi-leg booking recommended)</div>
-                                        <div className="space-y-2">
-                                          {resItem.hops.map((hop, hopIdx) => (
-                                            <div key={hopIdx} className="bg-slate-900/30 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center text-xs">
-                                              <div>
-                                                <span className="text-emerald-400 font-semibold">{hop.fromHub.name}</span> to <span className="text-emerald-400 font-semibold">{hop.toHub.name}</span>
-                                              </div>
-                                              <span className="text-slate-400 font-medium">₹{hop.route.fareMin} • {hop.route.timeMin} mins {hop.route.distance ? `• ${hop.route.distance} km` : ''}</span>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    )}
-
-                                    <div className="mt-4 text-[10px] text-slate-500 text-right font-sans">
-                                      Last Updated Ref: {resItem.route.lastUpdated}
-                                    </div>
-                                  </div>
-                                );
-                              })}
-
-                              {/* Toggle button to display all / rest of the route results */}
-                              {!showAllRoutes && activeRouteResults.length > 1 && (
-                                <div className="pt-2 text-center">
-                                  <button
-                                    type="button"
-                                    onClick={() => setShowAllRoutes(true)}
-                                    className="w-full bg-slate-800/85 hover:bg-slate-800 text-emerald-400 hover:text-emerald-300 border border-slate-700/80 p-4 rounded-xl font-bold text-xs tracking-wider uppercase transition duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-md"
-                                  >
-                                    <span>Show alternative routes ({activeRouteResults.length - 1} more discovered)</span>
-                                    <ChevronDown className="w-4 h-4 animate-bounce" />
-                                  </button>
-                                </div>
-                              )}
-
-                              {showAllRoutes && activeRouteResults.length > 1 && (
-                                <div className="pt-2 text-center">
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      setShowAllRoutes(false);
-                                      setSelectedRouteIdx(shortestRouteIdx);
-                                    }}
-                                    className="w-full bg-slate-800/40 hover:bg-slate-800/60 text-slate-300 border border-slate-700/60 p-3 rounded-xl font-bold text-xs tracking-wider uppercase transition duration-150 flex items-center justify-center gap-2 cursor-pointer"
-                                  >
-                                    <span>Show Ultimate Shortest Route Only</span>
-                                    <ChevronUp className="w-4 h-4" />
-                                  </button>
-                                </div>
-                              )}
-                            </>
-                          );
-                        })()}
-                      </div>
-
-
-                    </div>
-                  )}
-                </div>
-
-                {/* Destination, Attraction, and Homestays detail filtered of destination search from or search to */}
-                {(() => {
-                  // Attempt to map slug
-                  const targetSlug = searchTo;
-                  const dest = destinations.find(d => d.id === targetSlug) || destinations.find(d => d.id === searchFrom);
-                  if (!dest) return null;
-
-                  const filteredAtts = attractions.filter(a => a.destinationId === dest.id);
-                  const filteredHomes = homestays.filter(h => h.destinationId === dest.id);
-
-                  return (
-                    <div className="space-y-12">
-                      {/* Destination block */}
-                      <div className="bg-white rounded-3xl overflow-hidden shadow-xs border border-slate-200">
-                        <div className="grid grid-cols-1 lg:grid-cols-2">
-                          <div className="h-64 lg:h-full min-h-[300px] relative bg-slate-100">
-                            <img src={safeSrc(dest.image)} alt={dest.name} className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent lg:hidden" />
-                            <div className="absolute bottom-4 left-4 lg:hidden text-white">
-                              <h3 className="text-2xl font-extrabold">{dest.name}</h3>
-                              <p className="text-xs text-amber-400">{dest.tourismType}</p>
-                            </div>
-                          </div>
-                          
-                          <div className="p-6 md:p-8 flex flex-col justify-center">
-                            <span className="text-emerald-700 bg-emerald-50 self-start px-3 py-1 rounded-full text-xs font-bold mb-3 uppercase">Primary Terminus Destination</span>
-                            <h3 className="hidden lg:block text-3xl font-extrabold text-slate-900 mb-2">{dest.name}</h3>
-                            <p className="text-emerald-600 text-xs font-bold mb-4">{dest.tourismType} • Best Period: {dest.bestSeason}</p>
-                            <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-6">{dest.description}</p>
-                            
-                            <div className="flex flex-wrap gap-3">
-                              <button 
-                                onClick={() => navigate(`#/destination/${dest.id}`)}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer"
-                              >
-                                View Destination Page
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Attractions Section list (Horizontal swipe carousel) */}
-                      <div>
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 mb-6">
-                          <div>
-                            <h3 className="text-2xl font-bold text-slate-900 font-sans">Must-Visit Attractions in {dest.name}</h3>
-                            <p className="text-sm text-slate-500 mt-0.5 font-sans">Explore gorgeous sightseeing spots around this region.</p>
-                          </div>
-                          <div className="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end">
-                            <div className="flex items-center gap-1.5 md:mr-2">
-                              <button 
-                                onClick={() => scrollCarousel(`attractions-carousel-${dest.id}`, 'left')}
-                                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200/85 text-slate-750 flex items-center justify-center transition cursor-pointer select-none"
-                                title="Scroll left"
-                              >
-                                <ArrowLeft className="w-4 h-4" />
-                              </button>
-                              <button 
-                                onClick={() => scrollCarousel(`attractions-carousel-${dest.id}`, 'right')}
-                                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200/85 text-slate-750 flex items-center justify-center transition cursor-pointer select-none"
-                                title="Scroll right"
-                              >
-                                <ArrowRight className="w-4 h-4" />
-                              </button>
-                            </div>
-                            <button 
-                              onClick={() => navigate('#/attractions')}
-                              className="text-xs font-bold text-emerald-600 border border-emerald-200 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition shrink-0"
-                            >
-                              View All Attractions
-                            </button>
-                          </div>
-                        </div>
-
-                        {filteredAtts.length === 0 ? (
-                          <div className="bg-slate-100 p-6 rounded-2xl text-center text-slate-500 text-xs">
-                            No local attractions currently registered under this hub. Contribute one!
-                          </div>
-                        ) : (
-                          <div 
-                            id={`attractions-carousel-${dest.id}`}
-                            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 sm:mx-0 sm:px-0"
-                          >
-                            {filteredAtts.slice(0, 6).map(att => (
-                              <div 
-                                key={att.id} 
-                                className="w-[calc(100vw-48px)] min-w-[calc(100vw-48px)] sm:w-[280px] sm:min-w-[280px] md:w-[320px] md:min-w-[320px] snap-center flex-shrink-0 bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden hover:scale-[1.01] transition duration-155 flex flex-col"
-                              >
-                                <div className="h-40 bg-slate-100 relative">
-                                  <img src={safeSrc(att.image)} alt={att.name} className="w-full h-full object-cover animate-fade-in" />
-                                  <span className="absolute top-3 left-3 text-[9px] text-indigo-700 bg-indigo-50/95 font-extrabold uppercase px-2 py-0.5 rounded shadow-xs border border-indigo-150">
-                                    {att.category}
-                                  </span>
-                                </div>
-                                <div className="p-4 flex-grow flex flex-col justify-between">
-                                  <div className="mb-4">
-                                    <h4 className="font-bold text-base text-slate-900 mt-1">{att.name}</h4>
-                                    <p className="text-xs text-slate-500 mt-1.5 line-clamp-2">{att.description}</p>
-                                  </div>
-                                  <button
-                                    onClick={() => navigate(`#/attraction/${att.id}`)}
-                                    className="w-full bg-slate-50 hover:bg-emerald-50 text-[11px] font-bold text-slate-700 py-2 rounded-xl border border-slate-200/80 cursor-pointer text-center font-sans transition"
-                                  >
-                                    Attraction Guide
-                                  </button>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Homestays list (Horizontal swipe carousel) */}
-                      <div>
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 mb-6">
-                          <div>
-                            <h3 className="text-2xl font-bold text-slate-900 font-sans">Recommended Local Homestays</h3>
-                            <p className="text-sm text-slate-500 mt-0.5 font-sans">Safe, organic, Lepcha & Nepali hospitality lodging choices closely verified.</p>
-                          </div>
-                          <div className="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end">
-                            <div className="flex items-center gap-1.5 md:mr-2">
-                              <button 
-                                onClick={() => scrollCarousel(`homestays-carousel-${dest.id}`, 'left')}
-                                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200/85 text-slate-750 flex items-center justify-center transition cursor-pointer select-none"
-                                title="Scroll left"
-                              >
-                                <ArrowLeft className="w-4 h-4" />
-                              </button>
-                              <button 
-                                onClick={() => scrollCarousel(`homestays-carousel-${dest.id}`, 'right')}
-                                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200/85 text-slate-750 flex items-center justify-center transition cursor-pointer select-none"
-                                title="Scroll right"
-                              >
-                                <ArrowRight className="w-4 h-4" />
-                              </button>
-                            </div>
-                            <button 
-                              onClick={() => navigate('#/destinations')}
-                              className="text-xs font-bold text-emerald-600 border border-emerald-200 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition shrink-0"
-                            >
-                              View All Homestays
-                            </button>
-                          </div>
-                        </div>
-
-                        {filteredHomes.length === 0 ? (
-                          <div className="bg-slate-100 p-6 rounded-2xl text-center text-slate-500 text-xs">
-                            No local homestays documented under this hub yet. 
-                          </div>
-                        ) : (
-                          <div 
-                            id={`homestays-carousel-${dest.id}`}
-                            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 sm:mx-0 sm:px-0"
-                          >
-                            {filteredHomes.slice(0, 6).map(home => (
-                              <div 
-                                key={home.id} 
-                                className="w-[calc(100vw-48px)] min-w-[calc(100vw-48px)] sm:w-[280px] sm:min-w-[280px] md:w-[320px] md:min-w-[320px] snap-center flex-shrink-0 bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden hover:scale-[1.01] transition duration-150 flex flex-col"
-                              >
-                                <div className="h-44 bg-slate-100 relative">
-                                  <img 
-                                    src={(home.images && home.images.find(img => img && img.trim() !== '')) || DEFAULT_HOMESTAY_IMAGE} 
-                                    alt={home.name} 
-                                    className="w-full h-full object-cover" 
-                                    referrerPolicy="no-referrer"
-                                    loading="lazy"
-                                    onError={(e) => {
-                                      e.currentTarget.src = DEFAULT_HOMESTAY_IMAGE;
-                                    }}
-                                  />
-                                </div>
-                                <div className="p-4 flex-grow flex flex-col justify-between">
-                                  <div>
-                                    <h4 className="font-bold text-base text-slate-900 line-clamp-1 text-left">{home.name}</h4>
-                                    <div className="flex flex-wrap items-center justify-between gap-1.5 mt-1">
-                                      <p className="text-emerald-700 text-sm font-bold text-left">₹{home.priceMin} - ₹{home.priceMax}/day</p>
-                                      <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-100">
-                                        🍳 {home.breakfastIncluded === 'Not Included' ? 'Bfast Excluded' : 'Bfast Incl'}
-                                      </span>
-                                    </div>
-                                    
-                                    <div className="flex flex-wrap gap-1 mt-2.5 mb-4 justify-start">
-                                      {home.amenities.slice(0, 3).map((amen, idx) => (
-                                        <span key={idx} className="bg-slate-100 text-slate-650 text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-slate-200/50">
-                                          {amen}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  </div>
-
-                                  <div className="flex gap-2">
-                                    <button 
-                                      onClick={() => navigate(`#/homestay/${home.id}`)}
-                                      className="flex-grow bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2 rounded-xl cursor-pointer text-center transition"
-                                    >
-                                      Room Details
-                                    </button>
-                                    <a 
-                                      href={`https://wa.me/${formatWhatsAppNumber(home.whatsapp || home.contact)}?text=Hi,%20I'm%2520interested%2520in%2520booking%2520${encodeURIComponent(home.name)}%2520via%2520HillyTrip.`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="bg-emerald-600 hover:bg-emerald-700 text-white p-2 rounded-xl flex items-center justify-center transition shrink-0"
-                                    >
-                                      <MessageCircle className="w-4 h-4" />
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Related Destinations (Horizontal swipe carousel) */}
-                      <div>
-                        {(() => {
-                          const relatedDests = destinations
-                            .filter(d => d.id !== dest.id)
-                            .slice(0, 6);
-
-                          if (relatedDests.length === 0) return null;
-
-                          return (
-                            <>
-                              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 mb-6">
-                                <div>
-                                  <h3 className="text-2xl font-bold text-slate-900 font-sans">Related Destinations</h3>
-                                  <p className="text-sm text-slate-500 mt-0.5 font-sans">Discover vibrant nearby mountain towns and hidden valleys.</p>
-                                </div>
-                                <div className="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end">
-                                  <div className="flex items-center gap-1.5 md:mr-2">
-                                    <button 
-                                      onClick={() => scrollCarousel(`destinations-carousel-${dest.id}`, 'left')}
-                                      className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200/85 text-slate-750 flex items-center justify-center transition cursor-pointer select-none"
-                                      title="Scroll left"
-                                    >
-                                      <ArrowLeft className="w-4 h-4" />
-                                    </button>
-                                    <button 
-                                      onClick={() => scrollCarousel(`destinations-carousel-${dest.id}`, 'right')}
-                                      className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200/85 text-slate-750 flex items-center justify-center transition cursor-pointer select-none"
-                                      title="Scroll right"
-                                    >
-                                      <ArrowRight className="w-4 h-4" />
-                                    </button>
-                                  </div>
-                                  <button 
-                                    onClick={() => navigate('#/destinations')}
-                                    className="text-xs font-bold text-emerald-600 border border-emerald-200 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition shrink-0"
-                                  >
-                                    View All Destinations
-                                  </button>
-                                </div>
-                              </div>
-
-                              <div 
-                                id={`destinations-carousel-${dest.id}`}
-                                className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 sm:mx-0 sm:px-0"
-                              >
-                                {relatedDests.map(d => (
-                                  <div 
-                                    key={d.id} 
-                                    className="w-[calc(100vw-48px)] min-w-[calc(100vw-48px)] sm:w-[280px] sm:min-w-[280px] md:w-[320px] md:min-w-[320px] snap-center flex-shrink-0 bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden hover:scale-[1.01] transition duration-150 flex flex-col"
-                                  >
-                                    <div className="h-44 bg-slate-100 relative">
-                                      <img src={safeSrc(d.image)} alt={d.name} className="w-full h-full object-cover" />
-                                      <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-xs font-extrabold text-[9px] text-slate-800 py-1 px-2.5 rounded-full border border-slate-200 uppercase">
-                                        🏕️ {d.tourismType}
-                                      </span>
-                                    </div>
-                                    <div className="p-4 flex-grow flex flex-col justify-between">
-                                      <div className="mb-4">
-                                        <h4 className="font-bold text-base text-slate-900 line-clamp-1">{d.name}</h4>
-                                        <p className="text-emerald-750 text-xs font-extrabold mt-1">Best Season: {d.bestSeason}</p>
-                                        <p className="text-xs text-slate-500 mt-2 line-clamp-2">{d.description}</p>
-                                      </div>
-                                      <button 
-                                        onClick={() => navigate(`#/destination/${d.id}`)}
-                                        className="w-full bg-slate-900 hover:bg-emerald-650 text-white font-bold py-2.5 rounded-xl text-center text-xs cursor-pointer transition-all flex items-center justify-center gap-1"
-                                      >
-                                        Explore Destination Guide <ChevronRight className="w-3.5 h-3.5" />
-                                      </button>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </>
-                          );
-                        })()}
-                      </div>
-
-                      {/* Action buttons CTAs */}
-                      <div className="bg-emerald-50 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6 border border-emerald-100">
-                        <div>
-                          <h4 className="font-bold text-xl text-emerald-900">Need Custom Booking Support?</h4>
-                          <p className="text-sm text-emerald-700 mt-1">We can assist you directly with reserving standard pool cars, drivers, or reserving full family trip planning packages.</p>
-                        </div>
-                        <div className="flex flex-wrap gap-3 w-full md:w-auto shrink-0 justify-end">
-                          <button 
-                            onClick={() => navigate('#/book-car')} 
-                            className="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-3 rounded-xl cursor-pointer"
-                          >
-                            Book Car 🚗
-                          </button>
-                          <button 
-                            onClick={() => navigate('#/plan-my-trip')} 
-                            className="w-full md:w-auto bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-5 py-3 rounded-xl cursor-pointer"
-                          >
-                            Plan My Trip 🧭
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Correction details submission */}
-                      <div className="bg-slate-100 rounded-xl p-4 text-center text-xs text-slate-500">
-                        <p>Route discrepancy discovered? <button onClick={() => navigate('#/contribute')} className="text-emerald-700 font-bold underline cursor-pointer">Suggest Route Correction Or missing fare updates</button> to preserve system accuracy.</p>
-                      </div>
-
-                    </div>
-                  );
-                })()}
-
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
               </div>
             )}
           </div>
         )}
 
         {/* ========================================================
-<<<<<<< HEAD
             2. ROUTES DISCOVERY CATALOG
             ======================================================== */}
         {(currentPath === '/routes' || currentPath === '#/routes') && (
@@ -8299,11 +6988,6 @@ export default function App() {
         )}
 
         {false && currentPath === '/destinations' && (
-=======
-            3. REDESIGNED DESTINATIONS DISCOVERY EXPERIENCE (MOBILE-FIRST ENGINE)
-            ======================================================== */}
-        {currentPath === '/destinations' && (
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           <div id="destinations-view" className="relative pb-24 overflow-x-hidden animate-fade-in bg-slate-50/50 dark:bg-slate-950/20">
             
             {/* STICKY SEARCH HEADER */}
@@ -8359,7 +7043,7 @@ export default function App() {
                           <div 
                             key={d.id} 
                             onClick={() => {
-                              navigate(`#/destination/${d.id}`);
+                              navigate(`#/destination/${getItemSlug(d)}`);
                               setShowDestSuggestions(false);
                             }}
                             className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors"
@@ -8440,7 +7124,7 @@ export default function App() {
 
                     <div className="flex flex-col sm:flex-row gap-3 w-full mt-6 shrink-0 pt-4 border-t border-slate-800/50">
                       <button
-                        onClick={() => navigate(`#/destination/${surpriseDest.id}`)}
+                        onClick={() => navigate(`#/destination/${getItemSlug(surpriseDest)}`)}
                         className="flex-1 bg-white hover:bg-emerald-50 text-slate-900 font-bold py-3.5 px-6 rounded-2xl text-xs cursor-pointer tracking-wider text-center uppercase transition-all flex items-center justify-center gap-2 shadow-sm shrink-0"
                       >
                         Explore Complete Coordinates <ArrowRight className="w-4 h-4" />
@@ -8538,7 +7222,7 @@ export default function App() {
                           <span className="flex items-center gap-1">🏡 {homestayCount} Lodgings</span>
                           
                           <button 
-                            onClick={() => navigate(`#/destination/${dest.id}`)}
+                            onClick={() => navigate(`#/destination/${getItemSlug(dest)}`)}
                             className="text-emerald-700 dark:text-emerald-400 font-extrabold uppercase tracking-wide hover:underline cursor-pointer flex items-center"
                           >
                             Go <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
@@ -8795,10 +7479,7 @@ export default function App() {
                         <option value="newest">Newest Discovery</option>
                         <option value="views">Most Viewed Clickrate</option>
                         <option value="trending">Highest Trending Signal</option>
-<<<<<<< HEAD
                         <option value="likes">Most Loved (By Likes)</option>
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                       </select>
                     </div>
                   </div>
@@ -8842,15 +7523,12 @@ export default function App() {
                       const scoreB = (destinationStats[b.id] || 0) + (likes.filter(l => l.contentId === b.id).length * 4);
                       return scoreB - scoreA;
                     });
-<<<<<<< HEAD
                   } else if (destBrowseSort === 'likes') {
                     list.sort((a, b) => {
                       const scoreA = likes.filter(l => l.contentId === a.id).length;
                       const scoreB = likes.filter(l => l.contentId === b.id).length;
                       return scoreB - scoreA;
                     });
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   }
 
                   // Pagination parameters
@@ -8947,7 +7625,7 @@ export default function App() {
                                   </div>
 
                                   <button 
-                                    onClick={() => navigate(`#/destination/${dest.id}`)}
+                                    onClick={() => navigate(`#/destination/${getItemSlug(dest)}`)}
                                     className="mt-4 w-full bg-slate-900 dark:bg-slate-800 hover:bg-emerald-600 dark:hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-center text-xs cursor-pointer transition-all flex items-center justify-center gap-1"
                                   >
                                     Explore Destination Guide <ChevronRight className="w-4 h-4" />
@@ -9005,7 +7683,7 @@ export default function App() {
                                         <Heart className={`w-3.5 h-3.5 ${user && likes.some(l => l.id === `${user.uid}_${dest.id}`) ? 'fill-red-500 text-red-500' : ''}`} />
                                       </button>
                                       <button 
-                                        onClick={() => navigate(`#/destination/${dest.id}`)}
+                                        onClick={() => navigate(`#/destination/${getItemSlug(dest)}`)}
                                         className="bg-slate-900 hover:bg-emerald-600 text-white font-bold text-[10px] px-3.5 py-2 rounded-lg cursor-pointer"
                                       >
                                         Explore Guide
@@ -9077,7 +7755,6 @@ export default function App() {
           </div>
         )}
 
-<<<<<<< HEAD
         {(currentPath.startsWith('/destinations/') || currentPath.startsWith('/destination/')) && (
           <ErrorBoundary fallbackTitle="Destination Guide Error" fallbackMessage="The destination travel guide could not be rendered. Let's try resetting.">
             <div id="destination-detail-view" className="animate-fade-in bg-slate-50 min-h-screen">
@@ -9423,194 +8100,13 @@ export default function App() {
 
                       </div>
                     </div>
-=======
-        {currentPath.startsWith('/destination/') && (
-          <div id="destination-detail-view" className="animate-fade-in bg-slate-50 min-h-screen">
-            {loading ? (
-              <div className="text-center py-24 flex flex-col items-center justify-center">
-                <Loader2 className="w-12 h-12 text-emerald-600 animate-spin mb-4" />
-                <p className="text-slate-500 font-semibold">Gathering local attraction data & homestay files...</p>
-              </div>
-            ) : activeDestDetail ? (
-              <div>
-                {/* 1. HERO SECTION */}
-                <div className="relative overflow-hidden bg-slate-900 text-white min-h-[360px] md:min-h-[460px] flex items-center justify-center py-16 px-6 text-center">
-                  <div className="absolute inset-0 z-0 select-none">
-                    <img 
-                      src={safeSrc(activeDestDetail.destination.image)} 
-                      alt={activeDestDetail.destination.name} 
-                      className="w-full h-full object-cover opacity-35 object-center scale-105" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
-                  </div>
-                  
-                  {/* Banner Like & Save Buttons Overlay */}
-                  <div className="absolute top-6 right-6 z-20 flex items-center gap-3">
-                    {/* Public Like Button */}
-                    <button
-                      id="like-destination-banner-btn"
-                      onClick={() => toggleLike(activeDestDetail.destination.id, 'destination')}
-                      className={`px-4 py-2.5 rounded-full border shadow-lg font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
-                        user && likes.some(l => l.id === `${user.uid}_${activeDestDetail.destination.id}`)
-                          ? 'bg-rose-600 border-rose-700 text-white hover:bg-rose-700'
-                          : 'bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-md'
-                      }`}
-                    >
-                      <motion.span
-                        animate={{ scale: (user && likes.some(l => l.id === `${user.uid}_${activeDestDetail.destination.id}`)) ? [1, 1.4, 1] : 1 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <Heart className={`w-4 h-4 ${(user && likes.some(l => l.id === `${user.uid}_${activeDestDetail.destination.id}`)) ? 'fill-white text-white' : 'text-white'}`} />
-                      </motion.span>
-                      <span>
-                        {(user && likes.some(l => l.id === `${user.uid}_${activeDestDetail.destination.id}`)) ? 'Liked' : 'Like'} ({likes.filter(l => l.contentId === activeDestDetail.destination.id).length})
-                      </span>
-                    </button>
-
-                    {/* Bookmark Save Button */}
-                    <button
-                      id="save-destination-banner-btn"
-                      onClick={() => handleToggleSave(activeDestDetail.destination.id, 'destination')}
-                      className={`px-4 py-2.5 rounded-full border shadow-lg font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
-                        isItemSaved(activeDestDetail.destination.id)
-                          ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-750'
-                          : 'bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-md'
-                      }`}
-                    >
-                      <motion.span
-                        animate={{ scale: isItemSaved(activeDestDetail.destination.id) ? [1, 1.4, 1] : 1 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <Bookmark className={`w-4 h-4 ${isItemSaved(activeDestDetail.destination.id) ? 'fill-white text-white' : 'text-white'}`} />
-                      </motion.span>
-                      <span>
-                        {isItemSaved(activeDestDetail.destination.id) ? 'Saved' : 'Save'}
-                      </span>
-                    </button>
-                  </div>
-                  <div className="relative z-10 max-w-4xl mx-auto space-y-4">
-                    <button 
-                      onClick={() => navigate('#/destinations')}
-                      className="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 px-3.5 py-1.5 rounded-full text-xs font-bold mb-4 inline-flex items-center gap-1.5 cursor-pointer transition border border-white/15"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back to Destinations List
-                    </button>
-                    
-                    {/* Badges row */}
-                    <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
-                      <span className="text-xs font-bold tracking-wider uppercase px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-md">
-                        ✨ {activeDestDetail.destination.tourismType}
-                      </span>
-                      <span className="text-xs font-bold tracking-wider uppercase px-3 py-1 bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 rounded-md">
-                        📅 Peak: {activeDestDetail.destination.bestSeason}
-                      </span>
-                    </div>
-
-                    <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mt-2 drop-shadow-md">
-                      {activeDestDetail.destination.name}
-                    </h1>
-
-                    <p className="text-slate-200 leading-relaxed text-sm sm:text-base md:text-lg max-w-2xl mx-auto font-medium opacity-90">
-                      {activeDestDetail.destination.description}
-                    </p>
-                  </div>
-                </div>
-
-                {/* 2. STICKY QUICK ACTION BAR */}
-                <div className="sticky top-[58px] z-30 bg-white/90 backdrop-blur-md border-y border-slate-200 shadow-xs py-3 px-4">
-                  <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 overflow-x-auto pb-1 sm:pb-0 [&::-webkit-scrollbar]:none">
-                    <button 
-                      onClick={() => document.getElementById('attractions-section')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="px-4 py-2 shrink-0 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs border border-emerald-100"
-                    >
-                      <Sparkles className="w-3.5 h-3.5 text-emerald-600" /> Attractions
-                    </button>
-
-                    <button 
-                      onClick={() => document.getElementById('transit-routes-section')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="px-4 py-2 shrink-0 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs border border-slate-150"
-                    >
-                      🗺️ Find Route
-                    </button>
-
-                    <button 
-                      onClick={() => document.getElementById('gallery-section')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="px-4 py-2 shrink-0 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs border border-slate-150"
-                    >
-                      📸 Gallery
-                    </button>
-
-                    <button 
-                      onClick={() => document.getElementById('lodging-section')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="px-4 py-2 shrink-0 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs border border-slate-150"
-                    >
-                      🏨 Lodging
-                    </button>
-
-                    <button 
-                      onClick={() => document.getElementById('transit-routes-section')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="px-4 py-2 shrink-0 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs border border-slate-150"
-                    >
-                      🚗 Transit
-                    </button>
-
-                    <button 
-                      onClick={() => {
-                        setDestCommentsExpanded(true);
-                        setTimeout(() => {
-                          document.getElementById('comments-section')?.scrollIntoView({ behavior: 'smooth' });
-                        }, 100);
-                      }}
-                      className="px-4 py-2 shrink-0 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs border border-slate-150"
-                    >
-                      💬 Comments Inside
-                    </button>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   </div>
                 </div>
 
                 {/* MAIN CONTENT AREA */}
                 <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-12">
                   
-<<<<<<< HEAD
 
-=======
-                  {/* ABOUT / METRICS HEADER */}
-                  <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                    <div className="space-y-1">
-                      <h3 className="font-extrabold text-xl text-slate-900">Holidaying Overview</h3>
-                      <p className="text-sm text-slate-500 leading-relaxed">
-                        Explore must visit scenic points, transit schedules, clean homestays, and genuine photos shared by hill adventurers.
-                      </p>
-                    </div>
-                    
-                    <div className="flex flex-wrap items-center gap-3 shrink-0">
-                      {/* Share Button */}
-                      <button
-                        onClick={() => {
-                          const shareUrl = `${window.location.origin}/destination/${encodeURIComponent(activeDestDetail.destination.id)}`;
-                          navigator.clipboard.writeText(shareUrl);
-                          setNotification({
-                            type: 'success',
-                            message: `🔗 Direct link to ${activeDestDetail.destination.name} copied to clipboard! Share it with friends!`
-                          });
-                        }}
-                        className="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
-                        title="Copy details link"
-                      >
-                        <Share2 className="w-3.5 h-3.5 text-slate-500" />
-                        <span>Copy Link</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Himalayan AI Local Guide widget */}
-                  <AiLocalAdvisor 
-                    name={activeDestDetail.destination.name}
-                    category={activeDestDetail.destination.tourismType}
-                    description={activeDestDetail.destination.description}
-                  />
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 
                   {/* 3. MUST-VISIT ATTRACTIONS */}
                   <div id="attractions-section" className="bg-white rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 space-y-6">
@@ -9677,7 +8173,7 @@ export default function App() {
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          navigate(`#/attraction/${att.id}`);
+                                          navigate(`#/attraction/${getItemSlug(att)}`);
                                           setTimeout(() => {
                                             document.getElementById(`comments-section-attraction-${att.id}`)?.scrollIntoView({ behavior: 'smooth' });
                                           }, 350);
@@ -9702,7 +8198,7 @@ export default function App() {
                                       <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">{att.description}</p>
                                     </div>
                                     <button 
-                                      onClick={() => navigate(`#/attraction/${att.id}`)}
+                                      onClick={() => navigate(`#/attraction/${getItemSlug(att)}`)}
                                       className="w-full bg-white hover:bg-slate-100 text-slate-800 text-[11px] font-bold py-2 mt-3 rounded-lg border border-slate-200 cursor-pointer text-center transition"
                                     >
                                       View Attraction Details
@@ -9747,7 +8243,7 @@ export default function App() {
                                     <p className="text-slate-600 text-xs leading-relaxed line-clamp-3">{att.description}</p>
                                   </div>
                                   <button 
-                                    onClick={() => navigate(`#/attraction/${att.id}`)}
+                                    onClick={() => navigate(`#/attraction/${getItemSlug(att)}`)}
                                     className="w-full bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold py-2.5 mt-4 rounded-xl border border-slate-200 cursor-pointer text-center transition"
                                   >
                                     View Attraction Details
@@ -9817,7 +8313,7 @@ export default function App() {
                                   </div>
 
                                   <button 
-                                    onClick={() => navigate(`#/homestay/${home.id}`)}
+                                    onClick={() => navigate(`#/homestay/${getItemSlug(home)}`)}
                                     className="w-full bg-slate-900 hover:bg-slate-950 text-white text-xs font-bold py-2.5 mt-4 rounded-xl cursor-pointer text-center transitions shadow-xs"
                                   >
                                     Reserve & Booking Info
@@ -9850,7 +8346,7 @@ export default function App() {
                                 </div>
 
                                 <button 
-                                  onClick={() => navigate(`#/homestay/${home.id}`)}
+                                  onClick={() => navigate(`#/homestay/${getItemSlug(home)}`)}
                                   className="w-full bg-slate-900 hover:bg-slate-950 text-white text-xs font-bold py-3 mt-5 rounded-xl cursor-pointer text-center transition shadow-xs"
                                 >
                                   Reserve & Booking Info
@@ -9893,7 +8389,11 @@ export default function App() {
                           return (
                             <button
                               key={rt.id}
-                              onClick={() => navigate(`#/route/${rt.fromHubId}-to-${rt.toHubId}`)}
+                              onClick={() => {
+                                const fromSlug = fromH ? getItemSlug(fromH) : getItemSlug(rt.fromHubId);
+                                const toSlugStr = toH ? getItemSlug(toH) : getItemSlug(rt.toHubId);
+                                navigate(`#/route/${fromSlug}-to-${toSlugStr}`);
+                              }}
                               className="w-full text-left bg-slate-50 hover:bg-emerald-50 p-4 rounded-xl border border-slate-200 text-xs transition-all flex flex-col sm:flex-row justify-between sm:items-center gap-3 cursor-pointer shadow-3xs"
                             >
                               <div className="space-y-1">
@@ -9943,7 +8443,7 @@ export default function App() {
                           <button
                             key={nearby.id}
                             onClick={() => {
-                              navigate(`#/destination/${nearby.id}`);
+                              navigate(`#/destination/${getItemSlug(nearby)}`);
                               // Force scroll to top when looking at a new destination
                               window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
@@ -9997,12 +8497,9 @@ export default function App() {
                       setNotification={setNotification}
                       likes={likes}
                       onToggleLike={toggleLike}
-<<<<<<< HEAD
                       comments={comments}
                       onAddComment={addCommentAction}
                       onDeleteComment={deleteCommentAction}
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                     />
                   </div>
 
@@ -10096,12 +8593,9 @@ export default function App() {
 
                 </div>
               </div>
-<<<<<<< HEAD
               </div>
               )}
               </>
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             ) : (
               <div className="text-center py-16 text-slate-500">
                 Destination configuration not ready or not found. 
@@ -10109,16 +8603,12 @@ export default function App() {
               </div>
             )}
           </div>
-<<<<<<< HEAD
           </ErrorBoundary>
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         )}
 
         {/* ========================================================
             5. ATTRACTIONS LIST VIEW
             ======================================================== */}
-<<<<<<< HEAD
         {currentPath === '/attractions' && (
           <ErrorBoundary fallbackTitle="Attractions Board Error" fallbackMessage="Could not load the sightseeing coordinates board. Try resetting or contact the hilly network.">
             {(() => {
@@ -10335,302 +8825,10 @@ export default function App() {
                         </button>
                       )}
                     </div>
-=======
-        {currentPath === '/attractions' && (() => {
-          // Compute Automated Collections on-the-fly from live statistics & metadata
-          
-          // 1. Attraction of the Day (computes identically for all users on the same day)
-          const getDaySpotlight = () => {
-            if (attractions.length === 0) return null;
-            const today = new Date();
-            const dateStr = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
-            let hash = 0;
-            for (let i = 0; i < dateStr.length; i++) {
-              hash = dateStr.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            const index = Math.abs(hash) % attractions.length;
-            return attractions[index];
-          };
-          const daySpotlight = getDaySpotlight();
-
-          // 2. Hidden Discoveries
-          // Priority: isHiddenGem flag, lowest views count, descending product additions
-          const hiddenDiscoveriesList = [...attractions]
-            .sort((a, b) => {
-              const aGem = a.isHiddenGem ? 1 : 0;
-              const bGem = b.isHiddenGem ? 1 : 0;
-              if (aGem !== bGem) return bGem - aGem;
-
-              const aViews = attractionStats[a.id] || 0;
-              const bViews = attractionStats[b.id] || 0;
-              if (aViews !== bViews) return aViews - bViews;
-
-              return b.id.localeCompare(a.id);
-            })
-            .slice(0, 8);
-
-          // 3. Worth the Detour
-          // Priority: Engaged (likes/comments exist) but is NOT in the top 25% views (lower traffic overall)
-          const topViewedBoundIds = [...attractions]
-            .sort((a, b) => (attractionStats[b.id] || 0) - (attractionStats[a.id] || 0))
-            .map(x => x.id);
-
-          const worthTheDetourList = [...attractions]
-            .filter(a => {
-              const topQuarterLimit = Math.ceil(attractions.length * 0.25);
-              const isTopTierViewed = topViewedBoundIds.slice(0, topQuarterLimit).includes(a.id);
-              return !isTopTierViewed; // Less popular overall
-            })
-            .sort((a, b) => {
-              const aLikes = likes.filter(l => l.contentId === a.id).length;
-              const aComments = comments.filter(c => c.contentId === a.id && c.contentType === 'attraction').length;
-              const aEngagement = (aLikes * 3) + (aComments * 5);
-
-              const bLikes = likes.filter(l => l.contentId === b.id).length;
-              const bComments = comments.filter(c => c.contentId === b.id && c.contentType === 'attraction').length;
-              const bEngagement = (bLikes * 3) + (bComments * 5);
-
-              if (bEngagement !== aEngagement) return bEngagement - aEngagement; // High engagement first
-              return (attractionStats[a.id] || 0) - (attractionStats[b.id] || 0); // Scenically lower views first
-            })
-            .slice(0, 8);
-
-          // 4. Recently Added
-          const recentlyAddedList = [...attractions]
-            .sort((a, b) => b.id.localeCompare(a.id))
-            .slice(0, 8);
-
-          // 5. Most Explored Attractions
-          // Combination of highest view tally + interaction ratios
-          const mostExploredList = [...attractions]
-            .sort((a, b) => {
-              const aLikes = likes.filter(l => l.contentId === a.id).length;
-              const aComments = comments.filter(c => c.contentId === a.id && c.contentType === 'attraction').length;
-              const aPowerScore = (attractionStats[a.id] || 0) + (aLikes * 4) + (aComments * 8);
-
-              const bLikes = likes.filter(l => l.contentId === b.id).length;
-              const bComments = comments.filter(c => c.contentId === b.id && c.contentType === 'attraction').length;
-              const bPowerScore = (attractionStats[b.id] || 0) + (bLikes * 4) + (bComments * 8);
-
-              return bPowerScore - aPowerScore;
-            })
-            .slice(0, 8);
-
-          // 6. Filtering & Sorting for "Browse All Attractions"
-          const filteredBrowseList = attractions
-            .filter(a => {
-              const matchesFilter = attractionFilter === 'All' || a.category === attractionFilter;
-              const matchesSearch = !attractionSearchQuery || 
-                (a.name || '').toLowerCase().includes(attractionSearchQuery.toLowerCase()) ||
-                (a.description || '').toLowerCase().includes(attractionSearchQuery.toLowerCase()) ||
-                (a.category || '').toLowerCase().includes(attractionSearchQuery.toLowerCase());
-              return matchesFilter && matchesSearch;
-            })
-            .sort((a, b) => {
-              if (browseSort === 'name') {
-                return a.name.localeCompare(b.name);
-              }
-              if (browseSort === 'newest') {
-                return b.id.localeCompare(a.id);
-              }
-              if (browseSort === 'views') {
-                const aViews = attractionStats[a.id] || 0;
-                const bViews = attractionStats[b.id] || 0;
-                return bViews - aViews;
-              }
-              if (browseSort === 'explored') {
-                const aLikes = likes.filter(l => l.contentId === a.id).length;
-                const aComments = comments.filter(c => c.contentId === a.id && c.contentType === 'attraction').length;
-                const aScore = (attractionStats[a.id] || 0) + (aLikes * 4) + (aComments * 8);
-
-                const bLikes = likes.filter(l => l.contentId === b.id).length;
-                const bComments = comments.filter(c => c.contentId === b.id && c.contentType === 'attraction').length;
-                const bScore = (attractionStats[b.id] || 0) + (bLikes * 4) + (bComments * 8);
-
-                return bScore - aScore;
-              }
-              return 0;
-            });
-
-          // Pagination logic
-          const pageSize = 8;
-          const totalPages = Math.ceil(filteredBrowseList.length / pageSize) || 1;
-          const paginatedItems = filteredBrowseList.slice((browsePage - 1) * pageSize, browsePage * pageSize);
-
-          const renderUniversalCard = (item: any, collectionPrefixId: string) => {
-            const dest = destinations.find(d => d.id === item.destinationId);
-            const viewsCount = attractionStats[item.id] || 0;
-            const likesCount = likes.filter(l => l.contentId === item.id).length;
-            const commentsCount = comments.filter(c => c.contentId === item.id && c.contentType === 'attraction').length;
-            const isLiked = user && likes.some(l => l.id === `${user.uid}_${item.id}`);
-
-            return (
-              <div 
-                key={item.id}
-                className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-810 shadow-xs flex flex-col h-[400px] hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition duration-300 snap-start snap-always"
-              >
-                {/* Card Thumbnail Area with linear overlay */}
-                <div className="h-44 bg-slate-100 dark:bg-slate-800 relative overflow-hidden group/thumb">
-                  <img src={safeSrc(item.image)} alt={item.name} className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80" />
-                  
-                  {/* Action Overlays */}
-                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
-                    {/* Share Button */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const shareUrl = `${window.location.origin}/attraction/${encodeURIComponent(item.id)}`;
-                        navigator.clipboard.writeText(shareUrl);
-                        setNotification({
-                          type: 'success',
-                          message: `🔗 Direct link to ${item.name} copied! Share with friends!`
-                        });
-                      }}
-                      className="bg-white/95 hover:bg-white dark:bg-slate-805 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 p-2 rounded-full shadow-xs hover:scale-105 active:scale-95 transition cursor-pointer"
-                      title="Copy share link"
-                    >
-                      <Share2 className="w-3.5 h-3.5" />
-                    </button>
-                    
-                    {/* Like Action */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleLike(item.id, 'attraction');
-                      }}
-                      className="bg-white/95 hover:bg-white dark:bg-slate-805 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 p-2 rounded-full shadow-xs hover:scale-105 active:scale-95 transition cursor-pointer flex items-center justify-center gap-1"
-                    >
-                      <Heart className={`w-3.5 h-3.5 transition-colors ${isLiked ? 'fill-red-500 text-red-500' : 'text-slate-500 group-hover:text-red-550'}`} />
-                      <span className="text-[10px] font-extrabold font-mono text-slate-700 dark:text-slate-300">{likesCount}</span>
-                    </button>
-                  </div>
-
-                  {/* Badges on Bottom boundaries */}
-                  {item.isHiddenGem && (
-                    <span className="absolute bottom-3 left-3 bg-teal-500 text-white text-[9px] uppercase font-mono font-extrabold px-2.5 py-0.5 rounded-full shadow-xs tracking-wider">
-                      💎 Hidden Gem
-                    </span>
-                  )}
-                  {!item.isHiddenGem && (
-                    <span className="absolute bottom-3 left-3 bg-indigo-500 text-white text-[10px] sm:text-[9px] uppercase font-mono font-extrabold px-2.5 py-0.5 rounded-full shadow-xs tracking-wider">
-                      {item.category}
-                    </span>
-                  )}
-                </div>
-
-                {/* Info and Navigation triggers */}
-                <div className="p-5 flex-grow flex flex-col justify-between text-left">
-                  <div className="space-y-1.5 min-w-0">
-                    <span className="text-[10px] text-slate-400 dark:text-slate-400 font-extrabold uppercase font-mono tracking-widest block">
-                      {dest?.name || 'Local Region'} area
-                    </span>
-                    <h4 className="font-extrabold text-base text-slate-902 dark:text-white line-clamp-1 leading-snug group-hover:text-emerald-600 transition">
-                      {item.name}
-                    </h4>
-                    <p className="text-slate-503 dark:text-slate-400 text-xs leading-relaxed line-clamp-3">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  {/* Mini-Metrics footer section */}
-                  <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-semibold font-mono">
-                    <span className="flex items-center gap-1">
-                      <Eye className="w-3.5 h-3.5 text-slate-400" /> {viewsCount} Views
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MessageSquare className="w-3.5 h-3.5 text-slate-400" /> {commentsCount} Chats
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={() => navigate(`#/attraction/${item.id}`)}
-                    className="w-full mt-4 bg-slate-900 dark:bg-slate-800 text-white font-bold text-center py-2.5 rounded-xl text-xs hover:bg-emerald-600 dark:hover:bg-emerald-600 transition cursor-pointer"
-                  >
-                    Details & Trails
-                  </button>
-                </div>
-              </div>
-            );
-          };
-
-          return (
-            <div id="attractions-discovery-view" className="space-y-12 pb-24">
-              
-              {/* STICKY SEARCH & NAVIGATION ROW */}
-              <div className="sticky top-[73px] z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md py-4 border-b border-slate-200/50 dark:border-slate-800/80 transition-colors shadow-xs">
-                <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-emerald-500/10 rounded-xl">
-                      <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-none">Discovery Hub</h2>
-                      <p className="text-[10px] text-slate-500 font-mono mt-1 font-semibold uppercase tracking-wider">Zero maintenance • Fully automatic curated trails</p>
-                    </div>
-                  </div>
-
-                  {/* Sticky Search bar with instant floating suggestions */}
-                  <div className="relative flex-grow max-w-md w-full">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                      <Search className="w-4 h-4" />
-                    </div>
-                    <input
-                      type="text"
-                      value={attractionSearchQuery}
-                      onChange={(e) => {
-                        setAttractionSearchQuery(e.target.value);
-                        setBrowsePage(1);
-                      }}
-                      placeholder="Search cascading waterfalls, monasteries, lakes..."
-                      className="w-full pl-10 pr-10 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-semibold text-slate-800 dark:text-white transition duration-200 focus:outline-hidden focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                    />
-                    {attractionSearchQuery ? (
-                      <button 
-                        onClick={() => setAttractionSearchQuery('')}
-                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    ) : (
-                      <span className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[10px] font-mono text-slate-400 uppercase tracking-widest font-extrabold select-none pointer-events-none hidden sm:inline-flex">CTRL+K</span>
-                    )}
-
-                    {/* Instant smart dropdown overlay */}
-                    {attractionSearchQuery && (
-                      <div className="absolute right-0 left-0 top-[52px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl z-55 max-h-[300px] overflow-y-auto p-2.5 space-y-1 animate-fade-in">
-                        <div className="text-[9px] font-mono font-extrabold text-slate-400 dark:text-slate-500 px-3.5 py-1.5 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800/60 mb-1 flex items-center justify-between">
-                          <span>Live matches</span>
-                          <span>{filteredBrowseList.length} spots</span>
-                        </div>
-                        {filteredBrowseList.slice(0, 5).map(item => (
-                          <button
-                            key={item.id}
-                            onClick={() => {
-                              setAttractionSearchQuery('');
-                              navigate(`#/attraction/${item.id}`);
-                            }}
-                            className="w-full flex items-center gap-3.5 p-2 hover:bg-emerald-500/5 dark:hover:bg-slate-800 rounded-2xl text-left transition duration-200 group cursor-pointer"
-                          >
-                            <img src={safeSrc(item.image)} alt={item.name} className="w-11 h-11 rounded-xl object-cover shrink-0" />
-                            <div className="min-w-0 flex-grow">
-                              <span className="text-xs font-extrabold text-slate-800 dark:text-white block group-hover:text-emerald-505 transition truncate leading-tight">{item.name}</span>
-                              <span className="text-[10px] text-slate-450 font-mono block mt-0.5 uppercase tracking-wider">{item.category} • {destinations.find(d => d.id === item.destinationId)?.name || 'Himalayas'} area</span>
-                            </div>
-                            <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition shrink-0" />
-                          </button>
-                        ))}
-                        {filteredBrowseList.length === 0 && (
-                          <div className="py-6 text-center text-xs text-slate-400 font-semibold">No direct destination matches. Try tweaking query.</div>
-                        )}
-                      </div>
-                    )}
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   </div>
                 </div>
               </div>
 
-<<<<<<< HEAD
               {/* 2. ATTRACTION CATEGORIES ROW */}
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 text-left">
                 <React.Suspense fallback={
@@ -10685,7 +8883,7 @@ export default function App() {
                       return (
                         <div 
                           key={item.id} 
-                          onClick={() => navigate('#/attraction/' + item.id)}
+                          onClick={() => navigate('#/attraction/' + getItemSlug(item))}
                           className="w-[82%] sm:w-[48%] md:w-[32%] lg:w-[24%] shrink-0 snap-start snap-always group cursor-pointer bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-150 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-lg transition duration-300 flex flex-col justify-between"
                         >
                           <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
@@ -10752,7 +8950,7 @@ export default function App() {
                       return (
                         <div 
                           key={item.id} 
-                          onClick={() => navigate('#/attraction/' + item.id)}
+                          onClick={() => navigate('#/attraction/' + getItemSlug(item))}
                           className="w-[82%] sm:w-[48%] md:w-[32%] lg:w-[24%] shrink-0 snap-start snap-always group cursor-pointer bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-150 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-lg transition duration-300 flex flex-col justify-between"
                         >
                           <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
@@ -10919,7 +9117,7 @@ export default function App() {
                           </div>
 
                           <button
-                            onClick={() => navigate('#/attraction/' + item.id)}
+                            onClick={() => navigate('#/attraction/' + getItemSlug(item))}
                             className="w-full mt-4 bg-slate-900 dark:bg-slate-800 text-white font-bold text-center py-2.5 rounded-xl text-xs hover:bg-emerald-600 dark:hover:bg-emerald-600 transition cursor-pointer"
                           >
                             Explore Sights
@@ -10943,373 +9141,6 @@ export default function App() {
                           setAttractionVisibleCount(8);
                         }} 
                         className="mt-3 text-xs bg-slate-900 text-white dark:bg-slate-800 px-4 py-2.5 rounded-xl font-bold cursor-pointer transition hover:bg-emerald-600"
-=======
-              {/* SPLIT HERO SECTION: ATTRACTION OF THE DAY + SURPRISE ME */}
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  
-                  {/* LEFT: Attraction of the Day (Synchronized Calendar Rotate) */}
-                  {daySpotlight && (() => {
-                    const dest = destinations.find(d => d.id === daySpotlight.destinationId);
-                    const viewsCount = attractionStats[daySpotlight.id] || 0;
-                    return (
-                      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-between min-h-[420px] shadow-sm border border-slate-800 hover:border-slate-700/80 transition duration-300">
-                        {/* Immersive background photo layer */}
-                        <div className="absolute inset-0 z-0">
-                          <img src={safeSrc(daySpotlight.image)} className="w-full h-full object-cover opacity-35 hover:scale-[1.02] transition duration-500" alt={daySpotlight.name} />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-                        </div>
-
-                        {/* Top Metadata Row */}
-                        <div className="z-10 flex items-start justify-between flex-wrap gap-2.5">
-                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/90 text-white font-mono font-extrabold text-[10px] tracking-wider uppercase shadow-xs">
-                            <Calendar className="w-3.5 h-3.5 animate-pulse" /> Spot of the Day • Daily Rotation
-                          </span>
-                          <span className="text-[10px] font-mono bg-white/10 px-2.5 py-1 rounded-sm text-slate-200">
-                            ID: {daySpotlight.id}
-                          </span>
-                        </div>
-
-                        {/* Bottom Info Row */}
-                        <div className="z-10 space-y-4 pt-16">
-                          <div className="space-y-1.5 text-left">
-                            <span className="text-[10px] font-mono uppercase tracking-widest font-extrabold text-emerald-400 block">{dest?.name || 'Local Region'} Area</span>
-                            <h3 className="text-2xl sm:text-3xl font-black tracking-tight leading-snug">{daySpotlight.name}</h3>
-                            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl line-clamp-3">
-                              {daySpotlight.description}
-                            </p>
-                          </div>
-
-                          <div className="flex items-center justify-between gap-4 flex-wrap pt-2 border-t border-white/15">
-                            <div className="flex items-center gap-4 text-xs font-mono font-semibold text-slate-300">
-                              <span className="flex items-center gap-1.5"><Eye className="w-4 h-4 text-emerald-400" /> {viewsCount} Views</span>
-                              <span className="flex items-center gap-1.5"><Heart className="w-4 h-4 text-emerald-400" /> {likes.filter(l => l.contentId === daySpotlight.id).length} Likes</span>
-                            </div>
-
-                            <button
-                              onClick={() => navigate(`#/attraction/${daySpotlight.id}`)}
-                              className="px-5 py-2.5 bg-white text-slate-900 hover:bg-emerald-500 hover:text-white text-xs font-black rounded-xl transition duration-300 cursor-pointer flex items-center gap-2 shadow-xs group"
-                            >
-                              Explore Spot <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                  {/* RIGHT: Surprise Me Randomizer card */}
-                  {surpriseAttraction && (() => {
-                    const dest = destinations.find(d => d.id === surpriseAttraction.destinationId);
-                    const viewsCount = attractionStats[surpriseAttraction.id] || 0;
-                    return (
-                      <div className="bg-white dark:bg-slate-905 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-between min-h-[420px] shadow-sm transition duration-300">
-                        {/* Immersive background photo layer */}
-                        <div className="absolute inset-0 z-0">
-                          <img src={safeSrc(surpriseAttraction.image)} className="w-full h-full object-cover opacity-15 dark:opacity-20 hover:scale-[1.02] transition duration-500" alt={surpriseAttraction.name} />
-                          <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-950 via-white/80 dark:via-slate-950/60 to-transparent" />
-                        </div>
-
-                        {/* Top Metadata Row */}
-                        <div className="z-10 flex items-start justify-between flex-wrap gap-2.5">
-                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-mono font-extrabold text-[10px] tracking-wider uppercase">
-                            <Shuffle className="w-3.5 h-3.5 text-indigo-500" /> 🎲 Surprise Me generator
-                          </span>
-                          
-                          {/* Spin button to flip to another */}
-                          <button
-                            onClick={() => {
-                              const remaining = attractions.filter(a => a.id !== surpriseAttraction.id);
-                              if (remaining.length > 0) {
-                                const idx = Math.floor(Math.random() * remaining.length);
-                                setSurpriseAttraction(remaining[idx]);
-                              }
-                            }}
-                            className="bg-white hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-805 dark:text-white border border-slate-250 dark:border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs active:scale-95"
-                          >
-                            <RefreshCw className="w-3.5 h-3.5 text-indigo-500" /> Spin Spot
-                          </button>
-                        </div>
-
-                        {/* Bottom Info Row */}
-                        <div className="z-10 space-y-4 pt-16 text-left">
-                          <div className="space-y-1.5">
-                            <span className="text-[10px] font-mono uppercase tracking-widest font-extrabold text-indigo-600 dark:text-indigo-400 block">{dest?.name || 'Local Region'} Area</span>
-                            <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-snug">{surpriseAttraction.name}</h3>
-                            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl line-clamp-3">
-                              {surpriseAttraction.description}
-                            </p>
-                          </div>
-
-                          <div className="flex items-center justify-between gap-4 flex-wrap pt-2 border-t border-slate-100 dark:border-slate-800/80">
-                            <div className="flex items-center gap-4 text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">
-                              <span className="flex items-center gap-1.5"><Eye className="w-4 h-4 text-indigo-500" /> {viewsCount} Views</span>
-                              <span className="flex items-center gap-1.5"><Heart className="w-4 h-4 text-indigo-500" /> {likes.filter(l => l.contentId === surpriseAttraction.id).length} Likes</span>
-                            </div>
-
-                            <button
-                              onClick={() => navigate(`#/attraction/${surpriseAttraction.id}`)}
-                              className="px-5 py-2.5 bg-indigo-600 text-white hover:bg-indigo-700 text-xs font-black rounded-xl transition duration-300 cursor-pointer flex items-center gap-2 shadow-xs group"
-                            >
-                              Details <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                </div>
-              </div>
-
-              {/* 1. ✨ HIDDEN DISCOVERIES CAROUSEL */}
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
-                <div className="flex items-center justify-between pb-3 border-b border-rose-100/10 dark:border-slate-800/80">
-                  <div>
-                    <h3 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-teal-500" /> ✨ Hidden Discoveries
-                    </h3>
-                    <p className="text-xs text-slate-450 mt-1">Lesser-known peaks and spiritual loops with lower overall page view traffic</p>
-                  </div>
-                  
-                  {/* Left-Right Carousel Buttons */}
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => scrollCarousel('carousel-hidden', 'left')}
-                      className="p-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-705 dark:text-slate-300 rounded-xl cursor-pointer active:scale-95 transition"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => scrollCarousel('carousel-hidden', 'right')}
-                      className="p-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-705 dark:text-slate-300 rounded-xl cursor-pointer active:scale-95 transition"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Horizontal track featuring a trailing next card to prompt swipes */}
-                <div 
-                  id="carousel-hidden"
-                  className="flex gap-4 overflow-x-auto pb-4 pt-4 snap-x snap-mandatory scrollbar-none scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden"
-                >
-                  {hiddenDiscoveriesList.map(item => (
-                    <div key={item.id} className="w-[85%] sm:w-[48%] md:w-[31%] lg:w-[23.5%] shrink-0 snap-start snap-always">
-                      {renderUniversalCard(item, 'hidden-gem')}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 2. 🔥 WORTH THE DETOUR CAROUSEL */}
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
-                <div className="flex items-center justify-between pb-3 border-b border-rose-100/10 dark:border-slate-800/80">
-                  <div>
-                    <h3 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                      <Flame className="w-5 h-5 text-orange-500" /> 🔥 Worth the Detour
-                    </h3>
-                    <p className="text-xs text-slate-450 mt-1">Locations receiving solid comment feedback despite overall lighter visitor numbers</p>
-                  </div>
-                  
-                  {/* Left-Right Carousel Buttons */}
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => scrollCarousel('carousel-detour', 'left')}
-                      className="p-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-705 dark:text-slate-300 rounded-xl cursor-pointer active:scale-95 transition"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => scrollCarousel('carousel-detour', 'right')}
-                      className="p-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-705 dark:text-slate-300 rounded-xl cursor-pointer active:scale-95 transition"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Horizontal peaking track */}
-                <div 
-                  id="carousel-detour"
-                  className="flex gap-4 overflow-x-auto pb-4 pt-4 snap-x snap-mandatory scrollbar-none scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden"
-                >
-                  {worthTheDetourList.map(item => (
-                    <div key={item.id} className="w-[85%] sm:w-[48%] md:w-[31%] lg:w-[23.5%] shrink-0 snap-start snap-always">
-                      {renderUniversalCard(item, 'detour-spot')}
-                    </div>
-                  ))}
-                  {worthTheDetourList.length === 0 && (
-                    <div className="w-full text-center py-10 text-xs text-slate-405 font-medium">Accumulating user analytics parameters. Check back shortly.</div>
-                  )}
-                </div>
-              </div>
-
-              {/* 3. 📍 RECENTLY ADDED */}
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
-                <div className="flex items-center justify-between pb-3 border-b border-rose-100/10 dark:border-slate-800/80">
-                  <div>
-                    <h3 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-indigo-505" /> 📍 Recently Added
-                    </h3>
-                    <p className="text-xs text-slate-450 mt-1">Fresh mountain viewpoints and trails discovered and added by our local guides</p>
-                  </div>
-                  
-                  {/* Left-Right Carousel Buttons */}
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => scrollCarousel('carousel-recent', 'left')}
-                      className="p-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-705 dark:text-slate-300 rounded-xl cursor-pointer active:scale-95 transition"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => scrollCarousel('carousel-recent', 'right')}
-                      className="p-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-705 dark:text-slate-300 rounded-xl cursor-pointer active:scale-95 transition"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Horizontal peaking track */}
-                <div 
-                  id="carousel-recent"
-                  className="flex gap-4 overflow-x-auto pb-4 pt-4 snap-x snap-mandatory scrollbar-none scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden"
-                >
-                  {recentlyAddedList.map(item => (
-                    <div key={item.id} className="w-[85%] sm:w-[48%] md:w-[31%] lg:w-[23.5%] shrink-0 snap-start snap-always">
-                      {renderUniversalCard(item, 'recent-spot')}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 4. 🏆 MOST EXPLORED */}
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
-                <div className="flex items-center justify-between pb-3 border-b border-rose-100/10 dark:border-slate-800/80">
-                  <div>
-                    <h3 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                      <Award className="w-5 h-5 text-amber-500" /> 🏆 Most Explored Attractions
-                    </h3>
-                    <p className="text-xs text-slate-450 mt-1">Top-trending locations seeing major interactive clicks, views, and discussion records</p>
-                  </div>
-                  
-                  {/* Left-Right Carousel Buttons */}
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => scrollCarousel('carousel-explored', 'left')}
-                      className="p-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-705 dark:text-slate-300 rounded-xl cursor-pointer active:scale-95 transition"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => scrollCarousel('carousel-explored', 'right')}
-                      className="p-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-705 dark:text-slate-300 rounded-xl cursor-pointer active:scale-95 transition"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Horizontal peaking track */}
-                <div 
-                  id="carousel-explored"
-                  className="flex gap-4 overflow-x-auto pb-4 pt-4 snap-x snap-mandatory scrollbar-none scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden"
-                >
-                  {mostExploredList.map(item => (
-                    <div key={item.id} className="w-[85%] sm:w-[48%] md:w-[31%] lg:w-[23.5%] shrink-0 snap-start snap-always">
-                      {renderUniversalCard(item, 'explored-spot')}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 5. BROWSE ALL ATTRACTIONS SECTION */}
-              <div id="browse-all-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left space-y-8">
-                
-                {/* Section Header + Sorting Controls row */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200/60 dark:border-slate-800/80 gap-4">
-                  <div>
-                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                       All Attractions Directory
-                    </h3>
-                    <p className="text-xs text-slate-450 mt-1">Full indexable roster of viewpoints, water courses, and sanctuaries across the Himalayan chains</p>
-                  </div>
-
-                  {/* Filter elements & Sorting Dropdowns */}
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-2xl">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase font-mono tracking-wider">Sort:</span>
-                      <select
-                        value={browseSort}
-                        onChange={(e: any) => {
-                          setBrowseSort(e.target.value);
-                          setBrowsePage(1);
-                        }}
-                        className="bg-transparent text-xs font-bold text-slate-700 dark:text-slate-200 focus:outline-hidden cursor-pointer"
-                      >
-                        <option value="name" className="bg-white dark:bg-slate-900">A - Z Alphabetical</option>
-                        <option value="newest" className="bg-white dark:bg-slate-900">Newest Additions</option>
-                        <option value="views" className="bg-white dark:bg-slate-900">Most Viewed</option>
-                        <option value="explored" className="bg-white dark:bg-slate-900">Most Explored</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Categories Tab selectors */}
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full [&::-webkit-scrollbar]:hidden">
-                  <button
-                    onClick={() => {
-                      setAttractionFilter('All');
-                      setBrowsePage(1);
-                    }}
-                    className={`px-4 py-2 shrink-0 rounded-full text-xs font-extrabold tracking-wide transition duration-200 cursor-pointer ${
-                      attractionFilter === 'All' 
-                        ? 'bg-emerald-600 text-white shadow-xs' 
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800/10 dark:text-slate-350 dark:hover:bg-slate-800'
-                    }`}
-                  >
-                    All Types
-                  </button>
-                  {attractionCategories.map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => {
-                        setAttractionFilter(cat);
-                        setBrowsePage(1);
-                      }}
-                      className={`px-4 py-2 shrink-0 rounded-full text-xs font-extrabold tracking-wide transition duration-200 cursor-pointer ${
-                        attractionFilter === cat 
-                          ? 'bg-emerald-600 text-white shadow-xs' 
-                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-805 dark:text-slate-300 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      {cat}s
-                    </button>
-                  ))}
-                  <div className="text-xs font-mono text-slate-400 font-extrabold uppercase tracking-widest pl-4 hidden md:inline ml-auto">
-                    ({filteredBrowseList.length} spots matched)
-                  </div>
-                </div>
-
-                {/* Directory Cards Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
-                  {paginatedItems.map(item => renderUniversalCard(item, 'dir-spot'))}
-                  
-                  {paginatedItems.length === 0 && (
-                    <div className="col-span-1 sm:col-span-2 lg:col-span-4 text-center py-20 bg-slate-50 dark:bg-slate-900/10 rounded-3xl border border-dashed border-slate-250 dark:border-slate-800">
-                      <Compass className="w-10 h-10 text-slate-300 mx-auto mb-3 animate-spin duration-300" />
-                      <p className="text-slate-505 dark:text-slate-400 font-bold text-sm">No sights match structural constraints.</p>
-                      <button 
-                        onClick={() => {
-                          setAttractionFilter('All');
-                          setAttractionSearchQuery('');
-                          setBrowsePage(1);
-                        }} 
-                        className="mt-3 text-xs bg-slate-900 text-white dark:bg-slate-850 px-4 py-2 rounded-xl font-bold cursor-pointer transition hover:bg-emerald-600"
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                       >
                         Reset Filtration Queries
                       </button>
@@ -11317,72 +9148,12 @@ export default function App() {
                   )}
                 </div>
 
-<<<<<<< HEAD
                 {/* Infinite scroll sentinel */}
                 {explorerItems.length > attractionVisibleCount && (
                   <div ref={attractionSentinelRef} id="explorer-sentinel" className="h-16 w-full flex items-center justify-center pt-8">
                     <div className="flex items-center gap-2 text-slate-450 text-xs font-mono">
                       <Loader2 className="w-5 h-5 text-emerald-600 animate-spin" />
                       <span>Scanning coordinates...</span>
-=======
-                {/* Pagination Navigation Controller */}
-                {totalPages > 1 && (
-                  <div className="pt-6 border-t border-slate-200/50 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-full">
-                    <p className="text-xs text-slate-405 font-medium font-mono text-center sm:text-left">
-                      Showing {(browsePage - 1) * pageSize + 1} - {Math.min(browsePage * pageSize, filteredBrowseList.length)} of {filteredBrowseList.length} spots
-                    </p>
-
-                    <div className="flex items-center justify-center gap-1 max-w-full overflow-x-auto py-1 scrollbar-none px-1 flex-nowrap shrink-0">
-                      <button
-                        onClick={() => setBrowsePage(p => Math.max(1, p - 1))}
-                        disabled={browsePage === 1}
-                        className={`px-3 py-2 border rounded-xl text-xs font-bold font-mono transition duration-200 cursor-pointer flex items-center gap-1 shrink-0 ${
-                          browsePage === 1 
-                            ? 'text-slate-300 border-slate-100 cursor-not-allowed dark:border-slate-800' 
-                            : 'text-slate-700 bg-white border-slate-205 hover:bg-slate-50 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-800'
-                        }`}
-                      >
-                        <ChevronLeft className="w-4 h-4" /> Prev
-                      </button>
-
-                      {getPaginationRange(browsePage, totalPages).map((pNum, idx) => {
-                        if (pNum === '...') {
-                          return (
-                            <span 
-                              key={`ellipsis-${idx}`}
-                              className="w-9 h-9 text-xs font-bold font-mono text-slate-400 dark:text-slate-600 flex items-center justify-center select-none"
-                            >
-                              ...
-                            </span>
-                          );
-                        }
-                        return (
-                          <button
-                            key={`page-${pNum}`}
-                            onClick={() => setBrowsePage(pNum as number)}
-                            className={`w-9 h-9 text-xs font-black font-mono rounded-xl transition duration-200 cursor-pointer shrink-0 ${
-                              browsePage === pNum 
-                                ? 'bg-emerald-600 text-white shadow-xs' 
-                                : 'border border-slate-200 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-800 text-slate-700 dark:text-slate-300 dark:hover:bg-slate-800'
-                            }`}
-                          >
-                            {pNum}
-                          </button>
-                        );
-                      })}
-
-                      <button
-                        onClick={() => setBrowsePage(p => Math.min(totalPages, p + 1))}
-                        disabled={browsePage === totalPages}
-                        className={`px-3 py-2 border rounded-xl text-xs font-bold font-mono transition duration-200 cursor-pointer flex items-center gap-1 shrink-0 ${
-                          browsePage === totalPages 
-                            ? 'text-slate-300 border-slate-100 cursor-not-allowed dark:border-slate-800' 
-                            : 'text-slate-700 bg-white border-slate-205 hover:bg-slate-50 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-800'
-                        }`}
-                      >
-                        Next <ChevronRight className="w-4 h-4" />
-                      </button>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                     </div>
                   </div>
                 )}
@@ -11392,7 +9163,6 @@ export default function App() {
             </div>
           );
         })()}
-<<<<<<< HEAD
           </ErrorBoundary>
         )}
 
@@ -11472,777 +9242,15 @@ export default function App() {
                 <h4 className="font-extrabold text-slate-800 dark:text-white text-lg">Wanderer Coordinates Lost</h4>
                 <p className="text-xs text-slate-400 mt-1 px-4 max-w-sm mx-auto">This specific sightseeing attraction cannot be located in the offline or database index. Return to standard search boards.</p>
                 <button onClick={() => navigate('#/attractions')} className="mt-4 px-4 py-2.5 bg-slate-900 dark:bg-slate-800 text-white rounded-xl text-xs font-bold font-sans cursor-pointer">
-=======
-
-        {currentPath.startsWith('/attraction/') && (
-          <div id="attraction-detail-view" className="animate-fade-in text-slate-700 bg-slate-50/30 dark:bg-slate-950/20">
-            {loading ? (
-              <div className="text-center py-24 flex flex-col items-center justify-center min-h-[60vh]">
-                <Loader2 className="w-12 h-12 text-emerald-600 animate-spin mb-4" />
-                <p className="text-slate-500 font-semibold text-sm">Gathering travel guides & lodgings coordinates...</p>
-              </div>
-            ) : activeAttrDetail ? (
-              <div>
-                
-                {/* 1. Hero Section */}
-                <div id="hero-section" className="relative bg-slate-900 h-[380px] sm:h-[450px] md:h-[500px] text-white flex flex-col justify-end overflow-hidden">
-                  <div className="absolute inset-0 z-0">
-                    <img 
-                      src={safeSrc(activeAttrDetail.attraction.image)} 
-                      alt={activeAttrDetail.attraction.name} 
-                      className="w-full h-full object-cover opacity-35 object-center scale-105 transition-transform duration-700 ease-out hover:scale-100" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent" />
-                  </div>
-                  
-                  {/* Banner Like & Save Buttons Overlay */}
-                  <div className="absolute top-6 right-6 z-20 flex items-center gap-3">
-                    {/* Public Like Button */}
-                    <button
-                      id="like-attraction-banner-btn"
-                      onClick={() => toggleLike(activeAttrDetail.attraction.id, 'attraction')}
-                      className={`px-4 py-2.5 rounded-full border shadow-lg font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
-                        user && likes.some(l => l.id === `${user.uid}_${activeAttrDetail.attraction.id}`)
-                          ? 'bg-rose-600 border-rose-700 text-white hover:bg-rose-700'
-                          : 'bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-md'
-                      }`}
-                    >
-                      <motion.span
-                        animate={{ scale: (user && likes.some(l => l.id === `${user.uid}_${activeAttrDetail.attraction.id}`)) ? [1, 1.4, 1] : 1 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <Heart className={`w-4 h-4 ${(user && likes.some(l => l.id === `${user.uid}_${activeAttrDetail.attraction.id}`)) ? 'fill-white text-white' : 'text-white'}`} />
-                      </motion.span>
-                      <span>
-                        {(user && likes.some(l => l.id === `${user.uid}_${activeAttrDetail.attraction.id}`)) ? 'Liked' : 'Like'} ({likes.filter(l => l.contentId === activeAttrDetail.attraction.id).length})
-                      </span>
-                    </button>
-
-                    {/* Bookmark Save Button */}
-                    <button
-                      id="save-attraction-banner-btn"
-                      onClick={() => handleToggleSave(activeAttrDetail.attraction.id, 'attraction')}
-                      className={`px-4 py-2.5 rounded-full border shadow-lg font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
-                        isItemSaved(activeAttrDetail.attraction.id)
-                          ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-750'
-                          : 'bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-md'
-                      }`}
-                    >
-                      <motion.span
-                        animate={{ scale: isItemSaved(activeAttrDetail.attraction.id) ? [1, 1.4, 1] : 1 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <Bookmark className={`w-4 h-4 ${isItemSaved(activeAttrDetail.attraction.id) ? 'fill-white text-white' : 'text-white'}`} />
-                      </motion.span>
-                      <span>
-                        {isItemSaved(activeAttrDetail.attraction.id) ? 'Saved' : 'Save'}
-                      </span>
-                    </button>
-                  </div>
-                  
-                  <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-8 sm:pb-10 md:pb-14 flex flex-col items-start gap-4">
-                    <button 
-                      onClick={() => navigate('#/attractions')}
-                      className="text-white bg-white/10 hover:bg-white/20 border border-white/15 text-xs px-4 py-2 rounded-full font-sans cursor-pointer transition flex items-center gap-1.5 backdrop-blur-xs"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back to Attractions
-                    </button>
-                    
-                    <div className="space-y-2 max-w-3xl text-left">
-                      <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs text-emerald-300 font-extrabold bg-emerald-500/15 border border-emerald-500/20 px-3 py-1 rounded-full uppercase tracking-wider">
-                        <Compass className="w-3 h-3 text-emerald-400" /> {activeAttrDetail.attraction.category} Spot
-                      </span>
-                      
-                      <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight font-sans">
-                        {activeAttrDetail.attraction.name}
-                      </h1>
-                      
-                      <p className="text-sm sm:text-base text-slate-300 flex items-center gap-1.5 mt-2">
-                        <MapPin className="w-4 h-4 text-emerald-400 shrink-0" />
-                        <span>Located close to: </span>
-                        <span 
-                          className="font-bold underline cursor-pointer hover:text-white transition" 
-                          onClick={() => navigate(`#/destination/${activeAttrDetail.destination?.id}`)}
-                        >
-                          {activeAttrDetail.destination ? activeAttrDetail.destination.name : 'Scenic Base'}
-                        </span>
-                      </p>
-                      
-                      <p className="text-xs sm:text-sm text-slate-400 font-medium italic mt-2 opacity-90 leading-relaxed">
-                        "Experience the pristine beauty of {activeAttrDetail.attraction.name}, a cozy {(activeAttrDetail.attraction.category || 'attraction').toLowerCase()} nesting quietly in the {activeAttrDetail.destination?.name || 'Himalayan'} landscape."
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 2. Floating Quick Action Bar */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 relative z-20">
-                  <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-200/80 dark:border-slate-800 p-2 sm:p-3 flex flex-wrap sm:flex-nowrap items-center justify-around gap-1 md:gap-3 max-w-4xl mx-auto">
-                    
-                    <button 
-                      onClick={() => document.getElementById('route-planner-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                      className="flex-1 min-w-[70px] sm:min-w-0 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 px-1 rounded-xl text-slate-700 hover:text-emerald-600 hover:bg-emerald-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition cursor-pointer"
-                    >
-                      <Compass className="w-4 h-4 md:w-4.5 md:h-4.5 text-emerald-500" />
-                      <span className="text-[10px] sm:text-xs font-bold tracking-tight">Find Route</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => document.getElementById('gallery-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                      className="flex-1 min-w-[70px] sm:min-w-0 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 px-1 rounded-xl text-slate-700 hover:text-emerald-600 hover:bg-emerald-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition cursor-pointer"
-                    >
-                      <Camera className="w-4 h-4 md:w-4.5 md:h-4.5 text-emerald-500" />
-                      <span className="text-[10px] sm:text-xs font-bold tracking-tight">Gallery</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => document.getElementById('lodgings-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                      className="flex-1 min-w-[70px] sm:min-w-0 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 px-1 rounded-xl text-slate-700 hover:text-emerald-600 hover:bg-emerald-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition cursor-pointer"
-                    >
-                      <Home className="w-4 h-4 md:w-4.5 md:h-4.5 text-emerald-500" />
-                      <span className="text-[10px] sm:text-xs font-bold tracking-tight">Nearby Stay</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => document.getElementById('nearby-attractions-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                      className="flex-1 min-w-[70px] sm:min-w-0 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 px-1 rounded-xl text-slate-700 hover:text-emerald-600 hover:bg-emerald-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition cursor-pointer"
-                    >
-                      <MapPin className="w-4 h-4 md:w-4.5 md:h-4.5 text-emerald-500" />
-                      <span className="text-[10px] sm:text-xs font-bold tracking-tight">Nearby Spots</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => document.getElementById('comments-section-accordion')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                      className="flex-1 min-w-[70px] sm:min-w-0 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 px-1 rounded-xl text-slate-700 hover:text-emerald-600 hover:bg-emerald-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition cursor-pointer"
-                    >
-                      <MessageSquare className="w-4 h-4 md:w-4.5 md:h-4.5 text-emerald-500" />
-                      <span className="text-[10px] sm:text-xs font-bold tracking-tight">Comments</span>
-                    </button>
-                    
-                  </div>
-                </div>
-
-                {/* Main Content Grid Area */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-12">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
-                    {/* Left & Middle Column (Primary Information & Interactive Widgets) */}
-                    <div className="lg:col-span-2 space-y-8">
-                      
-                      {/* 3. Attraction Overview Component */}
-                      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-xs border border-slate-200/60 dark:border-slate-800/80 text-left">
-                        <div className="flex justify-between items-start flex-wrap gap-4 mb-4 border-b border-slate-100 dark:border-slate-800 pb-4">
-                          <div>
-                            <h3 className="font-extrabold text-2xl text-slate-900 dark:text-white">Attraction Synopsis</h3>
-                            <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5 font-bold font-mono">Territorially cached coordinates</p>
-                          </div>
-                          
-                          <div className="flex flex-wrap items-center gap-2">
-                            {/* Share button */}
-                            <button
-                              onClick={() => {
-                                const shareUrl = `${window.location.origin}/#/attraction/${encodeURIComponent(activeAttrDetail.attraction.id)}`;
-                                navigator.clipboard.writeText(shareUrl);
-                                setNotification({
-                                  type: 'success',
-                                  message: `🔗 Direct link to ${activeAttrDetail.attraction.name} copied to clipboard!`
-                                });
-                              }}
-                              className="px-3.5 py-1.5 rounded-full border border-slate-205 bg-slate-50 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-750 dark:text-slate-300 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
-                            >
-                              <Share2 className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                              <span>Share</span>
-                            </button>
-                          </div>
-                        </div>
-                        
-                        <p className="text-slate-600 dark:text-slate-350 leading-relaxed text-sm md:text-base">
-                          {activeAttrDetail.attraction.description}
-                        </p>
-
-                        {/* Why Visit & Special Highlights */}
-                        {(() => {
-                          const categoryData = getCategoryHighlights(activeAttrDetail.attraction.category, activeAttrDetail.attraction.name);
-                          return (
-                            <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <div className="bg-emerald-50/40 dark:bg-emerald-950/10 rounded-2xl p-4 sm:p-5 border border-emerald-500/10 shrink-0">
-                                <h4 className="flex items-center gap-2 text-emerald-800 dark:text-emerald-400 font-extrabold text-sm uppercase tracking-wider mb-2 font-sans">
-                                  <Sparkles className="w-4 h-4 text-emerald-500 shrink-0" /> Why Visit?
-                                </h4>
-                                <p className="text-xs text-slate-600 dark:text-slate-350 leading-relaxed">
-                                  {categoryData.whyVisit}
-                                </p>
-                              </div>
-                              
-                              <div className="bg-slate-50/50 dark:bg-slate-800/10 rounded-2xl p-4 sm:p-5 border border-slate-200/40 dark:border-slate-850">
-                                <h4 className="flex items-center gap-2 text-indigo-805 dark:text-indigo-400 font-extrabold text-sm uppercase tracking-wider mb-2.5 font-sans">
-                                  <CheckSquare className="w-4 h-4 text-emerald-500 shrink-0" /> Special Highlights
-                                </h4>
-                                <ul className="space-y-2">
-                                  {categoryData.highlights.map((hLine, hIdx) => (
-                                    <li key={hIdx} className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-350">
-                                      <Zap className="w-3 h-3 text-amber-500 shrink-0 mt-0.5" />
-                                      <span>{hLine}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </div>
-                          );
-                        })()}
-                      </div>
-
-                      {/* Himalayan AI Local Guide widget */}
-                      <AiLocalAdvisor 
-                        name={activeAttrDetail.attraction.name}
-                        category={activeAttrDetail.attraction.category}
-                        description={activeAttrDetail.attraction.description}
-                        destinationName={activeAttrDetail.destination?.name}
-                      />
-
-                      {/* 5. Route Information Block */}
-                      <div id="route-planner-section" className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-xs border border-slate-200/60 dark:border-slate-800/80 text-left">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-4 border-b border-slate-100 dark:border-slate-800">
-                          <div>
-                            <h3 className="font-extrabold text-xl text-slate-900 dark:text-white flex items-center gap-2">
-                              <Compass className="w-5 h-5 text-emerald-600" /> Route Access Coordinates
-                            </h3>
-                            <p className="text-xs text-slate-450 mt-0.5 font-mono">Himalayan transit logs and pathfinding terminals</p>
-                          </div>
-                          
-                          <button 
-                            onClick={() => navigate('#/plan-my-trip')}
-                            className="bg-emerald-600 hover:bg-emerald-750 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-95 shadow-sm shadow-emerald-700/10"
-                          >
-                            <Calendar className="w-3.5 h-3.5" /> Ask Travel Desk
-                          </button>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                          <div className="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
-                            <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block leading-none mb-1 font-mono">Destination Base Hub</span>
-                            <span className="font-extrabold text-slate-900 dark:text-emerald-400 block text-sm sm:text-base">{activeAttrDetail.destination?.name || 'Base Station'}</span>
-                            <span className="text-[11px] text-slate-450 block mt-1">Directly accessible via regional mountain routes and private carriers.</span>
-                          </div>
-                          
-                          <div className="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
-                            <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block leading-none mb-1 font-mono">Principal Railway Hub</span>
-                            <span className="font-extrabold text-slate-900 dark:text-emerald-400 block text-sm sm:text-base">
-                              {(() => {
-                                if (activeAttrDetail.routes && activeAttrDetail.routes.length > 0) {
-                                  const r0 = activeAttrDetail.routes[0];
-                                  const matchedHub = hubs.find(h => h.id === r0.fromHubId);
-                                  return matchedHub?.name || 'New Jalpaiguri (NJP)';
-                                }
-                                return 'New Jalpaiguri / Siliguri (NJP)';
-                              })()}
-                            </span>
-                            <span className="text-[11px] text-slate-450 block mt-1">Primary railhead access with shared and private taxi options.</span>
-                          </div>
-                        </div>
-
-                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-350 mb-3 block">Authentic transit runs to base destination:</p>
-                        
-                        {activeAttrDetail.routes.length === 0 ? (
-                          <div className="bg-slate-50 dark:bg-slate-800/20 p-6 rounded-2xl text-slate-400 dark:text-slate-500 text-center text-xs border border-dashed border-slate-205 dark:border-slate-800">
-                            No explicit transit coordinates registered for this spot yet. Try looking up generalized routes to {activeAttrDetail.destination?.name} on our pathfinding terminal.
-                          </div>
-                        ) : (
-                          <div className="space-y-3">
-                            {activeAttrDetail.routes.map((rt: Route) => {
-                              const fH = hubs.find(h => h.id === rt.fromHubId);
-                              const tH = hubs.find(h => h.id === rt.toHubId);
-                              return (
-                                <div key={rt.id} className="bg-slate-50/80 dark:bg-slate-800/20 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between sm:items-center gap-4 text-xs transition hover:border-emerald-500/25 hover:bg-white dark:hover:bg-slate-850">
-                                  <div className="text-left">
-                                    <span className="font-extrabold text-slate-900 dark:text-slate-200 block text-sm sm:text-base flex items-center gap-1.5">
-                                      {fH?.name} <ArrowRight className="w-3.5 h-3.5 text-emerald-600" /> {tH?.name}
-                                    </span>
-                                    <span className="text-slate-450 block mt-1 font-medium leading-normal">
-                                      Stops terminal path: {rt.path.join(' ➔ ')}
-                                    </span>
-                                  </div>
-                                  <div className="shrink-0 text-left sm:text-right flex sm:flex-col justify-between sm:justify-start items-center sm:items-end border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100 dark:border-slate-800">
-                                    <p className="font-extrabold text-emerald-705 dark:text-emerald-450 text-sm md:text-base">Est. ₹{rt.fareMin} - ₹{rt.fareMax}</p>
-                                    <button 
-                                      onClick={() => navigate(`#/route/${rt.fromHubId}-to-${rt.toHubId}`)}
-                                      className="text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 font-extrabold hover:underline mt-1 cursor-pointer block text-xs whitespace-nowrap"
-                                    >
-                                      Launch Pathfinding Tracker ➔
-                                    </button>
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* 6. Nearby Attractions Horizontal Swipe Carousel */}
-                      <div id="nearby-attractions-section" className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-xs border border-slate-200/60 dark:border-slate-800/80 text-left">
-                        <div className="flex justify-between items-center mb-6">
-                          <div>
-                            <h3 className="font-extrabold text-xl text-slate-900 dark:text-white flex items-center gap-2">
-                              <Sparkles className="w-5 h-5 text-amber-505" /> Nearby Scenic Spots
-                            </h3>
-                            <p className="text-xs text-slate-450 mt-0.5 font-mono">Discovered spots in the vicinity of {activeAttrDetail.destination?.name}</p>
-                          </div>
-                          
-                          <button 
-                            onClick={() => navigate('#/attractions')}
-                            className="text-emerald-600 hover:text-emerald-750 dark:text-emerald-400 font-extrabold text-xs flex items-center gap-1 cursor-pointer whitespace-nowrap hover:underline"
-                          >
-                            View All <ChevronRight className="w-4 h-4" />
-                          </button>
-                        </div>
-                        
-                        {(() => {
-                          const nearbyList = attractions.filter(a => a.destinationId === activeAttrDetail.attraction.destinationId && a.id !== activeAttrDetail.attraction.id);
-                          if (nearbyList.length === 0) {
-                            return (
-                              <div className="bg-slate-50 dark:bg-slate-800/20 p-6 rounded-2xl text-slate-400 dark:text-slate-500 text-center text-xs border border-slate-100 dark:border-slate-800">
-                                No alternative spot guides log under {activeAttrDetail.destination?.name} yet. Explore other destinations for more guides!
-                              </div>
-                            );
-                          }
-                          return (
-                            <div className="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x scrollbar-thin scrollbar-thumb-slate-205 dark:scrollbar-thumb-slate-800">
-                              {nearbyList.map((item) => (
-                                <div 
-                                  key={item.id} 
-                                  className="min-w-[270px] sm:min-w-[310px] snap-start shrink-0 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col justify-between group h-full"
-                                >
-                                  <div className="relative h-40 w-full overflow-hidden shrink-0">
-                                    <img 
-                                      src={safeSrc(item.image)} 
-                                      alt={item.name} 
-                                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                                    />
-                                    <span className="absolute top-2.5 left-2.5 bg-slate-900/80 text-white font-extrabold text-[9px] py-1 px-2.5 rounded-full uppercase tracking-wider scale-90 font-mono">
-                                      {item.category}
-                                    </span>
-                                  </div>
-                                  <div className="p-4 flex flex-col justify-between flex-grow text-left">
-                                    <div>
-                                      <h4 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">{item.name}</h4>
-                                      <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1 mb-4 leading-relaxed font-sans">{item.description}</p>
-                                    </div>
-                                    <button 
-                                      onClick={() => {
-                                        navigate(`#/attraction/${encodeURIComponent(item.id)}`);
-                                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                                      }}
-                                      className="w-full bg-slate-900 hover:bg-slate-955 dark:bg-slate-800 dark:hover:bg-slate-750 text-white font-bold text-[11px] py-2.5 rounded-xl cursor-pointer transition uppercase tracking-wider"
-                                    >
-                                      Explore Spot Details
-                                    </button>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          );
-                        })()}
-                      </div>
-
-                      {/* 7. Nearby Homestays / Lodging Horizontal Swipe Carousel */}
-                      <div id="lodgings-section" className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-xs border border-slate-200/60 dark:border-slate-800/80 text-left">
-                        <div className="flex justify-between items-center mb-6">
-                          <div>
-                            <h3 className="font-extrabold text-xl text-slate-900 dark:text-white flex items-center gap-2">
-                              <Home className="w-5 h-5 text-emerald-600" /> Nearby Recommended Lodgings
-                            </h3>
-                            <p className="text-xs text-slate-450 mt-0.5 font-mono">Cozy local homes with traditional hospitality & local meals</p>
-                          </div>
-                          
-                          <button 
-                            onClick={() => navigate('#/register/homestay')}
-                            className="text-emerald-600 hover:text-emerald-750 dark:text-emerald-400 font-extrabold text-xs flex items-center gap-1 cursor-pointer whitespace-nowrap hover:underline"
-                          >
-                            Add Homestay <Plus className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                        
-                        {activeAttrDetail.homestays.length === 0 ? (
-                          <div className="bg-slate-50 dark:bg-slate-800/15 p-6 rounded-2xl text-slate-400 dark:text-slate-500 text-center text-xs border border-slate-100 dark:border-slate-800">
-                            No registered local homestays loaded next to this area yet. Submit a Travel Lead to secure comfortable lodgings!
-                          </div>
-                        ) : (
-                          <div className="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x scrollbar-thin scrollbar-thumb-slate-205 dark:scrollbar-thumb-slate-800">
-                            {activeAttrDetail.homestays.map((hs: Homestay) => (
-                              <div 
-                                key={hs.id} 
-                                className="min-w-[270px] sm:min-w-[310px] snap-start shrink-0 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col justify-between group h-full"
-                              >
-                                <div className="relative h-40 w-full overflow-hidden shrink-0">
-                                  <img 
-                                    src={(hs.images && hs.images.find(img => img && img.trim() !== '')) || DEFAULT_HOMESTAY_IMAGE} 
-                                    alt={hs.name} 
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                                    referrerPolicy="no-referrer"
-                                    loading="lazy"
-                                    onError={(e) => {
-                                      e.currentTarget.src = DEFAULT_HOMESTAY_IMAGE;
-                                    }}
-                                  />
-                                  <span className="absolute top-2.5 left-2.5 bg-emerald-600 text-white font-extrabold text-[9px] py-1 px-2.5 rounded-full uppercase tracking-wider scale-90 font-mono">
-                                    🏡 Homestay{(!hs.images || !hs.images.find(i => i && i.trim() !== '')) && ' (Default)'}
-                                  </span>
-                                </div>
-                                <div className="p-4 flex flex-col justify-between flex-grow text-left">
-                                  <div>
-                                    <h4 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">{hs.name}</h4>
-                                    <div className="flex flex-wrap items-center justify-between gap-1.5 mt-1">
-                                      <p className="text-emerald-705 dark:text-emerald-400 text-xs sm:text-sm font-extrabold">₹{hs.priceMin} - ₹{hs.priceMax} <span className="text-slate-400 font-medium font-mono text-[11px]">/ night</span></p>
-                                      <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-100 dark:bg-amber-950/20 dark:text-amber-300 dark:border-amber-900/45">
-                                        🍳 {hs.breakfastIncluded === 'Not Included' ? 'No Bfast' : 'Bfast Incl'}
-                                      </span>
-                                    </div>
-                                    
-                                    <div className="flex flex-wrap gap-1 mt-2.5 mb-4">
-                                      {hs.amenities.slice(0, 3).map((amenity, idx) => (
-                                        <span key={idx} className="bg-slate-150 dark:bg-slate-800 text-slate-650 dark:text-slate-350 text-[10px] px-2 py-0.5 rounded-md font-medium capitalize">
-                                          {amenity}
-                                        </span>
-                                      ))}
-                                      {hs.amenities.length > 3 && (
-                                        <span className="bg-slate-100 dark:bg-slate-800 text-slate-500 text-[9px] px-2 py-0.5 rounded-md font-bold">
-                                          +{hs.amenities.length - 3} More
-                                        </span>
-                                      )}
-                                    </div>
-                                  </div>
-                                  <button 
-                                    onClick={() => navigate(`#/homestay/${hs.id}`)}
-                                    className="w-full bg-slate-900 hover:bg-slate-955 dark:bg-slate-800 dark:hover:bg-slate-750 text-white font-bold text-[11px] py-2.5 rounded-xl cursor-pointer transition uppercase tracking-wider"
-                                  >
-                                    Explore Stay Log
-                                  </button>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* 8. Responsive Image Gallery with Upload capability */}
-                      <div id="gallery-section" className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-xs border border-slate-200/60 dark:border-slate-800/80 text-left">
-                        <div className="mb-4">
-                          <h3 className="font-extrabold text-xl text-slate-900 dark:text-white flex items-center gap-2">
-                            <Camera className="w-5 h-5 text-emerald-600" /> Travelers Sightseeing Gallery
-                          </h3>
-                          <p className="text-xs text-slate-450 mt-0.5 font-mono">Captures published directly by Himalayan wanderers</p>
-                        </div>
-                        
-                        <ImageGallerySystem
-                          entityType="attraction"
-                          entityId={activeAttrDetail.attraction.id}
-                          staticGallery={[]} // Attractions fall back to dynamic uploader galleries
-                          activePhotos={activePhotos}
-                          user={user}
-                          isAdmin={isAdmin}
-                          onLogin={handleUserLogin}
-                          onPhotoUploaded={(newPhoto) => {
-                            setActivePhotos((prev) => [newPhoto, ...prev]);
-                          }}
-                          onPhotoUpdated={(updatedPhoto) => {
-                            setActivePhotos((prev) => prev.map(p => p.id === updatedPhoto.id ? updatedPhoto : p));
-                          }}
-                          setNotification={setNotification}
-                          likes={likes}
-                          onToggleLike={toggleLike}
-                        />
-                      </div>
-
-                    </div>
-
-                    {/* Right Column (Sidebar containing facts, travel tips, and plan inquiries form) */}
-                    <div className="space-y-8 h-fit lg:sticky lg:top-24">
-                      
-                      {/* 4. Quick Facts Bento Box */}
-                      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-xs border border-slate-200/60 dark:border-slate-800/80 space-y-4 text-left">
-                        <div>
-                          <h4 className="font-extrabold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                            <Info className="w-4.5 h-4.5 text-emerald-600" /> Quick Attraction Facts
-                          </h4>
-                          <p className="text-[10px] text-slate-450 uppercase mb-2 font-bold font-mono">Pristine geography values</p>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
-                          
-                          <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-850 flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-                              <MapPin className="w-4 h-4 text-emerald-600" />
-                            </div>
-                            <div>
-                              <span className="text-[9px] text-slate-400 font-extrabold block uppercase leading-none font-mono">Location Hub</span>
-                              <span className="text-xs font-bold text-slate-900 dark:text-slate-200 block mt-0.5">{activeAttrDetail.destination?.name || 'Highland Spot'}</span>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-850 flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-                              <Compass className="w-4 h-4 text-emerald-600" />
-                            </div>
-                            <div>
-                              <span className="text-[9px] text-slate-400 font-extrabold block uppercase leading-none font-mono">Special Elevation</span>
-                              <span className="text-xs font-bold text-slate-900 dark:text-slate-200 block mt-0.5">
-                                {activeAttrDetail.attraction.category === 'Trek' ? '7,150 ft (High Ridge)' : activeAttrDetail.attraction.category === 'Viewpoint' ? '6,200 ft (Summit)' : '4,850 ft (Valley Level)'}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-850 flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-                              <Calendar className="w-4 h-4 text-emerald-600" />
-                            </div>
-                            <div>
-                              <span className="text-[9px] text-slate-400 font-extrabold block uppercase leading-none font-mono">Best Season</span>
-                              <span className="text-xs font-bold text-slate-900 dark:text-slate-200 block mt-0.5">{activeAttrDetail.destination?.bestSeason || 'September - June'}</span>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-850 flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-                              <Users className="w-4 h-4 text-emerald-600" />
-                            </div>
-                            <div>
-                              <span className="text-[9px] text-slate-400 font-extrabold block uppercase leading-none font-mono">Difficulty Level</span>
-                              <span className="text-xs font-bold text-slate-900 dark:text-slate-200 block mt-0.5">
-                                {activeAttrDetail.attraction.category === 'Trek' ? 'Moderate to Challenging' : 'Easy / Family Friendly'}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-850 flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-                              <Clock className="w-4 h-4 text-emerald-600" />
-                            </div>
-                            <div>
-                              <span className="text-[9px] text-slate-400 font-extrabold block uppercase leading-none font-mono">Recommended Duration</span>
-                              <span className="text-xs font-bold text-slate-900 dark:text-slate-200 block mt-0.5">
-                                {activeAttrDetail.attraction.category === 'Trek' ? '4 - 6 Hours (Half day)' : '1 - 2 Hours'}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-850 flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-                              <Wallet className="w-4 h-4 text-emerald-600" />
-                            </div>
-                            <div>
-                              <span className="text-[9px] text-slate-400 font-extrabold block uppercase leading-none font-mono">Entry Access Fee</span>
-                              <span className="text-xs font-bold text-slate-900 dark:text-slate-200 block mt-0.5">
-                                {activeAttrDetail.attraction.category === 'Trek' ? '₹50 (Conservation fee)' : 'Free Entry'}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-850 flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-                              <CheckSquare className="w-4 h-4 text-emerald-600" />
-                            </div>
-                            <div>
-                              <span className="text-[9px] text-slate-400 font-extrabold block uppercase leading-none font-mono">Facilities Available</span>
-                              <span className="text-xs font-bold text-slate-900 dark:text-slate-200 block mt-0.5">Tea stalls, viewpoints, resting benches</span>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-
-                      {/* 9. Travel Tips Section */}
-                      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-xs border border-slate-150 dark:border-slate-800/70 space-y-4 text-left">
-                        <div>
-                          <h4 className="font-extrabold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                            <Sparkles className="w-4.5 h-4.5 text-amber-550" /> Essential Travel Tips
-                          </h4>
-                          <p className="text-[10px] text-slate-450 uppercase mb-2 font-bold font-mono">Local mountain knowledge</p>
-                        </div>
-                        
-                        <div className="space-y-3.5 text-xs">
-                          <div className="border-l-2 border-emerald-500 pl-3 py-0.5">
-                            <p className="font-bold text-slate-800 dark:text-slate-200">🌤 Recommended Best Hour</p>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1 leading-normal">Mornings (7 AM - 11 AM) are optimal before fog rolls in around midday. Sunset hikes require flashlights.</p>
-                          </div>
-                          
-                          <div className="border-l-2 border-slate-400 pl-3 py-0.5">
-                            <p className="font-bold text-slate-800 dark:text-slate-200">🚗 Mountain Road Condition</p>
-                            <p className="text-slate-505 dark:text-slate-400 mt-1 leading-normal">Paved but with steep hilly hairpins. Having local professional drives is highly advised over self-driving.</p>
-                          </div>
-                          
-                          <div className="border-l-2 border-slate-400 pl-3 py-0.5">
-                            <p className="font-bold text-slate-800 dark:text-slate-200">🅿 Parking Convenience</p>
-                            <p className="text-slate-505 dark:text-slate-400 mt-1 leading-normal">Ample local parking is available at the trail base gate. Nominal fee of ₹20-50 collected by local committee.</p>
-                          </div>
-                          
-                          <div className="border-l-2 border-slate-400 pl-3 py-0.5">
-                            <p className="font-bold text-slate-800 dark:text-slate-200">📶 Network & Cellular Carrier</p>
-                            <p className="text-slate-505 dark:text-slate-400 mt-1 leading-normal">Jio and Airtel 4G signals are stable. Expect complete network blindspots inside deep valley gorges.</p>
-                          </div>
-                          
-                          <div className="border-l-2 border-rose-500 pl-3 py-0.5">
-                            <p className="font-bold text-slate-800 dark:text-slate-200">🛡 Vital Safety Notes</p>
-                            <p className="text-slate-505 dark:text-slate-400 mt-1 leading-normal">Always stay strictly on marked paths. Avoid steep wet cliff steps during high rain monsoons.</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 10. Send Travel Lead planning CTA card */}
-                      <div className="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-7 relative overflow-hidden border border-indigo-900/60 shadow-xl text-left">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-600/15 rounded-full blur-2xl mt-12 mr-2 pointer-events-none" />
-                        
-                        <div className="relative z-10">
-                          <Compass className="w-8 h-8 text-emerald-400 mb-3" />
-                          <h4 className="font-extrabold text-lg text-white">Need help planning your visit?</h4>
-                          <p className="text-slate-350 text-xs mt-1 leading-relaxed">Submit a travel lead enquiry to coordinate bespoke valley homestays, private cabs & complete route itineraries instantly.</p>
-                          
-                          {attrLeadSuccess ? (
-                            <div className="bg-emerald-950/40 border border-emerald-500/25 p-4 rounded-2xl mt-4 text-center animate-fade-in">
-                              <CheckCircle className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
-                              <p className="text-sm font-extrabold text-emerald-300">Inquiry Registered!</p>
-                              <p className="text-[11px] text-slate-300 mt-1 leading-normal">Our regional mountain partner will message you on WhatsApp shortly to fine-tune arrangements.</p>
-                              <button 
-                                onClick={() => setAttrLeadSuccess(false)}
-                                className="text-[10px] text-emerald-400 underline font-extrabold mt-3 hover:text-emerald-300 transition cursor-pointer"
-                              >
-                                Submit Another Inquiry
-                              </button>
-                            </div>
-                          ) : (
-                            <form onSubmit={handleAttractionLeadSubmit} className="space-y-3 mt-4 text-left">
-                              <div>
-                                <label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1 font-mono">Your Full Name *</label>
-                                <input 
-                                  name="name" 
-                                  type="text" 
-                                  required 
-                                  placeholder="e.g. Priyanjali Sen" 
-                                  className="w-full bg-slate-900/80 border border-slate-800 rounded-xl p-2.5 text-xs text-white placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
-                                />
-                              </div>
-                              
-                              <div>
-                                <label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1 font-mono">WhatsApp Mobile *</label>
-                                <input 
-                                  name="mobile" 
-                                  type="tel" 
-                                  required 
-                                  placeholder="e.g. 9876543210" 
-                                  className="w-full bg-slate-900/80 border border-slate-800 rounded-xl p-2.5 text-xs text-white placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
-                                />
-                              </div>
-
-                              <div className="grid grid-cols-2 gap-2">
-                                <div>
-                                  <label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1 font-mono">Travel Date</label>
-                                  <input 
-                                    name="travelDate" 
-                                    type="date" 
-                                    required
-                                    defaultValue={new Date().toISOString().split('T')[0]}
-                                    className="w-full bg-slate-900/80 border border-slate-800 rounded-xl p-2 md:p-2.5 text-xs text-white focus:border-indigo-500 focus:outline-none"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1 font-mono">Inquiry Budget (Est. ₹)</label>
-                                  <input 
-                                    name="budget" 
-                                    type="number" 
-                                    required
-                                    placeholder="e.g. 12000"
-                                    className="w-full bg-slate-900/80 border border-slate-800 rounded-xl p-2 md:p-2.5 text-xs text-white placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
-                                  />
-                                </div>
-                              </div>
-
-                              <button 
-                                type="submit" 
-                                disabled={submittingAttrLead}
-                                className="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-extrabold text-xs py-3 rounded-xl cursor-pointer transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/20 disabled:opacity-50 mt-4 leading-none"
-                              >
-                                {submittingAttrLead ? (
-                                  <>
-                                    <Loader2 className="w-3.5 h-3.5 animate-spin" /> Submitting Inquiry...
-                                  </>
-                                ) : (
-                                  <>
-                                    Register Planning Lead ➔
-                                  </>
-                                )}
-                              </button>
-                            </form>
-                          )}
-                        </div>
-                      </div>
-
-                    </div>
-                    
-                  </div>
-                </div>
-
-                {/* 11. Comments Accordion Section */}
-                <div id="comments-section-accordion" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24 animate-fade-in text-left">
-                  <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-xs border border-slate-205 dark:border-slate-800 overflow-hidden">
-                    <button 
-                      onClick={() => setAttrCommentsExpanded(!attrCommentsExpanded)}
-                      className="w-full flex items-center justify-between text-left cursor-pointer group"
-                    >
-                      <div>
-                        <h3 className="font-extrabold text-xl text-slate-900 dark:text-white flex items-center gap-2 group-hover:text-emerald-600 transition">
-                          <MessageSquare className="w-5 h-5 text-emerald-600" /> Traveler Discussion Forum
-                        </h3>
-                        <p className="text-xs text-slate-450 mt-0.5">
-                          Read opinions or seek updates from {comments.filter(c => c.contentId === activeAttrDetail.attraction.id && c.contentType === 'attraction').length} registered travelers
-                        </p>
-                      </div>
-                      
-                      <div className="bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 p-2.5 rounded-xl transition">
-                        {attrCommentsExpanded ? (
-                          <ChevronUp className="w-5 h-5 text-slate-500" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5 text-slate-500" />
-                        )}
-                      </div>
-                    </button>
-                    
-                    {attrCommentsExpanded && (
-                      <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 animate-fade-in">
-                        <CommentsSection
-                          contentId={activeAttrDetail.attraction.id}
-                          contentType="attraction"
-                          comments={comments}
-                          user={user}
-                          onAddComment={addCommentAction}
-                          onDeleteComment={deleteCommentAction}
-                          onLogin={handleUserLogin}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-              </div>
-            ) : (
-              <div className="text-center py-24 text-slate-500 bg-white rounded-3xl shadow-xs max-w-xl mx-auto border my-12">
-                <Compass className="w-12 h-12 text-slate-350 mx-auto mb-3" />
-                <h4 className="font-extrabold text-slate-800 text-lg">Wanderer Coordinates Lost</h4>
-                <p className="text-xs text-slate-400 mt-1 px-4 max-w-sm mx-auto">This specific sightseeing attraction cannot be located in the offline or database index. Return to standard search boards.</p>
-                <button onClick={() => navigate('#/attractions')} className="mt-4 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold font-sans cursor-pointer">
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   Back to Attractions board
                 </button>
               </div>
             )}
           </div>
-<<<<<<< HEAD
           </ErrorBoundary>
         )}
 
 
-=======
-        )}
-
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         {/* ========================================================
             HIDDEN GEMS VIEW
             ======================================================== */}
@@ -12372,7 +9380,7 @@ export default function App() {
                 return (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filteredGems.map((item) => {
-                      const detailUrl = item.itemType === 'destination' ? `#/destination/${item.id}` : `#/attraction/${item.id}`;
+                      const detailUrl = item.itemType === 'destination' ? `#/destination/${getItemSlug(item)}` : `#/attraction/${getItemSlug(item)}`;
                       return (
                         <div
                           key={`${item.itemType}-${item.id}`}
@@ -12422,7 +9430,6 @@ export default function App() {
         {/* ========================================================
             7. HOMESTAY DETAIL VIEW
             ======================================================== */}
-<<<<<<< HEAD
         {(currentPath.startsWith('/homestays/') || currentPath.startsWith('/homestay/')) && (
           <ErrorBoundary fallbackTitle="Homestay Guide Error" fallbackMessage="The homestay information sheet could not be processed. Let's try resetting.">
             <HomestayDetailPage 
@@ -12440,180 +9447,12 @@ export default function App() {
               allDestinations={destinations}
             />
           </ErrorBoundary>
-=======
-        {currentPath.startsWith('/homestay/') && (
-          <div id="homestay-detail-view" className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8 animate-fade-in">
-            {loading ? (
-              <div className="text-center py-24 flex flex-col items-center justify-center">
-                <Loader2 className="w-12 h-12 text-emerald-600 animate-spin mb-4" />
-                <p className="text-slate-500 font-semibold font-sans animate-pulse">Retrieving price ranges & host credentials...</p>
-              </div>
-            ) : activeHomeDetail ? (
-              <div>
-                <button 
-                  onClick={() => navigate('#/')}
-                  className="mb-6 inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-emerald-600 cursor-pointer"
-                >
-                  ← Home Search
-                </button>
-
-                <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-xs mb-8">
-                  <div className="grid grid-cols-1 lg:grid-cols-2">
-                    <div className="h-72 lg:h-full bg-slate-100">
-                      <img 
-                        src={(activeHomeDetail.homestay.images && activeHomeDetail.homestay.images.find(img => img && img.trim() !== '')) || DEFAULT_HOMESTAY_IMAGE} 
-                        alt={activeHomeDetail.homestay.name} 
-                        className="w-full h-full object-cover" 
-                        referrerPolicy="no-referrer"
-                        onError={(e) => {
-                          e.currentTarget.src = DEFAULT_HOMESTAY_IMAGE;
-                        }}
-                      />
-                    </div>
-                    <div className="p-6 md:p-8 flex flex-col justify-between">
-                      <div>
-                        {activeHomeDetail.homestay.ownerId ? (
-                          <span className="text-emerald-700 bg-emerald-50 border border-emerald-100/60 text-[10px] font-black px-3 py-1 rounded-full uppercase self-start mb-3 inline-flex items-center gap-1">
-                            ✨ Verified Partner Managed
-                          </span>
-                        ) : (
-                          <span className="text-slate-600 bg-slate-100 border border-slate-200 text-[10px] font-black px-3 py-1 rounded-full uppercase self-start mb-3 inline-flex items-center gap-1">
-                            🏠 HillyTrip Directory Listing
-                          </span>
-                        )}
-                        <div className="flex justify-between items-start flex-wrap gap-4 mb-2">
-                          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight text-left">{activeHomeDetail.homestay.name}</h2>
-                          
-                          {/* Homestay Save Button */}
-                          <button
-                            onClick={() => handleToggleSave(activeHomeDetail.homestay.id, 'homestay')}
-                            className={`px-3.5 py-1.5 rounded-full border text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-xs ${
-                              isItemSaved(activeHomeDetail.homestay.id)
-                                ? 'bg-red-50 border-red-200 text-red-650 hover:bg-red-100 dark:bg-red-955/20 dark:border-red-900 dark:text-red-400'
-                                : 'bg-slate-50 border-slate-205 text-slate-700 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300'
-                            }`}
-                          >
-                            <motion.span
-                              animate={{ scale: isItemSaved(activeHomeDetail.homestay.id) ? 2 : 1 }}
-                              transition={{ duration: 0.3, ease: 'easeOut' }}
-                              className="inline-block shrink-0 mx-2"
-                            >
-                              <Heart className={`w-3.5 h-3.5 ${isItemSaved(activeHomeDetail.homestay.id) ? 'fill-red-500 text-red-500' : 'text-slate-400 shrink-0'}`} />
-                            </motion.span>
-                            <span>
-                              {isItemSaved(activeHomeDetail.homestay.id) ? 'Saved' : 'Save'}
-                            </span>
-                          </button>
-                        </div>
-                        
-                        {activeHomeDetail.destination && (
-                          <button 
-                            onClick={() => navigate(`#/destination/${activeHomeDetail.destination.id}`)}
-                            className="text-emerald-600 hover:underline font-bold text-xs mt-1 text-left block"
-                          >
-                            📍 Location: {activeHomeDetail.destination.name} Hub
-                          </button>
-                        )}
-
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 my-4 text-center">
-                          <span className="text-slate-400 text-[10px] block font-bold uppercase tracking-widest">Base Rate Nightly Range</span>
-                          <span className="text-3xl font-extrabold text-emerald-800 font-sans">₹{activeHomeDetail.homestay.priceMin} - ₹{activeHomeDetail.homestay.priceMax}</span>
-                          <span className="text-slate-400 text-xs block mt-1">(Exclusive of local organic and mountains dining context)</span>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2 my-1 mb-4 justify-start text-left">
-                          {activeHomeDetail.homestay.breakfastIncluded === 'Not Included' ? (
-                            <span className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-650 text-xs font-bold px-3 py-1.5 rounded-full border border-slate-200 dark:bg-slate-800 dark:text-slate-350">
-                              🍳 Breakfast Not Included
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-full border border-amber-100 dark:bg-amber-950/20 dark:text-amber-305 dark:border-amber-900/40">
-                              🍳 Breakfast Included
-                            </span>
-                          )}
-
-                          {activeHomeDetail.homestay.lunchAvailable && (
-                            <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-100 dark:bg-emerald-950/20 dark:text-emerald-305 dark:border-emerald-900/40">
-                              🥗 Lunch Available
-                            </span>
-                          )}
-
-                          {activeHomeDetail.homestay.dinnerAvailable && (
-                            <span className="inline-flex items-center gap-1.5 bg-sky-50 text-sky-800 text-xs font-bold px-3 py-1.5 rounded-full border border-sky-100 dark:bg-sky-950/20 dark:text-sky-305 dark:border-sky-900/40">
-                              🍗 Dinner Available
-                            </span>
-                          )}
-                        </div>
-
-                        <div>
-                          <h4 className="font-bold text-sm uppercase text-slate-400 tracking-wider mb-2 text-left">Amenities Provided</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {activeHomeDetail.homestay.amenities.map((am: string, index: number) => (
-                              <span key={index} className="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1 rounded-md border border-slate-100">
-                                ✓ {am}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-3 mt-8">
-                        <div className="flex gap-4">
-                          <a 
-                            href={`https://wa.me/${formatWhatsAppNumber(activeHomeDetail.homestay.whatsapp || activeHomeDetail.homestay.contact)}?text=Hello%20HillyTrip%20Host!%20I'm%20inquiring%20about%20booking%20and%20availabilities%2520for%2520${encodeURIComponent(activeHomeDetail.homestay.name)}.`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-center py-3.5 rounded-xl shadow-xs transition duration-150 flex items-center justify-center gap-2 cursor-pointer text-xs"
-                          >
-                            <MessageCircle className="w-5 h-5" />
-                            WhatsApp Host Securely
-                          </a>
-                          
-                          <button 
-                            onClick={() => {
-                              setInqName(user?.name || '');
-                              setInqEmail(user?.email || '');
-                              setInqMobile(user?.mobile || '');
-                              setInqMessage(`Hi! I'm interested in booking ${activeHomeDetail.homestay.name}. Can you confirm availability?`);
-                              setInquiryModalOpen(true);
-                            }}
-                            className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-black px-4 py-3.5 rounded-xl cursor-pointer shadow-xs"
-                          >
-                            📩 Send Live Inquiry
-                          </button>
-                        </div>
-
-                        {!activeHomeDetail.homestay.ownerId && (
-                          <button
-                            onClick={() => {
-                              navigate('#/partner-dashboard');
-                              setNotification({
-                                type: 'success',
-                                message: '🔍 Quick claim helper launched! Search for this homestay in the portal.'
-                              });
-                            }}
-                            className="w-full bg-slate-900 hover:bg-slate-850 text-white text-xs font-extrabold py-3 rounded-xl cursor-pointer border border-slate-700 hover:border-slate-650 shadow-2xs flex items-center justify-center gap-1.5"
-                          >
-                            🔑 Are you the owner? Claim this Business Listing
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-20 text-slate-500">Homestay specifications not accessible.</div>
-            )}
-          </div>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         )}
 
         {/* ========================================================
             8. PLAN MY TRIP VIEW
             ======================================================== */}
         {currentPath === '/plan-my-trip' && (
-<<<<<<< HEAD
           <div id="plan-my-trip-view" className="max-w-5xl mx-auto px-4 py-8 animate-fade-in text-center">
             {/* Planner Sub navigation tabs */}
             <div className="inline-flex bg-slate-100 dark:bg-slate-950 p-1 rounded-2xl mb-8 border border-slate-200/50 dark:border-slate-800 shadow-2xs">
@@ -12773,105 +9612,6 @@ export default function App() {
                 </form>
               </div>
             )}
-=======
-          <div id="plan-my-trip-view" className="max-w-2xl mx-auto px-4 py-12 animate-fade-in">
-            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-md border-b-4 border-emerald-600">
-              <div className="text-center mb-8">
-                <Compass className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
-                <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Hillary Trip Planner Inquiry</h2>
-                <p className="text-slate-500 text-sm mt-1">Fill this form to coordinate custom family arrangements, drivers & homestays.</p>
-              </div>
-
-              <form id="trip-lead-form" onSubmit={handleTripLeadSubmit} className="space-y-4">
-                <div>
-                  <label className="text-xs font-extrabold text-slate-400 uppercase tracking-widest block mb-1">Your Full Name (Primary Traveller) *</label>
-                  <input 
-                    name="name" 
-                    type="text" 
-                    required 
-                    placeholder="e.g. Priyanjali Sen" 
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs font-extrabold text-slate-400 uppercase tracking-widest block mb-1">Mobile / WhatsApp Number *</label>
-                    <input 
-                      name="mobile" 
-                      type="tel" 
-                      required 
-                      placeholder="e.g. 9876543210" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-extrabold text-slate-400 uppercase tracking-widest block mb-1">Target Base Destination Hub *</label>
-                    <select name="destination" required className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm font-semibold">
-                      {destinations.map((d, dIdx) => (
-                        <option key={`${d.id}-${dIdx}`} value={d.name}>{d.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label className="text-xs font-extrabold text-slate-400 uppercase tracking-widest block mb-1">Ideal Date of Travel</label>
-                    <input 
-                      name="travelDate" 
-                      type="date" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.2 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-extrabold text-slate-400 uppercase tracking-widest block mb-1">Estimated Budget (INR)</label>
-                    <input 
-                      name="budget" 
-                      type="number" 
-                      placeholder="e.g. 15000" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm font-sans"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-extrabold text-slate-400 uppercase tracking-widest block mb-1">Total Passengers</label>
-                    <input 
-                      name="numTravellers" 
-                      type="number" 
-                      min="1" 
-                      placeholder="2" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                  <span className="text-xs font-extrabold text-slate-400 uppercase block tracking-wider mb-2">Services Demanded</span>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2.5 text-sm text-slate-700 cursor-pointer">
-                      <input type="checkbox" name="svc-homestay" className="accent-emerald-600 rounded-sm" /> 
-                      Scenic Local Homestay Arrangements Included
-                    </label>
-                    <label className="flex items-center gap-2.5 text-sm text-slate-700 cursor-pointer">
-                      <input type="checkbox" name="svc-car" className="accent-emerald-600 rounded-sm" /> 
-                      Private Pool / Dedicated Tour Guide & Car
-                    </label>
-                    <label className="flex items-center gap-2.5 text-sm text-slate-700 cursor-pointer">
-                      <input type="checkbox" name="svc-planning" className="accent-emerald-600 rounded-sm" /> 
-                      Full Customized Daily Itinerary Planning support
-                    </label>
-                  </div>
-                </div>
-
-                <button 
-                  type="submit" 
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 font-extrabold text-white py-3 rounded-lg shadow-sm font-semibold cursor-pointer text-center"
-                >
-                  Submit Travel Lead
-                </button>
-              </form>
-            </div>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           </div>
         )}
 
@@ -13147,7 +9887,6 @@ export default function App() {
                 )}
 
                 {selectedContribType === 'add_homestay' && (
-<<<<<<< HEAD
                   <div className="space-y-6">
                     <div className="border-b border-slate-200 pb-2">
                       <span className="text-sm font-extrabold text-emerald-800 uppercase tracking-wide">Register Local Organic Homestay</span>
@@ -13365,41 +10104,6 @@ export default function App() {
                         {renderContributionUploader('image', 'Panoramic Scenic Photo')}
                       </div>
                     </div>
-=======
-                  <div className="space-y-4">
-                    <span className="text-xs font-semibold text-emerald-800">Register Local Organic Homestay</span>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-[10px] uppercase font-bold text-slate-400">Homestay Brand Name *</label>
-                        <input name="name" type="text" required placeholder="Misty Orchid Lepcha Stay" className="w-full p-2 text-xs bg-slate-50 border rounded-lg" />
-                      </div>
-                      <div>
-                        <label className="text-[10px] uppercase font-bold text-slate-400">Parent Village Destination *</label>
-                        <select name="destinationId" className="w-full p-2 text-xs font-semibold bg-slate-50 border rounded-lg">
-                          {destinations.map((d, dIdx) => <option key={`add-home-dest-${d.id}-${dIdx}`} value={d.id}>{d.name}</option>)}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-3 gap-2">
-                      <div>
-                        <label className="text-[10px] uppercase font-bold text-slate-400">Min Cost / day *</label>
-                        <input name="priceMin" type="number" required placeholder="1200" className="w-full p-2 text-xs bg-slate-50 border rounded-lg" />
-                      </div>
-                      <div>
-                        <label className="text-[10px] uppercase font-bold text-slate-400">Max Cost *</label>
-                        <input name="priceMax" type="number" required placeholder="2200" className="w-full p-2 text-xs bg-slate-50 border rounded-lg" />
-                      </div>
-                      <div>
-                        <label className="text-[10px] uppercase font-bold text-slate-400">Host Phone *</label>
-                        <input name="contact" type="tel" required placeholder="+91987..." className="w-full p-2 text-xs bg-slate-50 border rounded-lg" />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-[10px] uppercase font-bold text-slate-400">Amenities list (comma separated values)</label>
-                      <input name="amenities" type="text" placeholder="Organic Meals, Fireplace, Geyers" className="w-full p-2 text-xs bg-slate-50 border rounded-lg" />
-                    </div>
-                    {renderContributionUploader('image', 'Scenic Photo')}
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   </div>
                 )}
 
@@ -13721,15 +10425,9 @@ export default function App() {
                           </div>
                         ) : (
                           <div className="space-y-2.5">
-<<<<<<< HEAD
                             {userNotifications.map((notif, idx) => (
                               <div
                                 key={notif.id ? `user-notif-${notif.id}-${idx}` : `user-notif-idx-${idx}`}
-=======
-                            {userNotifications.map((notif) => (
-                              <div
-                                key={notif.id}
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                                 onClick={async () => {
                                   if (!notif.isRead) {
                                     try {
@@ -13825,7 +10523,6 @@ export default function App() {
         )}
 
         {/* ========================================================
-<<<<<<< HEAD
             8.0 PREMIUM CONTRIBUTOR PORTFOLIO & PROFILE
             ======================================================== */}
         {currentPath.startsWith('/contributor/') && (
@@ -13868,23 +10565,13 @@ export default function App() {
         )}
 
         {(currentPath === '/profile' || currentPath.startsWith('/profile?')) && (
-=======
-            8.1 UNIFIED MY PROFILE & ROLE SYSTEM
-            ======================================================== */}
-        {currentPath === '/profile' && (
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           <div id="profile-unified-view" className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8 animate-fade-in text-slate-800 dark:text-slate-100">
             {!user ? (
               /* UNAUTHENTICATED STATE - UNIFIED LOGIN / REGISTRATION */
               <div className="max-w-md mx-auto bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-800 shadow-xl mt-6">
                 <div className="text-center mb-6">
-<<<<<<< HEAD
                   <div className="flex justify-center mb-4">
                     <AnimatedLogo variant="full" size="md" theme={themeMode} />
-=======
-                  <div className="mx-auto w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-1">
-                    <UserIcon className="w-6 h-6" />
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   </div>
                   <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">HillyTrip Unified Portal</h2>
                   <p className="text-xs text-slate-450 dark:text-slate-400 mt-1.5 font-medium leading-relaxed text-center">
@@ -13932,7 +10619,6 @@ export default function App() {
                         />
                       </div>
                       <div>
-<<<<<<< HEAD
                         <label className="text-[10px] font-black uppercase tracking-wider text-slate-500 block mb-1">Unique Username *</label>
                         <input
                           type="text"
@@ -13944,8 +10630,6 @@ export default function App() {
                         />
                       </div>
                       <div>
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                         <label className="text-[10px] font-black uppercase tracking-wider text-slate-500 block mb-1">Mobile Number</label>
                         <input
                           type="tel"
@@ -13975,7 +10659,6 @@ export default function App() {
                     <input
                       type="password"
                       required
-<<<<<<< HEAD
                       placeholder="Enter safe password (min. 8 characters)"
                       value={profilePassword}
                       onChange={(e) => setProfilePassword(e.target.value)}
@@ -14027,13 +10710,6 @@ export default function App() {
                         </div>
                       </div>
                     )}
-=======
-                      placeholder="Enter safe password"
-                      value={profilePassword}
-                      onChange={(e) => setProfilePassword(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-750 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-slate-100 font-medium"
-                    />
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   </div>
 
                   {isSignUp && (
@@ -14061,7 +10737,6 @@ export default function App() {
                 </form>
               </div>
             ) : (
-<<<<<<< HEAD
               /* AUTHENTICATED STATE */
               <UserProfileSystem 
                 user={user} 
@@ -14118,1014 +10793,11 @@ export default function App() {
                 </div>
 
                 <BookingEngine currentUser={user} onNavigate={navigate} />
-=======
-              /* AUTHENTICATED STATE - ACCOUNT DETAILS AND PROFILE CORES */
-              <div className="space-y-6">
-                {/* Profile Header Block */}
-                <div className="bg-gradient-to-tr from-slate-900 to-indigo-950 text-white p-6 md:p-8 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 border border-slate-800 shadow-xl relative overflow-hidden text-left">
-                  <div className="absolute inset-0 opacity-10">
-                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4">
-                    <div className="w-16 h-16 rounded-2xl bg-emerald-600 border-2 border-white/20 flex items-center justify-center text-white text-3xl font-black font-mono shrink-0">
-                      {user.name?.charAt(0).toUpperCase() || 'U'}
-                    </div>
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h2 className="text-2xl font-black">{user.name}</h2>
-                        <span className="bg-emerald-600/30 text-emerald-400 border border-emerald-500/20 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">
-                          {user.status || 'Active'}
-                        </span>
-                      </div>
-                      <p className="text-slate-300 text-xs mt-1">Authorized security session email: <strong className="text-emerald-400 font-mono font-bold">{user.email}</strong></p>
-                      {user.mobile && <p className="text-slate-450 text-[11px] font-mono mt-0.5">Mobile: {user.mobile}</p>}
-                      
-                      <div className="flex flex-wrap items-center gap-1.5 mt-3">
-                        <span className="text-[10px] text-slate-4/10 dark:text-slate-400 uppercase font-bold tracking-wider font-mono mr-1">Assigned roles:</span>
-                        {(user.roles || [user.role || 'traveler']).map(r => (
-                          <span key={r} className="bg-white/15 border border-white/10 px-2 py-0.5 rounded text-white font-mono uppercase text-[9px] font-black shrink-0 tracking-wider">
-                            {r}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="relative z-10 flex flex-col gap-2 w-full md:w-auto shrink-0 md:items-end">
-                    <button
-                      onClick={async () => {
-                        setAuthLoading(true);
-                        try {
-                          const res = await fetch(`/api/auth/profile?email=${encodeURIComponent(user.email)}`);
-                          const data = await res.json();
-                          if (data.success && data.user) {
-                            handleSetUser(data.user);
-                            setNotification({ type: 'success', message: 'Profile state dynamically synchronized with server.' });
-                          } else {
-                            setNotification({ type: 'error', message: 'Could not sync details.' });
-                          }
-                        } catch (e) {
-                          setNotification({ type: 'error', message: 'Error querying synchronization.' });
-                        } finally {
-                          setAuthLoading(false);
-                        }
-                      }}
-                      className="bg-white/10 hover:bg-white/20 border border-white/10 text-white text-[11px] font-bold px-3 py-2 rounded-xl transition cursor-pointer font-mono"
-                    >
-                      🔄 SYNC PROFILE & ROLES
-                    </button>
-                    <button
-                      onClick={handleUserLogout}
-                      className="bg-red-950/80 hover:bg-red-900 border border-red-800/50 text-red-100 text-[11px] font-bold px-4 py-2 rounded-xl transition cursor-pointer"
-                    >
-                      Sign Out Session
-                    </button>
-                  </div>
-                </div>
-
-                {/* Workspace Switcher */}
-                {(user.roles && user.roles.length > 1) && (
-                  <div className="text-left">
-                    <label className="text-[10px] uppercase font-black text-slate-450 dark:text-slate-400 tracking-wider block mb-2 font-mono">Workspace Role selection</label>
-                    <div className="flex bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl max-w-lg mb-4 border border-slate-205 dark:border-slate-750">
-                      {(user.roles || [user.role || 'traveler']).map(r => {
-                        const active = activeRoleTab === r;
-                        return (
-                          <button
-                            key={r}
-                            onClick={() => {
-                              setActiveRoleTab(r as any);
-                              setNotification({ type: 'success', message: `Working dashboard context set to: ${r.toUpperCase()}` });
-                            }}
-                            className={`flex-1 py-1.5 text-xs font-black rounded-lg transition-all capitalize cursor-pointer tracking-wider ${
-                              active 
-                                ? 'bg-white dark:bg-slate-750 text-emerald-800 dark:text-emerald-300 shadow-sm border border-slate-200 dark:border-slate-600' 
-                                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
-                            }`}
-                          >
-                            🎨 {r} Dashboard
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Active Role Working Area */}
-                <div className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 text-left">
-                  {/* TRAVELER DASHBOARD WORKSPACE */}
-                  {activeRoleTab === 'traveler' && (
-                    <div className="space-y-6">
-                      {/* Personal Details Editing Card */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                        <h4 className="font-extrabold text-sm text-slate-900 dark:text-white flex items-center gap-1.5 mb-3">
-                          👤 Personal details card
-                        </h4>
-                        <form onSubmit={handleUpdateProfileSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                          <div>
-                            <label className="text-[10px] font-black uppercase text-slate-550 block mb-1">Full Name</label>
-                            <input
-                              type="text"
-                              value={editProfileName}
-                              onChange={(e) => setEditProfileName(e.target.value)}
-                              required
-                              className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs text-slate-800 dark:text-white focus:ring-1 focus:ring-emerald-500"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-[10px] font-black uppercase text-slate-550 block mb-1">Contact Mobile Number</label>
-                            <input
-                              type="tel"
-                              value={editProfileMobile}
-                              onChange={(e) => setEditProfileMobile(e.target.value)}
-                              className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs text-slate-800 dark:text-white focus:ring-1 focus:ring-emerald-500"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-[10px] font-black uppercase text-slate-550 block mb-1">Update Password (Optional)</label>
-                            <div className="flex gap-2">
-                              <input
-                                type="password"
-                                placeholder="Enter secure new password"
-                                value={editProfilePassword}
-                                onChange={(e) => setEditProfilePassword(e.target.value)}
-                                className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs text-slate-800 dark:text-white focus:ring-1 focus:ring-emerald-500"
-                              />
-                              <button
-                                type="submit"
-                                disabled={isUpdatingProfile}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] uppercase font-bold font-mono px-4 py-2 rounded-xl transition shrink-0 cursor-pointer disabled:bg-slate-400 font-extrabold"
-                              >
-                                {isUpdatingProfile ? 'Saving...' : 'Save Profile'}
-                              </button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-
-                      {/* Manage Trip & Rental Leads from HillyTrip */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Manage Trip: View trip planning inquiries */}
-                        <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                          <h4 className="font-extrabold text-sm text-slate-900 dark:text-white flex items-center gap-1.5 mb-3">
-                            🗺️ Manage Trip (Trip Planning Inquiries)
-                          </h4>
-                          {!travelerLeads || travelerLeads.trips.length === 0 ? (
-                            <p className="text-xs text-slate-400 py-4 italic text-center">You have no active high-altitude trip inquiries submitted yet. Explore destinations to build one!</p>
-                          ) : (
-                            <div className="space-y-3 max-h-[300px] overflow-y-auto">
-                              {travelerLeads.trips.map((trip: any) => (
-                                <div key={trip.id} className="p-3 bg-slate-50 dark:bg-slate-905 rounded-xl border border-slate-100 dark:border-slate-800 text-xs text-left">
-                                  <div className="flex justify-between items-start mb-1">
-                                    <span className="font-bold text-slate-800 dark:text-slate-200">Hub: {trip.selectedHub || 'Himalayan Base'}</span>
-                                    <span className="bg-amber-100/70 text-amber-800 text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full capitalize">{trip.leadStatus || 'submitted'}</span>
-                                  </div>
-                                  <p className="text-slate-500">Destination: {trip.selectedDest || 'Not specified'}</p>
-                                  <p className="text-slate-500">Dates: {trip.dates || 'TBD'} | Group: {trip.groupSize || '1'} traveler(s)</p>
-                                  {trip.allocatedGuide && <p className="text-emerald-500 font-bold mt-1 text-[11px]">👤 Guide: {trip.allocatedGuide.name} ({trip.allocatedGuide.rating}⭐)</p>}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Manage Rental: View private car or homestay requests */}
-                        <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                          <h4 className="font-extrabold text-sm text-slate-900 dark:text-white flex items-center gap-1.5 mb-3">
-                            🚗 Manage Rental (Private Cab Inquiries)
-                          </h4>
-                          {!travelerLeads || travelerLeads.cars.length === 0 ? (
-                            <p className="text-xs text-slate-400 py-4 italic text-center">No luxury driver cab rentals requested yet. Search vehicle fleets to hire!</p>
-                          ) : (
-                            <div className="space-y-3 max-h-[300px] overflow-y-auto">
-                              {travelerLeads.cars.map((car: any) => (
-                                <div key={car.id} className="p-3 bg-slate-50 dark:bg-slate-905 rounded-xl border border-slate-100 dark:border-slate-800 text-xs text-left">
-                                  <div className="flex justify-between items-start mb-1">
-                                    <span className="font-bold text-slate-800 dark:text-slate-200">Trip: {car.startRegion} ➔ {car.endRegion}</span>
-                                    <span className="bg-emerald-100/60 text-emerald-850 text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full capitalize">{car.leadStatus || 'submitted'}</span>
-                                  </div>
-                                  <p className="text-slate-500">Vehicle Category: <span className="capitalize">{car.carCategory || 'any'}</span></p>
-                                  <p className="text-slate-500">Duration: {car.totalDays} Day(s) starting {car.startDate}</p>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="pt-2 border-t border-slate-150 dark:border-slate-800">
-                        <strong className="text-xs text-slate-900 dark:text-white block mb-2 uppercase font-mono tracking-wider">Become a Member</strong>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
-                          {/* Partner apply cards */}
-                        <div className="bg-white dark:bg-slate-855 p-5 rounded-2xl border border-slate-220 dark:border-slate-800 shadow-3xs flex flex-col justify-between">
-                          <div>
-                            <div className="flex items-center justify-between mb-3">
-                              <span className="p-2 rounded-xl bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400">
-                                <Home className="w-5 h-5" />
-                              </span>
-                              <span className={`text-[10px] font-black uppercase tracking-widest border px-2.5 py-0.5 rounded-full ${
-                                user.partnerStatus === 'approved' ? 'bg-emerald-50 text-emerald-800 border-emerald-150' :
-                                user.partnerStatus === 'pending' ? 'bg-amber-50 text-amber-800 border-amber-150' :
-                                user.partnerStatus === 'rejected' ? 'bg-rose-50 text-rose-800 border-rose-150' :
-                                'bg-slate-50 text-slate-505 dark:text-slate-405 text-slate-500 dark:text-slate-400'
-                              }`}>
-                                Status: {user.partnerStatus || 'Not Applied'}
-                              </span>
-                            </div>
-                            <h4 className="font-extrabold text-sm text-slate-850 dark:text-white">Partner Program Circle</h4>
-                            <p className="text-xs text-slate-505 mt-1 mb-4 leading-relaxed dark:text-slate-405">
-                              Onboard your homestay lodging property or mountain driver agency to get verified bookings directly.
-                            </p>
-                          </div>
-
-                          {(user.partnerStatus === 'none' || !user.partnerStatus || user.partnerStatus === 'rejected') ? (
-                            <form onSubmit={handlePartnerApplication} className="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                              <span className="text-[10px] uppercase font-black text-slate-405 tracking-wider font-mono">Submit Partner Onboarding registration</span>
-                              {user.partnerStatus === 'rejected' && (
-                                <p className="text-[10px] text-red-500 italic">Previous application rejected. Re-apply below.</p>
-                              )}
-                              <input
-                                type="text"
-                                required
-                                placeholder="Business Legal Name (e.g., Kanchenjunga Lodge)"
-                                value={applyBusinessName}
-                                onChange={(e) => setApplyBusinessName(e.target.value)}
-                                className="w-full bg-slate-100 dark:bg-slate-850 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs"
-                              />
-                              <select
-                                value={applyBusinessType}
-                                onChange={(e) => setApplyBusinessType(e.target.value as any)}
-                                className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs text-slate-700 dark:text-slate-250 cursor-pointer"
-                              >
-                                <option value="homestay">🏡 Homestay Lodging Property</option>
-                                <option value="cab">🚗 Luxury Driver/Mountain Fleet Cab</option>
-                                <option value="guide">🗺️ Mountain Tour Guide / Sherpa</option>
-                              </select>
-                              <input
-                                type="text"
-                                required
-                                placeholder="Core operating location (e.g. Darjeeling, Sikkim)"
-                                value={applyPartnerLocation}
-                                onChange={(e) => setApplyPartnerLocation(e.target.value)}
-                                className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs"
-                              />
-                              <input
-                                type="tel"
-                                placeholder="Contact Mobile (Leave blank for registry default)"
-                                value={applyPartnerMobile}
-                                onChange={(e) => setApplyPartnerMobile(e.target.value)}
-                                className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs"
-                              />
-                              <input
-                                type="text"
-                                placeholder="Identity Card Documents / Licence URL"
-                                value={applyPartnerDocs}
-                                onChange={(e) => setApplyPartnerDocs(e.target.value)}
-                                className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs"
-                              />
-                              <button
-                                type="submit"
-                                disabled={applyPartnerLoading}
-                                className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-350 text-white font-mono font-bold text-[10px] tracking-wider py-2 rounded-xl transition flex items-center justify-center gap-1 cursor-pointer"
-                              >
-                                {applyPartnerLoading && <Loader2 className="w-3 h-3 animate-spin" />}
-                                REGISTER BUSINESS PARTNER NOMINATION
-                              </button>
-                            </form>
-                          ) : user.partnerStatus === 'pending' ? (
-                            <div className="bg-amber-100/50 border border-amber-200 p-3.5 rounded-xl mt-3 text-xs text-amber-800">
-                              <strong>⏳ Pending verification:</strong> Your application is being reviewed. Our backoffice agents are verifying property license documents. Check again later.
-                            </div>
-                          ) : (
-                            <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-150 p-3.5 rounded-xl mt-3 text-xs text-emerald-800 dark:text-emerald-400">
-                              <strong>✓ Verified Homestay Partner:</strong> Congratulations! Your business profile is approved. Use the Partner Dashboard from your workspace bar to list homestay assets or car details.
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Contributor apply cards */}
-                        <div className="bg-white dark:bg-slate-855 p-5 rounded-2xl border border-slate-220 dark:border-slate-800 shadow-3xs flex flex-col justify-between">
-                          <div>
-                            <div className="flex items-center justify-between mb-3">
-                              <span className="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400">
-                                <Award className="w-5 h-5" />
-                              </span>
-                              <span className={`text-[10px] font-black uppercase tracking-widest border px-2.5 py-0.5 rounded-full ${
-                                user.contributorStatus === 'approved' ? 'bg-emerald-50 text-emerald-800 border-emerald-150' :
-                                user.contributorStatus === 'pending' ? 'bg-amber-50 text-amber-800 border-amber-150' :
-                                user.contributorStatus === 'rejected' ? 'bg-rose-50 text-rose-850 border-rose-150' :
-                                'bg-slate-50 text-slate-505 dark:text-slate-405 text-slate-500 dark:text-slate-400'
-                              }`}>
-                                Status: {user.contributorStatus || 'Not Applied'}
-                              </span>
-                            </div>
-                            <h4 className="font-extrabold text-sm text-slate-850 dark:text-white">Contributor Circle</h4>
-                            <p className="text-xs text-slate-505 mt-1 mb-4 leading-relaxed dark:text-slate-405">
-                              Share high-altitude mountain hike notes, offbeat routes, and scenic hidden gems with explorers.
-                            </p>
-                          </div>
-
-                          {(user.contributorStatus === 'none' || !user.contributorStatus || user.contributorStatus === 'rejected') ? (
-                            <form onSubmit={handleContributorApplication} className="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                              <span className="text-[10px] uppercase font-black text-slate-405 tracking-wider font-mono">Join Contributor Team Request</span>
-                              {user.contributorStatus === 'rejected' && (
-                                <p className="text-[10px] text-red-500 italic font-mono">Previous enrollment rejected. Submit again below.</p>
-                              )}
-                              <input
-                                type="text"
-                                required
-                                placeholder="India Mountain Region of Interest (e.g. Sittong, Kalimpong)"
-                                value={applyContribRegion}
-                                onChange={(e) => setApplyContribRegion(e.target.value)}
-                                className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs"
-                              />
-                              <input
-                                type="text"
-                                placeholder="Your Hiking/Guiding Experience (e.g. 5+ years trek lead)"
-                                value={applyContribExperience}
-                                onChange={(e) => setApplyContribExperience(e.target.value)}
-                                className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs"
-                              />
-                              <textarea
-                                required
-                                placeholder="Why do you want to contribute local guide maps for HillyTrip?"
-                                value={applyContribReason}
-                                onChange={(e) => setApplyContribReason(e.target.value)}
-                                className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-205 dark:border-slate-755 rounded-xl p-2 text-xs h-16"
-                              />
-                              <button
-                                type="submit"
-                                disabled={applyContribLoading}
-                                className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-slate-350 text-white font-mono font-bold text-[10px] tracking-wider py-2 rounded-xl transition flex items-center justify-center gap-1 cursor-pointer"
-                              >
-                                {applyContribLoading && <Loader2 className="w-3 h-3 animate-spin" />}
-                                SUBMIT CONTRIBUTOR REQUEST LINK
-                              </button>
-                            </form>
-                          ) : user.contributorStatus === 'pending' ? (
-                            <div className="bg-amber-100/50 border border-amber-200 p-3.5 rounded-xl mt-3 text-xs text-amber-800">
-                              <strong>⏳ Pending onboarding:</strong> HillyTrip moderation board is evaluating your mountain guide profile. Approval will be granted within 24 working hours.
-                            </div>
-                          ) : (
-                            <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-150 p-3.5 rounded-xl mt-3 text-xs text-emerald-800 dark:text-emerald-400">
-                              <strong>✓ Onboarded Contributor:</strong> Welcome onboard! Your contribution status is verified. Click "Contribute" in the sidebar to add offbeat hills & trekking maps.
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                  {/* PARTNER DASHBOARD WORKSPACE */}
-                  {activeRoleTab === 'partner' && (
-                    <div className="space-y-6">
-                      {/* Manage Homestay Bookings & Traveler Inquiries */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                        <div className="flex justify-between items-center mb-3">
-                          <h4 className="font-extrabold text-sm text-slate-900 dark:text-white flex items-center gap-1.5 uppercase font-mono tracking-wider">
-                            🏡 Manage Homestay Bookings & Traveler Inquiries
-                          </h4>
-                          <button onClick={fetchPartnerState} className="text-[10px] text-teal-600 font-bold uppercase tracking-wider hover:underline cursor-pointer">
-                            🔄 Refresh Inbox
-                          </button>
-                        </div>
-                        {loadingPartnerInquiries ? (
-                          <p className="text-xs text-slate-400 italic text-center py-4">Refreshing traveler inbox leads...</p>
-                        ) : partnerInquiries.length === 0 ? (
-                          <p className="text-xs text-slate-400 py-4 italic text-center text-slate-500">Your properties have no traveler bookings or contact inquiries recorded yet. Make sure your assets are listed!</p>
-                        ) : (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {partnerInquiries.map((inq: any) => (
-                              <div key={inq.id} className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 text-xs text-left space-y-2">
-                                <div className="flex justify-between items-center bg-slate-100/50 dark:bg-slate-800/30 p-2 rounded-lg">
-                                  <div className="flex flex-col">
-                                    <span className="font-bold text-slate-850 dark:text-white text-sm">{inq.userName || inq.clientName || 'Anonymous Traveler'}</span>
-                                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">🏠 {inq.homestayName || 'Local Homestay'}</span>
-                                  </div>
-                                  <span className="font-mono bg-teal-100 text-teal-800 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase shrink-0">{inq.inquiryStatus || 'new'}</span>
-                                </div>
-                                <p className="text-slate-505 dark:text-slate-405">Email: <strong className="text-slate-700 dark:text-slate-200 font-mono">{inq.userEmail || inq.clientEmail || 'N/A'}</strong> | Mobile: <strong className="text-slate-700 dark:text-slate-200 font-mono">{inq.userMobile || inq.clientMobile || 'N/A'}</strong></p>
-                                <p className="text-slate-505 dark:text-slate-405 font-mono text-[10px]">Travel headcount: <strong>{inq.numberOfGuests || inq.groupCount || 1} Guests</strong> | Booking date: <strong>{inq.travelDate || inq.stayDates || 'Not scheduled'}</strong></p>
-                                {inq.message && (
-                                  <div className="bg-slate-100/70 dark:bg-slate-800/60 p-2 rounded-lg text-slate-650 dark:text-slate-300 italic text-[11px] font-sans border border-slate-200/40 dark:border-slate-700/30">
-                                    "{inq.message}"
-                                  </div>
-                                )}
-                                <div className="flex items-center gap-1.5 pt-1 border-t border-slate-200/50">
-                                  <label className="text-[9px] font-black uppercase text-slate-450 mr-1">Update Status:</label>
-                                  {['new', 'contacted', 'converted', 'closed'].map((st) => (
-                                    <button
-                                      key={st}
-                                      onClick={async () => {
-                                        try {
-                                          const res = await fetch(`/api/partner/inquiries/${inq.id}/status`, {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({ status: st })
-                                          });
-                                          if (res.ok) {
-                                            setNotification({ type: 'success', message: `Lead updated to status: ${st.toUpperCase()}` });
-                                            fetchPartnerState();
-                                          }
-                                        } catch (e) {
-                                          setNotification({ type: 'error', message: 'Failed to update lead status.' });
-                                        }
-                                      }}
-                                      className={`text-[9.5px] font-mono px-2 py-0.5 rounded font-bold capitalize cursor-pointer border transition-colors ${
-                                        (inq.inquiryStatus || 'new') === st 
-                                          ? 'bg-emerald-600 border-emerald-600 text-white font-extrabold' 
-                                          : 'bg-white hover:bg-slate-100 dark:bg-slate-850 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
-                                      }`}
-                                    >
-                                      {st}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Manage Rental Listings */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                        <div className="flex justify-between items-center mb-3">
-                          <h4 className="font-extrabold text-sm text-slate-900 dark:text-white flex items-center gap-1.5 uppercase font-mono tracking-wider">
-                            🏡 manage rental listings (Active Properties & Driver Fleets)
-                          </h4>
-                          <button onClick={fetchPartnerState} className="text-[10px] text-teal-600 font-bold uppercase tracking-wider hover:underline cursor-pointer">
-                            🔄 Sync Inventory
-                          </button>
-                        </div>
-                        {loadingPartnerListings ? (
-                          <p className="text-xs text-slate-400 italic text-center py-4">Refreshing active marketplace catalog...</p>
-                        ) : (!partnerListings || (partnerListings.homestays.length === 0 && partnerListings.drivers.length === 0)) ? (
-                          <p className="text-xs text-slate-400 py-4 italic text-center text-slate-500">Status: No active property listings or cabs listed on the HillyTrip search indexes. Onboard below!</p>
-                        ) : (
-                          <div className="space-y-4">
-                            {/* Homestays list */}
-                            {partnerListings.homestays.length > 0 && (
-                              <div>
-                                <span className="text-[10px] uppercase font-black tracking-wider text-teal-600 block mb-2 font-mono">Listed Homestay Properties</span>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                  {partnerListings.homestays.map((home: any) => (
-                                    <div key={home.id} className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs">
-                                      <div>
-                                        <p className="font-bold text-slate-850 dark:text-white">{home.name}</p>
-                                        <p className="text-slate-505 mt-0.5">Location: {home.location} | Headcount Limit: {home.maxGuests} guests</p>
-                                        <p className="text-emerald-600 font-bold mt-0.5">₹{home.pricePerNight || 1200} per night</p>
-                                      </div>
-                                      <button
-                                        onClick={async () => {
-                                          if (confirm(`Remove listing ${home.name}?`)) {
-                                            try {
-                                              const res = await fetch(`/api/partner/listings/homestay/${home.id}?name=${encodeURIComponent(user.name || '')}&mobile=${encodeURIComponent(user.mobile || '')}`, {
-                                                method: 'DELETE'
-                                              });
-                                              if (res.ok) {
-                                                setNotification({ type: 'success', message: 'Homestay listing deleted successfully.' });
-                                                fetchPartnerState();
-                                              }
-                                            } catch (e) {
-                                              setNotification({ type: 'error', message: 'Failed to delete listing.' });
-                                            }
-                                          }
-                                        }}
-                                        className="bg-red-50 hover:bg-red-100 dark:bg-red-950/30 text-rose-600 px-2.5 py-1.5 rounded-lg font-bold text-[10px] transition cursor-pointer"
-                                      >
-                                        🗑️ Delete
-                                      </button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Drivers list */}
-                            {partnerListings.drivers.length > 0 && (
-                              <div>
-                                <span className="text-[10px] uppercase font-black tracking-wider text-teal-600 block mb-2 font-mono">Listed Mountain Driver Cabs</span>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                  {partnerListings.drivers.map((drv: any) => (
-                                    <div key={drv.id} className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs">
-                                      <div>
-                                        <p className="font-bold text-slate-850 dark:text-white">{drv.name}</p>
-                                        <p className="text-slate-505 mt-0.5">Category: <span className="capitalize">{drv.carCategory || 'any'}</span> | Mobile: {drv.mobile}</p>
-                                        <p className="text-slate-505 mt-0.5">Region: {drv.operatingRegion}</p>
-                                      </div>
-                                      <button
-                                        onClick={async () => {
-                                          if (confirm(`Remove driver registration ${drv.name}?`)) {
-                                            try {
-                                              const res = await fetch(`/api/partner/listings/driver/${drv.id}?name=${encodeURIComponent(user.name || '')}&mobile=${encodeURIComponent(user.mobile || '')}`, {
-                                                method: 'DELETE'
-                                              });
-                                              if (res.ok) {
-                                                setNotification({ type: 'success', message: 'Driver registration removed successfully.' });
-                                                fetchPartnerState();
-                                              }
-                                            } catch (e) {
-                                              setNotification({ type: 'error', message: 'Failed to delete listing.' });
-                                            }
-                                          }
-                                        }}
-                                        className="bg-red-50 hover:bg-red-100 dark:bg-red-950/30 text-rose-600 px-2.5 py-1.5 rounded-lg font-bold text-[10px] transition cursor-pointer"
-                                      >
-                                        🗑️ Delete
-                                      </button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Onboard Assets Forms Block */}
-                      <div className="bg-gradient-to-tr from-teal-900 to-emerald-950 text-white rounded-3xl p-6 border border-teal-800 shadow-lg">
-                        <h4 className="font-extrabold text-sm flex items-center gap-1.5 mb-1.5 uppercase font-mono tracking-wider text-teal-300">
-                          ➕ Onboard New lodging or Vehicle Asset
-                        </h4>
-                        <p className="text-xs text-emerald-250 mb-4 leading-relaxed">Instantly write your mountain asset to search catalogs so explorers can contact or hire you directly.</p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          {/* Add Homestay */}
-                          <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-3">
-                            <span className="text-[10px] font-black uppercase text-teal-300 font-mono tracking-wider block border-b border-white/10 pb-1.5">Onboard Mountain Homestay</span>
-                            <form 
-                              onSubmit={async (e) => {
-                                e.preventDefault();
-                                const form = e.currentTarget;
-                                const fd = new FormData(form);
-                                try {
-                                  const res = await fetch('/api/register/homestay', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                      name: fd.get('name'),
-                                      location: fd.get('location'),
-                                      ownerName: user.name,
-                                      ownerMobile: user.mobile || fd.get('ownerMobile'),
-                                      ownerEmail: user.email,
-                                      maxGuests: Number(fd.get('maxGuests')),
-                                      pricePerNight: Number(fd.get('pricePerNight')) || 1200,
-                                      description: fd.get('description')
-                                    })
-                                  });
-                                  if (res.ok) {
-                                    setNotification({ type: 'success', message: '🏡 Homestay listed on HillyTrip index! Sync inventory to view.' });
-                                    form.reset();
-                                    fetchPartnerState();
-                                  }
-                                } catch (e) {
-                                  setNotification({ type: 'error', message: 'Failed to onboard property.' });
-                                }
-                              }}
-                              className="space-y-2.5 text-xs text-left"
-                            >
-                              <input type="text" name="name" required placeholder="Property Name (e.g., Pineview Retreat)" className="w-full bg-white/10 border border-white/10 rounded-xl p-2 text-white placeholder-slate-400 focus:ring-1 focus:ring-emerald-500" />
-                              <input type="text" name="location" required placeholder="Exact Location (e.g., Kurseong)" className="w-full bg-white/10 border border-white/10 rounded-xl p-2 text-white placeholder-slate-400 focus:ring-1 focus:ring-emerald-500" />
-                              <div className="grid grid-cols-2 gap-2">
-                                <input type="number" name="pricePerNight" required placeholder="Price / night in ₹" className="w-full bg-white/10 border border-white/10 rounded-xl p-2 text-white placeholder-slate-400 focus:ring-1 focus:ring-emerald-500" />
-                                <input type="number" name="maxGuests" required placeholder="Max guests" className="w-full bg-white/10 border border-white/10 rounded-xl p-2 text-white placeholder-slate-400 focus:ring-1 focus:ring-emerald-500" />
-                              </div>
-                              <textarea name="description" required placeholder="Homestay beauty, mountain vistas, food service details..." className="w-full bg-white/10 border border-white/10 rounded-xl p-2 text-white placeholder-slate-400 h-16 focus:ring-1 focus:ring-emerald-500"></textarea>
-                              <button type="submit" className="w-full bg-teal-600 hover:bg-teal-500 text-white font-mono font-bold text-[10px] tracking-wider py-2 rounded-xl transition cursor-pointer font-black">
-                                SUBMIT LODGING INDEX
-                              </button>
-                            </form>
-                          </div>
-
-                          {/* Add Driver */}
-                          <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-3">
-                            <span className="text-[10px] font-black uppercase text-teal-300 font-mono tracking-wider block border-b border-white/10 pb-1.5">Add Driver / Private Cab</span>
-                            <form 
-                              onSubmit={async (e) => {
-                                e.preventDefault();
-                                const form = e.currentTarget;
-                                const fd = new FormData(form);
-                                try {
-                                  const res = await fetch('/api/register/driver', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                      name: fd.get('name'),
-                                      mobile: fd.get('mobile') || user.mobile,
-                                      carCategory: fd.get('carCategory'),
-                                      operatingRegion: fd.get('operatingRegion')
-                                    })
-                                  });
-                                  if (res.ok) {
-                                    setNotification({ type: 'success', message: '🚗 Driver added directly to fleet search registry! Sync inventory to view.' });
-                                    form.reset();
-                                    fetchPartnerState();
-                                  }
-                                } catch (e) {
-                                  setNotification({ type: 'error', message: 'Failed to onboard driver.' });
-                                }
-                              }}
-                              className="space-y-2.5 text-xs text-left"
-                            >
-                              <input type="text" name="name" required placeholder="Driver Full Name" className="w-full bg-white/10 border border-white/10 rounded-xl p-2 text-white placeholder-slate-400 focus:ring-1 focus:ring-emerald-500" />
-                              <input type="tel" name="mobile" required placeholder="Operating Mobile Number" className="w-full bg-white/10 border border-white/10 rounded-xl p-2 text-white placeholder-slate-400 focus:ring-1 focus:ring-emerald-500" />
-                              <select name="carCategory" className="w-full bg-teal-955 border border-white/10 rounded-xl p-2 text-white placeholder-slate-400 cursor-pointer focus:ring-1 focus:ring-emerald-500">
-                                <option value="SUV">🚙 SUV / Force Traveler (Heavy Terrain)</option>
-                                <option value="Sedan">🚗 Sedan (Comfort Tour)</option>
-                                <option value="Hatchback">🚕 Hatchback (Budget Short distance)</option>
-                                <option value="Offroad">🚜 4X4 Gypsy Jeep (Extreme passes)</option>
-                              </select>
-                              <input type="text" name="operatingRegion" required placeholder="Service Range (e.g. Gangtok, Lachen)" className="w-full bg-white/10 border border-white/10 rounded-xl p-2 text-white placeholder-slate-400 focus:ring-1 focus:ring-emerald-500" />
-                              <button type="submit" className="w-full bg-teal-600 hover:bg-teal-500 text-white font-mono font-bold text-[10px] tracking-wider py-2 rounded-xl transition cursor-pointer font-black">
-                                ENROLL FLEET CAB MEMBER
-                              </button>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* CONTRIBUTOR DASHBOARD WORKSPACE */}
-                  {activeRoleTab === 'contributor' && (
-                    <div className="space-y-6">
-                      {/* Points Card */}
-                      <div className="bg-gradient-to-tr from-purple-900 to-indigo-950 text-white p-6 rounded-3xl border border-purple-800 flex justify-between items-center shadow-lg">
-                        <div>
-                          <span className="bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] uppercase font-mono font-black tracking-widest px-2.5 py-0.5 rounded-full">
-                            Contributor Elite Circles
-                          </span>
-                          <h3 className="text-xl font-bold flex items-center mt-2.5">
-                            🌟 Verified Explorer Points: <strong className="text-yellow-400 ml-1.5 font-mono">{(photoContributions || []).length * 100} Points</strong>
-                          </h3>
-                          <p className="text-xs text-slate-350 mt-1">Earn 100 points for each high-altitude offbeat route gem or photo validated by the moderation board.</p>
-                        </div>
-                        <div className="text-center shrink-0">
-                          <span className="text-2xl block">🏆</span>
-                          <span className="text-[10px] uppercase tracking-wider font-mono font-black text-yellow-505 mt-1 shrink-0 block">Hill-Guide Badge</span>
-                        </div>
-                      </div>
-
-                      {/* Shared contributions */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                        <strong className="font-extrabold text-sm text-slate-850 dark:text-white block mb-2.5 font-mono uppercase tracking-wider">📸 Your Shared Hill Treasures & Hidden Gems ({(photoContributions || []).length})</strong>
-                        {(!photoContributions || photoContributions.length === 0) ? (
-                          <div className="border border-spaced border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 rounded-xl p-6 italic text-xs text-slate-400 text-center">
-                            No secret offbeat hills or hike routes uploaded to your account yet. Share an unexplored summit draft below!
-                          </div>
-                        ) : (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            {photoContributions.map((contrib: any) => (
-                              <div key={contrib.id} className="bg-slate-50 dark:bg-slate-900 rounded-xl p-3 border border-slate-200/50 dark:border-slate-800 flex items-center gap-3">
-                                {contrib.imageUrl && <img src={safeSrc(contrib.imageUrl)} className="w-12 h-12 rounded-lg object-cover bg-slate-200 shrink-0" referrerPolicy="no-referrer" />}
-                                <div className="text-xs text-left truncate">
-                                  <p className="font-bold text-slate-800 dark:text-slate-205 truncate">{contrib.title || 'Mountain Peak view'}</p>
-                                  <p className="text-slate-505 font-mono text-[10px] mt-0.5 shrink-0 truncate">Zone: {contrib.mappedDestName || 'Unmapped range'}</p>
-                                  <span className={`inline-block mt-1 text-[9px] font-bold px-1.5 py-0.2 rounded font-mono uppercase ${
-                                    contrib.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-850'
-                                  }`}>{contrib.status || 'review'}</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Fast Hidden Gem submit */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs text-left space-y-4">
-                        <span className="text-[10px] uppercase font-black text-purple-600 block mb-1 font-mono tracking-wider">Submit New Hidden Gems Draft</span>
-                        <p className="text-xs text-slate-500">Provide offbeat transit options, trek steps, home-stay tips, maps or secret locations.</p>
-                        
-                        <form 
-                          onSubmit={async (e) => {
-                            e.preventDefault();
-                            const form = e.currentTarget;
-                            const fd = new FormData(form);
-                            try {
-                              const res = await fetch('/api/contribute', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                  title: fd.get('title'),
-                                  location: fd.get('location'),
-                                  description: fd.get('description'),
-                                  imageUrl: fd.get('imageUrl') || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=600',
-                                  uploaderName: user.name,
-                                  uploaderEmail: user.email
-                                })
-                              });
-                              if (res.ok) {
-                                setNotification({ type: 'success', message: '🎉 Contribution draft published successfully! Moderator review in progress.' });
-                                form.reset();
-                                fetchUserPhotoData(user);
-                              }
-                            } catch (e) {
-                              setNotification({ type: 'error', message: 'Failed to publish gem.' });
-                            }
-                          }}
-                          className="space-y-3"
-                        >
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <input type="text" name="title" required placeholder="Sumptuous Spot Title (e.g., Hidden Sandakphu Glade)" className="w-full bg-slate-100 dark:bg-slate-850 border border-slate-200 dark:border-slate-705 text-xs rounded-xl p-2.5 text-slate-805 dark:text-white focus:ring-1 focus:ring-purple-500" />
-                            <input type="text" name="location" required placeholder="Hills Region Location (e.g. Kurseong valley)" className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-200 dark:border-slate-705 text-xs rounded-xl p-2.5 text-slate-805 dark:text-white focus:ring-1 focus:ring-purple-500" />
-                          </div>
-                          <input type="url" name="imageUrl" placeholder="Scenic Landscape Photo URL (Optional)" className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-200 dark:border-slate-705 text-xs rounded-xl p-2.5 text-slate-805 dark:text-white focus:ring-1 focus:ring-purple-500" />
-                          <textarea name="description" required placeholder="Describe transit tricks, offbeat hiking trails, local budget guidelines..." className="w-full bg-slate-100 dark:bg-slate-855 border border-slate-200 dark:border-slate-705 text-xs rounded-xl p-2.5 h-20 text-slate-805 dark:text-white focus:ring-1 focus:ring-purple-500" />
-                          <button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white font-mono font-bold text-[10px] tracking-wider py-2.5 px-6 rounded-xl transition cursor-pointer font-black border-none">
-                            PUBLISH SECRET EXPLORER GEM
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* ADMIN DASHBOARD WORKSPACE */}
-                  {activeRoleTab === 'admin' && (
-                    <div className="space-y-6">
-                      {/* Review Applications */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                        <h4 className="font-extrabold text-sm text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 uppercase font-mono tracking-wider">
-                          🛡️ Pending Onboarding Applications (Admins Review Desk)
-                        </h4>
-                        
-                        <div className="space-y-4 pt-2">
-                          {/* Partners application review */}
-                          <div>
-                            <span className="text-[10px] uppercase font-black text-slate-450 block mb-2 font-mono">Pending Business Partners ({adminPendingPartners.length})</span>
-                            {adminPendingPartners.length === 0 ? (
-                              <p className="text-xs text-slate-400 italic bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">No pending business partner applications waiting.</p>
-                            ) : (
-                              <div className="space-y-2">
-                                {adminPendingPartners.map((app: any) => (
-                                  <div key={app.id} className="p-3 bg-amber-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded-xl border border-amber-200 dark:border-slate-800 text-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                                    <div>
-                                      <p className="font-bold text-slate-900 dark:text-slate-100">{app.businessName} (Category: <span className="capitalize">{app.businessType}</span>)</p>
-                                      <p className="text-slate-550 dark:text-slate-400 mt-1">Region: {app.partnerLocation} | Mobile: {app.mobile}</p>
-                                    </div>
-                                    <div className="flex gap-2 shrink-0">
-                                      <button
-                                        onClick={async () => {
-                                          try {
-                                            const res = await fetch('/api/admin/resolve-application', {
-                                              method: 'POST',
-                                              headers: { 'Content-Type': 'application/json', 'x-admin-email': user.email, 'x-admin-password': 'admin123' },
-                                              body: JSON.stringify({ userId: app.id, type: 'partner', action: 'approve', remarks: 'Auto-approved.' })
-                                            });
-                                            if (res.ok) {
-                                              setNotification({ type: 'success', message: 'Partner application approved!' });
-                                              fetchAdminPanelState();
-                                            }
-                                          } catch (e) {
-                                            setNotification({ type: 'error', message: 'Resolving failed.' });
-                                          }
-                                        }}
-                                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold font-mono transition cursor-pointer"
-                                      >
-                                        APPROVE
-                                      </button>
-                                      <button
-                                        onClick={async () => {
-                                          try {
-                                            const res = await fetch('/api/admin/resolve-application', {
-                                              method: 'POST',
-                                              headers: { 'Content-Type': 'application/json', 'x-admin-email': user.email, 'x-admin-password': 'admin123' },
-                                              body: JSON.stringify({ userId: app.id, type: 'partner', action: 'reject', remarks: 'Verification documents incomplete.' })
-                                            });
-                                            if (res.ok) {
-                                              setNotification({ type: 'success', message: 'Partner application rejected.' });
-                                              fetchAdminPanelState();
-                                            }
-                                          } catch (e) {
-                                            setNotification({ type: 'error', message: 'Resolving failed.' });
-                                          }
-                                        }}
-                                        className="bg-red-650 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold font-mono transition cursor-pointer"
-                                      >
-                                        REJECT
-                                      </button>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Contributors review */}
-                          <div>
-                            <span className="text-[10px] uppercase font-black text-slate-450 block mb-2 font-mono">Pending Contributor Nominations ({adminPendingContributors.length})</span>
-                            {adminPendingContributors.length === 0 ? (
-                              <p className="text-xs text-slate-400 italic bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">No pending guide contributor applications.</p>
-                            ) : (
-                              <div className="space-y-2">
-                                {adminPendingContributors.map((app: any) => (
-                                  <div key={app.id} className="p-3 bg-purple-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded-xl border border-purple-200 dark:border-purple-950/20 text-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                                    <div>
-                                      <p className="font-bold text-slate-900 dark:text-slate-100">{app.name} ({app.email})</p>
-                                      <p className="text-slate-550 dark:text-slate-400 mt-0.5">Region interest: {app.contributorRegion} | Experience: {app.contributorExperience}</p>
-                                      <p className="text-slate-500 italic mt-1 font-serif">" {app.contributorReason} "</p>
-                                    </div>
-                                    <div className="flex gap-2 shrink-0">
-                                      <button
-                                        onClick={async () => {
-                                          try {
-                                            const res = await fetch('/api/admin/resolve-application', {
-                                              method: 'POST',
-                                              headers: { 'Content-Type': 'application/json', 'x-admin-email': user.email, 'x-admin-password': 'admin123' },
-                                              body: JSON.stringify({ userId: app.id, type: 'contributor', action: 'approve', remarks: 'Auto-approved.' })
-                                            });
-                                            if (res.ok) {
-                                              setNotification({ type: 'success', message: 'Contributor nomination verified & approved!' });
-                                              fetchAdminPanelState();
-                                            }
-                                          } catch (e) {
-                                            setNotification({ type: 'error', message: 'Resolving failed.' });
-                                          }
-                                        }}
-                                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold font-mono transition cursor-pointer"
-                                      >
-                                        APPROVE
-                                      </button>
-                                      <button
-                                        onClick={async () => {
-                                          try {
-                                            const res = await fetch('/api/admin/resolve-application', {
-                                              method: 'POST',
-                                              headers: { 'Content-Type': 'application/json', 'x-admin-email': user.email, 'x-admin-password': 'admin123' },
-                                              body: JSON.stringify({ userId: app.id, type: 'contributor', action: 'reject', remarks: 'Experience requirements not met.' })
-                                            });
-                                            if (res.ok) {
-                                              setNotification({ type: 'success', message: 'Contributor nomination rejected.' });
-                                              fetchAdminPanelState();
-                                            }
-                                          } catch (e) {
-                                            setNotification({ type: 'error', message: 'Resolving failed.' });
-                                          }
-                                        }}
-                                        className="bg-red-650 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold font-mono transition cursor-pointer"
-                                      >
-                                        REJECT
-                                      </button>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* View & Manage Users table */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                        <strong className="font-extrabold text-sm text-slate-850 dark:text-white block mb-3 font-mono">👥 Unified User Registries Management ({adminUsers.length})</strong>
-                        <div className="max-h-[300px] overflow-y-auto overflow-x-auto">
-                          <table className="w-full text-left text-xs border-collapse">
-                            <thead>
-                              <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 uppercase text-[9px] font-black tracking-wider">
-                                <th className="pb-2">User details</th>
-                                <th className="pb-2">Assigned Roles</th>
-                                <th className="pb-2">Status</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                              {adminUsers.map((u: any) => (
-                                <tr key={u.id} className="text-slate-700 dark:text-slate-300">
-                                  <td className="py-2.5 pr-2">
-                                    <p className="font-bold">{u.name || 'Anonymous User'}</p>
-                                    <p className="text-[10px] text-slate-400 font-mono">{u.email}</p>
-                                  </td>
-                                  <td className="py-2.5 pr-2">
-                                    <div className="flex flex-wrap gap-1">
-                                      {(u.roles || [u.role || 'traveler']).map((r: string) => (
-                                        <span key={r} className="bg-slate-100 dark:bg-slate-800 font-mono text-[9px] font-bold px-1.5 py-0.2 rounded uppercase border dark:border-slate-755">{r}</span>
-                                      ))}
-                                    </div>
-                                  </td>
-                                  <td className="py-2.5 pr-2 font-bold font-mono text-[10px]">
-                                    <span className={u.status === 'active' ? 'text-emerald-500' : 'text-red-500'}>{u.status || 'active'}</span>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-
-                      {/* User Reported Issues section */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                        <h4 className="font-extrabold text-sm text-slate-900 dark:text-white mb-2">
-                          ⚠️ review User Reported Issues & Flagged Gems
-                        </h4>
-                        <p className="text-xs text-slate-400 py-3 italic text-center text-slate-500">No reported comments, toxic queries, or navigation error logs currently active. Safe exploration!</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* SUPER ADMIN WORKSPACE */}
-                  {activeRoleTab === 'super_admin' && (
-                    <div className="space-y-6">
-                      {/* Create New Admin Accountant */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs text-left">
-                        <span className="text-[10px] uppercase font-black text-amber-600 block mb-1 font-mono tracking-wider">Allocate Administrative Authority Profile</span>
-                        <p className="text-xs text-slate-500 mb-3">Enforce backoffice privileges and allocate real-time roles. Admins cannot be created via public sign-up forums.</p>
-                        
-                        <form 
-                          onSubmit={async (e) => {
-                            e.preventDefault();
-                            const form = e.currentTarget;
-                            const fd = new FormData(form);
-                            try {
-                              const res = await fetch('/api/admin/users', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json', 'x-admin-email': user.email, 'x-admin-password': 'admin123' },
-                                body: JSON.stringify({
-                                  email: fd.get('email'),
-                                  name: fd.get('name'),
-                                  roles: ['traveler', fd.get('assignedRole')],
-                                  status: 'active',
-                                  password: fd.get('password') || 'adminPass123',
-                                  emailVerified: true
-                                })
-                              });
-                              const data = await res.json();
-                              if (res.ok) {
-                                setNotification({ type: 'success', message: `Successfully allocated administrative role: ${fd.get('assignedRole')}` });
-                                form.reset();
-                                fetchAdminPanelState();
-                              } else {
-                                setNotification({ type: 'error', message: data.error || 'Failed to assign role.' });
-                              }
-                            } catch (e) {
-                              setNotification({ type: 'error', message: 'Role allocation failed.' });
-                            }
-                          }}
-                          className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end text-xs"
-                        >
-                          <div>
-                            <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block">Full Name</label>
-                            <input type="text" name="name" required placeholder="Name (e.g. Anand Sen)" className="w-full bg-slate-150 border rounded-xl p-2 focus:ring-1 focus:ring-amber-500 dark:bg-slate-800 dark:border-slate-700 text-slate-800 dark:text-white" />
-                          </div>
-                          <div>
-                            <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block">Security Email</label>
-                            <input type="email" name="email" required placeholder="Email (e.g. anand@hillytrip)" className="w-full bg-slate-150 border rounded-xl p-2 focus:ring-1 focus:ring-amber-500 dark:bg-slate-800 dark:border-slate-700 text-slate-800 dark:text-white" />
-                          </div>
-                          <div>
-                            <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block">Authority Role</label>
-                            <select name="assignedRole" className="w-full bg-slate-150 border rounded-xl p-2 focus:ring-1 focus:ring-amber-505 font-mono font-bold cursor-pointer text-slate-800 dark:text-white">
-                              <option value="admin">🔧 Backoffice Admin</option>
-                              <option value="super_admin">👑 Super Administrator</option>
-                            </select>
-                          </div>
-                          <button type="submit" className="bg-amber-600 hover:bg-amber-700 text-white font-mono font-black text-[10px] tracking-wider py-2.5 rounded-xl transition cursor-pointer whitespace-nowrap">
-                            ALLOCATE NOW
-                          </button>
-                        </form>
-                      </div>
-
-                      {/* Audit Trail list */}
-                      <div className="bg-white dark:bg-slate-855 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-3xs">
-                        <strong className="font-extrabold text-sm text-slate-855 dark:text-white block mb-3 font-mono">📜 Mountain Security Audit Trail Logs ({adminAuditLogs.length})</strong>
-                        <div className="max-h-[300px] overflow-y-auto space-y-2 text-left">
-                          {adminAuditLogs.length === 0 ? (
-                            <p className="text-xs text-slate-400 py-3 italic text-center">No high-altitude logging actions recorded yet.</p>
-                          ) : (
-                            adminAuditLogs.map((log: any) => (
-                              <div key={log.id} className="p-3 bg-slate-105 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-mono">
-                                <div className="flex justify-between text-slate-400 text-[10px] mb-1">
-                                  <span>Operator: {log.userId || log.email || 'system'}</span>
-                                  <span>{log.timestamp}</span>
-                                </div>
-                                <p className="text-yellow-650 dark:text-yellow-450 font-bold">{log.action}</p>
-                                <p className="text-slate-600 dark:text-slate-350 mt-1">{log.details}</p>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* ADMIN DIRECT RE-ROUTE SHORTCUT */}
-                  {(user.roles?.includes('admin') || user.roles?.includes('super_admin') || user.role === 'admin' || user.role === 'super_admin') && (
-                    <div className="mt-6 pt-4 border-t border-slate-150 dark:border-slate-800 bg-amber-500/5 p-4 rounded-2xl border border-amber-500/20 text-left">
-                      <h4 className="text-xs font-black text-amber-700 dark:text-amber-450 tracking-wider uppercase font-mono mb-1">🛡️ Administrative Backoffice Link</h4>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Your unified login role lists verify that you possess active administrative privileges.</p>
-                      <button
-                        onClick={() => navigate('#/admin')}
-                        className="bg-amber-600 hover:bg-amber-700 text-white font-mono font-black text-[10px] tracking-wider px-4 py-2 rounded-xl transition shadow cursor-pointer uppercase"
-                      >
-                        OPEN CONTROL PANEL DESK
-                      </button>
-                    </div>
-                  )}
-                </div>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
               </div>
             )}
           </div>
         )}
 
-<<<<<<< HEAD
         {currentPath.startsWith('/search') && (
           <div id="search-route-view" className="animate-fade-in text-slate-800 dark:text-slate-100">
             <UniversalSearch 
@@ -15151,7 +10823,7 @@ export default function App() {
 
         {currentPath === '/inventory' && (
           <div id="inventory-route-view" className="animate-fade-in text-slate-800 dark:text-slate-100">
-            <UniversalInventoryEngineView navigate={navigate} user={user} />
+            <BusinessOS navigate={navigate} user={user} onUpdateUser={(updated) => setUser(updated)} setNotification={setNotification} />
           </div>
         )}
 
@@ -15233,25 +10905,6 @@ export default function App() {
               routes={routes}
               hubs={hubs}
               user={user}
-=======
-        {/* ========================================================
-            9. PARTNER DASHBOARD PANEL
-            ======================================================== */}
-        {currentPath === '/partner-dashboard' && (
-          <div id="partner-dashboard-view" className="animate-fade-in">
-            <PartnerDashboard 
-              user={user}
-              navigate={navigate}
-              setNotification={setNotification}
-              dbHomestays={homestays}
-              reloadDb={async () => {
-                const res = await fetch('/api/admin/data/homestays');
-                const data = await res.json();
-                if (data.success && data.data) {
-                  setHomestays(data.data);
-                }
-              }}
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             />
           </div>
         )}
@@ -15456,7 +11109,6 @@ export default function App() {
                         </div>
                       </div>
 
-<<<<<<< HEAD
                       <div className="mt-2">
                         <FeaturedPhotoUploader
                           onUploadComplete={(url) => setRegisterHomestayImage(url)}
@@ -15464,17 +11116,6 @@ export default function App() {
                           currentImageUrl={registerHomestayImage}
                           email="homestay-partner"
                         />
-=======
-                      <div>
-                        <label className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Primary Property Photograph (JPEG/PNG Image URL)</label>
-                        <input 
-                          name="images" 
-                          type="url" 
-                          placeholder={DEFAULT_HOMESTAY_IMAGE} 
-                          className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-600 font-mono" 
-                        />
-                        <p className="text-[10px] text-slate-400 mt-1">If hosted on unsplash or third party cloud stores, copy-paste the direct imagery url. If left blank, a high-quality default mountain guest cottage artwork is appended.</p>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                       </div>
 
                       <button 
@@ -15611,7 +11252,6 @@ export default function App() {
         )}
 
         {/* ========================================================
-<<<<<<< HEAD
             10B. UNIVERSAL BUSINESS ONBOARDING & REGISTRATION
             ======================================================== */}
         {(currentPath === '/become-taxi-operator' || currentPath === '/register/taxi-operator' || currentPath === '/become-partner') && (
@@ -15642,8 +11282,6 @@ export default function App() {
         )}
 
         {/* ========================================================
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             11. ADMIN VIEW
             ======================================================== */}
         {currentPath === '/admin' && (
@@ -15846,7 +11484,6 @@ export default function App() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                   {/* Tabs select */}
-<<<<<<< HEAD
                   <div className="space-y-3 lg:max-h-[85vh] lg:overflow-y-auto pr-1 scrollbar-thin sticky top-6">
                     {/* High-priority No-Code Business Control Tab Button */}
                     <button
@@ -16247,179 +11884,12 @@ export default function App() {
                         </div>
                       )}
                     </div>
-=======
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => setAdminActiveTab('stats')}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'stats' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span>📊 Platform Metrics</span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
-                    </button>
-                    <button
-                      onClick={() => setAdminActiveTab('leads')}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'leads' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span>🧭 Trip Queries ({adminTripLeads.length})</span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
-                    </button>
-                    <button
-                      onClick={() => setAdminActiveTab('car-leads')}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'car-leads' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span>🚗 Private Car bookings ({adminCarLeads.length})</span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
-                    </button>
-                    <button
-                      onClick={() => setAdminActiveTab('contributions')}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'contributions' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span>📥 Contributor Inbox ({adminContributions.filter(c => c.status === 'Pending').length} pending)</span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
-                    </button>
-                    <button
-                      onClick={() => setAdminActiveTab('images')}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'images' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span>📸 Image Moderation Queue ({adminImages.filter(img => img.status === 'Pending').length} pending)</span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
-                    </button>
-                    <button
-                      onClick={() => setAdminActiveTab('add-data')}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'add-data' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span>⚙ Seed Custom Hubs</span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
-                    </button>
-                    <button
-                      onClick={() => setAdminActiveTab('bulk-import')}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'bulk-import' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span className="text-emerald-600">📥 Excel & Google Sheets Importer</span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
-                    </button>
-                    <button
-                      onClick={() => setAdminActiveTab('registrations')}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'registrations' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span className="text-emerald-705 font-extrabold flex items-center gap-1.5">🛡 Partner Onboarding ({adminHomestays.filter(h => h.status === 'Pending').length + adminDrivers.filter(d => d.status === 'Pending').length} pending)</span>
-                      <ChevronRight className="w-4 h-4 text-emerald-600" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setAdminActiveTab('analytics');
-                        navigate('#/admin/analytics');
-                      }}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'analytics' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span className="text-emerald-700 font-extrabold flex items-center gap-1.5">📈 Real-time Analytics</span>
-                      <ChevronRight className="w-4 h-4 text-emerald-600" />
-                    </button>
-
-                    {hasClientPermission('moderate_photos') && (
-                      <button
-                        onClick={() => setAdminActiveTab('photo_approvals')}
-                        className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                          adminActiveTab === 'photo_approvals' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600 font-extrabold' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                        }`}
-                      >
-                        <span className="flex items-center gap-1.5 font-sans text-emerald-700">📸 Photo Approvals</span>
-                        <ChevronRight className="w-4 h-4 text-emerald-600" />
-                      </button>
-                    )}
-
-                    {/* RBAC ADMINISTRATION SECTIONS */}
-                    {hasClientPermission('manage_users') && (
-                      <button
-                        onClick={() => setAdminActiveTab('admin_management')}
-                        className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                          adminActiveTab === 'admin_management' ? 'bg-orange-50 text-orange-900 border-l-4 border-orange-500 font-extrabold' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                        }`}
-                      >
-                        <span className="flex items-center gap-1.5 font-sans text-orange-700">👥 Admin Settings</span>
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
-                      </button>
-                    )}
-                    {hasClientPermission('view_analytics') && (
-                      <button
-                        onClick={() => setAdminActiveTab('audit_logs')}
-                        className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                          adminActiveTab === 'audit_logs' ? 'bg-indigo-50 text-indigo-900 border-l-4 border-indigo-500 font-extrabold' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                        }`}
-                      >
-                        <span className="flex items-center gap-1.5 font-sans text-indigo-700">📜 Access Audit Trails</span>
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => setAdminActiveTab('app_notifications')}
-                      id="admin-tab-btn-app-notifications"
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'app_notifications' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600 font-extrabold' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span className="flex items-center gap-1.5 font-sans text-emerald-800">🔔 Broadcast Alerts Panel</span>
-                      <ChevronRight className="w-4 h-4 text-emerald-600" />
-                    </button>
-
-                    <button
-                      onClick={() => setAdminActiveTab('cover_management')}
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'cover_management' ? 'bg-purple-50 text-purple-800 border-l-4 border-purple-600 font-extrabold' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span className="flex items-center gap-1.5 font-sans text-purple-800">✨ AI Cover Management</span>
-                      <ChevronRight className="w-4 h-4 text-purple-600" />
-                    </button>
-
-                    <button
-                      onClick={() => setAdminActiveTab('location-intelligence')}
-                      id="admin-tab-btn-location-intelligence"
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'location-intelligence' ? 'bg-blue-50 text-blue-800 border-l-4 border-blue-600 font-extrabold' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span className="flex items-center gap-1.5 font-sans text-blue-800">🧭 Location Intelligence Center</span>
-                      <ChevronRight className="w-4 h-4 text-blue-600" />
-                    </button>
-
-                    <button
-                      onClick={() => setAdminActiveTab('partner-management')}
-                      id="admin-tab-btn-partner-management"
-                      className={`w-full text-left p-3 rounded-lg text-xs font-bold transition flex justify-between cursor-pointer ${
-                        adminActiveTab === 'partner-management' ? 'bg-orange-50 text-orange-900 border-l-4 border-orange-500 font-extrabold' : 'bg-white text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span className="flex items-center gap-1.5 font-sans text-orange-700">🤝 Partner Verification Center</span>
-                      <ChevronRight className="w-4 h-4 text-orange-500" />
-                    </button>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                   </div>
 
                   <div className="lg:col-span-3">
                     
                     {/* STATS CONTROLS */}
                     {adminActiveTab === 'stats' && adminStats && (
-<<<<<<< HEAD
                       <div className="space-y-6 animate-fade-in text-slate-800">
                         {/* 1. OPERATIONAL HEADER BANNER */}
                         <div className="bg-slate-900 dark:bg-slate-950 text-white p-6 rounded-3xl border border-slate-850 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-left relative overflow-hidden">
@@ -16831,39 +12301,6 @@ export default function App() {
                               ))}
                             </div>
                           </div>
-=======
-                      <div className="space-y-6">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                          <div className="bg-white p-5 rounded-xl border border-slate-200">
-                            <span className="text-[10px] text-slate-400 font-bold block uppercase mb-1">Hub nodes</span>
-                            <span className="text-3xl font-extrabold text-slate-900">{adminStats.totalHubs}</span>
-                          </div>
-                          <div className="bg-white p-5 rounded-xl border border-slate-200">
-                            <span className="text-[10px] text-slate-400 font-bold block uppercase mb-1">Calculated Routes</span>
-                            <span className="text-3xl font-extrabold text-slate-900">{adminStats.totalRoutes}</span>
-                          </div>
-                          <div className="bg-white p-5 rounded-xl border border-slate-200">
-                            <span className="text-[10px] text-slate-400 font-bold block uppercase mb-1">Scenic Spots</span>
-                            <span className="text-3xl font-extrabold text-slate-900">{adminStats.totalAttractions}</span>
-                          </div>
-                          <div className="bg-white p-5 rounded-xl border border-slate-200">
-                            <span className="text-[10px] text-slate-400 font-bold block uppercase mb-1">Homestays Lodging</span>
-                            <span className="text-3xl font-extrabold text-slate-900">{adminStats.totalHomestays}</span>
-                          </div>
-                        </div>
-
-                        <div className="bg-white rounded-2xl p-6 border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                          <div>
-                            <h4 className="font-bold text-lg text-slate-900">Platform Data Integrities</h4>
-                            <p className="text-xs text-slate-400">Total processed contributions inbox: {adminContributions.length}</p>
-                          </div>
-                          <button 
-                            onClick={loadAdminDashboard}
-                            className="bg-emerald-600 text-white text-xs font-bold px-4 py-2.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer"
-                          >
-                            <RefreshCw className="w-3.5 h-3.5" /> Refresh Workspace Files
-                          </button>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                         </div>
                       </div>
                     )}
@@ -17052,11 +12489,8 @@ export default function App() {
                                 <option value="hubs">📍 Regional Hubs Sheet</option>
                                 <option value="routes">🛣️ Pathfinding Routes Sheet</option>
                                 <option value="destinations">🏞️ Destinations Portfolio Sheet</option>
-<<<<<<< HEAD
                                 <option value="villages">🏡 Villages Directory (Destinations)</option>
                                 <option value="taxi_stands">🚖 Taxi Stands Register Sheet</option>
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                                 <option value="attractions">⭐ Scenic Attractions Sheet</option>
                                 <option value="homestays">🏡 Homestays & Lodges Sheet</option>
                                 <option value="images">📸 Scenic/System Images Sheet</option>
@@ -17701,31 +13135,7 @@ export default function App() {
                                 </div>
                               </div>
 
-<<<<<<< HEAD
                               {/* Direct Photo URL Paste Field removed to enforce native-only uploads */}
-=======
-                              {/* Direct Photo URL Paste Field */}
-                              <div className="bg-white rounded-xl border border-slate-200 p-2.5 flex flex-col sm:flex-row items-center gap-2">
-                                <div className="relative flex-grow w-full">
-                                  <input
-                                    type="url"
-                                    value={quickUploadUrlInput}
-                                    onChange={(e) => setQuickUploadUrlInput(e.target.value)}
-                                    placeholder="Or paste direct image URL (Unsplash, Imgur, etc.) for instant apply..."
-                                    className="w-full text-xs font-mono bg-slate-50 border border-slate-180 rounded-lg px-3 py-2 focus:ring-1 focus:ring-emerald-500 focus:outline-hidden"
-                                    disabled={isUploadingQuickPhoto || !quickUploadSelectedId}
-                                  />
-                                </div>
-                                <button
-                                  type="button"
-                                  onClick={() => handleQuickPhotoUrlSubmit(quickUploadUrlInput)}
-                                  disabled={isUploadingQuickPhoto || !quickUploadSelectedId || !quickUploadUrlInput.trim()}
-                                  className="w-full sm:w-auto px-4 py-2 bg-slate-800 hover:bg-slate-950 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition disabled:bg-slate-100 disabled:text-slate-450 cursor-pointer whitespace-nowrap"
-                                >
-                                  Apply Web Link
-                                </button>
-                              </div>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                             </div>
                           </div>
                         </div>
@@ -19331,7 +14741,6 @@ export default function App() {
                       </div>
                     )}
 
-<<<<<<< HEAD
                     {adminActiveTab === 'system_reports' && (
                       <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs text-left animate-fade-in">
                         <React.Suspense fallback={<div className="flex justify-center p-12"><Loader2 className="w-8 h-8 animate-spin text-emerald-600" /></div>}>
@@ -19340,15 +14749,12 @@ export default function App() {
                       </div>
                     )}
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                     {adminActiveTab === 'cover_management' && (
                       <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs text-left animate-fade-in">
                         <AdminCoverManagementTab />
                       </div>
                     )}
 
-<<<<<<< HEAD
                     {adminActiveTab === 'homepage_content' && (
                       <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs text-left animate-fade-in">
                         <AdminHomepageContentTab />
@@ -19383,8 +14789,6 @@ export default function App() {
                       </div>
                     )}
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                     {adminActiveTab === 'location-intelligence' && (
                       <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs text-left animate-fade-in">
                         <AdminLocationIntelligenceTab />
@@ -19397,7 +14801,6 @@ export default function App() {
                       </div>
                     )}
 
-<<<<<<< HEAD
                     {adminActiveTab === 'taxi-marketplace' && (
                       <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs text-left animate-fade-in">
                         <AdminTaxiMarketplaceTab adminEmail={user?.email || 'admin@hillytrip.com'} />
@@ -19416,8 +14819,6 @@ export default function App() {
                       </div>
                     )}
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
                     {/* MODAL WINDOW DIALOG FOR USER PROFILE WRITES OR EDITS */}
                     {showUserModal && (
                       <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -19592,7 +14993,6 @@ export default function App() {
           />
         )}
 
-<<<<<<< HEAD
         {currentPath === '/live-bulletin' && (
           <LiveTransitBulletin
             hubs={hubs}
@@ -19610,8 +15010,6 @@ export default function App() {
           />
         )}
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         </React.Suspense>
       </main>
 
@@ -19619,7 +15017,6 @@ export default function App() {
       <footer className="bg-slate-950 text-slate-300 border-t border-slate-800/80 relative z-10 font-sans">
         <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
           
-<<<<<<< HEAD
           {/* Guide Shortcut: Himalayan Travel Simulation Banner */}
           <div className="mb-12 p-6 md:p-8 bg-slate-900 border border-slate-800 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden text-left">
             <div className="absolute top-0 right-0 w-64 h-64 bg-radial from-emerald-500/10 to-transparent rounded-full -translate-y-12 translate-x-12 blur-3xl pointer-events-none" />
@@ -19641,8 +15038,6 @@ export default function App() {
             </button>
           </div>
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
           {/* Main Footer Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 xl:gap-12 text-center md:text-left">
             
@@ -19847,18 +15242,9 @@ export default function App() {
 
           {/* Social icons row */}
           <div className="mt-12 pt-8 border-t border-slate-800/60 flex flex-col items-center gap-6">
-<<<<<<< HEAD
             <div className="flex flex-col items-center text-center gap-2">
               <AnimatedLogo variant="full" size="md" theme="dark" animated={false} />
               <span className="text-[10px] text-slate-500 block tracking-wider uppercase font-medium">India's Intelligent Mountain Travel Network</span>
-=======
-            <div className="flex items-center gap-2 text-left">
-              <Compass className="w-8 h-8 text-emerald-400 animate-spin-slow" />
-              <div>
-                <span className="font-extrabold text-xl leading-none text-white tracking-tight">HillyTrip</span>
-                <span className="text-[10px] text-slate-500 block mt-0.5 tracking-wider uppercase font-medium">India's Intelligent Mountain Travel Network</span>
-              </div>
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
             </div>
             
             <div className="flex items-center gap-4">
@@ -19929,11 +15315,7 @@ export default function App() {
       </footer>
 
       {/* Info Modals for Footer links */}
-<<<<<<< HEAD
       {footerModalType && footerModalType !== 'simulation_wizard' && (
-=======
-      {footerModalType && (
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
         <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fade-in">
           <div className="bg-slate-900 border border-slate-800 text-slate-100 rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl relative">
             <button 
@@ -20042,7 +15424,6 @@ export default function App() {
         </div>
       )}
 
-<<<<<<< HEAD
       {/* Traveler Interactive Simulation Wizard Wide Modal Overlay */}
       {footerModalType === 'simulation_wizard' && (
         <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 z-50 animate-fade-in overflow-y-auto animate-fade-in">
@@ -20364,8 +15745,6 @@ export default function App() {
         </div>
       )}
 
-=======
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
       {/* Traveler Direct Inquiry Modal */}
       {inquiryModalOpen && activeHomeDetail?.homestay && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
@@ -20504,7 +15883,6 @@ export default function App() {
           </div>
         </div>
       )}
-<<<<<<< HEAD
 
       {/* Floating WhatsApp Support Button */}
       {showFloatingWidgets && (
@@ -20608,11 +15986,29 @@ export default function App() {
           </div>
         </div>
       )}
+      {/* Pre-Booking Enquiry Modal */}
+      {enquireModalOpen && (
+        <PreBookingEnquiryModal
+          isOpen={enquireModalOpen}
+          onClose={() => {
+            setEnquireModalOpen(false);
+            if (window.location.hash.includes('?')) {
+              window.location.hash = window.location.hash.split('?')[0];
+            }
+          }}
+          currentUser={user || ({
+            id: 'traveller_guest_777',
+            name: 'Traveler Guest',
+            email: 'traveler@hillytrip.com',
+            role: 'traveler',
+            photoURL: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+          } as any)}
+          business={enquireBusiness}
+          initialBookingDetails={enquireBookingDetails}
+          navigate={navigate}
+        />
+      )}
     </div>
   </ThemeEngineProvider>
 );
-=======
-    </div>
-  );
->>>>>>> 2b89dbe2640650f239b483f99d03b06df15072a8
 }

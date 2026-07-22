@@ -5,6 +5,7 @@ import {
   Droplet, Trees, Mountain, Flower2 
 } from 'lucide-react';
 import { Route } from '../types';
+import { getItemSlug, toSlug } from '../utils/slug';
 
 interface PremiumRouteCardProps {
   rt: Route;
@@ -332,7 +333,8 @@ export default function PremiumRouteCard({
           onMouseLeave={handleCtaMouseLeave}
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`#/route/${rt.fromHubId}-to-${rt.toHubId}`);
+            const routeSlug = getItemSlug(rt) || `${toSlug(fromName)}-to-${toSlug(toName)}`;
+            navigate(`#/route/${routeSlug}`);
           }}
           style={{
             x: magneticOffset.x,

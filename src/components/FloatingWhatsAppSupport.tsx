@@ -164,11 +164,8 @@ Please help me.`;
       console.warn('Analytics tracking quiet fallback:', err);
     }
 
-    // Open WhatsApp link
-    const message = getContextualMessage();
-    const encodedMsg = encodeURIComponent(message);
-    const waUrl = `https://wa.me/${cleanNumber}?text=${encodedMsg}`;
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    // Open internal platform messaging system
+    window.location.hash = '#/messages';
   };
 
   // 6. Dynamic Safe Position (to prevent overlapping mobile bottom bars on Detail pages)

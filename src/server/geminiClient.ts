@@ -424,24 +424,29 @@ function wrapAiClient(client: GoogleGenAI): GoogleGenAI {
             if (modelsProp === "generateContent") {
               const originalGenerateContent = Reflect.get(modelsTarget, modelsProp, modelsReceiver);
               return async function (params: any) {
-                let model = params.model;
+                let model = params.model || "gemini-2.5-flash";
                 
-                // Map deprecated models to modern, supported ones
+                // Map deprecated or non-standard models to modern standard Gemini models
                 if (model === "gemini-2.5-flash-image" || model === "gemini-2.0-flash-image") {
                   model = "gemini-3.1-flash-lite-image";
                 }
                 
-                const modelsToTry = [model];
-                if (model === "gemini-3.5-flash") {
-                  modelsToTry.push("gemini-3.1-flash-lite");
-                  modelsToTry.push("gemini-flash-latest");
-                } else if (model === "gemini-3.1-flash-lite") {
-                  modelsToTry.push("gemini-3.5-flash");
-                  modelsToTry.push("gemini-flash-latest");
-                } else {
-                  modelsToTry.push("gemini-3.5-flash");
-                  modelsToTry.push("gemini-3.1-flash-lite");
-                  modelsToTry.push("gemini-flash-latest");
+                // Build candidate list prioritizing requested model followed by standard Gemini models
+                const candidatePool = [
+                  model,
+                  "gemini-2.5-flash",
+                  "gemini-2.0-flash",
+                  "gemini-1.5-flash",
+                  "gemini-2.5-pro",
+                  "gemini-flash-latest",
+                  "gemini-3.5-flash",
+                  "gemini-3.1-flash-lite"
+                ];
+                const modelsToTry: string[] = [];
+                for (const m of candidatePool) {
+                  if (m && !modelsToTry.includes(m)) {
+                    modelsToTry.push(m);
+                  }
                 }
                 
                 // Requirement 7: Cache repeated AI responses where appropriate to reduce API usage
@@ -452,10 +457,10 @@ function wrapAiClient(client: GoogleGenAI): GoogleGenAI {
                 }
 
                 let lastErr: any = null;
-                let quotaExceeded = false;
                 for (const tryModel of modelsToTry) {
+                  let modelQuotaExceeded = false;
                   let delay = 1000;
-                  for (let attempt = 1; attempt <= 3; attempt++) {
+                  for (let attempt = 1; attempt <= 2; attempt++) {
                     try {
                       const modifiedParams = { ...params, model: tryModel };
                       const result = await originalGenerateContent.call(modelsTarget, modifiedParams);
@@ -476,7 +481,6 @@ function wrapAiClient(client: GoogleGenAI): GoogleGenAI {
                       lastErr = err;
                       const errStr = String(err?.message || err?.error?.message || err || "");
                       
-                      // Requirement 6: Never retry permanent quota or billing errors
                       const isPermanentQuota = errStr.toLowerCase().includes("quota") || 
                                                errStr.toLowerCase().includes("exceeded") || 
                                                errStr.toLowerCase().includes("billing") ||
@@ -485,14 +489,13 @@ function wrapAiClient(client: GoogleGenAI): GoogleGenAI {
                                                errStr.includes("429");
                       
                       if (isPermanentQuota) {
-                        quotaExceeded = true;
+                        modelQuotaExceeded = true;
                       }
 
                       const isTransient = !isPermanentQuota && (
                                           errStr.includes("503") || 
                                           errStr.includes("UNAVAILABLE") || 
                                           errStr.includes("high demand") || 
-                                          errStr.includes("ResourceExhausted") ||
                                           errStr.toLowerCase().includes("fetch failed") ||
                                           errStr.toLowerCase().includes("socket") ||
                                           errStr.toLowerCase().includes("timeout") ||
@@ -501,31 +504,24 @@ function wrapAiClient(client: GoogleGenAI): GoogleGenAI {
                                           errStr.includes("network")
                       );
                       
-                      if (isTransient && attempt < 3) {
-                        const jitter = Math.floor(Math.random() * 500);
-                        console.log(`[Proxy Gemini] Model "${tryModel}" temporary state (Attempt ${attempt}/3). Retrying in ${delay + jitter}ms... Info: ${errStr.substring(0, 150)}`);
+                      if (isTransient && attempt < 2) {
+                        const jitter = Math.floor(Math.random() * 300);
+                        console.log(`[Proxy Gemini] Model "${tryModel}" temporary state (Attempt ${attempt}/2). Retrying in ${delay + jitter}ms... Info: ${errStr.substring(0, 150)}`);
                         await new Promise((r) => setTimeout(r, delay + jitter));
                         delay *= 2;
                       } else {
-                        console.log(`[Proxy Gemini] Model "${tryModel}" attempt exhaust or permanent condition. Proceeding to next fallback option. Info: ${errStr.substring(0, 150)}`);
-                        break; // Try next fallback model or fail
+                        if (modelQuotaExceeded) {
+                          console.log(`[Proxy Gemini] Model "${tryModel}" quota limit reached. Trying next candidate model...`);
+                        } else {
+                          console.log(`[Proxy Gemini] Model "${tryModel}" attempt exhaust or permanent condition. Trying next candidate model... Info: ${errStr.substring(0, 150)}`);
+                        }
+                        break; // Try next candidate model
                       }
                     }
                   }
-                  if (quotaExceeded) {
-                    console.log(`[Proxy Gemini] Permanent quota/billing error detected for current client. Skipping alternative models.`);
-                    break;
-                  }
                 }
 
-                // If this is the active, original mode, propagate the error up so executeGeminiOperation can try Vertex AI / API Key failover
-                const mode = (client as any).__mode || "api_key";
-                if (mode === currentMode) {
-                  console.log(`[Proxy Gemini] All models exhausted or blocked for current mode "${mode}". Propagating error to trigger dynamic failover...`);
-                  throw lastErr;
-                }
-
-                // Fallback offline generator if all real model attempts fail or run out of quota in the failover mode too
+                // Fallback offline generator if all real model attempts fail or run out of quota
                 console.log("[Proxy Gemini] Transitioning request to local travel intelligence fallback generator...");
                 try {
                   const fallbackText = generateFallbackText(params);
@@ -550,7 +546,7 @@ function wrapAiClient(client: GoogleGenAI): GoogleGenAI {
                   return mockResponse;
                 } catch (fallbackErr) {
                   console.error("[Proxy Gemini] Offline fallback failed:", fallbackErr);
-                  throw lastErr;
+                  throw lastErr || fallbackErr;
                 }
               };
             }

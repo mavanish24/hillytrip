@@ -529,12 +529,25 @@ export default function PublicOperatorProfile({ operatorId, onClose, onNavigate 
 
             <div className="border-t border-slate-800 pt-4 space-y-2">
               <h4 className="text-[10px] font-black uppercase text-slate-400 tracking-wider">direct communication safety</h4>
-              <div className="bg-slate-950/70 border border-slate-850 p-3 rounded-2xl text-[11px] leading-relaxed text-amber-200/90 flex gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
-                <div>
-                  <p className="font-bold text-white mb-1">HillyTrip Booking Protection</p>
-                  To secure your transit insurance cover, pre-vetted pricing matrices, and direct driver tracking, <strong>never communicate or pay outside the HillyTrip engine</strong>. Private bookings are unauthorized and forfeit full assistance.
+              <div className="bg-slate-950/70 border border-slate-850 p-3.5 rounded-2xl text-[11px] leading-relaxed text-amber-200/90 flex flex-col gap-3">
+                <div className="flex gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
+                  <div>
+                    <p className="font-bold text-white mb-1">HillyTrip Booking Protection</p>
+                    To secure your transit insurance cover, pre-vetted pricing matrices, and direct driver tracking, <strong>never communicate or pay outside the HillyTrip engine</strong>. Private bookings are unauthorized and forfeit full assistance.
+                  </div>
                 </div>
+
+                <button
+                  onClick={() => {
+                    if (onNavigate) onNavigate('#/messages');
+                    else window.location.hash = '#/messages';
+                  }}
+                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs py-2.5 rounded-xl transition cursor-pointer flex items-center justify-center gap-2 shadow-md"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Message Operator via HillyTrip Inbox</span>
+                </button>
               </div>
             </div>
           </div>

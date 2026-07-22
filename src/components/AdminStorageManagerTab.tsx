@@ -540,7 +540,7 @@ export function AdminStorageManagerTab() {
   // Helper to generate a reliable preview URL
   const getFilePreviewUrl = (fileName: string, bucketObj: any) => {
     const fullPath = currentPath ? `${currentPath}/${fileName}` : fileName;
-    const url = process.env.SUPABASE_URL || '';
+    const url = (import.meta as any).env?.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
     if (url) {
       return `${url}/storage/v1/object/public/${bucketObj.name}/${fullPath}`;
     }

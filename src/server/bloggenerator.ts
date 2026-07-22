@@ -296,83 +296,53 @@ The selected target Title is: "${selected.title}"
 
   try {
     const responseText = await executeGeminiOperation(async (aiInstance) => {
-      // Try primary "gemini-3.5-flash", and fallback to "gemini-3.1-flash-lite"
-      const modelsToTry = ["gemini-3.5-flash", "gemini-3.1-flash-lite"];
-      let lastError: any = null;
-
-      for (const modelName of modelsToTry) {
-        let delay = 1000;
-        for (let attempt = 1; attempt <= 2; attempt++) {
-          try {
-            console.log(`[Blog Generator] Querying model "${modelName}" (Attempt ${attempt}/2) for "${selected.title}"...`);
-            const response = await aiInstance.models.generateContent({
-              model: modelName,
-              contents: userPrompt,
-              config: {
-                systemInstruction,
-                responseMimeType: "application/json",
-                responseSchema: {
+      console.log(`[Blog Generator] Generating article via HillyTrip AI Engine for "${selected.title}"...`);
+      const response = await aiInstance.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: userPrompt,
+        config: {
+          systemInstruction,
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              title: { type: Type.STRING, description: "The final polished SEO Title of the blog article" },
+              slug: { type: Type.STRING, description: "Unique URL slug (hyphen-separated, lowercase)" },
+              content: { type: Type.STRING, description: "Detailed Markdown content of the article body" },
+              category: { type: Type.STRING, description: "Recommended category (e.g. 'Ultimate Travel Guide', 'Hidden Gem', 'Homestay Directory')" },
+              readingTime: { type: Type.INTEGER, description: "Estimated reading time in minutes" },
+              metaTitle: { type: Type.STRING, description: "SEO meta title (maximum 60 characters)" },
+              metaDescription: { type: Type.STRING, description: "SEO meta description (maximum 160 characters)" },
+              primaryKeyword: { type: Type.STRING, description: "Main target keyword for this article" },
+              secondaryKeywords: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+                description: "Array of secondary keywords to target"
+              },
+              lsiKeywords: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+                description: "Array of Latent Semantic Indexing keywords"
+              },
+              faqs: {
+                type: Type.ARRAY,
+                items: {
                   type: Type.OBJECT,
                   properties: {
-                    title: { type: Type.STRING, description: "The final polished SEO Title of the blog article" },
-                    slug: { type: Type.STRING, description: "Unique URL slug (hyphen-separated, lowercase)" },
-                    content: { type: Type.STRING, description: "Detailed Markdown content of the article body" },
-                    category: { type: Type.STRING, description: "Recommended category (e.g. 'Ultimate Travel Guide', 'Hidden Gem', 'Homestay Directory')" },
-                    readingTime: { type: Type.INTEGER, description: "Estimated reading time in minutes" },
-                    metaTitle: { type: Type.STRING, description: "SEO meta title (maximum 60 characters)" },
-                    metaDescription: { type: Type.STRING, description: "SEO meta description (maximum 160 characters)" },
-                    primaryKeyword: { type: Type.STRING, description: "Main target keyword for this article" },
-                    secondaryKeywords: {
-                      type: Type.ARRAY,
-                      items: { type: Type.STRING },
-                      description: "Array of secondary keywords to target"
-                    },
-                    lsiKeywords: {
-                      type: Type.ARRAY,
-                      items: { type: Type.STRING },
-                      description: "Array of Latent Semantic Indexing keywords"
-                    },
-                    faqs: {
-                      type: Type.ARRAY,
-                      items: {
-                        type: Type.OBJECT,
-                        properties: {
-                          question: { type: Type.STRING },
-                          answer: { type: Type.STRING }
-                        },
-                        required: ["question", "answer"]
-                      },
-                      description: "List of Frequently Asked Questions"
-                    }
+                    question: { type: Type.STRING },
+                    answer: { type: Type.STRING }
                   },
-                  required: ["title", "slug", "content", "category", "readingTime", "metaTitle", "metaDescription", "primaryKeyword", "faqs"]
-                }
+                  required: ["question", "answer"]
+                },
+                description: "List of Frequently Asked Questions"
               }
-            });
-
-            if (response && response.text) {
-              return response.text;
-            }
-          } catch (err: any) {
-            lastError = err;
-            const errStr = String(err?.message || err || "");
-            console.warn(`[Blog Generator Warning] Model "${modelName}" failed on attempt ${attempt}:`, errStr);
-            const isTransient = errStr.includes("503") || 
-                                errStr.includes("UNAVAILABLE") || 
-                                errStr.includes("high demand") || 
-                                errStr.includes("ResourceExhausted") ||
-                                errStr.includes("429");
-            if (isTransient && attempt < 2) {
-              console.log(`[Blog Generator] Retrying model "${modelName}" in ${delay}ms...`);
-              await new Promise(r => setTimeout(r, delay));
-              delay *= 2;
-            } else {
-              break; // Try next model or fail
-            }
+            },
+            required: ["title", "slug", "content", "category", "readingTime", "metaTitle", "metaDescription", "primaryKeyword", "faqs"]
           }
         }
-      }
-      throw lastError || new Error("Failed to generate content with all available models");
+      });
+
+      return response?.text || "";
     });
 
     if (responseText) {
