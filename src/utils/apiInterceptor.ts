@@ -1619,7 +1619,7 @@ function getBackendUrl(urlString: string): string {
     const isCloudRun = hostname.endsWith('run.app');
     
     if (!isLocal && !isCloudRun) {
-      backendUrl = 'https://hillytrip-api-930292453548.asia-south1.run.app
+      backendUrl = 'https://hillytrip-api-930292453548.asia-south1.run.app';
       // Only warn once in console per session to prevent spamming
       if (!(window as any)._hasWarnedNetlifyBackend) {
         (window as any)._hasWarnedNetlifyBackend = true;
