@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 # Copy dependency definitions
 COPY package*.json ./
@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Runtime stage
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 # Set production environment
 ENV NODE_ENV=production
