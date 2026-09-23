@@ -1,0 +1,6819 @@
+{
+  "lachen monastery, near lachen, monasteries, north  district sikkim, india": {
+    "latitude": 27.7267,
+    "longitude": 88.5522,
+    "district": "North Sikkim",
+    "state": "Sikkim",
+    "country": "India"
+  },
+  "lachen chu, near lachen, rivers, north  district sikkim, india": {
+    "latitude": 27.7268,
+    "longitude": 88.5517,
+    "district": "North Sikkim",
+    "state": "Sikkim",
+    "country": "India"
+  },
+  "green lake trek, near lachen, treks & adventure, north  district sikkim, india": {
+    "latitude": 27.7311,
+    "longitude": 88.2436,
+    "district": "North Sikkim",
+    "state": "Sikkim",
+    "country": "India"
+  },
+  "lachen dzumsa, near lachen, culture & markets, north  district sikkim, india": {
+    "latitude": 27.7268,
+    "longitude": 88.5517,
+    "district": "North Sikkim",
+    "state": "Sikkim",
+    "country": "India"
+  },
+  "lachen village viewpoint, near lachen, viewpoints, north  district sikkim, india": {
+    "latitude": 27.7258,
+    "longitude": 88.553,
+    "district": "North Sikkim",
+    "state": "Sikkim",
+    "country": "India"
+  },
+  "360? himalayan view, near phalut, viewpoint,  , india": {
+    "latitude": 27.1711,
+    "longitude": 88.0203,
+    "district": "Darjeeling",
+    "state": "West Bengal",
+    "country": "India"
+  },
+  "adventure zone, near delo, viewpoint,  , india": {
+    "latitude": 27.0812,
+    "longitude": 88.5011,
+    "district": "Kalimpong",
+    "state": "West Bengal",
+    "country": "India"
+  },
+  "heegyathangmonastery_": {
+    "lat": 27.472583,
+    "lng": 88.501026,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singhikmonastery_": {
+    "lat": 27.517876,
+    "lng": 88.556267,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangansinghikscenicdrive_": {
+    "lat": 27.5119,
+    "lng": 88.5325,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ringhimlepchavillage_": {
+    "lat": 27.492063,
+    "lng": 88.543441,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ringhimridgeview_": {
+    "lat": 27.492213,
+    "lng": 88.543441,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nampatamlepchavillage_": {
+    "lat": 27.479122,
+    "lng": 88.547795,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nampatamcardamomestates_": {
+    "lat": 27.479172,
+    "lng": 88.547795,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nampatamforest_": {
+    "lat": 27.479222,
+    "lng": 88.547845,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nampatamnaturetrail_": {
+    "lat": 27.479272,
+    "lng": 88.547845,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tingchimvillage_": {
+    "lat": 27.459353,
+    "lng": 88.531048,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tingchimgompa_": {
+    "lat": 27.460503,
+    "lng": 88.531198,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tingchimsacredgrove_": {
+    "lat": 27.460553,
+    "lng": 88.531198,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tingchimheritagewalk_": {
+    "lat": 27.460603,
+    "lng": 88.531198,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tingchimbirdwatchingarea_": {
+    "lat": 27.460753,
+    "lng": 88.531198,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "uppermangshilavillage_": {
+    "lat": 26.930028,
+    "lng": 88.883079,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rongongmonastery_": {
+    "lat": 27.408143,
+    "lng": 88.564237,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rongonglepchavillage_": {
+    "lat": 27.408193,
+    "lng": 88.564287,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "cardamomplantations_": {
+    "lat": 27.4192,
+    "lng": 88.5305,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "rongongforest_": {
+    "lat": 27.406893,
+    "lng": 88.563487,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tumlongpalaceruins_": {
+    "lat": 27.417835,
+    "lng": 88.58918,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tumlongmonastery_": {
+    "lat": 27.417885,
+    "lng": 88.58918,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "butterflypark_": {
+    "lat": 27.4872,
+    "lng": 88.5315,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "treatyoftumlongsite_": {
+    "lat": 27.417985,
+    "lng": 88.58918,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "phodongviewpoint_": {
+    "lat": 27.41017,
+    "lng": 88.586039,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chawanglepchavillage_": {
+    "lat": 27.435758,
+    "lng": 88.592116,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "monasterymuseum_": {
+    "lat": 27.4245,
+    "lng": 88.5888,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "chawangforest_": {
+    "lat": 27.435858,
+    "lng": 88.592116,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "phamtamvillage_": {
+    "lat": 27.382425,
+    "lng": 88.361948,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "wangduetsepalaceruins_": {
+    "lat": 27.4258,
+    "lng": 88.5583,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "dikchu_": {
+    "lat": 27.4172,
+    "lng": 88.5284,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "chaamfestivalground_": {
+    "lat": 27.4367,
+    "lng": 88.5758,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "phamtamforest_": {
+    "lat": 27.382525,
+    "lng": 88.361948,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "menrongonglepchavillage_": {
+    "lat": 27.440708,
+    "lng": 88.620995,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "menrongongforest_": {
+    "lat": 27.441858,
+    "lng": 88.621095,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ramthamgforest_": {
+    "lat": 27.2833,
+    "lng": 88.2333,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "phensangmonasticfestivalground_": {
+    "lat": 27.3958,
+    "lng": 88.5875,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "teestariver_": {
+    "lat": 27.4833,
+    "lng": 88.5333,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "tholungrelicrepository_": {
+    "lat": 27.6333,
+    "lng": 88.4667,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "nagafalls_": {
+    "lat": 27.4358,
+    "lng": 88.5342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "khangchendzongabiospherereserve_": {
+    "lat": 27.7,
+    "lng": 88.3333,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "rungyungchu_": {
+    "lat": 27.5333,
+    "lng": 88.45,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "mantamsuspensionbridge_": {
+    "lat": 27.5386,
+    "lng": 88.4758,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "phensangmonastery_": {
+    "lat": 27.4367,
+    "lng": 88.5833,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "manganreserveforest_": {
+    "lat": 27.51335,
+    "lng": 88.5333,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lowerdzongureserveforest_": {
+    "lat": 27.4833,
+    "lng": 88.4833,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "nagareserveforest_": {
+    "lat": 27.5582,
+    "lng": 88.5124,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "teestavalley_": {
+    "lat": 27.2167,
+    "lng": 88.5,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "phodongreserveforest_": {
+    "lat": 27.41252,
+    "lng": 88.586939,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kabireserveforest_": {
+    "lat": 27.406558,
+    "lng": 88.612467,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dubdimeditationforest_": {
+    "lat": 27.366813,
+    "lng": 88.234417,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kathoklake_": {
+    "lat": 27.371606,
+    "lng": 88.222059,
+    "source": "OSM_NOMINATIM",
+    "confidence": "HIGH"
+  },
+  "norbugangcoronationthrone_": {
+    "lat": 27.370038,
+    "lng": 88.217093,
+    "source": "OSM_NOMINATIM",
+    "confidence": "HIGH"
+  },
+  "rathongchu_": {
+    "lat": 27.411822,
+    "lng": 88.194985,
+    "source": "OSM_NOMINATIM",
+    "confidence": "HIGH"
+  },
+  "dzongritrek_": {
+    "lat": 27.4667,
+    "lng": 88.1833,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "yuksamheritagetrail_": {
+    "lat": 27.3785,
+    "lng": 88.2214,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "khechoedpaldrihill_": {
+    "lat": 27.3786,
+    "lng": 88.2167,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "sevensisterswaterfall_": {
+    "lat": 27.4358,
+    "lng": 88.5567,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "dikchuvalley_": {
+    "lat": 27.3833,
+    "lng": 88.5167,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "norbugangchorten_": {
+    "lat": 27.3814,
+    "lng": 88.2217,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "coronationpinetree_": {
+    "lat": 27.3825,
+    "lng": 88.2197,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "khangchendzonganationalparkyuksamgate_": {
+    "lat": 27.3815,
+    "lng": 88.2214,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "goechalatrek_": {
+    "lat": 27.5833,
+    "lng": 88.2167,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "kanchenjungaviewpoint_": {
+    "lat": 27.3025,
+    "lng": 88.2342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "khecheopalriwetland_": {
+    "lat": 27.3786,
+    "lng": 88.2658,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "singlitamlepchavillage_": {
+    "lat": 27.1856,
+    "lng": 88.3824,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "singlitamcardamomestates_": {
+    "lat": 27.1833,
+    "lng": 88.3667,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "tingbrumvillage_": {
+    "lat": 27.2356,
+    "lng": 88.2342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "topunglepchavillage_": {
+    "lat": 27.330631,
+    "lng": 88.16029,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singlitamforest_": {
+    "lat": 27.1856,
+    "lng": 88.3642,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "tingbrumforest_": {
+    "lat": 27.2358,
+    "lng": 88.3982,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "topungforest_": {
+    "lat": 27.330731,
+    "lng": 88.16034,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singrangpungvillage_": {
+    "lat": 27.3785,
+    "lng": 88.2142,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "nambumonastery_": {
+    "lat": 27.312826,
+    "lng": 88.160632,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nambuwildlifesanctuary_": {
+    "lat": 27.312876,
+    "lng": 88.160632,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nambuforest_": {
+    "lat": 27.312926,
+    "lng": 88.160632,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nambuviewpoint_": {
+    "lat": 27.312976,
+    "lng": 88.160632,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "darapvillagetourism_": {
+    "lat": 27.311537,
+    "lng": 88.190417,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chongpungvillage_": {
+    "lat": 27.2333,
+    "lng": 88.2167,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "chongpungcardamomestates_": {
+    "lat": 27.2583,
+    "lng": 88.1667,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "chongpungforest_": {
+    "lat": 27.2333,
+    "lng": 88.2167,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "sangtokpalriwoodensculpture_": {
+    "lat": 27.0658,
+    "lng": 88.4732,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "gurudrakmarchamfestival_": {
+    "lat": 27.3314,
+    "lng": 88.2358,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "monasticmuseumsacredrelics_": {
+    "lat": 27.3185,
+    "lng": 88.6064,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "pemayangtseviewpoint_": {
+    "lat": 27.3035,
+    "lng": 88.2328,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "rabdentsenaturetrail_": {
+    "lat": 27.2065,
+    "lng": 88.2358,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "rabdentseruins_": {
+    "lat": 27.2958,
+    "lng": 88.2356,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "sangachoelingmonastery_": {
+    "lat": 27.2975,
+    "lng": 88.2564,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "khecheopalrivalleylandscape_": {
+    "lat": 27.3785,
+    "lng": 88.2652,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "unglokvillage_": {
+    "lat": 27.321937,
+    "lng": 88.265475,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "melivillage_": {
+    "lat": 27.3785,
+    "lng": 88.2156,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "bhaluthangvillage_": {
+    "lat": 27.318338,
+    "lng": 88.259821,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "villageprayerflagridge_260957": {
+    "lat": 27.460803,
+    "lng": 88.531198,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "himalayanbirdhabitat_260977": {
+    "lat": 27.392212,
+    "lng": 88.614593,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "himalayanbroadleafforest_260978": {
+    "lat": 27.391034,
+    "lng": 88.612888,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "broadleafhimalayanforest_261002": {
+    "lat": 27.322037,
+    "lng": 88.265475,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "bhaluthangforest_261003": {
+    "lat": 27.314488,
+    "lng": 88.259971,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "terracedagriculturallandscape_vil0077": {
+    "lat": 27.3812,
+    "lng": 88.2215,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "MEDIUM"
+  },
+  "cardamomplantations_261006": {
+    "lat": 27.37602,
+    "lng": 88.308407,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "villageforest_261006": {
+    "lat": 27.37712,
+    "lng": 88.308557,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "yangtenvillage_vil0077": {
+    "lat": 27.2385,
+    "lng": 88.2654,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "labdangtrek_261007": {
+    "lat": 27.392106,
+    "lng": 88.291748,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "labdangcampsite_261007": {
+    "lat": 27.392156,
+    "lng": 88.291748,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "labdangwaterfall_261007": {
+    "lat": 27.392206,
+    "lng": 88.291748,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "labdangsuspensionbridge_261007": {
+    "lat": 27.392256,
+    "lng": 88.291798,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "labdangvillage_261007": {
+    "lat": 27.392306,
+    "lng": 88.291798,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lhakhimhomestay_mainmarketroadlachennorthdistrictsikkim": {
+    "lat": 27.730803,
+    "lng": 88.549268,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lamtenhomestay_upperlachennorthdistrictsikkim": {
+    "lat": 27.730853,
+    "lng": 88.549268,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "famaaresidency_lachenvillagenorthdistrictsikkim": {
+    "lat": 27.727103,
+    "lng": 88.549418,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chamoahomestay_lowerlachennorthdistrictsikkim": {
+    "lat": 27.727153,
+    "lng": 88.549468,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "norbulachunghomestay_upperlachungnorthdistrictsikkim": {
+    "lat": 27.691299,
+    "lng": 88.74636,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "appleorchardresorthomestay_lachungvillagenorthdistrictsikkim": {
+    "lat": 27.691349,
+    "lng": 88.74636,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "snowlionhomestay_nearmonasterylachungnorthdistrictsikkim": {
+    "lat": 27.691399,
+    "lng": 88.74636,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "cliffviewhomestay_lachungriversidenorthdistrictsikkim": {
+    "lat": 27.691449,
+    "lng": 88.74636,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "fortunahomestay_centrallachungnorthdistrictsikkim": {
+    "lat": 27.691499,
+    "lng": 88.74636,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kaldenhomestay_phuniroadlachungnorthdistrictsikkim": {
+    "lat": 27.691549,
+    "lng": 88.74636,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "yulmahomestay_upperlachungnorthdistrictsikkim": {
+    "lat": 27.691599,
+    "lng": 88.74636,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "valleyviewhomestay_lachungtownnorthdistrictsikkim": {
+    "lat": 27.692699,
+    "lng": 88.74651,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chungthanggreenhomestay_mainbazaarchungthangnorthdistrictsikkim": {
+    "lat": 27.602628,
+    "lng": 88.649299,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "teestavalleyhomestay_nearteestabridgechungthangnorthdistrictsikkim": {
+    "lat": 27.602678,
+    "lng": 88.649299,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sanghahomestay_chungthangvillagenorthdistrictsikkim": {
+    "lat": 27.602728,
+    "lng": 88.649349,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chungthangtaxistand_vil0004": {
+    "lat": 27.603628,
+    "lng": 88.646949,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0005": {
+    "lat": 27.51445,
+    "lng": 88.5322,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lachentaxistand_vil0007": {
+    "lat": 27.729803,
+    "lng": 88.547268,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chungthangtaxistand_vil0009": {
+    "lat": 27.603878,
+    "lng": 88.646949,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0016": {
+    "lat": 27.51605,
+    "lng": 88.5324,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0020": {
+    "lat": 27.5123,
+    "lng": 88.53255,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0021": {
+    "lat": 27.51235,
+    "lng": 88.53255,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0023": {
+    "lat": 27.51245,
+    "lng": 88.53255,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0024": {
+    "lat": 27.5125,
+    "lng": 88.5326,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0025": {
+    "lat": 27.51255,
+    "lng": 88.5326,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0026": {
+    "lat": 27.5126,
+    "lng": 88.5326,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0034": {
+    "lat": 27.51405,
+    "lng": 88.53275,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0035": {
+    "lat": 27.5141,
+    "lng": 88.5328,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0037": {
+    "lat": 27.5142,
+    "lng": 88.5328,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0038": {
+    "lat": 27.51425,
+    "lng": 88.5328,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "shipgyervillagehomestay_shipgyerwardnorthdistrictsikkim": {
+    "lat": 27.5055,
+    "lng": 88.5342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "thongwarangdolchorten_261013": {
+    "lat": 27.307415,
+    "lng": 88.29556,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "bumchufestival_261013": {
+    "lat": 27.307465,
+    "lng": 88.29556,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sacredbumchuvase_261013": {
+    "lat": 27.307515,
+    "lng": 88.29556,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gurupadmasambhavafootprints_261013": {
+    "lat": 27.307565,
+    "lng": 88.29561,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "manilhakhang_261013": {
+    "lat": 27.307615,
+    "lng": 88.29561,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "maniwall_261013": {
+    "lat": 27.307665,
+    "lng": 88.29561,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rathongchu_261013": {
+    "lat": 27.307715,
+    "lng": 88.29561,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rangeetriver_261013": {
+    "lat": 27.308815,
+    "lng": 88.29576,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lachenforestresthousestay_lachenforestblocknorthdistrictsikkim": {
+    "lat": 27.54396,
+    "lng": 88.640959,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pineridgelachenhomestay_outerlachenforestblocknorthdistrictsikkim": {
+    "lat": 27.54401,
+    "lng": 88.640959,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mountainshadowhomestay_neartungbridgenorthdistrictsikkim": {
+    "lat": 27.4582,
+    "lng": 88.5214,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "tungriversidehomestay_tungvillagenorthdistrictsikkim": {
+    "lat": 27.4685,
+    "lng": 88.5352,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "thanguwildernessstay_thanguforestblocknorthdistrictsikkim": {
+    "lat": 27.9022,
+    "lng": 88.53075,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "highaltitudethangucottage_thanguvalleyoutskirtnorthdistrictsikkim": {
+    "lat": 27.90225,
+    "lng": 88.53075,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lachungforestoutpoststay_lachungforestblocknorthdistrictsikkim": {
+    "lat": 27.54415,
+    "lng": 88.63701,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "alpinecanopylachung_lachungforestblockbordernorthdistrictsikkim": {
+    "lat": 27.5442,
+    "lng": 88.63701,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nagawaterfallshomestay_naganamgornorthdistrictsikkim": {
+    "lat": 27.538782,
+    "lng": 88.624103,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "namgorviewpointhomestay_namgorsectornaganamgornorthdistrictsikkim": {
+    "lat": 27.538832,
+    "lng": 88.624103,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "meyongvillagehomestay_meyongvillagenorthdistrictsikkim": {
+    "lat": 27.533153,
+    "lng": 88.597551,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenvalleymeyong_uppermeyongnorthdistrictsikkim": {
+    "lat": 27.533203,
+    "lng": 88.597551,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0039": {
+    "lat": 27.5143,
+    "lng": 88.5328,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "phodongtaxistand_vil0046": {
+    "lat": 27.41367,
+    "lng": 88.586489,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangantaxistand_vil0050": {
+    "lat": 27.51195,
+    "lng": 88.53315,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pellingtaxistand_vil0075": {
+    "lat": 27.3023,
+    "lng": 88.24225,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pellingtaxistand_vil0076": {
+    "lat": 27.30235,
+    "lng": 88.24225,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pellingtaxistand_vil0077": {
+    "lat": 27.3024,
+    "lng": 88.24225,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rathongchurangeetconfluence_261013": {
+    "lat": 27.308865,
+    "lng": 88.29576,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tashidingpilgrimagetrail_261013": {
+    "lat": 27.308915,
+    "lng": 88.29576,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gurupadmasambhavameditationcave_261013": {
+    "lat": 27.308965,
+    "lng": 88.29576,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singchitriversidehomestay_singchitvillagenorthdistrictsikkim": {
+    "lat": 27.522963,
+    "lng": 88.584775,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mountainnestsingchit_nearsingchitbridgenorthdistrictsikkim": {
+    "lat": 27.523013,
+    "lng": 88.584775,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tshungthangecocamphomestay_tshungthangforestblocknorthdistrictsikkim": {
+    "lat": 27.6235,
+    "lng": 88.6458,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "pakshepvillagehomestay_pakshepvillagenorthdistrictsikkim": {
+    "lat": 27.516107,
+    "lng": 88.555822,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "orchardviewpakshep_upperpakshepnorthdistrictsikkim": {
+    "lat": 27.516157,
+    "lng": 88.555822,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kazorheritagehomestay_kazorvillagenorthdistrictsikkim": {
+    "lat": 27.516484,
+    "lng": 88.54052,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mountainmistkazor_nearkazorstreamnorthdistrictsikkim": {
+    "lat": 27.511534,
+    "lng": 88.53557,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sentamvalleyhomestay_sentamvillagenorthdistrictsikkim": {
+    "lat": 27.518641,
+    "lng": 88.563653,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidesentam_lowersentamnorthdistrictsikkim": {
+    "lat": 27.518691,
+    "lng": 88.563653,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lingthemtraditionalhomestay_lingthemvillagenorthdistrictsikkim": {
+    "lat": 27.525711,
+    "lng": 88.503603,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lepchaheritagelingthem_nearmonasterylingthemnorthdistrictsikkim": {
+    "lat": 27.525761,
+    "lng": 88.503603,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tashidingtaxistand_vil0087": {
+    "lat": 27.307015,
+    "lng": 88.29926,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tashidingtaxistand_vil0088": {
+    "lat": 27.307065,
+    "lng": 88.29926,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sorengtaxistand_vil0099": {
+    "lat": 27.168201,
+    "lng": 88.195993,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lingdemhotspringhomestay_nearhotspringlingdemnorthdistrictsikkim": {
+    "lat": 27.536523,
+    "lng": 88.46057,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenvalleyshipyard_uppershipgyernorthdistrictsikkim": {
+    "lat": 27.5055,
+    "lng": 88.5342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "valleyviewlingdem_lingdemvillagenorthdistrictsikkim": {
+    "lat": 27.536573,
+    "lng": 88.46057,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tingbongvillagestay_tingbongvillagenorthdistrictsikkim": {
+    "lat": 27.553683,
+    "lng": 88.473116,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sacredpeaktingbong_uppertingbongnorthdistrictsikkim": {
+    "lat": 27.553733,
+    "lng": 88.473116,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sakyongheritagehomestay_sakyongpentongnorthdistrictsikkim": {
+    "lat": 27.243168,
+    "lng": 88.492005,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pentongvalleystay_pentongsectorsakyongpentongnorthdistrictsikkim": {
+    "lat": 27.243218,
+    "lng": 88.492005,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dentamtaxistand_vil0105": {
+    "lat": 27.260358,
+    "lng": 88.136688,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gnonsamdongtraditionalhomestay_gnonsamdongnorthdistrictsikkim": {
+    "lat": 27.359498,
+    "lng": 88.490568,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "samdongecostay_samdongsectornorthdistrictsikkim": {
+    "lat": 27.359548,
+    "lng": 88.490618,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "heetaxistand_vil0115": {
+    "lat": 27.2358,
+    "lng": 88.2342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "khecheopalritaxistand_vil0061": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "gyalshingmonastery_vil0091": {
+    "lat": 27.2917,
+    "lng": 88.2758,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "districtadministrativeheritagezone_vil0091": {
+    "lat": 27.2833,
+    "lng": 88.275,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "kanchenjungaviewpoint_vil0091": {
+    "lat": 27.3556,
+    "lng": 88.6238,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "lingdongtraditionalstay_lingdongvillagenorthdistrictsikkim": {
+    "lat": 27.50841,
+    "lng": 88.515371,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "orchardnestlingdong_lowerlingdongnorthdistrictsikkim": {
+    "lat": 27.50846,
+    "lng": 88.515371,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "zimchungmountainstay_zimchungvillagenorthdistrictsikkim": {
+    "lat": 27.497784,
+    "lng": 88.531913,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidezimchung_nearzimchungstreamnorthdistrictsikkim": {
+    "lat": 27.497834,
+    "lng": 88.531913,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singhikviewpointhomestay_singhikvillagenorthdistrictsikkim": {
+    "lat": 27.522576,
+    "lng": 88.554317,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "khecheopalritaxistand_vil0062": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "khecheopalritaxistand_vil0063": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "khecheopalritaxistand_vil0064": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "khecheopalritaxistand_vil0065": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "khecheopalritaxistand_vil0066": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "khecheopalritaxistand_vil0067": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "khecheopalritaxistand_vil0069": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "gyalshingtaxistand_vil0090": {
+    "lat": 27.247199,
+    "lng": 88.278798,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gyalshingtaxistand_vil0091": {
+    "lat": 27.247249,
+    "lng": 88.278798,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gyalshingtaxistand_vil0092": {
+    "lat": 27.247299,
+    "lng": 88.278798,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "umchungvillage_vil0090": {
+    "lat": 27.3333,
+    "lng": 88.25,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "gyalshingheritagepark_vil0091": {
+    "lat": 27.2917,
+    "lng": 88.2756,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "kanchenjungapanoramasinghik_mainviewpointroadsinghiknorthdistrictsikkim": {
+    "lat": 27.522626,
+    "lng": 88.554317,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ringhimtraditionalhomestay_ringhimvillagenorthdistrictsikkim": {
+    "lat": 27.495563,
+    "lng": 88.541391,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "valleyviewringhim_upperringhimnorthdistrictsikkim": {
+    "lat": 27.495613,
+    "lng": 88.541391,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nampatamriversidestay_nampatamvillagenorthdistrictsikkim": {
+    "lat": 27.478572,
+    "lng": 88.545845,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenhillsnampatam_lowernampatamnorthdistrictsikkim": {
+    "lat": 27.478622,
+    "lng": 88.545895,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "khecheopalritaxistand_vil0122": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "pellingtaxistand_vil0125": {
+    "lat": 27.31,
+    "lng": 88.23,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "rinchenpongtaxistand_vil0133": {
+    "lat": 27.239122,
+    "lng": 88.27173,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0134": {
+    "lat": 27.239172,
+    "lng": 88.27178,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0135": {
+    "lat": 27.239222,
+    "lng": 88.27178,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0136": {
+    "lat": 27.239272,
+    "lng": 88.27178,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0139": {
+    "lat": 27.239422,
+    "lng": 88.27178,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tingchimheritagehomestay_tingchimvillagenorthdistrictsikkim": {
+    "lat": 27.458703,
+    "lng": 88.529098,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "orchardnesttingchim_nearvillagesquaretingchimnorthdistrictsikkim": {
+    "lat": 27.458753,
+    "lng": 88.529098,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "uppermangshilaviewpointstay_uppermangshilanorthdistrictsikkim": {
+    "lat": 26.927978,
+    "lng": 88.880929,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "orangegardenmangshila_uppermangshilaridgenorthdistrictsikkim": {
+    "lat": 26.928028,
+    "lng": 88.880929,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lowermangshilavalleyhomestay_lowermangshilanorthdistrictsikkim": {
+    "lat": 27.450353,
+    "lng": 88.523141,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0140": {
+    "lat": 27.240522,
+    "lng": 88.27193,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0142": {
+    "lat": 27.240622,
+    "lng": 88.27193,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0148": {
+    "lat": 27.240872,
+    "lng": 88.27198,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0150": {
+    "lat": 27.240972,
+    "lng": 88.27198,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0151": {
+    "lat": 27.242072,
+    "lng": 88.27213,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0152": {
+    "lat": 27.242122,
+    "lng": 88.27213,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0155": {
+    "lat": 27.242272,
+    "lng": 88.27213,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "umchungcardamomestates_vil0090": {
+    "lat": 27.5167,
+    "lng": 88.5167,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "gyalshinghelipadview_vil0091": {
+    "lat": 27.2835,
+    "lng": 88.2758,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "gyalshingridgewalk_vil0091": {
+    "lat": 27.2958,
+    "lng": 88.2715,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "greencanopypackage_upperpakelnorthdistrictsikkim": {
+    "lat": 27.5125,
+    "lng": 88.5342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "salimpakelhomestay_salimpakelnorthdistrictsikkim": {
+    "lat": 27.4833,
+    "lng": 88.5333,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "riverbedtshungthanghomestay_nearstreamtshungthangforestblocknorthdistrictsikkim": {
+    "lat": 27.6258,
+    "lng": 88.5142,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "lumvillagehomestay_lumvillagenorthdistrictsikkim": {
+    "lat": 27.4333,
+    "lng": 88.5333,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "teestariversidelowermangshila_nearteestabanklowermangshilanorthdistrictsikkim": {
+    "lat": 27.450403,
+    "lng": 88.523141,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "namokvalleyhomestay_namokvillagenorthdistrictsikkim": {
+    "lat": 27.435615,
+    "lng": 88.535495,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidenamok_nearnamokstreamnorthdistrictsikkim": {
+    "lat": 27.435665,
+    "lng": 88.535545,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "yuksamtaxistand_vil0057": {
+    "lat": 27.3756,
+    "lng": 88.2435,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "yuksamtaxistand_vil0120": {
+    "lat": 27.3756,
+    "lng": 88.2435,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "yuksamtaxistand_vil0121": {
+    "lat": 27.3756,
+    "lng": 88.2435,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "rinchenpongtaxistand_vil0156": {
+    "lat": 27.242322,
+    "lng": 88.27213,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0160": {
+    "lat": 27.242522,
+    "lng": 88.27218,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0163": {
+    "lat": 27.243722,
+    "lng": 88.27233,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongtaxistand_vil0164": {
+    "lat": 27.238772,
+    "lng": 88.27233,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "daramdintaxistand_vil0166": {
+    "lat": 27.133701,
+    "lng": 88.165799,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sorengtaxistand_vil0168": {
+    "lat": 27.166501,
+    "lng": 88.196443,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sorengtaxistand_vil0172": {
+    "lat": 27.167751,
+    "lng": 88.196593,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gyalshingbazaar_vil0091": {
+    "lat": 27.2925,
+    "lng": 88.2736,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "kyonsawaterfall_vil0092": {
+    "lat": 27.2854,
+    "lng": 88.2342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "yangthanghotspring_261017": {
+    "lat": 27.292674,
+    "lng": 88.227989,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "yangthangmonastery_261017": {
+    "lat": 27.292724,
+    "lng": 88.227989,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kyonsavillage_vil0092": {
+    "lat": 27.2833,
+    "lng": 88.2667,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "rongongvalleyhomestay_rongongvillagenorthdistrictsikkim": {
+    "lat": 27.409593,
+    "lng": 88.561937,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "teestaviewrongong_nearteestabankrongongnorthdistrictsikkim": {
+    "lat": 27.409643,
+    "lng": 88.561937,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tumlongheritagestay_tumlongvillagenorthdistrictsikkim": {
+    "lat": 27.420585,
+    "lng": 88.58763,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chakungtaxistand_vil0174": {
+    "lat": 27.154775,
+    "lng": 88.243056,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "damthangtaxistand_vil0189": {
+    "lat": 27.230262,
+    "lng": 88.387191,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "damthangtaxistand_vil0190": {
+    "lat": 27.230312,
+    "lng": 88.387241,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "damthangtaxistand_vil0192": {
+    "lat": 27.231462,
+    "lng": 88.387341,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "damthangtaxistand_vil0194": {
+    "lat": 27.231562,
+    "lng": 88.387391,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "damthangtaxistand_vil0200": {
+    "lat": 27.231862,
+    "lng": 88.387391,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "damthangtaxistand_vil0204": {
+    "lat": 27.230662,
+    "lng": 88.386641,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "namchitaxistand_vil0209": {
+    "lat": 27.17,
+    "lng": 88.36025,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sumbuktaxistand_vil0211": {
+    "lat": 27.116488,
+    "lng": 88.373955,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singtamtaxistand_vil0216": {
+    "lat": 27.303608,
+    "lng": 88.518706,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "yangthangvillage_261017": {
+    "lat": 27.293824,
+    "lng": 88.228139,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_261017": {
+    "lat": 27.293874,
+    "lng": 88.228139,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singalilarangeview_261032": {
+    "lat": 27.264208,
+    "lng": 88.138438,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heewatergarden_261035": {
+    "lat": 27.261498,
+    "lng": 88.189382,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heehangingbridge_261035": {
+    "lat": 27.257648,
+    "lng": 88.184532,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "royalruinsviewpointtumlong_nearhistoricalruinstumlongnorthdistrictsikkim": {
+    "lat": 27.420635,
+    "lng": 88.58763,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "phodongmonasteryviewhomestay_nearphodongmonasterynorthdistrictsikkim": {
+    "lat": 27.4208,
+    "lng": 88.5801,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "orchardnestphodong_phodongvillagecentrenorthdistrictsikkim": {
+    "lat": 27.41132,
+    "lng": 88.583689,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singtamtaxistand_vil0217": {
+    "lat": 27.303658,
+    "lng": 88.518706,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singtamtaxistand_vil0218": {
+    "lat": 27.303708,
+    "lng": 88.518706,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singtamtaxistand_vil0164": {
+    "lat": 27.304908,
+    "lng": 88.518856,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singtamtaxistand_vil0222": {
+    "lat": 27.304958,
+    "lng": 88.518856,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mellitaxistand_vil0225": {
+    "lat": 27.331747,
+    "lng": 88.211205,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mellitaxistand_vil0226": {
+    "lat": 27.331797,
+    "lng": 88.211205,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mellitaxistand_vil0229": {
+    "lat": 27.331947,
+    "lng": 88.211205,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sadamtaxistand_vil0230": {
+    "lat": 27.123356,
+    "lng": 88.426075,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sadamtaxistand_vil0235": {
+    "lat": 27.124656,
+    "lng": 88.426275,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sadamtaxistand_vil0239": {
+    "lat": 27.124856,
+    "lng": 88.426275,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "heeviewpoint_261035": {
+    "lat": 27.257698,
+    "lng": 88.184532,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heemonastery_261035": {
+    "lat": 27.257748,
+    "lng": 88.184532,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heeorganicvillage_261035": {
+    "lat": 27.257798,
+    "lng": 88.184532,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heecardamomestates_261035": {
+    "lat": 27.257848,
+    "lng": 88.184532,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heekhola_261035": {
+    "lat": 27.257898,
+    "lng": 88.184532,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chawangmountainhomestay_chawangvillagenorthdistrictsikkim": {
+    "lat": 27.435758,
+    "lng": 88.589616,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "valleyridgechawang_upperchawangnorthdistrictsikkim": {
+    "lat": 27.435808,
+    "lng": 88.589616,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "phamtamvillagehomestay_phamtamvillagenorthdistrictsikkim": {
+    "lat": 27.382375,
+    "lng": 88.359448,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sadamtaxistand_vil0241": {
+    "lat": 27.126006,
+    "lng": 88.426425,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sadamtaxistand_vil0249": {
+    "lat": 27.121406,
+    "lng": 88.421475,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sadamtaxistand_vil0115": {
+    "lat": 27.122606,
+    "lng": 88.421625,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "temitaxistand_vil0255": {
+    "lat": 27.153473,
+    "lng": 88.523732,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "temitaxistand_vil0258": {
+    "lat": 27.153623,
+    "lng": 88.523782,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "temitaxistand_vil0262": {
+    "lat": 27.154873,
+    "lng": 88.523932,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "temitaxistand_vil0264": {
+    "lat": 27.154973,
+    "lng": 88.523932,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "temitaxistand_vil0266": {
+    "lat": 27.155073,
+    "lng": 88.523932,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "temitaxistand_vil0268": {
+    "lat": 27.155173,
+    "lng": 88.523982,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "namthangtaxistand_vil0280": {
+    "lat": 27.144857,
+    "lng": 88.472167,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "birdwatchingtrail_261035": {
+    "lat": 27.257948,
+    "lng": 88.184532,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "patalviewpoint_vil0112": {
+    "lat": 26.673593,
+    "lng": 88.248948,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "heepatalvillage_vil0112": {
+    "lat": 26.673643,
+    "lng": 88.248948,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greencanopyphamtam_lowerphamtamnorthdistrictsikkim": {
+    "lat": 27.382425,
+    "lng": 88.359448,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "menrongongvalleystay_menrongongvillagenorthdistrictsikkim": {
+    "lat": 27.440608,
+    "lng": 88.618445,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidemenronggong_nearstreammenrongongnorthdistrictsikkim": {
+    "lat": 27.440658,
+    "lng": 88.618445,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "namthangtaxistand_vil0281": {
+    "lat": 27.140957,
+    "lng": 88.472317,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "namthangtaxistand_vil0282": {
+    "lat": 27.141007,
+    "lng": 88.472317,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ravanglataxistand_vil0286": {
+    "lat": 27.3,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "ravanglataxistand_vil0288": {
+    "lat": 27.3,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "ravanglataxistand_vil0290": {
+    "lat": 27.3,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "legshiptaxistand_vil0294": {
+    "lat": 27.28869,
+    "lng": 88.284473,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ravanglataxistand_vil0296": {
+    "lat": 27.3,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "ravanglataxistand_vil0299": {
+    "lat": 27.3,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "ravanglataxistand_vil0303": {
+    "lat": 27.3,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "ravanglataxistand_vil0312": {
+    "lat": 27.3,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "martamvillage_261038": {
+    "lat": 27.261113,
+    "lng": 88.213919,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "pecherekvillage_vil0113": {
+    "lat": 27.2356,
+    "lng": 88.2342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "labivillagehomestay_labivillagenorthdistrictsikkim": {
+    "lat": 27.424585,
+    "lng": 88.62735,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "phensongmonasteryviewstay_nearphensongmonasterypaneyphensongnorthdistrictsikkim": {
+    "lat": 27.4583,
+    "lng": 88.5528,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "paneyorchardhomestay_paneysectorpaneyphensongnorthdistrictsikkim": {
+    "lat": 27.4385,
+    "lng": 88.5521,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "ravanglataxistand_vil0314": {
+    "lat": 27.3,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "yangangtaxistand_vil0319": {
+    "lat": 27.287595,
+    "lng": 88.415365,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "yangangtaxistand_vil0321": {
+    "lat": 27.288745,
+    "lng": 88.415465,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ravanglataxistand_vil0327": {
+    "lat": 27.3,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "rorathangtaxistand_vil0333": {
+    "lat": 27.1901,
+    "lng": 88.5795,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rorathangtaxistand_vil0334": {
+    "lat": 27.19015,
+    "lng": 88.5795,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "aritartaxistand_vil0337": {
+    "lat": 27.175392,
+    "lng": 88.66478,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "aritartaxistand_vil0338": {
+    "lat": 27.175442,
+    "lng": 88.66478,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "aritartaxistand_vil0341": {
+    "lat": 27.176642,
+    "lng": 88.66493,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ronglitaxistand_vil0342": {
+    "lat": 27.2189,
+    "lng": 88.69965,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "cardamomplantations_261038": {
+    "lat": 27.261163,
+    "lng": 88.213919,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "martamforest_261038": {
+    "lat": 27.261213,
+    "lng": 88.213919,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greencrestlabi_upperlabinorthdistrictsikkim": {
+    "lat": 27.424635,
+    "lng": 88.6274,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kabiheritagehomestay_kabivillagekabilongstocknorthdistrictsikkim": {
+    "lat": 27.406808,
+    "lng": 88.609367,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "treatyspotviewkabi_nearhistoricaltreatygroundkabinorthdistrictsikkim": {
+    "lat": 27.406858,
+    "lng": 88.609367,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ronglitaxistand_vil0345": {
+    "lat": 27.21905,
+    "lng": 88.6997,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ronglitaxistand_vil0349": {
+    "lat": 27.21925,
+    "lng": 88.6997,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ronglitaxistand_vil0351": {
+    "lat": 27.2204,
+    "lng": 88.69985,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ranipooltaxistand_vil0357": {
+    "lat": 27.28343,
+    "lng": 88.58183,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ranipooltaxistand_vil0358": {
+    "lat": 27.28348,
+    "lng": 88.58183,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ranipooltaxistand_vil0359": {
+    "lat": 27.28353,
+    "lng": 88.58183,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singtamtaxistand_vil0360": {
+    "lat": 27.308058,
+    "lng": 88.515506,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singtamtaxistand_vil0364": {
+    "lat": 27.304308,
+    "lng": 88.515656,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ranipooltaxistand_vil0366": {
+    "lat": 27.27993,
+    "lng": 88.58203,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ranipooltaxistand_vil0367": {
+    "lat": 27.27998,
+    "lng": 88.58203,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "barnyakvillage_vil0115": {
+    "lat": 27.2356,
+    "lng": 88.2642,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "heritagetrekkerlingzah_lingzahsectornorthdistrictsikkim": {
+    "lat": 27.5582,
+    "lng": 88.5412,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "tingdavillagestay_tingdavillagenorthdistrictsikkim": {
+    "lat": 27.393254,
+    "lng": 88.62881,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mistymountaintingda_uppertingdanorthdistrictsikkim": {
+    "lat": 27.393304,
+    "lng": 88.62881,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "upperdzonguforestcanopystay_upperdzonguforestblocknorthdistrictsikkim": {
+    "lat": 27.58545,
+    "lng": 88.4891,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ranipooltaxistand_vil0368": {
+    "lat": 27.28003,
+    "lng": 88.58203,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ranipooltaxistand_vil0369": {
+    "lat": 27.28008,
+    "lng": 88.58203,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangtokvajrataxistand_vil0373": {
+    "lat": 27.339,
+    "lng": 88.60555,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangtokvajrataxistand_vil0374": {
+    "lat": 27.33905,
+    "lng": 88.60555,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangtokvajrataxistand_vil0376": {
+    "lat": 27.33915,
+    "lng": 88.60555,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangtokvajrataxistand_vil0377": {
+    "lat": 27.3392,
+    "lng": 88.6056,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangtokvajrataxistand_vil0378": {
+    "lat": 27.33925,
+    "lng": 88.6056,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangtokvajrataxistand_vil0379": {
+    "lat": 27.3393,
+    "lng": 88.6056,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangtokvajrataxistand_vil0380": {
+    "lat": 27.33935,
+    "lng": 88.6056,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangtokvajrataxistand_vil0389": {
+    "lat": 27.34085,
+    "lng": 88.6058,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "villageheritagetrail_vil0034": {
+    "lat": 27.41295,
+    "lng": 88.74255,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "villagenaturewalk_vil0035": {
+    "lat": 27.28415,
+    "lng": 88.43655,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tingletraditionalvillage_vil0063": {
+    "lat": 27.4494,
+    "lng": 88.6036,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "villageforest_vil0063": {
+    "lat": 27.45055,
+    "lng": 88.60375,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "himalayanbroadleafforest_vil0064": {
+    "lat": 27.2147,
+    "lng": 88.69475,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "forestlandscape_vil0065": {
+    "lat": 27.22085,
+    "lng": 88.62075,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singrangpungforest_vil0069": {
+    "lat": 27.25205,
+    "lng": 88.27905,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "umchungforest_vil0090": {
+    "lat": 27.45085,
+    "lng": 88.52475,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_vil0092": {
+    "lat": 27.29595,
+    "lng": 88.64105,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kyonsaforest_vil0092": {
+    "lat": 27.296,
+    "lng": 88.64105,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_vil0112": {
+    "lat": 27.38085,
+    "lng": 88.50775,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "terracedfarms_vil0112": {
+    "lat": 27.3809,
+    "lng": 88.5078,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_vil0113": {
+    "lat": 27.265,
+    "lng": 88.6288,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_vil0115": {
+    "lat": 27.3123,
+    "lng": 88.71585,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "barnyakforest_vil0115": {
+    "lat": 27.3134,
+    "lng": 88.71595,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tolungmonasteryviewhomestay_lingzahtolungnorthdistrictsikkim": {
+    "lat": 27.4301,
+    "lng": 88.7447,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sangtokmountainviewhomestay_sangtokvillagenorthdistrictsikkim": {
+    "lat": 27.34545,
+    "lng": 88.72385,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "riversidegor_neargorstreamnorthdistrictsikkim": {
+    "lat": 27.4186,
+    "lng": 88.59185,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "waterfallviewhee_nearwaterfallheegyathangnorthdistrictsikkim": {
+    "lat": 27.1968,
+    "lng": 88.5629,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sheyammountainhomestay_sheyamvillagenorthdistrictsikkim": {
+    "lat": 27.239,
+    "lng": 88.4724,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greencrestsheyam_uppersheyamnorthdistrictsikkim": {
+    "lat": 27.23905,
+    "lng": 88.4724,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tangyekheritagestay_tangyekvillagenorthdistrictsikkim": {
+    "lat": 27.2211,
+    "lng": 88.34445,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "orchardviewtangyek_lowertangyeknorthdistrictsikkim": {
+    "lat": 27.22115,
+    "lng": 88.34445,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ramthamgviewpointhomestay_ramthamgvillagenorthdistrictsikkim": {
+    "lat": 27.3532,
+    "lng": 88.57645,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "mistyheightsramthamg_upperramthamgridgenorthdistrictsikkim": {
+    "lat": 27.35325,
+    "lng": 88.57645,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "wildernessretreatupperdzongu_forestedgeupperdzongunorthdistrictsikkim": {
+    "lat": 27.22,
+    "lng": 88.4669,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lowerdzonguforeststay_lowerdzonguforestblocknorthdistrictsikkim": {
+    "lat": 27.510836,
+    "lng": 88.435431,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidelowerdzongu_nearstreamlowerdzonguforestblocknorthdistrictsikkim": {
+    "lat": 27.510886,
+    "lng": 88.435481,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nagaforestoutpoststay_nagaforestblocknorthdistrictsikkim": {
+    "lat": 27.39306,
+    "lng": 88.617907,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "heetaxistand_vil0112": {
+    "lat": 27.3807,
+    "lng": 88.5109,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heetaxistand_vil0113": {
+    "lat": 27.26475,
+    "lng": 88.6319,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heetaxistand_vil0116": {
+    "lat": 27.3049,
+    "lng": 88.4919,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heetaxistand_vil0119": {
+    "lat": 27.45205,
+    "lng": 88.5289,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heetaxistand_vil0128": {
+    "lat": 27.41955,
+    "lng": 88.5951,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gangtokvajrataxistand_vil0393": {
+    "lat": 27.3982,
+    "lng": 88.24045,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "zuluktaxistand_vil0395": {
+    "lat": 27.3763,
+    "lng": 88.23445,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rorathangtaxistand_vil0400": {
+    "lat": 27.25155,
+    "lng": 88.5525,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singtamtaxistand_vil0404": {
+    "lat": 27.26435,
+    "lng": 88.2797,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ronglitaxistand_vil0407": {
+    "lat": 27.4145,
+    "lng": 88.34475,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ronglitaxistand_vil0409": {
+    "lat": 27.4486,
+    "lng": 88.52575,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singtamtaxistand_vil0266": {
+    "lat": 27.26295,
+    "lng": 88.2059,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singtamtaxistand_vil0416": {
+    "lat": 27.309,
+    "lng": 88.7159,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singtamtaxistand_vil0417": {
+    "lat": 27.35305,
+    "lng": 88.5019,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singtamtaxistand_vil0418": {
+    "lat": 27.2491,
+    "lng": 88.27695,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "khangchendzonganationalpark_vil0121": {
+    "lat": 27.34745,
+    "lng": 88.29995,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "goechalatrek_vil0121": {
+    "lat": 27.3475,
+    "lng": 88.3,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "dzongri_vil0121": {
+    "lat": 27.34755,
+    "lng": 88.3,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "dzongritop_vil0121": {
+    "lat": 27.3476,
+    "lng": 88.3,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tshoka_vil0121": {
+    "lat": 27.34765,
+    "lng": 88.3,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "bakhim_vil0121": {
+    "lat": 27.3477,
+    "lng": 88.3,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "phedang_vil0121": {
+    "lat": 27.34775,
+    "lng": 88.3,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kokchurong_vil0121": {
+    "lat": 27.3478,
+    "lng": 88.3,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "thansing_vil0121": {
+    "lat": 27.34785,
+    "lng": 88.3,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lamuney_vil0121": {
+    "lat": 27.34395,
+    "lng": 88.30015,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "samitilake_vil0121": {
+    "lat": 27.344,
+    "lng": 88.30015,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "pellingreservedforest_vil0125": {
+    "lat": 27.3166,
+    "lng": 88.2317,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sangachoelingforesttrail_vil0125": {
+    "lat": 27.31665,
+    "lng": 88.2317,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "himalayanmixedforest_vil0125": {
+    "lat": 27.31775,
+    "lng": 88.23185,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rhododendronforest_vil0125": {
+    "lat": 27.3178,
+    "lng": 88.23185,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "canopyviewnaga_forestedgenagaforestblocknorthdistrictsikkim": {
+    "lat": 27.39311,
+    "lng": 88.617907,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "manganforestresthousestay_manganforestblocknorthdistrictsikkim": {
+    "lat": 27.5165,
+    "lng": 88.5306,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pinecrestmanganese_uppermanganforestblocknorthdistrictsikkim": {
+    "lat": 27.51655,
+    "lng": 88.5306,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "phodongforestreservestay_phodongforestblocknorthdistrictsikkim": {
+    "lat": 27.392984,
+    "lng": 88.610038,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greencanopyphodong_nearreserveborderphodongforestblocknorthdistrictsikkim": {
+    "lat": 27.393034,
+    "lng": 88.610038,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kabiforestsanctuarystay_kabiforestblocknorthdistrictsikkim": {
+    "lat": 27.389945,
+    "lng": 88.60482,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "wildernesscottagekabi_deepforestedgekabiforestblocknorthdistrictsikkim": {
+    "lat": 27.389995,
+    "lng": 88.60482,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dubdimonasteryviewhomestay_neardubdimonasterydubdiwestdistrictsikkim": {
+    "lat": 27.3756,
+    "lng": 88.1963,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "heritagevalleydubdi_dubdivillagewestdistrictsikkim": {
+    "lat": 27.363713,
+    "lng": 88.231517,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "yuksamtraditionalstay_yuksamtownwestdistrictsikkim": {
+    "lat": 27.3756,
+    "lng": 88.2435,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "mountaineersnestyuksam_nearcoronationthroneyuksamwestdistrictsikkim": {
+    "lat": 27.3756,
+    "lng": 88.2435,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "gerethangvalleyhomestay_gerethangvillagewestdistrictsikkim": {
+    "lat": 27.341767,
+    "lng": 88.256175,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidegerethang_nearstreamgerethangwestdistrictsikkim": {
+    "lat": 27.341817,
+    "lng": 88.256225,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "labingvillagehomestay_labingvillagewestdistrictsikkim": {
+    "lat": 27.349281,
+    "lng": 88.239653,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenhilllabing_upperlabingwestdistrictsikkim": {
+    "lat": 27.349331,
+    "lng": 88.239653,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singtamtaxistand_vil0422": {
+    "lat": 27.28135,
+    "lng": 88.7091,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singtamtaxistand_vil0424": {
+    "lat": 27.21145,
+    "lng": 88.2671,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gangtokvajrataxistand_vil0425": {
+    "lat": 27.4055,
+    "lng": 88.5901,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gangtokvajrataxistand_vil0428": {
+    "lat": 27.47265,
+    "lng": 88.5321,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ronglitaxistand_vil0439": {
+    "lat": 27.22625,
+    "lng": 88.6203,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ronglitaxistand_vil0440": {
+    "lat": 27.3583,
+    "lng": 88.30435,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ronglitaxistand_vil0441": {
+    "lat": 27.4744,
+    "lng": 88.33445,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ronglitaxistand_vil0444": {
+    "lat": 27.32055,
+    "lng": 88.6445,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "aritartaxistand_vil0448": {
+    "lat": 27.18175,
+    "lng": 88.4595,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "zuluktaxistand_vil0449": {
+    "lat": 27.1818,
+    "lng": 88.6095,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rhenocktaxistand_vil0452": {
+    "lat": 27.463,
+    "lng": 88.60465,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "darjeelingtaxistand_vil0491": {
+    "lat": 27.0372,
+    "lng": 88.2325,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "darjeelingtaxistand_vil0496": {
+    "lat": 27.0372,
+    "lng": 88.2325,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "darjeelingtaxistand_vil0497": {
+    "lat": 27.0372,
+    "lng": 88.2325,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "darjeelingtaxistand_vil0498": {
+    "lat": 27.0372,
+    "lng": 88.2325,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "forestbirdhabitat_vil0125": {
+    "lat": 27.31785,
+    "lng": 88.23185,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "maenamwildlifesanctuaryforestportion_261050": {
+    "lat": 27.26272,
+    "lng": 88.284369,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rangitriverforestcorridor_261050": {
+    "lat": 27.26277,
+    "lng": 88.284369,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "reshiriverforest_261050": {
+    "lat": 27.26282,
+    "lng": 88.284419,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "himalayanbroadleafforest_261050": {
+    "lat": 27.26287,
+    "lng": 88.284419,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kalejkhola_261051": {
+    "lat": 27.248571,
+    "lng": 88.268551,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rhododendronforest_261051": {
+    "lat": 27.248621,
+    "lng": 88.268551,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "himalayanbirdhabitat_261051": {
+    "lat": 27.244721,
+    "lng": 88.268701,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "bernyakreserveforest_vil0128": {
+    "lat": 27.41565,
+    "lng": 88.59275,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomforesttransitionzone_vil0128": {
+    "lat": 27.4157,
+    "lng": 88.59275,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "himalayanmixedforest_vil0128": {
+    "lat": 27.41575,
+    "lng": 88.59275,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tadongmonastery_261053": {
+    "lat": 27.238281,
+    "lng": 88.234169,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tadongvillage_261053": {
+    "lat": 27.238331,
+    "lng": 88.234169,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_261053": {
+    "lat": 27.238381,
+    "lng": 88.234219,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tadongforest_261053": {
+    "lat": 27.238431,
+    "lng": 88.234219,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tsozomountainviewhomestay_tsozovillagewestdistrictsikkim": {
+    "lat": 27.352019,
+    "lng": 88.192813,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "alpineridgetsozo_uppertsozowestdistrictsikkim": {
+    "lat": 27.352069,
+    "lng": 88.192813,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "khecheopalrisacredlakehomestay_nearsacredlakekhachodpalriwestdistrictsikkim": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "holylakeviewkhachodpalri_khachodpalrivillagewestdistrictsikkim": {
+    "lat": 27.3472,
+    "lng": 88.3013,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tingleivillagehomestay_tingleiwestdistrictsikkim": {
+    "lat": 27.3763,
+    "lng": 88.58245,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greenvalleytinglei_uppertingleiwestdistrictsikkim": {
+    "lat": 27.37635,
+    "lng": 88.58245,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tingleiinaturestay_tingleiiwestdistrictsikkim": {
+    "lat": 27.4494,
+    "lng": 88.60045,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ridgeviewtingleii_tingleiisectorwestdistrictsikkim": {
+    "lat": 27.44945,
+    "lng": 88.60045,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "melivillagehomestay_melivillagewestdistrictsikkim": {
+    "lat": 27.2135,
+    "lng": 88.6915,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "riversidemeli_nearriverbankmeliwestdistrictsikkim": {
+    "lat": 27.21355,
+    "lng": 88.6915,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "meliachingmountainstay_meliachingwestdistrictsikkim": {
+    "lat": 27.2196,
+    "lng": 88.6175,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "valleycrestmeliaching_uppermeliachingwestdistrictsikkim": {
+    "lat": 27.21965,
+    "lng": 88.6175,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singlitamvalleyhomestay_singlitamvillagewestdistrictsikkim": {
+    "lat": 27.3567,
+    "lng": 88.3035,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "riversidesingles_nearstreamsinglitamwestdistrictsikkim": {
+    "lat": 27.35675,
+    "lng": 88.3035,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tingbrumvillagestay_tingbrumvillagewestdistrictsikkim": {
+    "lat": 27.25585,
+    "lng": 88.47665,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "darjeelingtaxistand_vil0499": {
+    "lat": 27.0372,
+    "lng": 88.2325,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "takdahtaxistand_vil0518": {
+    "lat": 27.00715,
+    "lng": 87.96795,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "mangputaxistand_vil0527": {
+    "lat": 26.89565,
+    "lng": 88.0161,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jorebunglowtaxistand_vil0543": {
+    "lat": 27.15255,
+    "lng": 88.1285,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sukhiapokhritaxistand_vil0572": {
+    "lat": 27.15515,
+    "lng": 87.85605,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sonadataxistand_vil0573": {
+    "lat": 27.0572,
+    "lng": 87.98205,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sukhiapokhritaxistand_vil0574": {
+    "lat": 27.11925,
+    "lng": 88.17005,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sukhiapokhritaxistand_vil0575": {
+    "lat": 27.0123,
+    "lng": 88.1201,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "miriktaxistand_vil0577": {
+    "lat": 26.9764,
+    "lng": 88.3101,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "miriktaxistand_vil0581": {
+    "lat": 26.97865,
+    "lng": 88.36125,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "panighatataxistand_vil0596": {
+    "lat": 27.10545,
+    "lng": 88.31745,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "suknataxistand_vil0623": {
+    "lat": 26.9305,
+    "lng": 87.9991,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kurseongtaxistand_vil0669": {
+    "lat": 27.042,
+    "lng": 88.1039,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "matigarataxistand_vil0692": {
+    "lat": 26.9333,
+    "lng": 87.95145,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "matigarataxistand_vil0699": {
+    "lat": 27.16465,
+    "lng": 88.3545,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rinchenpongmonastery_261054": {
+    "lat": 27.239272,
+    "lng": 88.26928,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "poisonlakebikhpokhri_261054": {
+    "lat": 27.239322,
+    "lng": 88.26928,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "reesummonastery_261054": {
+    "lat": 27.242972,
+    "lng": 88.26848,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rinchenpongheritagehouse_261054": {
+    "lat": 27.243022,
+    "lng": 88.26848,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rinchenpongviewpoint_261054": {
+    "lat": 27.243072,
+    "lng": 88.26848,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "borongview_261054": {
+    "lat": 27.243122,
+    "lng": 88.26848,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "heritagewalk_261054": {
+    "lat": 27.243172,
+    "lng": 88.26853,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomestates_261054": {
+    "lat": 27.243222,
+    "lng": 88.26853,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sangadorjimonastery_261055": {
+    "lat": 27.230216,
+    "lng": 88.277501,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sangadorjivillage_261055": {
+    "lat": 27.230266,
+    "lng": 88.277501,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sangadorjicardamombelt_261055": {
+    "lat": 27.230316,
+    "lng": 88.277501,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jeelvillage_261056": {
+    "lat": 27.223419,
+    "lng": 88.286953,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sribadammonastery_261061": {
+    "lat": 27.217529,
+    "lng": 88.206956,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sribadamviewpoint_261061": {
+    "lat": 27.217579,
+    "lng": 88.206956,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rammamrivervalley_261061": {
+    "lat": 27.217629,
+    "lng": 88.206956,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greenhilltingbrum_uppertingbrumwestdistrictsikkim": {
+    "lat": 27.2559,
+    "lng": 88.47665,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "topungmountainviewhomestay_topungvillagewestdistrictsikkim": {
+    "lat": 27.331781,
+    "lng": 88.15794,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "orchardnesttopung_lowertopungwestdistrictsikkim": {
+    "lat": 27.331831,
+    "lng": 88.15794,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singrangpungnaturestay_singrangpungvillagewestdistrictsikkim": {
+    "lat": 27.25305,
+    "lng": 88.27665,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ridgeviewsingrangpung_uppersingrangpungwestdistrictsikkim": {
+    "lat": 27.2531,
+    "lng": 88.2767,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nambutraditionalhomestay_nambuvillagewestdistrictsikkim": {
+    "lat": 27.312826,
+    "lng": 88.158132,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "valleycrestnambu_nearnambucentrewestdistrictsikkim": {
+    "lat": 27.312876,
+    "lng": 88.158132,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "darapheritagefarmstay_darapvillagewestdistrictsikkim": {
+    "lat": 27.311387,
+    "lng": 88.187917,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "valleyviewdarap_upperdarapwestdistrictsikkim": {
+    "lat": 27.311437,
+    "lng": 88.187917,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sindrangvillagehomestay_sindrangvillagewestdistrictsikkim": {
+    "lat": 27.3103,
+    "lng": 88.196618,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenhillsindrang_lowersindrangwestdistrictsikkim": {
+    "lat": 27.31035,
+    "lng": 88.196618,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singyangmountainstay_singyangvillagewestdistrictsikkim": {
+    "lat": 27.306154,
+    "lng": 88.218704,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "orchardcrestsingyang_nearsingyangridgewestdistrictsikkim": {
+    "lat": 27.306204,
+    "lng": 88.218704,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nakunaturehomestay_nakuvillagewestdistrictsikkim": {
+    "lat": 27.311498,
+    "lng": 88.225705,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidenaku_nearstreamnakuwestdistrictsikkim": {
+    "lat": 27.311548,
+    "lng": 88.225705,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "matigarataxistand_vil0700": {
+    "lat": 26.9917,
+    "lng": 88.0115,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "matigarataxistand_vil0702": {
+    "lat": 27.1604,
+    "lng": 87.9327,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "matigarataxistand_vil0739": {
+    "lat": 27.1304,
+    "lng": 88.39935,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "naxalbaritaxistand_vil0741": {
+    "lat": 27.08955,
+    "lng": 88.3105,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "naxalbaritaxistand_vil0742": {
+    "lat": 26.9536,
+    "lng": 88.1525,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "naxalbaritaxistand_vil0743": {
+    "lat": 26.99765,
+    "lng": 87.9385,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "naxalbaritaxistand_vil0744": {
+    "lat": 27.1417,
+    "lng": 88.3235,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "naxalbaritaxistand_vil0745": {
+    "lat": 27.11375,
+    "lng": 87.9675,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "naxalbaritaxistand_vil0746": {
+    "lat": 26.9708,
+    "lng": 88.3555,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "naxalbaritaxistand_vil0747": {
+    "lat": 26.92585,
+    "lng": 88.2695,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "naxalbaritaxistand_vil0760": {
+    "lat": 27.03155,
+    "lng": 88.29575,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "naxalbaritaxistand_vil0825": {
+    "lat": 27.0597,
+    "lng": 88.17915,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "bagdogrataxistand_vil0861": {
+    "lat": 26.6812,
+    "lng": 88.3286,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "bagdogrataxistand_vil0825": {
+    "lat": 26.6812,
+    "lng": 88.3286,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "bagdogrataxistand_vil0940": {
+    "lat": 26.6812,
+    "lng": 88.3286,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sribadamheritagevillage_261061": {
+    "lat": 27.217679,
+    "lng": 88.206956,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "deythangvillage_261062": {
+    "lat": 27.210601,
+    "lng": 88.228964,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_261062": {
+    "lat": 27.210651,
+    "lng": 88.228964,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "parrengaonvillage_vil0139": {
+    "lat": 27.2325,
+    "lng": 88.3466,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_vil0139": {
+    "lat": 27.23255,
+    "lng": 88.3466,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "takuthangvillage_vil0140": {
+    "lat": 27.2846,
+    "lng": 88.6336,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_vil0140": {
+    "lat": 27.28465,
+    "lng": 88.6336,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chuchenvillage_261065": {
+    "lat": 27.204115,
+    "lng": 88.302496,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_261065": {
+    "lat": 27.204165,
+    "lng": 88.302496,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chuchenforest_261065": {
+    "lat": 27.204215,
+    "lng": 88.302496,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tinzerbongvillage_vil0142": {
+    "lat": 27.4459,
+    "lng": 88.6758,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tinzerbongcardamomestates_vil0142": {
+    "lat": 27.44595,
+    "lng": 88.6758,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tinzerbongforest_vil0142": {
+    "lat": 27.446,
+    "lng": 88.6758,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "suldungvillage_261067": {
+    "lat": 27.205488,
+    "lng": 88.316318,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_261067": {
+    "lat": 27.205538,
+    "lng": 88.316318,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chongpungtraditionalstay_chongpungvillagewestdistrictsikkim": {
+    "lat": 27.2837,
+    "lng": 88.6349,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "hilltopviewchongpung_upperchongpungwestdistrictsikkim": {
+    "lat": 27.28375,
+    "lng": 88.6349,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "pemayangtsemonasteryviewstay_nearpemayangtsemonasterywestdistrictsikkim": {
+    "lat": 27.2986,
+    "lng": 88.2522,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "rabdentseruinsheritagestay_nearrabdentseruinswestdistrictsikkim": {
+    "lat": 27.34085,
+    "lng": 88.6749,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "yangtenvillagehomestay_yangtenvillagewestdistrictsikkim": {
+    "lat": 27.22795,
+    "lng": 88.69605,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "buddhaparkviewyangten_nearbuddhaparkyangtenwestdistrictsikkim": {
+    "lat": 27.228,
+    "lng": 88.69605,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "unglokmountainstay_unglokvillagewestdistrictsikkim": {
+    "lat": 27.319887,
+    "lng": 88.262725,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ridgeviewunglok_upperunglokwestdistrictsikkim": {
+    "lat": 27.319937,
+    "lng": 88.262725,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "bhaluthangvalleyhomestay_bhaluthangvillagewestdistrictsikkim": {
+    "lat": 27.316238,
+    "lng": 88.257071,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenhillbhaluthang_lowerbhaluthangwestdistrictsikkim": {
+    "lat": 27.316288,
+    "lng": 88.257071,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chongrangtraditionalstay_chongrangvillagewestdistrictsikkim": {
+    "lat": 27.335299,
+    "lng": 88.268541,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "valleycrestchongrang_upperchongrangwestdistrictsikkim": {
+    "lat": 27.335349,
+    "lng": 88.268591,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "arithangheritagehomestay_arithangvillagewestdistrictsikkim": {
+    "lat": 27.32485,
+    "lng": 88.6176,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "valleyviewarithang_upperarithangwestdistrictsikkim": {
+    "lat": 27.3249,
+    "lng": 88.6176,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kongrimountainstay_kongrivillagewestdistrictsikkim": {
+    "lat": 27.37872,
+    "lng": 88.305657,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "bagdogrataxistand_vil0981": {
+    "lat": 26.6812,
+    "lng": 88.3286,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "bagdogrataxistand_vil0760": {
+    "lat": 26.6812,
+    "lng": 88.3286,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "kharibaritaxistand_vil0940": {
+    "lat": 26.98695,
+    "lng": 88.2133,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kharibaritaxistand_vil1035": {
+    "lat": 27.0344,
+    "lng": 88.37445,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kharibaritaxistand_vil1036": {
+    "lat": 27.07845,
+    "lng": 88.31045,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "darjeelingtaxistand_vil1037": {
+    "lat": 27.0372,
+    "lng": 88.2325,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "kalimpongtaxistand_vil1038": {
+    "lat": 27.06,
+    "lng": 88.47,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "miriktaxistand_vil1039": {
+    "lat": 27.1376,
+    "lng": 88.3255,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kurseongtaxistand_vil1040": {
+    "lat": 26.92565,
+    "lng": 88.3475,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "siligurijunctiontaxistand_vil1041": {
+    "lat": 26.7161,
+    "lng": 88.4236,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "teestabazaartaxistand_vil1053": {
+    "lat": 26.9404,
+    "lng": 88.12985,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kalimpongtaxistand_vil1056": {
+    "lat": 27.06,
+    "lng": 88.47,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "rambibazaartaxistand_vil1076": {
+    "lat": 27.07265,
+    "lng": 88.16325,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "odlabaritaxistand_vil1087": {
+    "lat": 27.21025,
+    "lng": 88.54645,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kalimpongtaxistand_vil1092": {
+    "lat": 27.06,
+    "lng": 88.47,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "suldungforest_261067": {
+    "lat": 27.205588,
+    "lng": 88.316318,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kamlingwildlifesanctuary_261068": {
+    "lat": 27.192638,
+    "lng": 88.314097,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "reshiriver_261068": {
+    "lat": 27.192688,
+    "lng": 88.314097,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kamlingforest_261068": {
+    "lat": 27.192738,
+    "lng": 88.314147,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kamlingnaturetrail_261068": {
+    "lat": 27.192788,
+    "lng": 88.314147,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "mabongvillage_261069": {
+    "lat": 27.186459,
+    "lng": 88.290079,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "mabongcardamomestates_261069": {
+    "lat": 27.186509,
+    "lng": 88.290129,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "mabongforest_261069": {
+    "lat": 27.186559,
+    "lng": 88.290129,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "segengmonastery_261070": {
+    "lat": 27.186205,
+    "lng": 88.270673,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "segengforest_261070": {
+    "lat": 27.186255,
+    "lng": 88.270673,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "segengcardamombelt_261070": {
+    "lat": 27.186305,
+    "lng": 88.270673,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "samsingvillage_261071": {
+    "lat": 27.170725,
+    "lng": 88.285243,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "samsingcardamomestates_261071": {
+    "lat": 27.170775,
+    "lng": 88.285243,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "samsingforest_261071": {
+    "lat": 27.170825,
+    "lng": 88.285243,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gelingmonastery_vil0148": {
+    "lat": 27.2559,
+    "lng": 88.47805,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greenhillkongri_lowerkongriwestdistrictsikkim": {
+    "lat": 27.37877,
+    "lng": 88.305657,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "labdangnaturecampstay_labdangvillagewestdistrictsikkim": {
+    "lat": 27.393756,
+    "lng": 88.288848,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidelabdang_nearstreamlabdangwestdistrictsikkim": {
+    "lat": 27.393806,
+    "lng": 88.288848,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dhupidaraviewpointhomestay_dhupidaravillagewestdistrictsikkim": {
+    "lat": 27.398059,
+    "lng": 88.307578,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mistyridgedhupidara_upperdhupidararidgewestdistrictsikkim": {
+    "lat": 27.398109,
+    "lng": 88.307578,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "narkholavalleyhomestay_narkholavillagewestdistrictsikkim": {
+    "lat": 27.405773,
+    "lng": 88.327816,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "teestaviewnarkhola_nearriverbanknarkholawestdistrictsikkim": {
+    "lat": 27.405823,
+    "lng": 88.327816,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangnamvalleyhomestay_mangnamvillagewestdistrictsikkim": {
+    "lat": 27.385233,
+    "lng": 88.337892,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidemangnam_nearstreammangnamwestdistrictsikkim": {
+    "lat": 27.385283,
+    "lng": 88.337892,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangyepvillagehomestay_gangyepvillagewestdistrictsikkim": {
+    "lat": 27.29305,
+    "lng": 88.5624,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greenhillgangyep_uppergangyepwestdistrictsikkim": {
+    "lat": 27.2931,
+    "lng": 88.56245,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lasomountainstay_lasovillagewestdistrictsikkim": {
+    "lat": 27.39915,
+    "lng": 88.73945,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ridgeviewlaso_lowerlasowestdistrictsikkim": {
+    "lat": 27.3992,
+    "lng": 88.73945,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tashidingmonasteryviewstay_neartashidingmonasterywestdistrictsikkim": {
+    "lat": 27.3195,
+    "lng": 88.2974,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sacredhillstashiding_tashidingvillagewestdistrictsikkim": {
+    "lat": 27.307565,
+    "lng": 88.29746,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pedongtaxistand_vil1097": {
+    "lat": 27.1488,
+    "lng": 88.61435,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lavataxistand_vil1107": {
+    "lat": 27.0864,
+    "lng": 88.6631,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "algarahtaxistand_vil1115": {
+    "lat": 27.19435,
+    "lng": 88.1191,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "madarihattaxistand_vil1218": {
+    "lat": 26.43755,
+    "lng": 89.3681,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "madarihattaxistand_vil1219": {
+    "lat": 26.6286,
+    "lng": 89.1411,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jaigaontaxistand_vil1261": {
+    "lat": 26.44695,
+    "lng": 89.47105,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jaigaontaxistand_vil1262": {
+    "lat": 26.552,
+    "lng": 89.64805,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "hasimarataxistand_vil1263": {
+    "lat": 26.45805,
+    "lng": 89.37305,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rajabhatkhawataxistand_vil1264": {
+    "lat": 26.4541,
+    "lng": 89.37205,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "alipurduartaxistand_vil1318": {
+    "lat": 26.5786,
+    "lng": 89.2041,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "alipurduartaxistand_vil1319": {
+    "lat": 26.56065,
+    "lng": 89.5491,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kamakhyaguritaxistand_vil1320": {
+    "lat": 26.4867,
+    "lng": 89.38015,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "alipurduartaxistand_vil1365": {
+    "lat": 26.6992,
+    "lng": 89.66005,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "alipurduartaxistand_vil1368": {
+    "lat": 26.54735,
+    "lng": 89.2731,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "alipurduartaxistand_vil1369": {
+    "lat": 26.7114,
+    "lng": 89.5391,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gelingvillage_vil0148": {
+    "lat": 27.257,
+    "lng": 88.47815,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gelingcardamombelt_vil0148": {
+    "lat": 27.25705,
+    "lng": 88.47815,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "suntaleyvillage_261073": {
+    "lat": 27.17714,
+    "lng": 88.27064,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "suntaleycardamomestates_261073": {
+    "lat": 27.17719,
+    "lng": 88.27064,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "suntaleyforest_261073": {
+    "lat": 27.17724,
+    "lng": 88.27064,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "khanisherbungviewpoint_vil0150": {
+    "lat": 27.37625,
+    "lng": 88.6832,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "khanisherbungecopark_vil0150": {
+    "lat": 27.3763,
+    "lng": 88.6832,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "khanisherbungmonastery_vil0150": {
+    "lat": 27.37635,
+    "lng": 88.6832,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "khanisherbungheritagevillage_vil0150": {
+    "lat": 27.3764,
+    "lng": 88.6832,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "khanisherbungcardamomestates_vil0150": {
+    "lat": 27.37645,
+    "lng": 88.6832,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "khanisherbungforesttrail_vil0150": {
+    "lat": 27.37255,
+    "lng": 88.68335,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "arooboteyviewpoint_vil0151": {
+    "lat": 27.3116,
+    "lng": 88.71735,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "arooboteycardamombelt_vil0151": {
+    "lat": 27.31165,
+    "lng": 88.71735,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "arooboteyvillagelandscape_vil0151": {
+    "lat": 27.3117,
+    "lng": 88.7174,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chotasamdongvillage_vil0152": {
+    "lat": 27.41475,
+    "lng": 88.5184,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "umchungtraditionalhomestay_umchungvillagewestdistrictsikkim": {
+    "lat": 27.44935,
+    "lng": 88.52645,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "valleycrestumchung_upperumchungwestdistrictsikkim": {
+    "lat": 27.4494,
+    "lng": 88.52645,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gyalshingtownviewhomestay_gyalshingtownwestdistrictsikkim": {
+    "lat": 27.19045,
+    "lng": 88.26345,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ridgeviewgyalshing_uppergyalshingwestdistrictsikkim": {
+    "lat": 27.1905,
+    "lng": 88.2635,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "kyonsdavillagehomestay_kyonsdavillagewestdistrictsikkim": {
+    "lat": 27.29915,
+    "lng": 88.6377,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greenhillkyonsda_lowerkyonsdawestdistrictsikkim": {
+    "lat": 27.2992,
+    "lng": 88.6377,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "yangthangheritagestay_yangthangvillagewestdistrictsikkim": {
+    "lat": 27.295874,
+    "lng": 88.224639,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "orchardnestyangthang_nearyangthangcentrewestdistrictsikkim": {
+    "lat": 27.295924,
+    "lng": 88.224639,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tikjyamountainstay_tikjyavillagewestdistrictsikkim": {
+    "lat": 27.289686,
+    "lng": 88.222431,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "valleyviewtikjya_uppertikjyawestdistrictsikkim": {
+    "lat": 27.289736,
+    "lng": 88.222431,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lingchomtraditionalhomestay_lingchomvillagewestdistrictsikkim": {
+    "lat": 27.279406,
+    "lng": 88.206327,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidelingchom_nearstreamlingchomwestdistrictsikkim": {
+    "lat": 27.274456,
+    "lng": 88.206377,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sardongvillagehomestay_sardongvillagewestdistrictsikkim": {
+    "lat": 27.269798,
+    "lng": 88.186216,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidesardong_nearstreamsardongwestdistrictsikkim": {
+    "lat": 27.269848,
+    "lng": 88.186216,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lungzikmountainstay_lungzikvillagewestdistrictsikkim": {
+    "lat": 27.279868,
+    "lng": 88.176211,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "alipurduarjunctiontaxistand_vil1370": {
+    "lat": 26.60345,
+    "lng": 89.4371,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "alipurduartaxistand_vil1371": {
+    "lat": 26.65555,
+    "lng": 89.45025,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "birparataxistand_vil1372": {
+    "lat": 26.7246,
+    "lng": 89.59125,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "samuktalataxistand_vil1450": {
+    "lat": 26.5694,
+    "lng": 89.5527,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "samuktalataxistand_vil1451": {
+    "lat": 26.6205,
+    "lng": 89.16785,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "falakatataxistand_vil1511": {
+    "lat": 26.61635,
+    "lng": 89.4891,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jateshwartaxistand_vil1512": {
+    "lat": 26.4764,
+    "lng": 89.1051,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "falakatataxistand_vil1513": {
+    "lat": 26.58245,
+    "lng": 89.3571,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "falakatataxistand_vil1514": {
+    "lat": 26.6545,
+    "lng": 89.4501,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "alipurduartaxistand_vil1515": {
+    "lat": 26.49655,
+    "lng": 89.5341,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "siliguritaxistand_vil1541": {
+    "lat": 26.7161,
+    "lng": 88.4236,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "binnaguritaxistand_vil1542": {
+    "lat": 26.43205,
+    "lng": 88.38765,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jalpaiguritaxistand_vil1543": {
+    "lat": 26.4441,
+    "lng": 88.5897,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "damdimtaxistand_vil1570": {
+    "lat": 26.42255,
+    "lng": 88.3111,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "damdimtaxistand_vil1582": {
+    "lat": 26.48025,
+    "lng": 88.85045,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_vil0152": {
+    "lat": 27.4148,
+    "lng": 88.5184,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "forestlandscape_vil0152": {
+    "lat": 27.41485,
+    "lng": 88.5184,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singlingmonastery_261077": {
+    "lat": 27.180125,
+    "lng": 88.201096,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singlinglake_261077": {
+    "lat": 27.180175,
+    "lng": 88.201096,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "barseysinglingtrek_261077": {
+    "lat": 27.180225,
+    "lng": 88.201096,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "birdwatchingtrail_261077": {
+    "lat": 27.181325,
+    "lng": 88.201246,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "sherpavillage_261077": {
+    "lat": 27.181375,
+    "lng": 88.201246,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "paraglidingsite_261077": {
+    "lat": 27.181425,
+    "lng": 88.201246,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "karthokvillage_261078": {
+    "lat": 27.157547,
+    "lng": 88.172833,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_261078": {
+    "lat": 27.157597,
+    "lng": 88.172883,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "karthokforest_261078": {
+    "lat": 27.157647,
+    "lng": 88.172883,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "burikhopdodokvillage_vil0155": {
+    "lat": 27.2234,
+    "lng": 88.6206,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_vil0155": {
+    "lat": 27.22345,
+    "lng": 88.6206,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "forestlandscape_vil0155": {
+    "lat": 27.2235,
+    "lng": 88.6206,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "burikhopviewridge_vil0155": {
+    "lat": 27.22355,
+    "lng": 88.6206,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greenhilllungzik_upperlungzikwestdistrictsikkim": {
+    "lat": 27.279918,
+    "lng": 88.176211,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sapongtraditionalhomestay_sapongvillagewestdistrictsikkim": {
+    "lat": 27.269447,
+    "lng": 88.16946,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "orchardcrestsapong_lowersapongwestdistrictsikkim": {
+    "lat": 27.269497,
+    "lng": 88.16946,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "bangtenviewpointstay_bangtenvillagewestdistrictsikkim": {
+    "lat": 27.4099,
+    "lng": 88.7409,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "mistyridgebangten_upperbangtenridgewestdistrictsikkim": {
+    "lat": 27.40995,
+    "lng": 88.7409,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "srinagarvalleyhomestay_srinagivillagewestdistrictsikkim": {
+    "lat": 27.270564,
+    "lng": 88.14744,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "teestaviewsrinagi_nearriverbanksrinagiwestdistrictsikkim": {
+    "lat": 27.270614,
+    "lng": 88.14744,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lichingvalleyhomestay_lichingvillagewestdistrictsikkim": {
+    "lat": 27.277425,
+    "lng": 88.130777,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversideliching_nearstreamlichingwestdistrictsikkim": {
+    "lat": 27.277475,
+    "lng": 88.130777,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gyatenmountainstay_gyatenvillagewestdistrictsikkim": {
+    "lat": 27.283557,
+    "lng": 88.109782,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenhillgyaten_uppergyatenwestdistrictsikkim": {
+    "lat": 27.283607,
+    "lng": 88.109832,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "karmatarheritagehomestay_karmatarvillagewestdistrictsikkim": {
+    "lat": 27.281467,
+    "lng": 88.109627,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "orchardnestkarmatar_lowerkarmatarwestdistrictsikkim": {
+    "lat": 27.281517,
+    "lng": 88.109627,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sopakhaviewpointstay_sopakhavillagewestdistrictsikkim": {
+    "lat": 27.283815,
+    "lng": 88.090429,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mistyridgesopakha_uppersopakharidgewestdistrictsikkim": {
+    "lat": 27.283865,
+    "lng": 88.090429,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "damdimtaxistand_vil1583": {
+    "lat": 26.3753,
+    "lng": 88.67345,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "odlabaritaxistand_vil1643": {
+    "lat": 26.60515,
+    "lng": 88.8517,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "odlabaritaxistand_vil1644": {
+    "lat": 26.5932,
+    "lng": 88.7737,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lataguritaxistand_vil1645": {
+    "lat": 26.71355,
+    "lng": 88.7649,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chalsataxistand_vil1672": {
+    "lat": 26.53475,
+    "lng": 88.41025,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "matialitaxistand_vil1673": {
+    "lat": 26.5068,
+    "lng": 88.77825,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chalsataxistand_vil1674": {
+    "lat": 26.39185,
+    "lng": 88.79825,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chalsataxistand_vil1675": {
+    "lat": 26.5429,
+    "lng": 88.8363,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1698": {
+    "lat": 26.38715,
+    "lng": 88.5717,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1699": {
+    "lat": 26.4912,
+    "lng": 88.5977,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1700": {
+    "lat": 26.49925,
+    "lng": 88.3257,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1701": {
+    "lat": 26.6109,
+    "lng": 88.8299,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1702": {
+    "lat": 26.50995,
+    "lng": 88.4029,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1703": {
+    "lat": 26.382,
+    "lng": 88.6449,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1704": {
+    "lat": 26.54705,
+    "lng": 88.8369,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "burikhopvillage_vil0155": {
+    "lat": 27.22465,
+    "lng": 88.62075,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "burikhophilleytrekaccess_vil0155": {
+    "lat": 27.2247,
+    "lng": 88.62075,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rumbukmonastery_261081": {
+    "lat": 27.154682,
+    "lng": 88.152531,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rumbukheritagevillage_261081": {
+    "lat": 27.154732,
+    "lng": 88.152531,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "barseytrekapproach_261081": {
+    "lat": 27.154782,
+    "lng": 88.152531,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "bharengvillage_261082": {
+    "lat": 27.17252,
+    "lng": 88.087123,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "bharengridge_261082": {
+    "lat": 27.17257,
+    "lng": 88.087123,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ribdivillage_261083": {
+    "lat": 27.169362,
+    "lng": 88.100526,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ribdimonastery_261083": {
+    "lat": 27.169412,
+    "lng": 88.100526,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "barseyrhododendronsanctuaryaccessroute_261083": {
+    "lat": 27.169462,
+    "lng": 88.100526,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "okhreyribdiscenicroad_261083": {
+    "lat": 27.168112,
+    "lng": 88.099726,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "barseyrhododendronsanctuary_vil0160": {
+    "lat": 27.2878,
+    "lng": 88.711,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "hilleybarseytrek_vil0160": {
+    "lat": 27.28785,
+    "lng": 88.711,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "okhreymonastery_vil0160": {
+    "lat": 27.2879,
+    "lng": 88.71105,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "okhreyviewpoint_vil0160": {
+    "lat": 27.28795,
+    "lng": 88.71105,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "maneybungvalleyhomestay_maneybungvillagewestdistrictsikkim": {
+    "lat": 27.41455,
+    "lng": 88.5921,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "hilltopviewmaneybung_uppermaneybungwestdistrictsikkim": {
+    "lat": 27.4146,
+    "lng": 88.5921,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "beghavillagehomestay_beghavillagewestdistrictsikkim": {
+    "lat": 27.26166,
+    "lng": 88.115968,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidebegha_nearstreambeghawestdistrictsikkim": {
+    "lat": 27.26171,
+    "lng": 88.116018,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mangmomountainstay_mangmovillagewestdistrictsikkim": {
+    "lat": 27.253127,
+    "lng": 88.131243,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenhillmango_uppermangmowestdistrictsikkim": {
+    "lat": 27.253177,
+    "lng": 88.131243,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dentamvalleyhomestay_dentamvillagewestdistrictsikkim": {
+    "lat": 27.263958,
+    "lng": 88.135288,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "cheesefactoryviewdentam_nearcheesefactorydentamwestdistrictsikkim": {
+    "lat": 27.264008,
+    "lng": 88.135288,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sangkhutraditionalstay_sangkhuvillagewestdistrictsikkim": {
+    "lat": 27.255309,
+    "lng": 88.148344,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "valleycrestsangkhu_uppersangkhuwestdistrictsikkim": {
+    "lat": 27.255359,
+    "lng": 88.148344,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "radukhanduviewpointstay_radukhanduvillagewestdistrictsikkim": {
+    "lat": 27.262055,
+    "lng": 88.173162,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mistyridgeradukhandu_upperradukhanduridgewestdistrictsikkim": {
+    "lat": 27.262105,
+    "lng": 88.173162,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "heepatalnaturestay_heepatalvillagewestdistrictsikkim": {
+    "lat": 27.37935,
+    "lng": 88.50945,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "valleyviewhee_upperheewestdistrictsikkim": {
+    "lat": 27.2358,
+    "lng": 88.2342,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1705": {
+    "lat": 26.6171,
+    "lng": 88.45595,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1706": {
+    "lat": 26.59415,
+    "lng": 88.84795,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1707": {
+    "lat": 26.5702,
+    "lng": 88.56795,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1708": {
+    "lat": 26.47525,
+    "lng": 88.74395,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1709": {
+    "lat": 26.4383,
+    "lng": 88.41095,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1710": {
+    "lat": 26.61135,
+    "lng": 88.35395,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1711": {
+    "lat": 26.46145,
+    "lng": 88.4661,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1712": {
+    "lat": 26.6395,
+    "lng": 88.8121,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1713": {
+    "lat": 26.39555,
+    "lng": 88.6011,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1714": {
+    "lat": 26.6666,
+    "lng": 88.8671,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1715": {
+    "lat": 26.55165,
+    "lng": 88.4901,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1716": {
+    "lat": 26.3937,
+    "lng": 88.79915,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1717": {
+    "lat": 26.62475,
+    "lng": 88.68415,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1718": {
+    "lat": 26.5338,
+    "lng": 88.63515,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1719": {
+    "lat": 26.61285,
+    "lng": 88.65515,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rhododendroninterpretationcentre_vil0160": {
+    "lat": 27.288,
+    "lng": 88.71105,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tikpurmonastery_261085": {
+    "lat": 27.129773,
+    "lng": 88.11888,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tikpurheritagevillage_261085": {
+    "lat": 27.129823,
+    "lng": 88.11888,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tikpurviewridge_261085": {
+    "lat": 27.129873,
+    "lng": 88.11888,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "siktamhotspringreshihotspring_261086": {
+    "lat": 27.126578,
+    "lng": 88.132732,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "reshikhola_261086": {
+    "lat": 27.127678,
+    "lng": 88.132882,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "siktamsuspensionbridge_261086": {
+    "lat": 27.127728,
+    "lng": 88.132882,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "siktammonastery_261086": {
+    "lat": 27.127778,
+    "lng": 88.132882,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "salyangdangvillage_vil0163": {
+    "lat": 27.28645,
+    "lng": 88.4362,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "salyangdangcardamombelt_vil0163": {
+    "lat": 27.2865,
+    "lng": 88.43625,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "salyangdangforest_vil0163": {
+    "lat": 27.28655,
+    "lng": 88.43625,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "longchokmonastery_vil0164": {
+    "lat": 27.4646,
+    "lng": 88.67925,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "longchokheritagevillage_vil0164": {
+    "lat": 27.46465,
+    "lng": 88.67925,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "longchokviewpoint_vil0164": {
+    "lat": 27.4647,
+    "lng": 88.67925,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomestates_vil0164": {
+    "lat": 27.46475,
+    "lng": 88.67925,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greenhillheepatal_upperheepatalwestdistrictsikkim": {
+    "lat": 27.3794,
+    "lng": 88.50945,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "pecherekmountainhomestay_pecherekvillagewestdistrictsikkim": {
+    "lat": 27.26345,
+    "lng": 88.63045,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ridgeviewpecherek_lowerpecherekwestdistrictsikkim": {
+    "lat": 27.2635,
+    "lng": 88.6305,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "martamvillagehomestay_martamvillagewestdistrictsikkim": {
+    "lat": 27.259563,
+    "lng": 88.215619,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidemartam_nearstreammartamwestdistrictsikkim": {
+    "lat": 27.259613,
+    "lng": 88.215619,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "barnyaktraditionalstay_barnyakvillagewestdistrictsikkim": {
+    "lat": 27.31065,
+    "lng": 88.7175,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "valleycrestbarnyak_upperbarnyakwestdistrictsikkim": {
+    "lat": 27.3107,
+    "lng": 88.7175,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "barthangheritagehomestay_barthangvillagewestdistrictsikkim": {
+    "lat": 27.30375,
+    "lng": 88.4905,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "riversidebarthang_nearriverbankbarthangwestdistrictsikkim": {
+    "lat": 27.3038,
+    "lng": 88.4905,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "barphokvillagehomestay_barphokvillagewestdistrictsikkim": {
+    "lat": 27.261514,
+    "lng": 88.263803,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ridgeviewbarphok_upperbarphokwestdistrictsikkim": {
+    "lat": 27.261564,
+    "lng": 88.263803,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chingthangmountainstay_chingthangvillagewestdistrictsikkim": {
+    "lat": 27.264793,
+    "lng": 88.28216,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenhillchingthang_lowerchingthangwestdistrictsikkim": {
+    "lat": 27.264843,
+    "lng": 88.28216,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mengyongtraditionalstay_mengyongvillagewestdistrictsikkim": {
+    "lat": 27.4521,
+    "lng": 88.5277,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "orchardcrestmengyong_nearmengyongridgewestdistrictsikkim": {
+    "lat": 27.45215,
+    "lng": 88.5277,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1720": {
+    "lat": 26.5929,
+    "lng": 88.67615,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1721": {
+    "lat": 26.639,
+    "lng": 88.2863,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1722": {
+    "lat": 26.46005,
+    "lng": 88.3913,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1723": {
+    "lat": 26.3941,
+    "lng": 88.8253,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1724": {
+    "lat": 26.58615,
+    "lng": 88.7723,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1725": {
+    "lat": 26.3782,
+    "lng": 88.8213,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1726": {
+    "lat": 26.51925,
+    "lng": 88.8563,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1727": {
+    "lat": 26.4503,
+    "lng": 88.53935,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1728": {
+    "lat": 26.59635,
+    "lng": 88.52635,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "birparataxistand_vil1729": {
+    "lat": 26.5904,
+    "lng": 88.62335,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "birparataxistand_vil1730": {
+    "lat": 26.51745,
+    "lng": 88.78135,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1731": {
+    "lat": 26.51555,
+    "lng": 88.5555,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "madarihattaxistand_vil1732": {
+    "lat": 26.8347,
+    "lng": 89.3127,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1733": {
+    "lat": 26.56365,
+    "lng": 88.7665,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1734": {
+    "lat": 26.5237,
+    "lng": 88.7565,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lowerfambongvillage_261089": {
+    "lat": 27.140382,
+    "lng": 88.143361,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lowerfambongcardamomestates_261089": {
+    "lat": 27.140432,
+    "lng": 88.143361,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lowerfambongforest_261089": {
+    "lat": 27.140482,
+    "lng": 88.143361,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "srisathyasaisarvadharmakendra_vil0166": {
+    "lat": 27.25,
+    "lng": 88.2034,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "stairwaytoheaven_vil0166": {
+    "lat": 27.25005,
+    "lng": 88.2034,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jurelidara_vil0166": {
+    "lat": 27.2501,
+    "lng": 88.20345,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "batesaydara_vil0166": {
+    "lat": 27.25015,
+    "lng": 88.20345,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "daramdinbazaar_vil0166": {
+    "lat": 27.2502,
+    "lng": 88.20345,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "upperfambongvillage_261091": {
+    "lat": 27.126519,
+    "lng": 88.160787,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "cardamomplantations_261091": {
+    "lat": 27.126569,
+    "lng": 88.160787,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "upperfambongforest_261091": {
+    "lat": 27.127669,
+    "lng": 88.160937,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "timberbongvillage_vil0168": {
+    "lat": 27.21045,
+    "lng": 88.6916,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "timberbongcardamombelt_vil0168": {
+    "lat": 27.2105,
+    "lng": 88.6916,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "timberbongforest_vil0168": {
+    "lat": 27.21055,
+    "lng": 88.6916,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "mangardzong_261093": {
+    "lat": 27.139772,
+    "lng": 88.194659,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "miyongnaturehomestay_miyongvillagewestdistrictsikkim": {
+    "lat": 27.3172,
+    "lng": 88.5687,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "riversidemiyong_nearstreammiyongwestdistrictsikkim": {
+    "lat": 27.31725,
+    "lng": 88.5687,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "yuksamforestsanctuarystay_yuksamforestblockwestdistrictsikkim": {
+    "lat": 27.3756,
+    "lng": 88.2435,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "deepforestretreatyuksam_forestedgeyuksamforestblockwestdistrictsikkim": {
+    "lat": 27.3756,
+    "lng": 88.2435,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "khecheopalriforestoutpoststay_khachodpalriforestblockwestdistrictsikkim": {
+    "lat": 27.3524,
+    "lng": 88.2017,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "wildernesscottagekhachodpalri_sanctuaryborderkhachodpalriforestblockwestdistrictsikkim": {
+    "lat": 27.1955,
+    "lng": 88.53785,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tashidingforestsanctuarystay_tashidingforestblockwestdistrictsikkim": {
+    "lat": 27.035137,
+    "lng": 88.437218,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "wildernessedgetashiding_deepforestbordertashidingforestblockwestdistrictsikkim": {
+    "lat": 27.035187,
+    "lng": 88.437218,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gyalshingforestoutpoststay_gyalshingforestblockwestdistrictsikkim": {
+    "lat": 27.249899,
+    "lng": 88.277248,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "canopyviewgyalshingforest_forestreserveedgegyalshingforestblockwestdistrictsikkim": {
+    "lat": 27.249949,
+    "lng": 88.277298,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pellingforestcanopyretreat_pellingforestblockswestdistrictsikkim": {
+    "lat": 27.31845,
+    "lng": 88.2332,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "deepwoodspelling_sanctuaryborderpellingforestblockswestdistrictsikkim": {
+    "lat": 27.3185,
+    "lng": 88.2332,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "legshipforestresthousestay_legshipforestblockwestdistrictsikkim": {
+    "lat": 27.29034,
+    "lng": 88.285923,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversideforestlegship_nearriverbanklegshipforestblockwestdistrictsikkim": {
+    "lat": 27.29039,
+    "lng": 88.285923,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dentamforestsanctuarystay_dentamforestblockwestdistrictsikkim": {
+    "lat": 27.260058,
+    "lng": 88.136038,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "banarhattaxistand_vil1735": {
+    "lat": 26.65675,
+    "lng": 88.6395,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1736": {
+    "lat": 26.4838,
+    "lng": 88.5475,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1737": {
+    "lat": 26.50485,
+    "lng": 88.5525,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1738": {
+    "lat": 26.6559,
+    "lng": 88.59055,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1739": {
+    "lat": 26.45595,
+    "lng": 88.61555,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1740": {
+    "lat": 26.569,
+    "lng": 88.56855,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1741": {
+    "lat": 26.6051,
+    "lng": 88.7277,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1742": {
+    "lat": 26.53315,
+    "lng": 88.4847,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1743": {
+    "lat": 26.4102,
+    "lng": 88.7537,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1744": {
+    "lat": 26.63225,
+    "lng": 88.7837,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1745": {
+    "lat": 26.5203,
+    "lng": 88.4817,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "banarhattaxistand_vil1746": {
+    "lat": 26.45335,
+    "lng": 88.7647,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1748": {
+    "lat": 26.45945,
+    "lng": 88.6157,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "nagrakatataxistand_vil1787": {
+    "lat": 26.3916,
+    "lng": 88.6495,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "lataguritaxistand_vil1672": {
+    "lat": 26.5369,
+    "lng": 88.41115,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tharpubazaar_261093": {
+    "lat": 27.139822,
+    "lng": 88.194659,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tharpuvalley_261093": {
+    "lat": 27.139872,
+    "lng": 88.194709,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chulidara_261094": {
+    "lat": 27.168551,
+    "lng": 88.194193,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gumbadara_261094": {
+    "lat": 27.168601,
+    "lng": 88.194193,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "gumbadaramonastery_261094": {
+    "lat": 27.168651,
+    "lng": 88.194193,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jhandidarasunrisepoint_261094": {
+    "lat": 27.169751,
+    "lng": 88.194343,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "bhirdara_261094": {
+    "lat": 27.169801,
+    "lng": 88.194343,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "chageywaterfall_261094": {
+    "lat": 27.169851,
+    "lng": 88.194343,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ugenlhudupechemonastery_261094": {
+    "lat": 27.169901,
+    "lng": 88.194343,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "singadevimandir_261094": {
+    "lat": 27.169951,
+    "lng": 88.194343,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "charkharkeyecotrek_261094": {
+    "lat": 27.170001,
+    "lng": 88.194343,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ramidham_261094": {
+    "lat": 27.170051,
+    "lng": 88.194343,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "donboscoschoolmalbasey_261095": {
+    "lat": 27.16314,
+    "lng": 88.21703,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "malbaseyviewridge_261095": {
+    "lat": 27.16319,
+    "lng": 88.21703,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "rangitrivervalleyview_261095": {
+    "lat": 27.16324,
+    "lng": 88.21703,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "ridgeviewdentamforest_upperforestridgedentamforestblockwestdistrictsikkim": {
+    "lat": 27.260108,
+    "lng": 88.136038,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "bernyakforestoutpoststay_bernyakforestblockwestdistrictsikkim": {
+    "lat": 27.4161,
+    "lng": 88.59405,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "greencanopybernyakforest_forestedgebernyakforestblockwestdistrictsikkim": {
+    "lat": 27.41615,
+    "lng": 88.59405,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "tadongvillagehomestay_tadongvillagewestdistrictsikkim": {
+    "lat": 27.3107,
+    "lng": 88.60215,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "riversidetadong_nearstreamtadongwestdistrictsikkim": {
+    "lat": 27.31075,
+    "lng": 88.60215,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rinchenpongmonasteryviewstay_nearrinchenpongmonasterywestdistrictsikkim": {
+    "lat": 27.239572,
+    "lng": 88.27058,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "heritagevalleyrinchenpong_rinchenpongvillagewestdistrictsikkim": {
+    "lat": 27.239622,
+    "lng": 88.27058,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sangadorjivillagehomestay_sangadorjivillagewestdistrictsikkim": {
+    "lat": 27.226616,
+    "lng": 88.279551,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenhillsangadorji_uppersangadorjiwestdistrictsikkim": {
+    "lat": 27.226666,
+    "lng": 88.279551,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "jeelmountainhomestay_jeelvillagewestdistrictsikkim": {
+    "lat": 27.220819,
+    "lng": 88.289153,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ridgeviewjeel_lowerjeelwestdistrictsikkim": {
+    "lat": 27.220869,
+    "lng": 88.289153,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "hathidungaviewpointstay_hathidungavillagewestdistrictsikkim": {
+    "lat": 27.22865,
+    "lng": 88.69725,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "mistyridgehathidunga_upperhathidungaridgewestdistrictsikkim": {
+    "lat": 27.2287,
+    "lng": 88.69725,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "bumtraditionalhomestay_bumvillagewestdistrictsikkim": {
+    "lat": 27.29375,
+    "lng": 88.63825,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "valleycrestbum_upperbumwestdistrictsikkim": {
+    "lat": 27.2938,
+    "lng": 88.63825,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "maynaguritaxistand_vil1748": {
+    "lat": 26.456,
+    "lng": 88.61655,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "dakshindangaparastand_vil1787": {
+    "lat": 26.39505,
+    "lng": 88.6499,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "maynaguritaxistand_vil1889": {
+    "lat": 26.50075,
+    "lng": 88.8275,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jalpaiguritaxistand_vil1889": {
+    "lat": 26.49725,
+    "lng": 88.8277,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jalpaiguritaxistand_vil1912": {
+    "lat": 26.5616,
+    "lng": 88.6181,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "malbazartaxistand_vil1923": {
+    "lat": 26.5342,
+    "lng": 88.8363,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "jalpaiguritaxistand_vil1924": {
+    "lat": 26.37025,
+    "lng": 88.7203,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "dhupguritaxistand_vil1925": {
+    "lat": 26.6263,
+    "lng": 88.70935,
+    "source": "VILLAGE_MASTER_MATCH",
+    "confidence": "HIGH"
+  },
+  "barlungkhimhimhomestay_": {
+    "lat": 27.2371,
+    "lng": 88.2163,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "MEDIUM"
+  },
+  "batasayblueshomestayraivillabatasi_golaibajar": {
+    "lat": 26.7033,
+    "lng": 88.1649,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "singtom360viewpoint_": {
+    "lat": 27.0635,
+    "lng": 88.2618,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "kanungashrayhomestay_dabiapanibustypsrrdjg": {
+    "lat": 27.0178,
+    "lng": 88.3742,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "MEDIUM"
+  },
+  "karkihomestay_bhutiabustydabaipani": {
+    "lat": 27.0325,
+    "lng": 88.3278,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "MEDIUM"
+  },
+  "jorebunglowforest_": {
+    "lat": 27.01,
+    "lng": 88.253,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "MEDIUM"
+  },
+  "himalayancloudshomestay_lowerchimneysbusty": {
+    "lat": 26.89,
+    "lng": 88.28,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "himalayanecostay_turyok": {
+    "lat": 26.53255,
+    "lng": 88.8361,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "roshanhomestay_shelpu": {
+    "lat": 26.96,
+    "lng": 88.36,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "chowrastamall_": {
+    "lat": 26.532,
+    "lng": 88.8379,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mallroad_": {
+    "lat": 26.53205,
+    "lng": 88.8379,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gomburock_": {
+    "lat": 27.41245,
+    "lng": 88.5951,
+    "source": "VILLAGE_MASTER_NAME_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sittongbirdwatchingzone_": {
+    "lat": 26.9667,
+    "lng": 88.3667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sittongorangeorchards_": {
+    "lat": 26.9667,
+    "lng": 88.3667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sittongchurch_": {
+    "lat": 26.9667,
+    "lng": 88.3667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "singbulliteaestate_": {
+    "lat": 27.23,
+    "lng": 88.41,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sittongmonastery_": {
+    "lat": 26.9667,
+    "lng": 88.3667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sittongmountainviewpoints_": {
+    "lat": 26.9667,
+    "lng": 88.3667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sittongvillagetrails_": {
+    "lat": 26.9667,
+    "lng": 88.3667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sittongteagardenlandscape_": {
+    "lat": 26.9667,
+    "lng": 88.3667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "badamtamteaestate_": {
+    "lat": 26.98445,
+    "lng": 88.0127,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "bannockburnteaestate_": {
+    "lat": 27.055612,
+    "lng": 88.289645,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "chongtongteaestate_": {
+    "lat": 27.0275,
+    "lng": 88.2221,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "gingteaestate_": {
+    "lat": 26.974,
+    "lng": 88.0359,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "aahanahomestay_ranglilowerhumbustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "achulayhomestay_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "adarshhomestay_6thmilebazarpeshokroadpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "adarshhomestaylepchajagat_rampuriaforestbustyposimkuna3rdmilepsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "aditishomestay_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "adityahomestay_garlangpeshoktepsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "akritihomestay_6thmilebazarpeshokroadpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "chunnusummerfalls_": {
+    "lat": 27.030693,
+    "lng": 88.230912,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "senchalwildlifesanctuary_": {
+    "lat": 27.009384,
+    "lng": 88.278632,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "burmesehomestay_pokhriabongbajardjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "buzzuvalleyhomestay_oldhospitalroadbaramangwabustypopsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rammamriver_": {
+    "lat": 27.136434,
+    "lng": 88.063518,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "sawajikhola_": {
+    "lat": 27.004601,
+    "lng": 88.127423,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "pandamteaestate_": {
+    "lat": 27.041566,
+    "lng": 88.270796,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "rungneetteaestate_": {
+    "lat": 27.062648,
+    "lng": 88.264278,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "singlateaestate_": {
+    "lat": 27.1167,
+    "lng": 88.2833,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "singlabazar_": {
+    "lat": 27.110948,
+    "lng": 88.292336,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "singlavalleyviewpoint_": {
+    "lat": 27.1167,
+    "lng": 88.2833,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dojeinhomesatay_taklingbustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "drukhomestay_royakbustytinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "familyhomestay_ranglirangliottepsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "familyhomestay_baramangwabustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "soomteaestate_": {
+    "lat": 27.077048,
+    "lng": 88.224185,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "dhajeateaestate_": {
+    "lat": 26.92778,
+    "lng": 88.221641,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "dhajeateafactory_": {
+    "lat": 26.92783,
+    "lng": 88.221641,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "hillsidehomestay_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mimteaestate_": {
+    "lat": 26.958455,
+    "lng": 88.155211,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "nagrifarmteaestate_": {
+    "lat": 26.920474,
+    "lng": 88.197325,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "kenzoguesthouse_rampuriforestbustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "khangrihomestaypoobongfatak_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "koileehomesteadhomestay_kolbungbusyschoolgaontinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kritankartikhomestay_gumbadarapeshoktinchulaylopchuroadpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sungmateaestate_": {
+    "lat": 26.933059,
+    "lng": 88.181555,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "sungmateafactory_": {
+    "lat": 26.933109,
+    "lng": 88.181555,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "saluteaestate_": {
+    "lat": 27.026658,
+    "lng": 88.209253,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "manidharahomestay_baramangwabustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ambootiateaestate_": {
+    "lat": 26.880382,
+    "lng": 88.248096,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "ambootiateafactory_": {
+    "lat": 26.880432,
+    "lng": 88.248096,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "castletonteafactory_": {
+    "lat": 26.869901,
+    "lng": 88.279942,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "edenvaleteaestate_": {
+    "lat": 26.918515,
+    "lng": 88.289124,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "gayabariteaestate_": {
+    "lat": 26.856155,
+    "lng": 88.327556,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "nilakantahomestaylepchajagat_ranglizimbadhurapsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nilamhomestay_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nischalhomestay_udaychandroadbarakakjhoradjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "norlhahomestay_royakbustyneargumbadarapsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "longviewteafactory_": {
+    "lat": 26.803768,
+    "lng": 88.257483,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "mahanaditeaestate_": {
+    "lat": 26.881353,
+    "lng": 88.312768,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "maharaniteaestate_": {
+    "lat": 26.929115,
+    "lng": 88.289445,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "makaibariteaestate_": {
+    "lat": 26.858946,
+    "lng": 88.26077,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "makaibariteafactory_": {
+    "lat": 26.858996,
+    "lng": 88.26077,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "rabindrabhavan_": {
+    "lat": 26.89465,
+    "lng": 88.01535,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "pattaboncottageamastaytrailsbytaj_kolbungbustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pedenlahomestay_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pemaghaysherhomestay_chhotamangwabustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "presanghomestayghoombhanjyangkbroad_tinchulayplaygroundpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "pritamhomestay_rampuriaforestbustyposimkuna3rdmilepsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "shrubberynightingalepark_": {
+    "lat": 26.92045,
+    "lng": 88.1946,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "apsharahomestay_tinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "happyvalleyteafactory_": {
+    "lat": 27.048991,
+    "lng": 88.246408,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "chotamangwagogreenhomestay_royakbustypotinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "danbarsehomestay_baramangwapotaklingpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "danikahomestay_chotamangwapotaklingpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sleepingbuddhaview_": {
+    "lat": 27.38556,
+    "lng": 88.26204,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "redpandahabitat_": {
+    "lat": 27.133234,
+    "lng": 88.058718,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "kalapokhri_": {
+    "lat": 27.133434,
+    "lng": 88.063118,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "ghalayhomestay_7thmilebazarnearhalhalaypeshokroadpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenhoodhomestay_baramangwabustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kacelteaestate_": {
+    "lat": 27.114708,
+    "lng": 88.057815,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "kalejvalleyteaestate_": {
+    "lat": 26.973168,
+    "lng": 88.24651,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "kalejvalleyteafactory_": {
+    "lat": 26.973218,
+    "lng": 88.24651,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "jabakusumhs_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kanchankanyahomestaylepchajagat_6thmilebazarnearhalhalaypeshokroadpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kanchanjungadabaipanihomestay_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "simanaviewpoint_": {
+    "lat": 26.975,
+    "lng": 88.155,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "margaretshopeteaestate_": {
+    "lat": 26.916499,
+    "lng": 88.261385,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "tumsongteafactory_": {
+    "lat": 26.989982,
+    "lng": 88.16582,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "mrsujitmukherjeedewdrop_lopchupsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "namaratahomestaytnroadaloobarijorebunglow_upperchhotamangwapsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lizziepurteaestate_": {
+    "lat": 26.86004,
+    "lng": 88.321036,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "longviewteaestate_": {
+    "lat": 26.803718,
+    "lng": 88.257433,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "parthahideoutsaileshhomestay_ranglilowerhumbustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ambotiashivamandir_": {
+    "lat": 26.92685,
+    "lng": 88.34575,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "ranjittamanghomestay_royakbustytinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "simringteaestate_": {
+    "lat": 26.889671,
+    "lng": 88.359065,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "simulbariteaestate_": {
+    "lat": 26.788067,
+    "lng": 88.319093,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "jogighatbridge_": {
+    "lat": 27.085409,
+    "lng": 88.390413,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "riyangriver_": {
+    "lat": 26.932805,
+    "lng": 88.374903,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "sherpahomestay_chhotamangwapsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "shivakholaadventurescamp_chhotamangwabustypotinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "shriganeshhomestay_ranglibazarranglirangliotpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "marmateaestate_": {
+    "lat": 26.891559,
+    "lng": 88.217638,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "rameetaydara_": {
+    "lat": 27.1392,
+    "lng": 88.3232,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "deosidara_": {
+    "lat": 27.1358,
+    "lng": 88.3234,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "tamoghrahomestay_tukdateschooldhurapsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tamuhomestay_tinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "teavillagehomestay_teestavalleytepsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tinglingteaestate_": {
+    "lat": 26.841801,
+    "lng": 88.179253,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "manjhateaestate_": {
+    "lat": 26.771595,
+    "lng": 88.210548,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "sirsiateaestate_": {
+    "lat": 26.736404,
+    "lng": 88.228887,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "vrindabanhomestay_ranglizimbadhurapsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "yangsanghomestaymimbustyparmaguri_6thmilebazarpeshokroadpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "yolmohomestayandresort_upperhumbustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dalimonastery_": {
+    "lat": 26.92225,
+    "lng": 88.1942,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "standrewschurch_": {
+    "lat": 26.91975,
+    "lng": 88.19515,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "stepaside_": {
+    "lat": 26.92005,
+    "lng": 88.19455,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "avaartgallery_": {
+    "lat": 26.92,
+    "lng": 88.19515,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "jamunitouristcomplex_": {
+    "lat": 26.9205,
+    "lng": 88.1946,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "ponyroad_": {
+    "lat": 26.92035,
+    "lng": 88.1946,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "lizahillteaestate_": {
+    "lat": 27.053604,
+    "lng": 88.201678,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "anjithomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "navdeephomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "giddapaharviewpoint_": {
+    "lat": 26.9255,
+    "lng": 88.3456,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "chiuribotayhomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "mustanghomestay_dabaipanilingsey": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "peacokeviewhomestay_dabaipanilingsey": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rellykholagorge_": {
+    "lat": 27.4172,
+    "lng": 88.5942,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "jungpanateaestate_": {
+    "lat": 26.890782,
+    "lng": 88.320478,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "jungpanateafactory_": {
+    "lat": 26.890832,
+    "lng": 88.320478,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "rohiniteaestate_": {
+    "lat": 26.801434,
+    "lng": 88.305381,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "selimhillteaestate_": {
+    "lat": 26.827755,
+    "lng": 88.317402,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "paglajhorawaterfall_": {
+    "lat": 26.865408,
+    "lng": 88.334035,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "tindhariateaestate_": {
+    "lat": 26.852652,
+    "lng": 88.333716,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "lohagarteaestate_": {
+    "lat": 26.797345,
+    "lng": 88.188593,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "raidhap_": {
+    "lat": 27.13575,
+    "lng": 88.3234,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "thurboteaestate_": {
+    "lat": 26.97485,
+    "lng": 88.30675,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "peshokroadscenicviewpoints_": {
+    "lat": 27.07,
+    "lng": 88.39,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "teestavalleyteaestate_": {
+    "lat": 27.007446,
+    "lng": 88.405702,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "HIGH"
+  },
+  "nithyamhomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "bhaskarshomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenviewhomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "aakanshahomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "manisinduhomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ayushnahomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lingseyretreathomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "bajrapanihomestay_baramangwabustypotaklingpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "bambooresortatvpark_baramangwabustypotaklingpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dhurbahomestay_belowavaartgallerynearsimandiroksrosebankdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "greenviewhomestay_gumbadarapeshokpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "kanchanjungaviewhomestay_dalibokshijhoradjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lakshyahomestaylepchajagat_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "norlhahomestay_ranglihomebustypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "noryanghomestay_ranglizimbadhurapsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "noyelhomestay_chhotamangwabustypotinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "priyankshahomestay_neartinchulayplaygroundpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "punamhomestay_lowerhumbustywardnoivpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rabifarmhomestay_gurunggaonpeshoktepsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rangbhangretreat_rampuriaforestbustyposimkuna3rdmilepsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rampuriahomestay_rangaroon": {
+    "lat": 27.021,
+    "lng": 88.245,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rangaroontrekkershuthomestay_ranglibazardararanglitgpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "samjhanahomestaylepchajagat_ranglizimbadhurapsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sanguthhomestay_royakbustypotinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sunrisehomestay_chhotamangwabustytinchulaypsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sunshinehomestay_peshoktepsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sweethappyjourneyhomestay_ranglibazardararanglitgpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "theparadisepalmhomestay_marybongtepogumbalingyamarrybongpsjbdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "udensorganichomestay_lopchu11thmilepsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "yumahomestay_ranglizimbadhurapsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "zangodophhomestay_ranglibazardararanglitgpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "nividitahomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "shantibanhomstay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "dokshingretrohomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "ashirbadhomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "attarayahomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "godawarihomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "lenchyohomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gyanjyotihomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sanskritihomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "rashikahomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "parigharhomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gurupadmasambhavasacredsite_": {
+    "lat": 27.1815,
+    "lng": 88.3585,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "tenzingnorgaystatue_": {
+    "lat": 27.0583,
+    "lng": 88.2578,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sevokekalitemple_": {
+    "lat": 26.8833,
+    "lng": 88.4667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "historicbuddhistmonkshouse_": {
+    "lat": 27.0108,
+    "lng": 88.2575,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "ahanshs_upparrolak": {
+    "lat": 27.21,
+    "lng": 88.39,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "ajithomestay_56carmichalroadnearrlbuilding": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "rojinahomestay_upparrolak": {
+    "lat": 27.21,
+    "lng": 88.39,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sevokeforestbirdwatching_": {
+    "lat": 26.8833,
+    "lng": 88.4667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sevokeshwarikalitemple_": {
+    "lat": 26.8833,
+    "lng": 88.4667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sevokerailwaybridge_": {
+    "lat": 26.8833,
+    "lng": 88.4667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "sevokehillviewpoint_": {
+    "lat": 26.8833,
+    "lng": 88.4667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "smritihomestay_bhutiabustydabaipani": {
+    "lat": 27.0475,
+    "lng": 88.2736,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "tomandjerryhomestay_tinchulayfatakpsrrdjg": {
+    "lat": 27.041,
+    "lng": 88.2663,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "sevokeforest_": {
+    "lat": 26.8833,
+    "lng": 88.4667,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "pinehillhomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "gangotrihomestay_dabaipani": {
+    "lat": 27.0264,
+    "lng": 88.3094,
+    "source": "VERIFIED_LOCALITY_MATCH",
+    "confidence": "MEDIUM"
+  },
+  "buddhisthomestay_bonchayabasty": {
+    "lat": 27.0108,
+    "lng": 88.2575,
+    "source": "REGIONAL_LANDMARK_REGISTRY",
+    "confidence": "HIGH"
+  },
+  "bankghar_": {
+    "lat": 26.8768,
+    "lng": 88.2775,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "MEDIUM"
+  },
+  "tenzingrock_cartroaddarjeelingwestbengal": {
+    "lat": 27.057936,
+    "lng": 88.256564,
+    "source": "OSM_NOMINATIM",
+    "confidence": "HIGH"
+  },
+  "lebongracecourse_darjeelingdarjeelingwestbengal": {
+    "lat": 27.038639,
+    "lng": 88.306707,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "MEDIUM"
+  },
+  "pubongteaestate_darjeelingdarjeelingwestbengal": {
+    "lat": 26.99017,
+    "lng": 88.199539,
+    "source": "DUPLICATE_NAME_VERIFIED_CLUSTER",
+    "confidence": "MEDIUM"
+  },
+  "poolbazar_bijanbaridarjeelingwestbengal": {
+    "lat": 27.0832,
+    "lng": 88.1912,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "panchagamandirpoolbazar_darjeelingdarjeelingsikkim": {
+    "lat": 27.0982,
+    "lng": 88.2041,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "MEDIUM"
+  },
+  "ambootiateaestatetrails_darjeelingdarjeelingsikkim": {
+    "lat": 26.8741,
+    "lng": 88.2605,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "pashupatimarket_mirikdarjeelingwestbengal": {
+    "lat": 26.9115,
+    "lng": 88.1325,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "okaityteaestate_darjeelingdarjeelingwestbengal": {
+    "lat": 26.8906,
+    "lng": 88.1678,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "phuguriteaestate_darjeelingdarjeelingwestbengal": {
+    "lat": 26.8705,
+    "lng": 88.2078,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "soolbongsteaestate_darjeelingdarjeelingwestbengal": {
+    "lat": 27.0855,
+    "lng": 88.2235,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "mahadevtarmandir_mirikdarjeelingwestbengal": {
+    "lat": 26.8885,
+    "lng": 88.2462,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "krishnamandir_mirikdarjeelingwestbengal": {
+    "lat": 26.8916,
+    "lng": 88.1865,
+    "source": "GEMINI_AI_GEOSPATIAL",
+    "confidence": "HIGH"
+  },
+  "haydenhall_darjeelingdarjeelingwestbengal": {
+    "lat": 27.040961,
+    "lng": 88.266032,
+    "source": "OSM_NOMINATIM",
+    "confidence": "HIGH"
+  },
+  "giddapaharjharna_darjeelingdarjeelingsikkim": {
+    "lat": 26.860785,
+    "lng": 88.290905,
+    "source": "OSM_NOMINATIM",
+    "confidence": "HIGH"
+  },
+  "gayabarirailwaystation_darjeelingdarjeelingwestbengal": {
+    "lat": 26.859196,
+    "lng": 88.312477,
+    "source": "OSM_NOMINATIM",
+    "confidence": "HIGH"
+  },
+  "tenzingrock_darjeelingdarjeelingsikkim": {
+    "lat": 27.057936,
+    "lng": 88.256564,
+    "source": "OSM_NOMINATIM",
+    "confidence": "HIGH"
+  }
+}

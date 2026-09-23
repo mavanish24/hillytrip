@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="tableTop" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+    <linearGradient id="bronzeThali" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <linearGradient id="steamer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#tableTop)"/>
+  <!-- Steaming Momo Basket (Bamboo/Steel) -->
+  <circle cx="380" cy="340" r="180" fill="url(#steamer)" stroke="#475569" stroke-width="8"/>
+  <circle cx="380" cy="340" r="150" fill="#f1f5f9"/>
+  <!-- Fresh Steamed Momos -->
+  <ellipse cx="330" cy="280" rx="35" ry="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <ellipse cx="430" cy="280" rx="35" ry="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <ellipse cx="300" cy="350" rx="35" ry="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <ellipse cx="460" cy="350" rx="35" ry="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <ellipse cx="380" cy="390" rx="35" ry="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <!-- Spicy Dalle Chilly Chutney Bowl -->
+  <circle cx="380" cy="335" r="32" fill="#dc2626" stroke="#991b1b" stroke-width="4"/>
+  
+  <!-- Traditional Himalayan Kanchendzonga Thali (Brass Plate) -->
+  <circle cx="820" cy="340" r="190" fill="url(#bronzeThali)" stroke="#78350f" stroke-width="8"/>
+  <circle cx="820" cy="340" r="160" fill="#fef3c7"/>
+  <!-- Steamed Rice Mound -->
+  <circle cx="820" cy="340" r="60" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  <!-- Kalo Dal Bowl -->
+  <circle cx="740" cy="240" r="35" fill="#1e293b" stroke="#d97706" stroke-width="3"/>
+  <!-- Gundruk & Sinki Curry Bowl -->
+  <circle cx="900" cy="240" r="35" fill="#65a30d" stroke="#d97706" stroke-width="3"/>
+  <!-- Mountain Potato Dum Aloo -->
+  <circle cx="930" cy="340" r="35" fill="#ea580c" stroke="#d97706" stroke-width="3"/>
+  <!-- Local Churpi Cheese & Saag -->
+  <circle cx="900" cy="440" r="35" fill="#15803d" stroke="#d97706" stroke-width="3"/>
+  <!-- Local Pickle & Fresh Radish -->
+  <circle cx="740" cy="440" r="35" fill="#e11d48" stroke="#d97706" stroke-width="3"/>
+</svg>

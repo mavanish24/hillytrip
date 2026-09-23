@@ -1,0 +1,156 @@
+{
+  "searches": [],
+  "interactions": [],
+  "userAnalytics": [
+    {
+      "id": "ana-1784185987120-752430",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1775",
+      "slug": "TAXI1680-to-VIL1775",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T07:13:07.120Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784186145672-575742",
+      "type": "route_search",
+      "name": "Lachung Taxi Stand → Mangan Taxi Stand",
+      "slug": "TAXI0002-to-TAXI0005",
+      "source": "Lachung Taxi Stand",
+      "destination": "Mangan Taxi Stand",
+      "timestamp": "2026-07-16T07:15:45.672Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784187147181-461895",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1775",
+      "slug": "TAXI1680-to-VIL1775",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T07:32:27.181Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784187635417-174190",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1775",
+      "slug": "TAXI1680-to-VIL1775",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T07:40:35.417Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784189977313-944753",
+      "type": "route_search",
+      "name": "TAXI0005 → VIL0050",
+      "slug": "TAXI0005-to-VIL0050",
+      "source": "Mangan Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T08:19:37.313Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784190013559-66548",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1775",
+      "slug": "TAXI1680-to-VIL1775",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T08:20:13.559Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784190177186-687410",
+      "type": "route_search",
+      "name": "TAXI1273 → VIL1275",
+      "slug": "TAXI1273-to-VIL1275",
+      "source": "Kumargram Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T08:22:57.186Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784192239644-7103",
+      "type": "route_search",
+      "name": "TAXI1273 → VIL1274",
+      "slug": "TAXI1273-to-VIL1274",
+      "source": "Kumargram Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T08:57:19.644Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784192592014-793612",
+      "type": "route_search",
+      "name": "TAXI0005 → VIL0050",
+      "slug": "TAXI0005-to-VIL0050",
+      "source": "Mangan Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T09:03:12.014Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784194615326-110411",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1761",
+      "slug": "TAXI1680-to-VIL1761",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T09:36:55.326Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784195207660-267736",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1683",
+      "slug": "TAXI1680-to-VIL1683",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T09:46:47.660Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784195514362-409996",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1775",
+      "slug": "TAXI1680-to-VIL1775",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T09:51:54.362Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784197989924-87808",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1775",
+      "slug": "TAXI1680-to-VIL1775",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T10:33:09.924Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784198253412-701694",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1682",
+      "slug": "TAXI1680-to-VIL1682",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T10:37:33.412Z",
+      "count": 1
+    },
+    {
+      "id": "ana-1784198260729-591377",
+      "type": "route_search",
+      "name": "TAXI1680 → VIL1681",
+      "slug": "TAXI1680-to-VIL1681",
+      "source": "Nagrakata Taxi Stand",
+      "destination": "",
+      "timestamp": "2026-07-16T10:37:40.729Z",
+      "count": 1
+    }
+  ]
+}

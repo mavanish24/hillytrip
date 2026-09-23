@@ -1,0 +1,2 @@
+/api/*  https://hillytrip-api-930292453548.asia-south1.run.app/api/:splat  200!
+/*      /index.html                                                        200

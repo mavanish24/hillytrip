@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="nbSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#fdba74"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+    <linearGradient id="hillGreen1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+    <linearGradient id="hillGreen2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4d7c0f"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#nbSky)"/>
+  <!-- Mountain Ranges of Darjeeling & Kalimpong -->
+  <polygon points="100,380 350,180 580,380" fill="#94a3b8"/>
+  <polygon points="400,380 650,140 900,380" fill="#cbd5e1"/>
+  <!-- Rolling North Bengal Tea & Pine Hills -->
+  <path d="M0,350 Q300,290 600,340 T1200,310 L1200,675 L0,675 Z" fill="url(#hillGreen1)"/>
+  <path d="M0,430 Q400,370 800,440 T1200,400 L1200,675 L0,675 Z" fill="url(#hillGreen2)"/>
+  <!-- Darjeeling Himalayan Railway (Toy Train) Track & Blue Engine -->
+  <path d="M0,540 Q400,500 800,570 T1200,530" stroke="#64748b" stroke-width="8" fill="none"/>
+  <!-- Toy Train Blue Steam Engine -->
+  <rect x="520" y="475" width="90" height="50" fill="#1d4ed8" rx="4" stroke="#1e3a8a" stroke-width="3"/>
+  <rect x="530" y="450" width="30" height="25" fill="#1d4ed8" rx="2"/>
+  <rect x="585" y="460" width="15" height="15" fill="#18181b"/>
+  <!-- Smoke plume -->
+  <circle cx="592" cy="445" r="10" fill="#e2e8f0" opacity="0.8"/>
+  <circle cx="605" cy="430" r="14" fill="#e2e8f0" opacity="0.6"/>
+  <circle cx="622" cy="415" r="18" fill="#e2e8f0" opacity="0.4"/>
+  <!-- Train Wheels -->
+  <circle cx="540" cy="530" r="10" fill="#18181b" stroke="#94a3b8" stroke-width="3"/>
+  <circle cx="565" cy="530" r="10" fill="#18181b" stroke="#94a3b8" stroke-width="3"/>
+  <circle cx="590" cy="530" r="10" fill="#18181b" stroke="#94a3b8" stroke-width="3"/>
+  <!-- Coaches -->
+  <rect x="420" y="480" width="85" height="45" fill="#dc2626" rx="4"/>
+  <rect x="430" y="490" width="18" height="15" fill="#fef08a"/>
+  <rect x="455" y="490" width="18" height="15" fill="#fef08a"/>
+  <rect x="480" y="490" width="18" height="15" fill="#fef08a"/>
+</svg>
