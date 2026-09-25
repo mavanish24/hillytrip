@@ -462,17 +462,13 @@ export default function App() {
   if (tempPath === '/taxis' || tempPath === '#/taxis') {
     tempPath = '/taxi';
   }
-  if (tempPath === '/routes' || tempPath === '/route' || tempPath === '#/routes' || tempPath === '#/route') {
-    tempPath = '/journeys';
-  }
-  if (tempPath.startsWith('/routes/')) {
-    tempPath = tempPath.replace('/routes/', '/journeys/');
-  }
-  if (tempPath.startsWith('/route/')) {
-    tempPath = tempPath.replace('/route/', '/journeys/');
-  }
-  if (tempPath.startsWith('/journey/') && tempPath !== '/journey') {
-    tempPath = tempPath.replace('/journey/', '/journeys/');
+  if (
+    tempPath === '/routes' || tempPath === '/route' || tempPath === '#/routes' || tempPath === '#/route' ||
+    tempPath === '/journeys' || tempPath === '/journey' || tempPath === '#/journeys' || tempPath === '#/journey' ||
+    tempPath.startsWith('/routes/') || tempPath.startsWith('/route/') ||
+    tempPath.startsWith('/journeys/') || tempPath.startsWith('/journey/')
+  ) {
+    tempPath = '/explore';
   }
   if (tempPath.startsWith('/offer/') && tempPath !== '/offer') {
     tempPath = tempPath.replace('/offer/', '/offers/');
@@ -1309,8 +1305,10 @@ export default function App() {
       try {
         const bRes = await fetch('/api/bootstrap');
         if (bRes.ok) {
-          const bData = await bRes.json();
-          if (bData && typeof bData === 'object') {
+          const contentType = bRes.headers.get('content-type') || '';
+          if (contentType.includes('application/json')) {
+            const bData = await bRes.json();
+            if (bData && typeof bData === 'object' && !bData.error) {
             const cleanHubs = deduplicate<Hub>(bData.hubs || []);
             const cleanDests = deduplicate<Destination>(bData.destinations || []);
             const cleanAtts = deduplicate<Attraction>(bData.attractions || []);
@@ -1335,7 +1333,8 @@ export default function App() {
                 } catch {}
               });
             }
-            return;
+              return;
+            }
           }
         }
       } catch (err) {
@@ -3277,200 +3276,6 @@ export default function App() {
       try {
         if (currentPath === '' || currentPath === '/' || currentPath === '#/') {
           // Home
-        } else if (currentPath.startsWith('/journeys/') || currentPath.startsWith('/routes/')) {
-          // 7. Diagnostic logging: received slug
-          console.log('[Journey Diagnostic] received slug:', currentPath);
-          const rawRouteSlug = currentPath
-            .replace('/journeys/', '')
-            .replace('#/journeys/', '')
-            .replace('/journey/', '')
-            .replace('#/journey/', '')
-            .replace('/routes/', '')
-            .replace('#/routes/', '')
-            .replace('/route/', '')
-            .replace('#/route/', '');
-          const decodedRouteSlug = decodeURIComponent(rawRouteSlug);
-
-          // Canonicalize route ID to slug if hubs are loaded
-          if (hubs && hubs.length > 0 && destinations && destinations.length > 0) {
-            const params = decodedRouteSlug.split('-to-');
-            if (params.length === 2) {
-              const [fromId, toId] = params;
-              const resolveToHubSlugName = (slugOrId: string): string => {
-                const clean = slugOrId.trim().toLowerCase();
-                const foundHub = hubs.find(h => 
-                  (h?.id || '').toLowerCase() === clean || 
-                  toSlug(h?.id) === toSlug(clean) || 
-                  (h?.name || '').toLowerCase() === clean || 
-                  toSlug(h?.name) === toSlug(clean)
-                );
-                if (foundHub) return toSlug(foundHub.name);
-                const foundDest = destinations.find(d => 
-                  (d?.id || '').toLowerCase() === clean || 
-                  toSlug(d?.id) === toSlug(clean) || 
-                  (d?.name || '').toLowerCase() === clean || 
-                  toSlug(d?.name) === toSlug(clean)
-                );
-                if (foundDest) {
-                  const nearHub = hubs.find(h => (h?.id || '').toLowerCase() === (foundDest.nearestHubId || '').toLowerCase().trim());
-                  if (nearHub) return toSlug(nearHub.name);
-                }
-                return slugOrId;
-              };
-              const fromSlug = resolveToHubSlugName(fromId);
-              const toSlugVal = resolveToHubSlugName(toId);
-              const canonicalRouteSlug = `${fromSlug}-to-${toSlugVal}`;
-
-              if (decodedRouteSlug !== canonicalRouteSlug && fromSlug && toSlugVal) {
-                const cleanPath = `/journeys/${canonicalRouteSlug}`;
-                if (currentPath !== cleanPath && tempPath !== cleanPath) {
-                  console.log(`[SEO Client Redirect] Replacing journey slug '${decodedRouteSlug}' with canonical '${canonicalRouteSlug}'`);
-                  if (typeof window !== 'undefined') {
-                    const targetHash = '#' + cleanPath;
-                    if (window.location.hash !== targetHash) {
-                      window.history.replaceState(null, '', targetHash);
-                    }
-                  }
-                  setCurrentHash('#' + cleanPath);
-                }
-                return;
-              }
-            }
-          }
-
-          // 5. Log required diagnostics
-          console.log('[Route Detail Diagnostic] raw URL parameter:', rawRouteSlug);
-          console.log('[Route Detail Diagnostic] decoded parameter:', decodedRouteSlug);
-          console.log('[Route Detail Diagnostic] database lookup key:', decodedRouteSlug);
-
-          const params = decodedRouteSlug.split('-to-');
-          if (params.length === 2) {
-            const [fromId, toId] = params;
-            // 7. Diagnostic logging: parsed source and destination
-            console.log('[Route Diagnostic] parsed source:', fromId);
-            console.log('[Route Diagnostic] parsed destination:', toId);
-
-            // Use loaded hubs list immediately without network wait
-            let allHubsList: Hub[] = hubs && hubs.length > 0 ? hubs : [];
-            if (allHubsList.length === 0) {
-              try {
-                const hubsRes = await fetch('/api/hubs');
-                if (hubsRes.ok) {
-                  const contentType = hubsRes.headers.get('content-type') || '';
-                  if (contentType.includes('application/json')) {
-                    const text = await hubsRes.text();
-                    if (!text.trim().startsWith('<!') && !text.trim().startsWith('<html')) {
-                      allHubsList = JSON.parse(text);
-                    }
-                  }
-                }
-              } catch (err) {
-                console.error('[Route Parser] Error loading hubs:', err);
-              }
-            }
-            if (!Array.isArray(allHubsList) || allHubsList.length === 0) {
-              allHubsList = hubs || [];
-            }
-
-            // Slug-to-Hub ID Resolution function
-            const resolveSlugToHubId = (slugName: string): string => {
-              const clean = slugName.trim().toLowerCase();
-              if (!clean) return '';
-
-              const currentHubs = hubs || [];
-              const currentDests = destinations || [];
-              const currentAttrs = attractions || [];
-
-              // Strict custom slugify helper for comparisons
-              const getSlug = (text: string): string => {
-                if (!text) return '';
-                return text
-                  .toLowerCase()
-                  .replace(/[^a-z0-9\s_'-]/g, '')
-                  .trim()
-                  .replace(/[\s_']+/g, '-')
-                  .replace(/-+/g, '-')
-                  .replace(/^-+|-+$/g, '');
-              };
-
-              const cleanSlug = getSlug(slugName);
-
-              // 4. Map requirements:
-              if (clean === 'njp' || cleanSlug === 'njp') return 'NJP';
-              if (clean === 'darjeeling' || cleanSlug === 'darjeeling') return 'Darjeeling';
-              if (clean === 'kalimpong' || cleanSlug === 'kalimpong') return 'Kalimpong';
-              if (clean === 'lava' || cleanSlug === 'lava') return 'Lava';
-
-              // 3. Support case-insensitive matching on ID first
-              const byId = allHubsList.find(h => (h?.id || '').toLowerCase() === clean || getSlug(h?.id || '') === cleanSlug);
-              if (byId) return byId.id;
-
-              // 6. If a slug matches a hub name, automatically resolve it
-              const byName = allHubsList.find(h => (h?.name || '').toLowerCase() === clean || getSlug(h?.name || '') === cleanSlug);
-              if (byName) return byName.id;
-
-              // Check if matches a destination's name, ID or slug, and resolve to nearestHubId
-              const byDest = currentDests.find(d => 
-                (d?.id || '').toLowerCase() === clean || 
-                getSlug(d?.id || '') === cleanSlug || 
-                (d?.name || '').toLowerCase() === clean || 
-                getSlug(d?.name || '') === cleanSlug
-              );
-              if (byDest && byDest.nearestHubId) {
-                const nearHub = allHubsList.find(h => (h?.id || '').toLowerCase() === (byDest.nearestHubId || '').toLowerCase().trim());
-                if (nearHub) return nearHub.id;
-              }
-
-              // Check if matches an attraction's name, ID or slug
-              const byAttr = currentAttrs.find(a => 
-                (a?.id || '').toLowerCase() === clean || 
-                getSlug(a?.id || '') === cleanSlug || 
-                (a?.name || '').toLowerCase() === clean || 
-                getSlug(a?.name || '') === cleanSlug
-              );
-              if (byAttr) {
-                if (byAttr.nearestHubId) {
-                  const nearHub = allHubsList.find(h => (h?.id || '').toLowerCase() === (byAttr.nearestHubId || '').toLowerCase().trim());
-                  if (nearHub) return nearHub.id;
-                }
-                // Fallback to parent destination's nearestHubId
-                if (byAttr.destinationId) {
-                  const parentDest = currentDests.find(d => d.id === byAttr.destinationId);
-                  if (parentDest && parentDest.nearestHubId) {
-                    const nearHub = allHubsList.find(h => (h?.id || '').toLowerCase() === (parentDest.nearestHubId || '').toLowerCase().trim());
-                    if (nearHub) return nearHub.id;
-                  }
-                }
-              }
-
-              // Check substring fuzzy matching on hubs as last resort
-              const fuzzyHub = allHubsList.find(h => 
-                (h?.name || '').toLowerCase().includes(clean) || 
-                clean.includes((h?.name || '').toLowerCase()) ||
-                getSlug(h?.name || '').includes(cleanSlug) ||
-                cleanSlug.includes(getSlug(h?.name || ''))
-              );
-              if (fuzzyHub) return fuzzyHub.id;
-
-              return slugName; // Return original if no match
-            };
-
-            const resolvedFromId = resolveSlugToHubId(fromId);
-            const resolvedToId = resolveSlugToHubId(toId);
-
-            // Track GA4 Route Search
-            trackRouteSearch(resolvedFromId, resolvedToId);
-
-            // 7. Diagnostic logging: resolved hub IDs
-            console.log('[Route Diagnostic] resolved hub IDs:', {
-              from: resolvedFromId,
-              to: resolvedToId
-            });
-
-            // 5. Update search input state to match resolved endpoints
-            setSearchFrom(resolvedFromId);
-            setSearchTo(resolvedToId);
-          }
         } else if (currentPath.startsWith('/destinations/')) {
           const rawDestId = currentPath.replace('/destinations/', '').replace('#/destinations/', '').replace('/destination/', '').replace('#/destination/', '').replace('/villages/', '').replace('#/villages/', '').replace('/village/', '').replace('#/village/', '');
           const decodedDestId = decodeURIComponent(rawDestId);
@@ -3998,50 +3803,9 @@ export default function App() {
     } else if (currentPath === '/attractions') {
       title = "Scenic Sightseeing Views, Treks & High-Altitude Passes | HilliTrip";
       desc = "Discover pristine waterfalls, monasteries, sunrise viewpoints, forests, rhododendron nature parks, and hidden trekking routes in the Himalayas.";
-    } else if (currentPath === '/journeys' || currentPath.split('?')[0] === '/journeys') {
-      title = "Explore Himalayan Journeys & Scenic Road Trips | HilliTrip";
-      desc = "Discover handpicked road trips, scenic drives, weekend escapes, and unforgettable Himalayan experiences across North Bengal & Sikkim.";
-    } else if (currentPath.startsWith('/journeys/') || currentPath.startsWith('/routes/')) {
-      const p = currentPath
-        .replace('/journeys/', '')
-        .replace('#/journeys/', '')
-        .replace('/journey/', '')
-        .replace('#/journey/', '')
-        .replace('/routes/', '')
-        .replace('#/routes/', '')
-        .replace('/route/', '')
-        .replace('#/route/', '');
-      let rt = routes.find(x => (x?.id || '').toLowerCase() === p.toLowerCase() || toSlug(x?.id) === toSlug(p));
-      if (!rt && p.includes('-to-')) {
-        const partsSlug = p.split('-to-');
-        const fromPart = partsSlug[0] || '';
-        const toPart = partsSlug[1] || '';
-        rt = routes.find(r => 
-          (toSlug(r.fromHubId).toLowerCase() === fromPart && toSlug(r.toHubId).toLowerCase() === toPart) ||
-          (toSlug(r.toHubId).toLowerCase() === fromPart && toSlug(r.fromHubId).toLowerCase() === toPart)
-        );
-      }
-      if (rt) {
-        const fromHub = hubs.find(h => h.id === rt.fromHubId) || { id: rt.fromHubId, name: rt.fromHubId };
-        const toHub = hubs.find(h => h.id === rt.toHubId) || { id: rt.toHubId, name: rt.toHubId };
-        title = `${fromHub.name} to ${toHub.name} Journey Details, Map & Travel Experience | HilliTrip`;
-        desc = `Experience the journey from ${fromHub.name} to ${toHub.name}. Distance is ${rt.distance || 'N/A'} km, travel time is around ${rt.timeMin}-${rt.timeMax} mins. Live conditions, attractions, homestays & taxi fare guidance.`;
-        schemaObj = {
-          "@context": "https://schema.org",
-          "@type": "TravelAction",
-          "name": `Himalayan Journey from ${fromHub.name} to ${toHub.name}`,
-          "description": desc,
-          "origin": {
-            "@id": fromHub.id,
-            "name": fromHub.name
-          },
-          "destination": {
-            "@id": toHub.id,
-            "name": toHub.name
-          },
-          "distance": `${rt.distance || ''} km`
-        };
-      }
+    } else if (currentPath === '/explore' || currentPath.split('?')[0] === '/explore') {
+      title = "Explore Himalayan Villages, Stays & Attractions | HilliTrip";
+      desc = "Discover authentic mountain base villages, scenic viewpoints, local homestays, and hidden trails across North Bengal & Sikkim.";
     }
 
     if (desc.length > 165) {
@@ -6222,9 +5986,9 @@ export default function App() {
     saveRecentRouteSearch(searchFrom, searchTo, undefined, undefined, hubs, destinations);
     const fromH = hubs.find(h => h.id === searchFrom);
     const toH = hubs.find(h => h.id === searchTo);
-    const fromSlug = fromH ? getItemSlug(fromH) : getItemSlug(searchFrom);
-    const toSlugStr = toH ? getItemSlug(toH) : getItemSlug(searchTo);
-    navigate(`#/route/${fromSlug}-to-${toSlugStr}`);
+    const fromName = fromH?.name || searchFrom;
+    const toName = toH?.name || searchTo;
+    navigate(`#/taxi?from=${encodeURIComponent(fromName)}&to=${encodeURIComponent(toName)}`);
   };
 
   const clickQuickSearchRoute = (fromId: string, toId: string) => {
@@ -6233,9 +5997,9 @@ export default function App() {
     saveRecentRouteSearch(fromId, toId, undefined, undefined, hubs, destinations);
     const fromH = hubs.find(h => h.id === fromId);
     const toH = hubs.find(h => h.id === toId);
-    const fromSlug = fromH ? getItemSlug(fromH) : getItemSlug(fromId);
-    const toSlugStr = toH ? getItemSlug(toH) : getItemSlug(toId);
-    navigate(`#/route/${fromSlug}-to-${toSlugStr}`);
+    const fromName = fromH?.name || fromId;
+    const toName = toH?.name || toId;
+    navigate(`#/taxi?from=${encodeURIComponent(fromName)}&to=${encodeURIComponent(toName)}`);
   };
 
   const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
@@ -7843,7 +7607,7 @@ export default function App() {
               </p>
             </div>
             <button
-              onClick={() => navigate('#/routes')}
+              onClick={() => navigate('#/explore')}
               className="relative z-10 w-full md:w-auto bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-600 hover:to-teal-500 text-slate-950 font-black px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-1.5 shrink-0 transition active:scale-95 cursor-pointer font-mono"
             >
               Start Travel Simulator 🗺️

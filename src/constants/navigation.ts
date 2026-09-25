@@ -2,13 +2,13 @@ import React from 'react';
 import { MapPin, Mountain, Home, Car, Route, Gift, Sparkles } from 'lucide-react';
 
 export interface NavItemConfig {
-  id: string; // 'villages' | 'attractions' | 'stays' | 'taxi' | 'journeys' | 'offers' | 'ai-planner'
-  tabId: 'village' | 'destination' | 'attraction' | 'homestay' | 'taxi' | 'journeys' | 'offers' | 'ai-planner';
-  label: string; // 'Villages' | 'Attractions' | 'Stays' | 'Taxi' | 'Journeys' | 'Offers' | 'AI Planner'
-  heroTabLabel: string; // 'Village' | 'Attraction' | 'Homestay' | 'Taxi' | 'Journeys' | 'Offers'
+  id: string; // 'villages' | 'attractions' | 'stays' | 'taxi' | 'explore' | 'offers' | 'ai-planner'
+  tabId: 'village' | 'destination' | 'attraction' | 'homestay' | 'taxi' | 'journeys' | 'explore' | 'offers' | 'ai-planner';
+  label: string; // 'Villages' | 'Attractions' | 'Stays' | 'Taxi' | 'Explore' | 'Offers' | 'AI Planner'
+  heroTabLabel: string; // 'Village' | 'Attraction' | 'Homestay' | 'Taxi' | 'Explore' | 'Offers'
   path: string;
   icon: React.ComponentType<{ className?: string }>;
-  emoji: string; // 🏔, 📍, 🏡, 🚖, 🛣, 🎁, ✨
+  emoji: string; // 🏔, 📍, 🏡, 🚖, 🧭, 🎁, ✨
   iconColor: string;
   isAi?: boolean;
   badge?: string; // 'NEW'
@@ -62,13 +62,13 @@ export const MAIN_NAVIGATION: NavItemConfig[] = [
     supportsHeroTab: true,
   },
   {
-    id: 'journeys',
-    tabId: 'journeys',
-    label: 'Journeys',
-    heroTabLabel: 'Journeys',
-    path: '#/journeys',
+    id: 'explore',
+    tabId: 'explore',
+    label: 'Explore',
+    heroTabLabel: 'Explore',
+    path: '#/explore',
     icon: Route,
-    emoji: '🛣',
+    emoji: '🧭',
     iconColor: 'text-emerald-400',
     supportsHeroTab: true,
   },

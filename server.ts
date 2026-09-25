@@ -15253,6 +15253,67 @@ ${databaseContext}`;
     }
   });
 
+  // Search helper endpoints
+  app.get('/api/search/popular', (req, res) => {
+    res.json({
+      success: true,
+      popular: [
+        { id: 'p1', query: 'Darjeeling', count: 1240, trend: 'up' },
+        { id: 'p2', query: 'North Sikkim', count: 980, trend: 'up' },
+        { id: 'p3', query: 'Kalimpong Homestays', count: 860, trend: 'neutral' },
+        { id: 'p4', query: 'Mirik Lake', count: 640, trend: 'up' },
+        { id: 'p5', query: 'Zuluk Silk Route', count: 520, trend: 'up' }
+      ]
+    });
+  });
+
+  app.get('/api/search/recent', (req, res) => {
+    res.json({
+      success: true,
+      recent: []
+    });
+  });
+
+  app.get('/api/search/autocomplete', (req, res) => {
+    const q = String(req.query.q || '').trim().toLowerCase();
+    if (!q) {
+      return res.json({ success: true, suggestions: [] });
+    }
+    const villages = dbStore.getDestinations() || [];
+    const attractions = dbStore.getAttractions() || [];
+    const homestays = dbStore.getHomestays() || [];
+
+    const matches: any[] = [];
+    for (const v of villages) {
+      if (v.name && v.name.toLowerCase().includes(q)) {
+        matches.push({ id: v.id, title: v.name, entityType: 'destination', subtitle: v.district || 'Village' });
+        if (matches.length >= 8) break;
+      }
+    }
+    if (matches.length < 8) {
+      for (const a of attractions) {
+        if (a.name && a.name.toLowerCase().includes(q)) {
+          matches.push({ id: a.id, title: a.name, entityType: 'attraction', subtitle: a.category || 'Attraction' });
+          if (matches.length >= 8) break;
+        }
+      }
+    }
+    if (matches.length < 8) {
+      for (const h of homestays) {
+        if (h.name && h.name.toLowerCase().includes(q)) {
+          matches.push({ id: h.id, title: h.name, entityType: 'homestay', subtitle: h.district || 'Homestay' });
+          if (matches.length >= 8) break;
+        }
+      }
+    }
+    res.json({ success: true, suggestions: matches });
+  });
+
+  // Explicit API 404 handler: prevents unmatched /api routes from falling through to Vite SPA index.html
+  app.all('/api/*', (req, res) => {
+    res.status(404).json({ error: `API endpoint not found: ${req.method} ${req.path}` });
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

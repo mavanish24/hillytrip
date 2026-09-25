@@ -174,13 +174,21 @@ export async function hillyTripFetch(input: RequestInfo | URL, init?: RequestIni
       }
 
       // Safety wrapper for response.json to avoid unexpected token '<'
-      const originalJson = response.json.bind(response);
       response.json = async () => {
         try {
-          return await originalJson();
+          const text = await response.text();
+          if (!text || !text.trim()) {
+            return {};
+          }
+          const trimmed = text.trim();
+          if (trimmed.startsWith('<') || trimmed.toLowerCase().startsWith('<!doctype')) {
+            console.warn(`[HillyTrip Fetch] HTML received instead of JSON from ${targetUrl}:`, trimmed.slice(0, 80));
+            return { error: 'Non-JSON response received', status: response.status };
+          }
+          return JSON.parse(text);
         } catch (jsonErr) {
           console.warn(`[HillyTrip Fetch] Failed parsing JSON from ${targetUrl}:`, jsonErr);
-          throw jsonErr;
+          return { error: 'Failed to parse JSON', status: response.status };
         }
       };
 
@@ -190,7 +198,25 @@ export async function hillyTripFetch(input: RequestInfo | URL, init?: RequestIni
   
   if (typeof origFetch === 'function' && origFetch !== hillyTripFetch) {
     try {
-      return await origFetch(input, init);
+      const response = await origFetch(input, init);
+      if (response && typeof response.json === 'function') {
+        const origJson = response.json.bind(response);
+        response.json = async () => {
+          try {
+            const text = await response.text();
+            if (!text || !text.trim()) return {};
+            const trimmed = text.trim();
+            if (trimmed.startsWith('<') || trimmed.toLowerCase().startsWith('<!doctype')) {
+              console.warn(`[HillyTrip Fetch] Non-JSON payload received from fetch:`, trimmed.slice(0, 80));
+              return { error: 'Non-JSON response received', status: response.status };
+            }
+            return JSON.parse(text);
+          } catch (e) {
+            return { error: 'Failed to parse JSON', status: response.status };
+          }
+        };
+      }
+      return response;
     } catch (err) {
       return await origFetch.call(window, input, init);
     }

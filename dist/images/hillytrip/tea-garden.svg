@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="teaSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="70%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#d9f99d"/>
+    </linearGradient>
+    <linearGradient id="teaHill1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#84cc16"/>
+      <stop offset="100%" stop-color="#4d7c0f"/>
+    </linearGradient>
+    <linearGradient id="teaHill2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#65a30d"/>
+      <stop offset="100%" stop-color="#3f6212"/>
+    </linearGradient>
+    <linearGradient id="teaHill3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4d7c0f"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#teaSky)"/>
+  <circle cx="850" cy="200" r="60" fill="#facc15" opacity="0.8"/>
+  <!-- Distant hill ridges -->
+  <path d="M0,280 Q300,220 600,260 T1200,230 L1200,675 L0,675 Z" fill="url(#teaHill1)" opacity="0.8"/>
+  <path d="M0,360 Q400,300 800,380 T1200,320 L1200,675 L0,675 Z" fill="url(#teaHill2)"/>
+  <!-- Tea plantation contour terraces -->
+  <path d="M0,450 Q300,390 700,470 T1200,430 L1200,675 L0,675 Z" fill="url(#teaHill3)"/>
+  <path d="M0,540 Q450,490 900,560 T1200,510 L1200,675 L0,675 Z" fill="#14532d"/>
+  <!-- Tea bush contour lines -->
+  <path d="M50,470 Q300,420 600,460 T1150,440" stroke="#a3e635" stroke-width="4" fill="none" stroke-dasharray="12,8"/>
+  <path d="M30,510 Q350,460 700,510 T1180,480" stroke="#bef264" stroke-width="5" fill="none" stroke-dasharray="14,10"/>
+  <path d="M20,570 Q400,520 800,580 T1190,540" stroke="#d9f99d" stroke-width="6" fill="none" stroke-dasharray="16,12"/>
+  <path d="M10,630 Q450,580 900,640 T1200,610" stroke="#ecfccb" stroke-width="7" fill="none" stroke-dasharray="18,14"/>
+</svg>

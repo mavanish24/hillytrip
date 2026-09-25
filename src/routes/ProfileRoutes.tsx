@@ -40,14 +40,14 @@ export const ProfileRoutes: React.FC<ProfileRoutesProps> = ({
   executeProtectedAction
 }) => {
   const cleanPath = (currentPath || '').split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
-  const isProfile = cleanPath === '/profile' || currentPath.startsWith('/profile?');
+  const isProfile = cleanPath === '/profile' || currentPath.startsWith('/profile?') || cleanPath === '/dashboard' || currentPath.startsWith('/dashboard?');
   const isContributor = cleanPath.startsWith('/contributor/');
   const isPublicProfile = cleanPath.startsWith('/u/') || 
                           cleanPath.startsWith('/user/') || 
                           cleanPath.startsWith('/traveler/') || 
                           cleanPath.startsWith('/traveller/') || 
                           cleanPath.startsWith('/public-profile');
-  const isBookingsTab = currentPath.includes('tab=bookings');
+  const isBookingsTab = (cleanPath === '/bookings' || currentPath.startsWith('/bookings?')) && !isProfile;
 
   if (!isProfile && !isContributor && !isPublicProfile && !isBookingsTab) {
     return null;
@@ -74,22 +74,30 @@ export const ProfileRoutes: React.FC<ProfileRoutesProps> = ({
         />
       )}
 
-      {/* 2. UNIFIED MY PROFILE & LOGIN */}
+      {/* 2. UNIFIED MY PROFILE & ACCOUNT DASHBOARD */}
       {isProfile && (
-        <div id="profile-unified-view" className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8 animate-fade-in text-slate-800 dark:text-slate-100">
+        <div id="profile-unified-view" className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 animate-fade-in text-slate-800 dark:text-slate-100">
           {!user ? (
-            <HillyTripLoginPage
-              initialMode="login"
-              isModal={false}
-              onSuccess={(loggedUser) => handleSetUser(loggedUser)}
-            />
+            <div className="max-w-md mx-auto py-12">
+              <HillyTripLoginPage
+                initialMode="login"
+                isModal={false}
+                onSuccess={(loggedUser) => handleSetUser(loggedUser)}
+              />
+            </div>
           ) : (
             <UserProfileSystem 
               user={user} 
               onUpdateUser={handleSetUser} 
               navigate={navigate} 
               setNotification={setNotification} 
-              onLogout={handleUserLogout} 
+              onLogout={handleUserLogout}
+              destinations={destinations}
+              attractions={attractions}
+              homestays={homestays}
+              likes={likes}
+              toggleLike={toggleLike}
+              currentPath={currentPath}
             />
           )}
         </div>

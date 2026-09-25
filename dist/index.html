@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <style>
+      html, body {
+        background-color: #020617;
+        color: #f8fafc;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+    </style>
+    <script>
+      // Safe Storage Shim: in sandboxed iframes (e.g. VS Code Simple Browser) or third-party cookie restrictions,
+      // accessing window.localStorage or window.sessionStorage throws a fatal DOMException/SecurityError.
+      // This shim guarantees localStorage and sessionStorage are always safely accessible.
+      (function() {
+        var createMemoryStore = function() {
+          var store = {};
+          return {
+            getItem: function(k) { return Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null; },
+            setItem: function(k, v) { store[k] = String(v); },
+            removeItem: function(k) { delete store[k]; },
+            clear: function() { store = {}; },
+            get length() { return Object.keys(store).length; },
+            key: function(i) { return Object.keys(store)[i] || null; }
+          };
+        };
+
+        try {
+          var test = '__safe_storage_probe__';
+          window.localStorage.setItem(test, test);
+          window.localStorage.removeItem(test);
+        } catch (e) {
+          try {
+            var memStore = createMemoryStore();
+            Object.defineProperty(window, 'localStorage', { value: memStore, configurable: true, writable: true });
+          } catch (e2) {}
+        }
+
+        try {
+          var test2 = '__safe_session_probe__';
+          window.sessionStorage.setItem(test2, test2);
+          window.sessionStorage.removeItem(test2);
+        } catch (e) {
+          try {
+            var memSession = createMemoryStore();
+            Object.defineProperty(window, 'sessionStorage', { value: memSession, configurable: true, writable: true });
+          } catch (e3) {}
+        }
+      })();
+
+      // Preserve pristine native browser fetch before any module scripts or interceptors load
+      try {
+        if (typeof window !== 'undefined' && window.fetch) {
+          window.__hillyTrip_realNativeFetch = window.fetch.bind(window);
+          window.originalFetch = window.fetch.bind(window);
+        }
+      } catch (e) {}
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>HillyTrip - India's Intelligent Mountain Travel Network</title>
+    
+    <!-- Speed & Network Preconnections -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
+    <!-- Hero LCP Image Preload -->
+    <link
+      rel="preload"
+      as="image"
+      fetchpriority="high"
+      href="https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?q=75&w=1280&auto=format&fit=crop"
+      imagesrcset="https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?q=75&w=640&auto=format&fit=crop 640w, https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?q=75&w=1280&auto=format&fit=crop 1280w"
+      imagesizes="100vw"
+    />
+    
+    <!-- PWA primary details -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#064e3b" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="India's Intelligent Mountain Travel Network - Your comprehensive travel intelligence platform for Himalayan routes, attractions, and eco-homestays." />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    
+    <!-- OpenGraph Tag fallbacks (Social Platforms) -->
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="HillyTrip - India's Intelligent Mountain Travel Network" />
+    <meta property="og:description" content="India's Intelligent Mountain Travel Network - Your comprehensive travel intelligence platform for Himalayan routes, attractions, and eco-homestays." />
+    <meta property="og:url" content="https://hillytrip.com" />
+    <meta property="og:site_name" content="HillyTrip" />
+    <meta property="og:image" content="https://hillytrip.com/hillytrip_logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="HillyTrip - India's Intelligent Mountain Travel Network" />
+    <meta name="twitter:description" content="India's Intelligent Mountain Travel Network - Your comprehensive travel intelligence platform for Himalayan routes, attractions, and eco-homestays." />
+    <meta name="twitter:image" content="https://hillytrip.com/hillytrip_logo.png" />
+    
+    <!-- Apple Mobile Web App Support iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="HillyTrip" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png?v=3" />
+    <link rel="shortcut icon" type="image/png" href="/favicon-32.png?v=3" />
+    <script type="module" crossorigin src="/assets/index-DThBOuFn.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-core-D3eya0eI.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-icons-DsS5cLVm.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-animations-ChG-26KP.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-zx1yPFQH.css">
+  </head>
+  <body>
+    <div id="root">
+      <div id="hillytrip-initial-loader" style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #020617; color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align: center; padding: 24px;">
+        <div style="width: 48px; height: 48px; border: 3px solid rgba(16, 185, 129, 0.2); border-top-color: #10b981; border-radius: 50%; animation: hillyspin 0.9s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; margin-bottom: 24px;"></div>
+        <h1 style="font-size: 22px; font-weight: 800; letter-spacing: -0.025em; margin: 0 0 8px 0; color: #f8fafc;">HillyTrip</h1>
+        <p style="font-size: 13px; color: #94a3b8; margin: 0; letter-spacing: 0.02em;">Loading Himalayan Travel Network...</p>
+      </div>
+      <style>
+        @keyframes hillyspin { to { transform: rotate(360deg); } }
+      </style>
+    </div>
+  </body>
+</html>
+

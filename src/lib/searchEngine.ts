@@ -336,7 +336,7 @@ export function buildUnifiedDataset(datasets: {
         budget: true,
         openNow: true,
       },
-      detailsUrl: `#/routes/${r.slug || r.id}`,
+      detailsUrl: `#/taxi?from=${encodeURIComponent(fromHub?.name || r.fromHubId)}&to=${encodeURIComponent(toHub?.name || r.toHubId)}`,
       description: `Reliable hill taxi stand connection: ${title}.`,
       rawItem: r
     });
@@ -360,7 +360,7 @@ export function buildUnifiedDataset(datasets: {
       features: {
         openNow: true
       },
-      detailsUrl: `#/routes?fromHubId=${h.id}`,
+      detailsUrl: `#/taxi?from=${encodeURIComponent(h.name)}`,
       description: `Official shared and reserved taxi stand in ${h.name}.`,
       rawItem: h
     });
@@ -389,7 +389,7 @@ export function buildUnifiedDataset(datasets: {
         familyFriendly: true,
         coupleFriendly: true,
       },
-      detailsUrl: isGuide ? `#/travel-guides` : `#/routes`,
+      detailsUrl: isGuide ? `#/travel-guides` : `#/taxi`,
       description: `Certified local ${isGuide ? 'mountain guide' : 'hill driver'} with extensive local experience.`,
       rawItem: d
     });
@@ -593,7 +593,7 @@ export function searchHillyTrip(
     { id: 'homestays', title: 'Homestays', icon: '🏡', viewAllUrl: '#/homestays' },
     { id: 'restaurants', title: 'Restaurants', icon: '🍴', viewAllUrl: '#/restaurants' },
     { id: 'offers', title: 'Special Offers & Deals', icon: '🎁', viewAllUrl: '#/offers' },
-    { id: 'taxi', title: 'Taxi Stands & Journeys', icon: '🧭', viewAllUrl: '#/journeys' },
+    { id: 'taxi', title: 'Taxi Stands & Transfers', icon: '🚖', viewAllUrl: '#/taxi' },
     { id: 'guides', title: 'Guides', icon: '👤', viewAllUrl: '#/travel-guides' },
     { id: 'experiences', title: 'Experiences', icon: '🎒', viewAllUrl: '#/experiences' },
     { id: 'blogs', title: 'Blogs & Guides', icon: '📰', viewAllUrl: '#/travel-guides' },

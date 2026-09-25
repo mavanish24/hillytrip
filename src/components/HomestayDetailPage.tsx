@@ -2181,10 +2181,10 @@ export const HomestayDetailPage: React.FC<HomestayDetailPageProps> = ({
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           onSelectTaxiStand={(ts) => {
-            navigate(`#/routes?from=${encodeURIComponent(ts.taxi_stand_name || ts.name)}`);
+            navigate(`#/taxi?from=${encodeURIComponent(ts.taxi_stand_name || ts.name)}`);
           }}
           onBookTaxi={(fromHub, toDest) => {
-            navigate(`#/routes?from=${encodeURIComponent(fromHub)}&to=${encodeURIComponent(toDest || '')}`);
+            navigate(`#/taxi?from=${encodeURIComponent(fromHub)}&to=${encodeURIComponent(toDest || '')}`);
           }}
         />
       </div>

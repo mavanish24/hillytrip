@@ -3,22 +3,11 @@ import {
   Compass, 
   Mountain,
   Car,
-  Building2,
-  Shield,
-  Server,
   X, 
   LogIn, 
   LogOut, 
   User as UserIcon, 
   WifiOff, 
-  Sun, 
-  Moon, 
-  Palette,
-  Radio,
-  Globe,
-  MessageSquare,
-  Settings,
-  Briefcase,
   Search,
   Camera,
   Upload,
@@ -26,18 +15,10 @@ import {
   ArrowRight,
   ArrowLeft,
   Loader2,
-  ChevronRight,
   ChevronDown,
   Sparkles,
-  Award,
-  Clock,
-  Calendar,
-  Boxes,
-  Heart,
   MapPin,
-  Home,
-  Menu,
-  ShieldCheck
+  Home
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AnimatedLogo } from './AnimatedLogo';
@@ -45,10 +26,11 @@ import UserNotificationBell from './UserNotificationBell';
 import { useThemeEngine } from './ThemeContext';
 import { useBranding } from './BrandingContext';
 import { ProfileNavigationMenu } from './navigation/ProfileNavigationMenu';
-import { MAIN_NAVIGATION } from '../constants/navigation';
 import { roleService } from '../services/navigation/RoleService';
 
 import UniversalHeroSearchModal from './search/UniversalHeroSearchModal';
+import MobileSearchModal from './search/MobileSearchModal';
+import MobileAccountDrawer from './navigation/MobileAccountDrawer';
 import { SearchDataSources } from '../lib/universalHeroSearchEngine';
 import { Destination, Attraction, Homestay, Driver, Hub, Route } from '../types';
 
@@ -102,32 +84,19 @@ export default function Navbar({
   const { activeTheme, setTheme: setThemePreset, themes } = useThemeEngine();
   
   // Navigation & UI state
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isMobileAccountDrawerOpen, setIsMobileAccountDrawerOpen] = useState(false);
   const [unreadChatCount, setUnreadChatCount] = useState(0);
   const [wishlistCount, setWishlistCount] = useState(0);
   const [logoImgError, setLogoImgError] = useState(false);
-  const themeMenuRef = useRef<HTMLDivElement>(null);
 
   // Close menus on route change
   useEffect(() => {
-    setIsOpen(false);
-    setIsMenuOpen(false);
     setIsProfileOpen(false);
+    setIsMobileSearchOpen(false);
+    setIsMobileAccountDrawerOpen(false);
   }, [currentHash]);
-
-  // Outside click listener for Theme Menu
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (themeMenuRef.current && !themeMenuRef.current.contains(event.target as Node)) {
-        setIsThemeMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   // Live Saved/Wishlist Count Listener
   useEffect(() => {
@@ -328,21 +297,6 @@ export default function Navbar({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Swipe closing right drawer with PopState integration for Back button
-  useEffect(() => {
-    if (isOpen) {
-      const handlePopState = () => {
-        setIsOpen(false);
-      };
-      window.addEventListener('popstate', handlePopState);
-      window.history.pushState({ drawerOpen: true }, '');
-
-      return () => {
-        window.removeEventListener('popstate', handlePopState);
-      };
-    }
-  }, [isOpen]);
-
   const showThemeChangeToast = (name: string, emoji: string) => {
     if (toastTimeout.current) clearTimeout(toastTimeout.current);
     setActiveThemeToast({ name, emoji });
@@ -363,13 +317,6 @@ export default function Navbar({
     emoji: activeTheme.emoji,
     color: activeTheme.primaryColor,
     mood: activeTheme.mood
-  };
-
-  const handleDrawerNavigate = (targetHash: string) => {
-    setIsOpen(false);
-    setTimeout(() => {
-      navigate(targetHash);
-    }, 280); // Wait until closing slide completes
   };
 
   // Profile Photo Crop/Zoom Drag Mouse/Touch Event Handlers
@@ -623,7 +570,52 @@ export default function Navbar({
     }
   };
 
-  const NAV_ITEMS = MAIN_NAVIGATION;
+  const DESKTOP_NAV_ITEMS = [
+    {
+      id: 'destinations',
+      label: 'Destinations',
+      path: '#/destinations',
+      icon: Mountain,
+      isActive: () => checkIsActive('/destinations') || checkIsActive('/villages') || checkIsActive('/destination') || checkIsActive('/village'),
+    },
+    {
+      id: 'attractions',
+      label: 'Attractions',
+      path: '#/attractions',
+      icon: MapPin,
+      isActive: () => checkIsActive('/attractions') || checkIsActive('/attraction'),
+    },
+    {
+      id: 'homestays',
+      label: 'Homestays',
+      path: '#/homestays',
+      icon: Home,
+      isActive: () => checkIsActive('/homestays') || checkIsActive('/homestay') || checkIsActive('/stays') || checkIsActive('/stay'),
+    },
+    {
+      id: 'taxi',
+      label: 'Taxi',
+      path: '#/taxi',
+      icon: Car,
+      isActive: () => checkIsActive('/taxi') || checkIsActive('/book-car'),
+    },
+    {
+      id: 'explore',
+      label: 'Explore',
+      path: '#/explore',
+      icon: Compass,
+      isActive: () => (currentPath === '/explore' || currentPath.startsWith('/explore/') || currentPath === '/' || currentPath === '' || currentPath === '/journeys') &&
+        !checkIsActive('/destinations') && !checkIsActive('/villages') && !checkIsActive('/attractions') && !checkIsActive('/homestays') && !checkIsActive('/taxi') && !checkIsActive('/ai-planner'),
+    },
+    {
+      id: 'ai-planner',
+      label: 'AI Planner',
+      path: '#/ai-planner',
+      icon: Sparkles,
+      isAi: true,
+      isActive: () => checkIsActive('/ai-planner') || checkIsActive('/plan-my-trip'),
+    },
+  ];
 
   const checkIsActive = (path: string) => {
     const cleanTarget = path.startsWith('#') ? path.substring(1) : path;
@@ -637,26 +629,26 @@ export default function Navbar({
     <>
       {/* Redesigned Premium Glass Sticky Navbar */}
       <header
-        className={`sticky top-0 left-0 right-0 z-50 select-none transition-all duration-500 ease-out h-[62px] md:h-[70px] lg:h-[76px] flex items-center ${
+        className={`sticky top-0 left-0 right-0 z-50 select-none transition-all duration-300 ease-out h-[60px] sm:h-[64px] md:h-[70px] lg:h-[76px] flex items-center ${
           isScrolled
-            ? 'bg-[#090d16]/90 backdrop-blur-[36px] border-b border-white/[0.12] shadow-[0_16px_40px_rgba(0,0,0,0.6)] px-3 sm:px-4 md:px-6 lg:px-8'
-            : 'bg-slate-950/40 backdrop-blur-xl border-b border-white/[0.08] px-3 sm:px-4 md:px-6 lg:px-8'
+            ? 'bg-[#090d16]/95 backdrop-blur-2xl border-b border-white/[0.12] shadow-[0_16px_40px_rgba(0,0,0,0.6)] px-2.5 sm:px-4 md:px-6 lg:px-8'
+            : 'bg-slate-950/70 backdrop-blur-xl border-b border-white/[0.08] px-2.5 sm:px-4 md:px-6 lg:px-8'
         }`}
       >
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-3 lg:gap-5 min-w-0">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-3 lg:gap-5 min-w-0">
           
-          {/* LEFT: HillyTrip Logo & Subtitle */}
-          <div className="flex items-center gap-2 lg:gap-3 shrink-0">
+          {/* LEFT: HillyTrip Logo & Himalayan Escapes subtitle */}
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 shrink-0">
             <button
               onClick={() => navigate('#/')}
-              className="flex items-center gap-2.5 text-white hover:text-amber-300 transition-all cursor-pointer group text-left focus:outline-none"
+              className="flex items-center gap-2 sm:gap-2.5 text-white hover:text-orange-400 transition-all cursor-pointer group text-left focus:outline-none"
               aria-label="HillyTrip Home"
             >
-              <div className="p-2 sm:p-2.5 rounded-2xl bg-amber-500/15 border border-amber-400/30 backdrop-blur-md text-amber-400 group-hover:scale-105 group-hover:border-amber-400/60 transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)]">
-                <Compass className="w-5 h-5 text-amber-400 group-hover:rotate-45 transition-transform duration-300" />
+              <div className="p-1.5 sm:p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-orange-500/15 border border-orange-400/30 backdrop-blur-md text-orange-400 group-hover:scale-105 group-hover:border-orange-400/60 transition-all shadow-[0_0_20px_rgba(249,115,22,0.25)]">
+                <Compass className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400 group-hover:rotate-45 transition-transform duration-300" />
               </div>
               <div className="flex flex-col">
-                <span className="font-['Plus_Jakarta_Sans'] font-black text-xl lg:text-2xl tracking-tight text-white group-hover:text-amber-300 transition-colors drop-shadow-sm leading-none">
+                <span className="font-['Plus_Jakarta_Sans'] font-black text-lg sm:text-xl lg:text-2xl tracking-tight text-white group-hover:text-orange-300 transition-colors drop-shadow-sm leading-none">
                   HillyTrip
                 </span>
                 <span className="hidden sm:block text-[9px] lg:text-[10px] font-['Inter'] font-semibold tracking-[0.2em] text-slate-300 uppercase mt-1 opacity-90">
@@ -666,26 +658,29 @@ export default function Navbar({
             </button>
 
             {isOffline && (
-              <span className="bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-amber-400/30 flex items-center gap-1 backdrop-blur-md shrink-0">
+              <span className="bg-orange-500/20 text-orange-300 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-orange-400/30 flex items-center gap-1 backdrop-blur-md shrink-0">
                 <WifiOff className="w-3 h-3" />
                 <span className="hidden xs:inline">Offline</span>
               </span>
             )}
           </div>
 
-          {/* CENTER: Primary Navigation Pill (Desktop & Laptop) */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 p-1.5 rounded-full bg-slate-950/50 border border-white/15 backdrop-blur-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.35)] text-xs font-semibold text-slate-100 relative font-['Inter'] shrink min-w-0">
+          {/* CENTER: Desktop Navigation Pill: [Destinations] [Attractions] [Homestays] [Taxi] [Explore] [AI Planner] */}
+          <nav 
+            className="hidden md:flex items-center gap-1 lg:gap-1.5 p-1 lg:p-1.5 rounded-full bg-slate-950/60 border border-white/15 backdrop-blur-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.35)] text-xs font-semibold text-slate-100 relative font-['Inter'] shrink min-w-0"
+            aria-label="Main Navigation"
+          >
             <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
-            {NAV_ITEMS.map((item) => {
+            {DESKTOP_NAV_ITEMS.map((item) => {
               const Icon = item.icon;
-              const active = checkIsActive(item.path);
-              const isAi = item.isAi || item.id === 'ai-planner';
-              const isSecondary = item.id === 'offers' || item.id === 'journeys';
+              const active = item.isActive();
+              const isAi = item.isAi;
 
               if (isAi) {
                 return (
                   <button
                     key={item.id}
+                    type="button"
                     onClick={() => {
                       if (onOpenAiPlanner) {
                         onOpenAiPlanner();
@@ -693,10 +688,10 @@ export default function Navbar({
                         navigate('#/ai-planner');
                       }
                     }}
-                    className="navbar-font font-['Inter'] relative flex items-center gap-1.5 px-3 py-1.5 xl:px-3.5 xl:py-1.5 rounded-full transition-all duration-300 cursor-pointer whitespace-nowrap text-xs font-bold bg-gradient-to-r from-amber-500/20 via-amber-400/20 to-purple-500/25 border border-amber-300/50 text-amber-200 hover:text-white shadow-[0_0_16px_rgba(168,85,247,0.3),0_0_10px_rgba(245,158,11,0.3)] hover:shadow-[0_0_22px_rgba(168,85,247,0.5),0_0_16px_rgba(245,158,11,0.5)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-95 shrink-0"
+                    className="relative flex items-center gap-1.5 px-3 py-1.5 lg:px-3.5 lg:py-1.5 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap text-xs font-bold bg-gradient-to-r from-orange-500/25 via-amber-500/25 to-purple-500/30 border border-orange-400/50 text-amber-200 hover:text-white shadow-[0_0_16px_rgba(249,115,22,0.25)] hover:scale-[1.03] active:scale-95 shrink-0"
                   >
                     <Icon className="w-3.5 h-3.5 text-amber-300 animate-pulse shrink-0" />
-                    <span className="tracking-wide bg-gradient-to-r from-amber-200 via-amber-100 to-white bg-clip-text text-transparent">
+                    <span className="tracking-wide text-amber-100">
                       {item.label}
                     </span>
                   </button>
@@ -706,166 +701,53 @@ export default function Navbar({
               return (
                 <button
                   key={item.id}
+                  type="button"
                   onClick={() => navigate(item.path)}
-                  className={`navbar-font font-['Inter'] relative items-center gap-1.5 px-3 py-1.5 xl:px-3.5 xl:py-1.5 rounded-full transition-all duration-300 cursor-pointer whitespace-nowrap text-xs font-semibold ${
-                    isSecondary ? 'hidden 2xl:flex' : 'flex'
-                  } ${
+                  className={`relative flex items-center gap-1.5 px-2.5 py-1.5 lg:px-3 lg:py-1.5 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap text-xs font-semibold ${
                     active
-                      ? 'bg-white/15 text-white font-bold border border-white/25 shadow-[0_0_16px_rgba(245,158,11,0.2)]'
+                      ? 'bg-white/15 text-white font-bold border border-white/25 shadow-[0_0_16px_rgba(249,115,22,0.2)]'
                       : 'text-slate-200/90 hover:text-white hover:bg-white/10'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 shrink-0 transition-all ${active ? 'text-amber-300 drop-shadow-[0_0_6px_rgba(245,158,11,0.8)]' : 'text-slate-300'}`} />
+                  <Icon className={`w-3.5 h-3.5 shrink-0 transition-all ${active ? 'text-orange-400 drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]' : 'text-slate-300'}`} />
                   <span className="tracking-wide">{item.label}</span>
                   {active && (
-                    <span className="absolute bottom-0.5 left-3 right-3 h-[2px] bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.9)]" />
-                  )}
-                  {item.badge && (
-                    <span className="inline-flex items-center px-1.5 py-0.2 rounded-full text-[8px] font-black tracking-wider uppercase bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-xs border border-orange-300/30 leading-none shrink-0 ml-0.5">
-                      {item.badge}
-                    </span>
+                    <span className="absolute bottom-0.5 left-3 right-3 h-[2px] bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 rounded-full shadow-[0_0_8px_rgba(249,115,22,0.9)]" />
                   )}
                 </button>
               );
             })}
           </nav>
 
-          {/* RIGHT (DESKTOP & LAPTOP): Streamlined Utility Icons Group + Corner Sign In / Profile */}
-          <div className="hidden md:flex items-center gap-2 lg:gap-2.5 shrink-0">
+          {/* RIGHT (DESKTOP): [Search] [Bell] [Profile / (Sign In + Sign Up)] */}
+          <div className="hidden md:flex items-center gap-2 lg:gap-3 shrink-0">
             {/* Search Trigger */}
             <button
+              type="button"
               onClick={() => setIsHeroSearchOpen(true)}
-              className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white/[0.07] hover:bg-white/[0.12] border border-white/15 backdrop-blur-xl flex items-center justify-center text-slate-100 hover:text-white transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:scale-105 hover:shadow-[0_0_16px_rgba(255,255,255,0.2)] hover:border-white/30 active:scale-95 shrink-0"
-              title="Search villages, stays, routes..."
+              className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white/[0.07] hover:bg-white/[0.14] border border-white/15 backdrop-blur-xl flex items-center justify-center text-slate-100 hover:text-white transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 shrink-0"
+              title="Search destinations, stays, routes"
               aria-label="Search"
             >
               <Search className="w-4 h-4 text-slate-100 hover:text-white" />
             </button>
 
-            {/* Wishlist Button */}
-            <button
-              onClick={() => navigate('#/likes')}
-              className="relative w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white/[0.07] hover:bg-white/[0.12] border border-white/15 backdrop-blur-xl flex items-center justify-center text-slate-100 hover:text-rose-400 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:scale-105 hover:shadow-[0_0_16px_rgba(244,63,94,0.3)] hover:border-rose-400/40 active:scale-95 group shrink-0"
-              title="Saved Wishlist"
-              aria-label="Wishlist"
-            >
-              <Heart className="w-4 h-4 text-slate-100 group-hover:text-rose-400 group-hover:scale-110 transition-all" />
-              {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-[9px] font-black text-white bg-rose-500 rounded-full border border-slate-950 shadow-sm animate-pulse">
-                  {wishlistCount}
-                </span>
-              )}
-            </button>
-
-            {/* Messages / Chat Trigger */}
-            <button
-              id="desktop-header-messages-btn"
-              onClick={() => navigate('#/messages')}
-              className="relative w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white/[0.07] hover:bg-white/[0.12] border border-white/15 backdrop-blur-xl flex items-center justify-center text-slate-100 hover:text-amber-300 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:scale-105 hover:shadow-[0_0_16px_rgba(245,158,11,0.25)] hover:border-amber-400/40 active:scale-95 group shrink-0"
-              title="Messages & Chat"
-              aria-label="Messages"
-            >
-              <MessageSquare className="w-4 h-4 text-slate-100 group-hover:text-amber-300 transition-all" />
-              {unreadChatCount > 0 && (
-                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-[9px] font-black text-white bg-amber-500 rounded-full border border-slate-950 shadow-sm animate-pulse">
-                  {unreadChatCount}
-                </span>
-              )}
-            </button>
-
-            {/* Notifications Trigger (Desktop) */}
+            {/* Notifications Trigger */}
             <div className="relative shrink-0 flex items-center justify-center">
               <UserNotificationBell />
             </div>
 
-            {/* Theme Toggle (Desktop) */}
-            <button
-              id="desktop-header-theme-btn"
-              onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
-              className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white/[0.07] hover:bg-white/[0.12] border border-white/15 backdrop-blur-xl flex items-center justify-center text-slate-100 hover:text-amber-300 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:scale-105 hover:shadow-[0_0_16px_rgba(255,255,255,0.2)] hover:border-white/30 active:scale-95 shrink-0"
-              title={themeMode === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
-              aria-label="Toggle Theme"
-            >
-              {themeMode === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-300 animate-pulse" />
-              ) : (
-                <Moon className="w-4 h-4 text-slate-100" />
-              )}
-            </button>
-
-            {/* 🛡️ Admin Console Direct Shortcut (Visible only to authorized admins) */}
-            {isAdmin && (
-              <button
-                onClick={() => navigate('#/admin')}
-                className={`h-9 lg:h-10 px-2.5 lg:px-3 rounded-full border backdrop-blur-xl flex items-center gap-1.5 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:scale-105 active:scale-95 shrink-0 ${
-                  checkIsActive('/admin')
-                    ? 'bg-purple-600/35 border-purple-400 text-white font-black shadow-[0_0_20px_rgba(168,85,247,0.45)] ring-1 ring-purple-400/50'
-                    : 'bg-purple-950/45 border-purple-500/40 text-purple-200 hover:text-white hover:bg-purple-900/60 hover:border-purple-400/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]'
-                }`}
-                title="Admin Panel & Operations Console"
-                aria-label="Admin Panel"
-              >
-                <ShieldCheck className="w-4 h-4 text-purple-300" />
-                <span className="text-[11px] lg:text-xs font-black tracking-wider uppercase text-purple-100 hidden 2xl:inline">Admin</span>
-              </button>
-            )}
-
-            {/* Explore Menu Trigger Button */}
-            <div className="relative">
-              <button
-                id="desktop-header-menu-btn"
-                onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
-                  setIsProfileOpen(false);
-                }}
-                className={`relative w-9 h-9 lg:w-10 lg:h-10 rounded-full border backdrop-blur-xl flex items-center justify-center transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:scale-105 active:scale-95 shrink-0 ${
-                  isMenuOpen
-                    ? 'bg-amber-500/20 border-amber-400/60 text-amber-300 shadow-[0_0_16px_rgba(245,158,11,0.3)]'
-                    : 'bg-white/[0.07] hover:bg-white/[0.12] border-white/15 text-slate-100 hover:text-amber-300 hover:shadow-[0_0_16px_rgba(255,255,255,0.2)] hover:border-white/30'
-                }`}
-                title="Explore & Navigation Menu"
-                aria-label="Explore & Navigation Menu"
-              >
-                <Menu className="w-4 h-4 lg:w-4.5 lg:h-4.5" />
-              </button>
-
-              {/* Navigation / Explore Dropdown */}
-              <div className="hidden md:block">
-                <ProfileNavigationMenu
-                  isOpen={isMenuOpen}
-                  onClose={() => setIsMenuOpen(false)}
-                  mode="navigation"
-                  user={user}
-                  isAdmin={isAdmin}
-                  navigate={navigate}
-                  currentPath={currentPath}
-                  onLogin={onLogin}
-                  onLogout={onLogout}
-                  onOpenAiPlanner={onOpenAiPlanner}
-                  wishlistCount={wishlistCount}
-                  unreadNotificationsCount={unreadChatCount}
-                  themeMode={themeMode}
-                  setThemeMode={setThemeMode}
-                  activeTheme={activeTheme}
-                  setThemePreset={setThemePreset}
-                  themes={themes}
-                />
-              </div>
-            </div>
-
-            {/* FAR RIGHT CORNER: Sign In Button or User Avatar Profile Pill */}
-            <div className="relative shrink-0 flex items-center ml-1">
-              {user ? (
+            {/* Authenticated State: Profile Avatar Button with dropdown menu */}
+            {user ? (
+              <div className="relative shrink-0 flex items-center">
                 <button
                   id="desktop-header-profile-btn"
-                  onClick={() => {
-                    setIsProfileOpen(!isProfileOpen);
-                    setIsMenuOpen(false);
-                  }}
-                  className={`h-9 lg:h-10 pl-1.5 pr-3 rounded-full border backdrop-blur-xl flex items-center gap-2 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:scale-105 active:scale-95 ring-1 ${
+                  type="button"
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className={`h-9 lg:h-10 pl-1.5 pr-3 rounded-full border backdrop-blur-xl flex items-center gap-2 transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 ${
                     isProfileOpen
-                      ? 'bg-emerald-500/20 border-emerald-400/60 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] ring-emerald-400/50'
-                      : 'bg-white/[0.07] hover:bg-white/[0.12] border-white/15 text-slate-100 hover:text-white hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:border-amber-400/40 ring-amber-400/30'
+                      ? 'bg-orange-500/20 border-orange-400/60 text-white shadow-[0_0_16px_rgba(249,115,22,0.3)] ring-1 ring-orange-400/50'
+                      : 'bg-white/[0.07] hover:bg-white/[0.14] border-white/15 text-slate-100 hover:text-white'
                   }`}
                   title="User Account & Profile Menu"
                   aria-label="User Account & Profile Menu"
@@ -873,207 +755,163 @@ export default function Navbar({
                   {user?.photoURL && user.photoURL.trim() !== '' ? (
                     <img src={user.photoURL} alt="Profile" className="w-7 h-7 lg:w-8 lg:h-8 rounded-full object-cover border border-white/30 shrink-0" referrerPolicy="no-referrer" />
                   ) : (
-                    <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center font-mono shrink-0 shadow-sm">
+                    <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center font-mono shrink-0 shadow-xs">
                       {(user.name || user.displayName || user.email || 'U').charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <span className="hidden xl:block text-xs font-bold text-slate-100 max-w-[90px] truncate">
+                  <span className="hidden xl:block text-xs font-bold text-slate-100 max-w-[100px] truncate">
                     {user.name || user.displayName || user.email?.split('@')[0] || 'Account'}
                   </span>
                   <ChevronDown className={`w-3.5 h-3.5 text-slate-300 transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`} />
                 </button>
-              ) : (
+
+                {/* Existing Desktop Profile Navigation Dropdown */}
+                <div className="hidden md:block">
+                  <ProfileNavigationMenu
+                    isOpen={isProfileOpen}
+                    onClose={() => setIsProfileOpen(false)}
+                    mode="profile"
+                    user={user}
+                    isAdmin={isAdmin}
+                    navigate={navigate}
+                    currentPath={currentPath}
+                    onLogin={onLogin}
+                    onLogout={onLogout}
+                    onOpenAiPlanner={onOpenAiPlanner}
+                    wishlistCount={wishlistCount}
+                    unreadNotificationsCount={unreadChatCount}
+                    themeMode={themeMode}
+                    setThemeMode={setThemeMode}
+                    activeTheme={activeTheme}
+                    setThemePreset={setThemePreset}
+                    themes={themes}
+                  />
+                </div>
+              </div>
+            ) : (
+              /* Guest State: Sign In only */
+              <div className="flex items-center shrink-0">
                 <button
                   id="desktop-header-signin-btn"
+                  type="button"
                   onClick={onLogin}
-                  className="h-9 px-3.5 lg:h-10 lg:px-5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 lg:gap-2 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:shadow-[0_0_28px_rgba(245,158,11,0.65)] border border-amber-300/80 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:scale-105 active:scale-95 shrink-0 whitespace-nowrap"
+                  className="h-9 px-4 lg:h-10 lg:px-5 rounded-full bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-[0_0_16px_rgba(249,115,22,0.3)] transition-all cursor-pointer hover:scale-105 active:scale-95 shrink-0 whitespace-nowrap"
                   title="Sign In to HillyTrip"
                   aria-label="Sign In"
                 >
-                  <LogIn className="w-4 h-4 text-slate-950 shrink-0 stroke-[2.5]" />
-                  <span className="tracking-wide">Sign In</span>
+                  <LogIn className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>Sign In</span>
                 </button>
-              )}
-
-              {/* Desktop Profile Dropdown */}
-              <div className="hidden md:block">
-                <ProfileNavigationMenu
-                  isOpen={isProfileOpen}
-                  onClose={() => setIsProfileOpen(false)}
-                  mode="profile"
-                  user={user}
-                  isAdmin={isAdmin}
-                  navigate={navigate}
-                  currentPath={currentPath}
-                  onLogin={onLogin}
-                  onLogout={onLogout}
-                  onOpenAiPlanner={onOpenAiPlanner}
-                  wishlistCount={wishlistCount}
-                  unreadNotificationsCount={unreadChatCount}
-                  themeMode={themeMode}
-                  setThemeMode={setThemeMode}
-                  activeTheme={activeTheme}
-                  setThemePreset={setThemePreset}
-                  themes={themes}
-                />
               </div>
-            </div>
+            )}
           </div>
 
-          {/* RIGHT (MOBILE) - Customized Per Guest / Logged-in Specs */}
+          {/* RIGHT (MOBILE): Compact Top Actions: [Explore] [Search] [Notifications] [Profile/Account Avatar] */}
           <div className="flex md:hidden items-center gap-1 sm:gap-1.5 shrink-0">
-            {!user ? (
-              /* GUEST USER MOBILE RIGHT NAVBAR: Search, Theme Toggle, Profile Icon */
-              <>
-                <button
-                  onClick={() => setIsHeroSearchOpen(true)}
-                  className="w-9 h-9 min-w-[36px] min-h-[36px] xs:w-10 xs:h-10 xs:min-w-[40px] xs:min-h-[40px] sm:w-11 sm:h-11 sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-full text-slate-200 hover:text-white bg-slate-900/60 hover:bg-slate-800/90 border border-white/15 backdrop-blur-md transition-all cursor-pointer active:scale-95 shrink-0"
-                  aria-label="Search"
-                  title="Search"
-                >
-                  <Search className="w-4 h-4 text-slate-200" />
-                </button>
+            {/* 1. Explore (Compact button) */}
+            <button
+              type="button"
+              onClick={() => navigate('#/explore')}
+              className="h-9 px-2 sm:h-10 sm:px-2.5 flex items-center gap-1 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] active:bg-white/20 border border-white/10 text-slate-200 hover:text-white transition-colors cursor-pointer shrink-0 text-xs font-semibold focus:outline-none"
+              aria-label="Explore"
+              title="Explore"
+            >
+              <Compass className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400 shrink-0" />
+              <span className="text-[11px] sm:text-xs">Explore</span>
+            </button>
 
-                <button
-                  onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
-                  className="w-9 h-9 min-w-[36px] min-h-[36px] xs:w-10 xs:h-10 xs:min-w-[40px] xs:min-h-[40px] sm:w-11 sm:h-11 sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-full text-slate-200 hover:text-amber-300 bg-slate-900/60 hover:bg-slate-800/90 border border-white/15 backdrop-blur-md transition-all cursor-pointer active:scale-95 shrink-0"
-                  title={themeMode === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
-                  aria-label="Toggle Theme"
-                >
-                  {themeMode === 'dark' ? (
-                    <Sun className="w-4 h-4 text-amber-300 animate-pulse" />
-                  ) : (
-                    <Moon className="w-4 h-4 text-slate-200" />
-                  )}
-                </button>
+            {/* 2. Search Lens Icon (ONLY lens icon) */}
+            <button
+              type="button"
+              onClick={() => setIsMobileSearchOpen(true)}
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl bg-white/[0.08] hover:bg-white/[0.14] active:bg-white/20 border border-white/10 text-slate-200 hover:text-white transition-colors cursor-pointer shrink-0 focus:outline-none"
+              aria-label="Search destinations, stays, routes"
+              title="Search"
+            >
+              <Search className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-200" />
+            </button>
 
-                {/* Compact circular avatar / profile icon for logged-out / guest user */}
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="w-9 h-9 min-w-[36px] min-h-[36px] xs:w-10 xs:h-10 xs:min-w-[40px] xs:min-h-[40px] sm:w-11 sm:h-11 sm:min-w-[44px] sm:min-h-[44px] p-0.5 flex items-center justify-center rounded-full bg-slate-900/60 hover:bg-slate-800/90 border border-white/20 backdrop-blur-md transition-all cursor-pointer active:scale-95 shrink-0 text-slate-200 hover:text-amber-300"
-                  aria-label="Account & Navigation Menu"
-                  title="Account & Navigation Menu"
-                >
-                  <div className="w-7 h-7 xs:w-8 xs:h-8 rounded-full bg-white/10 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 border border-white/15 flex items-center justify-center transition-all shrink-0">
-                    <UserIcon className="w-4 h-4 text-slate-200" />
+            {/* 3. Notifications Bell */}
+            <div className="relative shrink-0 flex items-center justify-center">
+              <UserNotificationBell className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl" />
+            </div>
+
+            {/* 4. Profile/Account Avatar (Icon/Avatar-only for both logged-in and logged-out) */}
+            <button
+              type="button"
+              onClick={() => setIsMobileAccountDrawerOpen(true)}
+              className="w-9 h-9 sm:w-10 sm:h-10 p-0.5 flex items-center justify-center rounded-xl bg-white/[0.08] hover:bg-white/[0.14] active:bg-white/20 border border-white/10 transition-colors cursor-pointer text-slate-200 shrink-0 focus:outline-none"
+              aria-label={user ? (user.name || user.displayName || "My Profile") : "Account Menu"}
+              title={user ? (user.name || user.displayName || "My Profile") : "Account Menu"}
+            >
+              {user ? (
+                user.photoURL && user.photoURL.trim() !== '' ? (
+                  <img
+                    src={user.photoURL}
+                    alt="Profile"
+                    className="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-cover border border-orange-400/50 shrink-0"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (user?.name || user?.displayName || user?.email) ? (
+                  <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 text-slate-950 font-black text-[11px] sm:text-xs flex items-center justify-center font-mono shrink-0 shadow-xs">
+                    {(user.name || user.displayName || user.email || 'U').charAt(0).toUpperCase()}
                   </div>
-                </button>
-              </>
-            ) : (
-              /* LOGGED-IN USER MOBILE RIGHT NAVBAR: Search, Messages, Theme Toggle, Notifications, Admin (if admin), User Avatar */
-              <>
-                <button
-                  onClick={() => setIsHeroSearchOpen(true)}
-                  className="w-9 h-9 min-w-[36px] min-h-[36px] xs:w-10 xs:h-10 xs:min-w-[40px] xs:min-h-[40px] sm:w-11 sm:h-11 sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-full text-slate-200 hover:text-white bg-slate-900/60 hover:bg-slate-800/90 border border-white/15 backdrop-blur-md transition-all cursor-pointer active:scale-95 shrink-0"
-                  aria-label="Search"
-                  title="Search"
-                >
-                  <Search className="w-4 h-4 text-slate-200" />
-                </button>
-
-                <button
-                  onClick={() => navigate('#/messages')}
-                  className="relative w-9 h-9 min-w-[36px] min-h-[36px] xs:w-10 xs:h-10 xs:min-w-[40px] xs:min-h-[40px] sm:w-11 sm:h-11 sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-full text-slate-200 hover:text-amber-300 bg-slate-900/60 hover:bg-slate-800/90 border border-white/15 backdrop-blur-md transition-all cursor-pointer active:scale-95 shrink-0"
-                  title="Messages"
-                  aria-label="Messages"
-                >
-                  <MessageSquare className="w-4 h-4 text-slate-200" />
-                  {unreadChatCount > 0 && (
-                    <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-[9px] font-black text-white bg-amber-500 rounded-full border border-slate-950 shadow-sm">
-                      {unreadChatCount}
-                    </span>
-                  )}
-                </button>
-
-                <button
-                  onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
-                  className="w-9 h-9 min-w-[36px] min-h-[36px] xs:w-10 xs:h-10 xs:min-w-[40px] xs:min-h-[40px] sm:w-11 sm:h-11 sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-full text-slate-200 hover:text-amber-300 bg-slate-900/60 hover:bg-slate-800/90 border border-white/15 backdrop-blur-md transition-all cursor-pointer active:scale-95 shrink-0"
-                  title={themeMode === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
-                  aria-label="Toggle Theme"
-                >
-                  {themeMode === 'dark' ? (
-                    <Sun className="w-4 h-4 text-amber-300 animate-pulse" />
-                  ) : (
-                    <Moon className="w-4 h-4 text-slate-200" />
-                  )}
-                </button>
-
-                <div className="relative shrink-0 flex items-center justify-center">
-                  <UserNotificationBell />
+                ) : (
+                  <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 text-slate-300 flex items-center justify-center shrink-0">
+                    <UserIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-300" />
+                  </div>
+                )
+              ) : (
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 text-slate-200 flex items-center justify-center shrink-0">
+                  <UserIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-200" />
                 </div>
-
-                {isAdmin && (
-                  <button
-                    onClick={() => navigate('#/admin')}
-                    className={`w-9 h-9 min-w-[36px] min-h-[36px] xs:w-10 xs:h-10 xs:min-w-[40px] xs:min-h-[40px] sm:w-11 sm:h-11 sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-full border backdrop-blur-md transition-all cursor-pointer active:scale-95 shrink-0 ${
-                      checkIsActive('/admin')
-                        ? 'bg-purple-600/40 border-purple-400 text-white shadow-md shadow-purple-500/30'
-                        : 'bg-purple-950/40 border-purple-500/40 text-purple-300 hover:bg-purple-900/60 hover:text-white'
-                    }`}
-                    title="Admin Panel"
-                    aria-label="Admin Panel"
-                  >
-                    <ShieldCheck className="w-4 h-4 text-purple-300" />
-                  </button>
-                )}
-
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="w-9 h-9 min-w-[36px] min-h-[36px] xs:w-10 xs:h-10 xs:min-w-[40px] xs:min-h-[40px] sm:w-11 sm:h-11 sm:min-w-[44px] sm:min-h-[44px] p-0.5 flex items-center justify-center rounded-full bg-slate-900/60 hover:bg-slate-800/90 border border-white/20 backdrop-blur-md transition-all cursor-pointer active:scale-95 shrink-0"
-                  title="User Account & Navigation Menu"
-                  aria-label="User Account"
-                >
-                  {user?.photoURL && user.photoURL.trim() !== '' ? (
-                    <img src={user.photoURL} alt="Profile" className="w-7 h-7 xs:w-8 xs:h-8 rounded-full object-cover border border-white/30 shrink-0" referrerPolicy="no-referrer" />
-                  ) : (user?.name || user?.displayName || user?.email) ? (
-                    <div className="w-7 h-7 xs:w-8 xs:h-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center font-mono shrink-0">
-                      {(user.name || user.displayName || user.email || 'U').charAt(0).toUpperCase()}
-                    </div>
-                  ) : (
-                    <div className="w-7 h-7 xs:w-8 xs:h-8 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center shrink-0">
-                      <UserIcon className="w-4 h-4 text-slate-300" />
-                    </div>
-                  )}
-                </button>
-              </>
-            )}
+              )}
+            </button>
           </div>
 
         </div>
       </header>
 
-      {/* 📱 FIXED BOTTOM MOBILE NAVIGATION (Visible on mobile < md only) - Icons ONLY */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/90 dark:bg-slate-950/90 backdrop-blur-2xl border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.6)] px-2 h-[60px] pb-[max(0.5rem,env(safe-area-inset-bottom,12px))] flex items-center justify-around w-full max-w-full">
-        {/* 1. 🏔 Villages */}
+      {/* 📱 FIXED BOTTOM MOBILE NAVIGATION (Visible on mobile < md only) - Exactly 5 items in visual order */}
+      <nav 
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 dark:bg-[#090d16]/95 backdrop-blur-2xl border-t border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] px-1 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom,8px))] flex items-center justify-around w-full select-none"
+        aria-label="Mobile Bottom Navigation"
+      >
+        {/* 1. Attractions */}
         <button
-          onClick={() => navigate('#/villages')}
-          className={`min-w-[44px] min-h-[44px] p-2 flex items-center justify-center rounded-2xl transition-all cursor-pointer active:scale-95 ${
-            checkIsActive('/villages') || checkIsActive('/village') || checkIsActive('/destinations') || checkIsActive('/destination')
-              ? 'bg-amber-500/20 text-amber-300 border border-amber-400/30 scale-105 shadow-xs'
-              : 'text-slate-400 hover:text-white'
-          }`}
-          aria-label="Villages"
-          title="Villages"
-        >
-          <Mountain className="w-5 h-5" />
-        </button>
-
-        {/* 2. 📍 Attractions */}
-        <button
+          type="button"
           onClick={() => navigate('#/attractions')}
-          className={`min-w-[44px] min-h-[44px] p-2 flex items-center justify-center rounded-2xl transition-all cursor-pointer active:scale-95 ${
+          className={`flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 px-1 rounded-xl transition-all cursor-pointer active:scale-95 text-center ${
             checkIsActive('/attractions') || checkIsActive('/attraction')
-              ? 'bg-amber-500/20 text-amber-300 border border-amber-400/30 scale-105 shadow-xs'
-              : 'text-slate-400 hover:text-white'
+              ? 'text-orange-500 font-bold'
+              : 'text-slate-400 hover:text-slate-200 font-medium'
           }`}
           aria-label="Attractions"
           title="Attractions"
         >
           <MapPin className="w-5 h-5" />
+          <span className="text-[10px] tracking-tight leading-tight mt-1">Attractions</span>
         </button>
 
-        {/* 3. 😊 Hilly (AI Planner) — Highlighted Center Button */}
+        {/* 2. Destinations */}
         <button
+          type="button"
+          onClick={() => navigate('#/destinations')}
+          className={`flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 px-1 rounded-xl transition-all cursor-pointer active:scale-95 text-center ${
+            checkIsActive('/destinations') || checkIsActive('/villages') || checkIsActive('/destination') || checkIsActive('/village')
+              ? 'text-orange-500 font-bold'
+              : 'text-slate-400 hover:text-slate-200 font-medium'
+          }`}
+          aria-label="Destinations"
+          title="Destinations"
+        >
+          <Mountain className="w-5 h-5" />
+          <span className="text-[10px] tracking-tight leading-tight mt-1">Destinations</span>
+        </button>
+
+        {/* 3. ✨ AI Planner (Center Action, Slightly Elevated, No Excessive Glow) */}
+        <button
+          type="button"
           onClick={() => {
             if (onOpenAiPlanner) {
               onOpenAiPlanner();
@@ -1081,43 +919,54 @@ export default function Navbar({
               navigate('#/ai-planner');
             }
           }}
-          className={`relative min-w-[48px] min-h-[48px] w-12 h-12 flex items-center justify-center rounded-2xl transition-all cursor-pointer active:scale-95 shadow-lg shadow-amber-500/30 border border-amber-300/50 -translate-y-2 ${
-            checkIsActive('/ai-planner')
-              ? 'bg-gradient-to-tr from-amber-400 via-amber-500 to-rose-500 text-slate-950 ring-2 ring-amber-300/60 scale-110'
-              : 'bg-gradient-to-tr from-amber-500 to-rose-500 text-slate-950 hover:brightness-110'
-          }`}
-          aria-label="Hilly AI Planner"
-          title="Hilly AI Planner"
+          className="flex flex-col items-center justify-center -translate-y-2 min-w-[56px] min-h-[48px] cursor-pointer group active:scale-95"
+          aria-label="AI Planner"
+          title="AI Planner"
         >
-          <Sparkles className="w-5.5 h-5.5 text-slate-950 animate-pulse" />
+          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-md border transition-all ${
+            checkIsActive('/ai-planner') || checkIsActive('/plan-my-trip')
+              ? 'bg-gradient-to-tr from-orange-500 via-amber-500 to-orange-400 text-slate-950 ring-2 ring-orange-400/60 shadow-orange-500/25 border-amber-300/60 scale-105'
+              : 'bg-gradient-to-tr from-orange-500 to-amber-500 text-slate-950 shadow-orange-500/20 border-amber-300/40 hover:brightness-110'
+          }`}>
+            <Sparkles className="w-5 h-5 text-slate-950" />
+          </div>
+          <span className={`text-[10px] font-bold tracking-tight mt-1 ${
+            checkIsActive('/ai-planner') || checkIsActive('/plan-my-trip') ? 'text-orange-400' : 'text-slate-300'
+          }`}>
+            AI Planner
+          </span>
         </button>
 
-        {/* 4. 🏡 Stay */}
+        {/* 4. Homestays */}
         <button
+          type="button"
           onClick={() => navigate('#/homestays')}
-          className={`min-w-[44px] min-h-[44px] p-2 flex items-center justify-center rounded-2xl transition-all cursor-pointer active:scale-95 ${
-            checkIsActive('/homestays') || checkIsActive('/stays') || checkIsActive('/stay')
-              ? 'bg-amber-500/20 text-amber-300 border border-amber-400/30 scale-105 shadow-xs'
-              : 'text-slate-400 hover:text-white'
+          className={`flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 px-1 rounded-xl transition-all cursor-pointer active:scale-95 text-center ${
+            checkIsActive('/homestays') || checkIsActive('/homestay') || checkIsActive('/stays') || checkIsActive('/stay')
+              ? 'text-orange-500 font-bold'
+              : 'text-slate-400 hover:text-slate-200 font-medium'
           }`}
-          aria-label="Stay"
-          title="Stay"
+          aria-label="Homestays"
+          title="Homestays"
         >
           <Home className="w-5 h-5" />
+          <span className="text-[10px] tracking-tight leading-tight mt-1">Homestays</span>
         </button>
 
-        {/* 5. 🚕 Taxi */}
+        {/* 5. Taxi */}
         <button
+          type="button"
           onClick={() => navigate('#/taxi')}
-          className={`min-w-[44px] min-h-[44px] p-2 flex items-center justify-center rounded-2xl transition-all cursor-pointer active:scale-95 ${
-            checkIsActive('/taxi')
-              ? 'bg-amber-500/20 text-amber-300 border border-amber-400/30 scale-105 shadow-xs'
-              : 'text-slate-400 hover:text-white'
+          className={`flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 px-1 rounded-xl transition-all cursor-pointer active:scale-95 text-center ${
+            checkIsActive('/taxi') || checkIsActive('/book-car')
+              ? 'text-orange-500 font-bold'
+              : 'text-slate-400 hover:text-slate-200 font-medium'
           }`}
           aria-label="Taxi"
           title="Taxi"
         >
           <Car className="w-5 h-5" />
+          <span className="text-[10px] tracking-tight leading-tight mt-1">Taxi</span>
         </button>
       </nav>
 
@@ -1136,7 +985,7 @@ export default function Navbar({
         )}
       </AnimatePresence>
 
-      {/* 🔍 Universal Spotlight Search Modal (Shared with Hero Search) */}
+      {/* 🔍 Universal Spotlight Search Modal (Shared with Desktop Hero Search) */}
       <UniversalHeroSearchModal
         isOpen={isHeroSearchOpen}
         onClose={() => setIsHeroSearchOpen(false)}
@@ -1145,27 +994,28 @@ export default function Navbar({
         sources={searchSources}
       />
 
-      {/* Mobile Profile Navigation Sheet / Drawer */}
-      <div className="md:hidden">
-        <ProfileNavigationMenu
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          user={user}
-          isAdmin={isAdmin}
-          navigate={navigate}
-          currentPath={currentPath}
-          onLogin={onLogin}
-          onLogout={onLogout}
-          onOpenAiPlanner={onOpenAiPlanner}
-          wishlistCount={wishlistCount}
-          unreadNotificationsCount={unreadChatCount}
-          themeMode={themeMode}
-          setThemeMode={setThemeMode}
-          activeTheme={activeTheme}
-          setThemePreset={setThemePreset}
-          themes={themes}
-        />
-      </div>
+      {/* 📱 Full-Screen Dedicated Mobile Search Experience */}
+      <MobileSearchModal
+        isOpen={isMobileSearchOpen}
+        onClose={() => setIsMobileSearchOpen(false)}
+        navigate={navigate}
+        sources={searchSources}
+      />
+
+      {/* 👤 Clean Mobile Account & Profile Drawer */}
+      <MobileAccountDrawer
+        isOpen={isMobileAccountDrawerOpen}
+        onClose={() => setIsMobileAccountDrawerOpen(false)}
+        user={user}
+        onLogin={onLogin}
+        onLogout={onLogout}
+        navigate={navigate}
+        currentPath={currentPath}
+        wishlistCount={wishlistCount}
+        unreadMessagesCount={unreadChatCount}
+        themeMode={themeMode}
+        setThemeMode={setThemeMode}
+      />
 
       {/* 👤 HIGH-FIDELITY PROFILE PHOTO EDITOR MODAL */}
       <AnimatePresence>

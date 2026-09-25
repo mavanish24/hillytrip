@@ -40,17 +40,26 @@ export const TaxiRoutes: React.FC<TaxiRoutesProps> = ({
   handleUserLogin
 }) => {
   const cleanPath = (currentPath || '').split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
+
+  const isOldJourneyRoute = 
+    cleanPath === '/journeys' || 
+    cleanPath.startsWith('/journeys/') || 
+    cleanPath === '/journey' || 
+    cleanPath.startsWith('/journey/') || 
+    cleanPath === '/routes' || 
+    cleanPath.startsWith('/routes/') || 
+    cleanPath === '/route' || 
+    cleanPath.startsWith('/route/');
+
+  React.useEffect(() => {
+    if (isOldJourneyRoute) {
+      navigate('#/explore');
+    }
+  }, [isOldJourneyRoute, navigate]);
+
   const isTaxi = cleanPath === '/taxi' || 
                  cleanPath === '/taxis' || 
                  cleanPath.startsWith('/taxi/') ||
-                 cleanPath === '/journeys' || 
-                 cleanPath.startsWith('/journeys/') || 
-                 cleanPath === '/journey' || 
-                 cleanPath.startsWith('/journey/') || 
-                 cleanPath === '/routes' || 
-                 cleanPath.startsWith('/routes/') || 
-                 cleanPath === '/route' || 
-                 cleanPath.startsWith('/route/') || 
                  cleanPath === '/book-car';
   const isOperatorProfile = cleanPath.startsWith('/taxi-operator/') || cleanPath.startsWith('/operator/');
   const isBookTaxi = cleanPath === '/book-taxi' || cleanPath.startsWith('/book-taxi/');

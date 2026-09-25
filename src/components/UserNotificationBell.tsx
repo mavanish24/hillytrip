@@ -180,7 +180,11 @@ export default function UserNotificationBell({ userId: propUserId, role: propRol
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   const [coords, setCoords] = useState<{ top: number; left: number; width: number } | null>(null);
@@ -601,7 +605,7 @@ export default function UserNotificationBell({ userId: propUserId, role: propRol
             role="dialog"
             aria-modal="true"
             aria-label="Notifications Panel"
-            className="fixed z-50 bg-[var(--surface,white)] dark:bg-[var(--surface,#0f172a)] border border-slate-200 dark:border-[rgba(255,255,255,0.08)] shadow-[0_20px_60px_rgba(0,0,0,0.18)] rounded-[20px] flex flex-col h-auto max-h-[calc(100vh-120px)] md:max-h-[80vh] overflow-hidden"
+            className="fixed z-[60] bg-[var(--surface,white)] dark:bg-[var(--surface,#0f172a)] border border-slate-200 dark:border-[rgba(255,255,255,0.08)] shadow-[0_20px_60px_rgba(0,0,0,0.18)] rounded-[20px] flex flex-col h-auto max-h-[calc(100vh-120px)] md:max-h-[80vh] overflow-hidden"
             style={coords ? { top: coords.top, left: coords.left, width: coords.width } : { opacity: 0, position: 'fixed' }}
           >
             {/* Header */}

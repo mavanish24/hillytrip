@@ -496,12 +496,12 @@ export const ProfileNavigationMenu: React.FC<ProfileNavigationMenuProps> = ({
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
 
-                {/* 🗺 JOURNEYS */}
+                {/* 🗺 EXPLORE */}
                 <button
                   type="button"
-                  onClick={() => handleNav('#/journeys')}
+                  onClick={() => handleNav('#/explore')}
                   className={`w-full p-2.5 rounded-2xl flex items-center justify-between text-left transition-all cursor-pointer border ${
-                    checkIsActive('/journeys')
+                    checkIsActive('/explore')
                       ? 'bg-emerald-500/15 border-emerald-400/40 text-white font-extrabold'
                       : 'bg-white/5 border-white/5 text-slate-200 hover:bg-white/10 hover:border-white/15'
                   }`}
@@ -510,7 +510,7 @@ export const ProfileNavigationMenu: React.FC<ProfileNavigationMenuProps> = ({
                     <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-400">
                       <Route className="w-4 h-4" />
                     </div>
-                    <span className="text-xs font-bold">🗺 Journeys</span>
+                    <span className="text-xs font-bold">🗺 Explore</span>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>

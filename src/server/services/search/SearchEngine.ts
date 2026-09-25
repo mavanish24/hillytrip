@@ -172,7 +172,7 @@ export class SearchEngine {
             subtitle: `Google Routes API • ${dynRoute.distanceKm} km • ~${dynRoute.timeFormatted}`,
             description: `Live road transit calculation from ${dynRoute.fromName} to ${dynRoute.toName}. Estimated fare: ₹${dynRoute.fareMin.toLocaleString()} - ₹${dynRoute.fareMax.toLocaleString()}. Shared jeep seat: ₹${dynRoute.sharedFarePerSeat}.`,
             slug: `${dynRoute.fromHubId}-to-${dynRoute.toHubId}`,
-            canonicalUrl: `/#/journeys/${dynRoute.fromHubId}-to-${dynRoute.toHubId}`,
+            canonicalUrl: `/#/taxi?from=${encodeURIComponent(dynRoute.fromName)}&to=${encodeURIComponent(dynRoute.toName)}`,
             tags: ['route', 'journey', 'taxi', dynRoute.fromHubId, dynRoute.toHubId, dynRoute.fromName.toLowerCase(), dynRoute.toName.toLowerCase()],
             keywords: [dynRoute.fromName.toLowerCase(), dynRoute.toName.toLowerCase(), 'taxi', 'route'],
             isVerified: true,

@@ -10,6 +10,7 @@ const DestinationView = safeLazy(() => import('../views/DestinationView').then((
 const AttractionView = safeLazy(() => import('../views/AttractionView').then((m: any) => ({ default: m.AttractionView || m.default })));
 const HomestayView = safeLazy(() => import('../views/HomestayView').then((m: any) => ({ default: m.HomestayView || m.default })));
 const ExploreView = safeLazy(() => import('../components/ExploreView').then((m: any) => ({ default: m.ExploreView || m.default })));
+const ExploreCircuitDetailPage = safeLazy(() => import('../components/ExploreCircuitDetailPage').then((m: any) => ({ default: m.ExploreCircuitDetailPage || m.default })));
 const TravelGuidesView = safeLazy(() => import('../components/TravelGuidesView').then((m: any) => ({ default: m.TravelGuidesView || m.default })));
 const UniversalSearchResultsView = safeLazy(() => import('../components/search/UniversalSearchResultsView').then((m: any) => ({ default: m.UniversalSearchResultsView || m.default })));
 
@@ -94,7 +95,8 @@ export const PublicRoutes: React.FC<PublicRoutesProps> = ({
   const cleanPath = (currentPath || '').split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
   const isHome = cleanPath === '' || cleanPath === '/' || currentHash === '#/' || currentHash === '#';
 
-  const isExplore = cleanPath === '/explore' || cleanPath.startsWith('/explore/');
+  const isExploreCircuit = cleanPath.startsWith('/explore/circuit/') || currentHash.startsWith('#/explore/circuit/');
+  const isExplore = (cleanPath === '/explore' || cleanPath.startsWith('/explore/') || currentHash === '#/explore' || currentHash.startsWith('#/explore') || currentHash.startsWith('#/explore/')) && !isExploreCircuit;
   const isDestinations = cleanPath === '/villages' || cleanPath === '/village' || cleanPath.startsWith('/villages/') || cleanPath.startsWith('/village/') || cleanPath === '/destinations' || cleanPath === '/destination' || cleanPath.startsWith('/destinations/') || cleanPath.startsWith('/destination/');
   const isAttractions = cleanPath === '/attractions' || cleanPath === '/attraction' || cleanPath.startsWith('/attractions/') || cleanPath.startsWith('/attraction/');
   const isHomestays = cleanPath === '/homestays' || cleanPath === '/homestay' || cleanPath === '/stays' || cleanPath === '/stay' || cleanPath.startsWith('/homestays/') || cleanPath.startsWith('/homestay/') || cleanPath.startsWith('/stays/') || cleanPath.startsWith('/stay/');
@@ -103,7 +105,7 @@ export const PublicRoutes: React.FC<PublicRoutesProps> = ({
   const isSearch = cleanPath === '/search' || cleanPath === '/results' || cleanPath.startsWith('/search/') || cleanPath.startsWith('/results/');
   const isLikes = cleanPath === '/likes' || cleanPath === '/wishlist' || cleanPath === '/saved' || currentHash === '#/likes' || currentHash === '#/wishlist' || currentHash === '#/saved';
 
-  if (!isHome && !isExplore && !isDestinations && !isAttractions && !isHomestays && !isGuides && !isOffers && !isSearch && !isLikes) {
+  if (!isHome && !isExplore && !isExploreCircuit && !isDestinations && !isAttractions && !isHomestays && !isGuides && !isOffers && !isSearch && !isLikes) {
     return null;
   }
 
@@ -151,7 +153,29 @@ export const PublicRoutes: React.FC<PublicRoutesProps> = ({
 
       {/* 2. EXPLORE VIEW */}
       {isExplore && (
-        <ExploreView navigate={navigate} />
+        <ExploreView
+          navigate={navigate}
+          destinations={destinations}
+          attractions={attractions}
+          homestays={homestays}
+          hubs={hubs}
+          setAttractionFilter={setAttractionFilter}
+        />
+      )}
+
+      {/* 2b. EXPLORE CIRCUIT DETAIL VIEW */}
+      {isExploreCircuit && (
+        <ExploreCircuitDetailPage
+          circuitSlug={(cleanPath.startsWith('/explore/circuit/')
+            ? cleanPath.replace('/explore/circuit/', '')
+            : currentHash.startsWith('#/explore/circuit/')
+              ? currentHash.replace('#/explore/circuit/', '')
+              : '').split('?')[0].split('#')[0].trim()}
+          navigate={navigate}
+          destinations={destinations}
+          attractions={attractions}
+          homestays={homestays}
+        />
       )}
 
       {/* 3. DESTINATIONS CATALOG & DETAIL */}

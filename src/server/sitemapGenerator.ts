@@ -10,7 +10,6 @@ export function generateSitemapXml(baseUrl: string): string {
     { path: '/#/explore', priority: '0.9', changefreq: 'daily' },
     { path: '/#/villages', priority: '0.9', changefreq: 'daily' },
     { path: '/#/homestays', priority: '0.9', changefreq: 'daily' },
-    { path: '/#/routes', priority: '0.8', changefreq: 'daily' },
     { path: '/#/taxi', priority: '0.8', changefreq: 'daily' },
     { path: '/#/guides', priority: '0.8', changefreq: 'weekly' },
     { path: '/#/ai-planner', priority: '0.7', changefreq: 'weekly' },
@@ -78,23 +77,6 @@ export function generateSitemapXml(baseUrl: string): string {
     }
   } catch (e) {
     console.warn('[Sitemap] Failed to append homestays to XML sitemap:', e);
-  }
-
-  // Dynamic Routes
-  try {
-    const routes = dbStore.getRoutes() || [];
-    for (const r of routes) {
-      if (!r || (!r.slug && !r.id)) continue;
-      const slug = (r.slug || r.id).toLowerCase();
-      xml += `  <url>\n`;
-      xml += `    <loc>${cleanBase}/#/route/${encodeURIComponent(slug)}</loc>\n`;
-      xml += `    <lastmod>${now}</lastmod>\n`;
-      xml += `    <changefreq>weekly</changefreq>\n`;
-      xml += `    <priority>0.70</priority>\n`;
-      xml += `  </url>\n`;
-    }
-  } catch (e) {
-    console.warn('[Sitemap] Failed to append routes to XML sitemap:', e);
   }
 
   xml += `</urlset>`;

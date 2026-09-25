@@ -227,7 +227,7 @@ export function executeUniversalHeroSearch(
         subtitle: loc ? `📍 ${loc}` : undefined,
         entityTypeKey: 'taxi_stands',
         typeParam: 'taxi-stands',
-        url: `#/routes?fromHubId=${h.id}`,
+        url: `#/taxi?from=${encodeURIComponent(standName)}`,
         popularityScore: 82 - idx,
         rawItem: h
       };
@@ -253,8 +253,8 @@ export function executeUniversalHeroSearch(
         name: title,
         subtitle: undefined, // Compact route row shows just the route title
         entityTypeKey: 'routes',
-        typeParam: 'journeys',
-        url: `#/journeys/${r.slug || r.id}`,
+        typeParam: 'taxi',
+        url: `#/taxi?from=${encodeURIComponent(fromName)}&to=${encodeURIComponent(toName)}`,
         popularityScore: 80 - idx,
         rawItem: r
       };

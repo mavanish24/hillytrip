@@ -140,15 +140,19 @@ export const HillyTripHeroSection: React.FC<HillyTripHeroSectionProps> = ({
         url: `#/homestay/${h.id}`,
         searchable: `${h.name} ${h.address} homestay stay`
       })),
-      ...routes.map(r => ({
-        id: r.id,
-        icon: '🛣',
-        title: (r.path || []).join(' → ') || 'Scenic Route',
-        category: 'Route',
-        subtitle: 'Unforgettable Journey',
-        url: `#/journeys/${r.slug || r.id}`,
-        searchable: `${(r.path || []).join(' ')} route journey`
-      }))
+      ...routes.map(r => {
+        const fromName = r.fromHubId || (r.path && r.path[0]) || '';
+        const toName = r.toHubId || (r.path && r.path[r.path.length - 1]) || '';
+        return {
+          id: r.id,
+          icon: '🚖',
+          title: (r.path || []).join(' → ') || `${fromName} to ${toName}` || 'Scenic Transit',
+          category: 'Taxi Route',
+          subtitle: `${r.distance ? `${r.distance} km • ` : ''}Taxi Transit`,
+          url: `#/taxi?from=${encodeURIComponent(fromName)}&to=${encodeURIComponent(toName)}`,
+          searchable: `${(r.path || []).join(' ')} ${fromName} ${toName} taxi route transit`
+        };
+      })
     ];
 
     const ranked = rankSearchEntities(

@@ -1,23 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
-  User, Calendar, Bookmark, MessageSquare, Star, HelpCircle, Car, Settings, 
-  LogOut, Lock, Bell, Shield, Globe, Trash2, Camera, Compass, Award, Heart, 
-  MapPin, Edit3, Image as ImageIcon, Send, Clock, BookOpen, ThumbsUp, Sparkles, Share2, ArrowRight,
-  X, ZoomIn, ZoomOut, Download, ChevronLeft, ChevronRight, Check, Loader2, Upload, LayoutDashboard, ShieldCheck
+  User as UserIcon, LayoutDashboard, Calendar, Heart, Sparkles, 
+  MessageSquare, Building2, Settings, LogOut, HelpCircle, Camera, 
+  MapPin, Mail, Phone, Compass, Mountain, Home, Car, ChevronRight, 
+  ExternalLink, Edit3, Check, X, Clock, ShieldCheck, Tag, ArrowRight, 
+  Loader2, Trash2, AlertCircle, Sun, Moon, CheckCircle2, ChevronDown
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { FeaturedPhotoUploader } from './FeaturedPhotoUploader';
-import { TravelPassport } from './TravelPassport';
-import ExplorerBadges from './ExplorerBadges';
-import { calculateExplorerScore, getExplorerLevel, CommunityUserStats } from '../lib/explorerSystem';
+import { User, Destination, Attraction, Homestay } from '../types';
+import { getOffers } from '../services/offers/OfferEngine';
+import { useThemeEngine } from './ThemeContext';
 
-interface UserProfileSystemProps {
-  user: any; // Logged-in user
-  profileUser?: any; // The user whose profile is being viewed (if viewing someone else)
-  onUpdateUser: (updatedUser: any) => void;
+export interface UserProfileSystemProps {
+  user: User;
+  profileUser?: User;
+  onUpdateUser: (updatedUser: User) => void;
   navigate: (path: string) => void;
-  setNotification: (notif: { type: 'success' | 'error', message: string } | null) => void;
+  setNotification: (notif: { type: 'success' | 'error' | 'info'; message: string } | null) => void;
   onLogout: () => void;
+  destinations?: Destination[];
+  attractions?: Attraction[];
+  homestays?: Homestay[];
+  likes?: any[];
+  toggleLike?: (contentId: string, contentType: 'destination' | 'attraction' | 'photo') => Promise<void>;
+  currentPath?: string;
+}
+
+type TabKey = 'dashboard' | 'profile' | 'bookings' | 'wishlist' | 'contributions' | 'messages' | 'settings' | 'offers';
+
+interface RealBooking {
+  id: string;
+  serviceName?: string;
+  homestayName?: string;
+  destinationName?: string;
+  leadTitle?: string;
+  customerName?: string;
+  customerEmail?: string;
+  customerMobile?: string;
+  checkInDate?: string;
+  checkOutDate?: string;
+  date?: string;
+  createdAt?: string;
+  status?: string;
+  amount?: number | string;
+  totalAmount?: number | string;
+  price?: number | string;
+  leadType?: string;
+  notes?: string;
+}
+
+interface RealConversation {
+  id: string;
+  peerName?: string;
+  peerRole?: string;
+  peerAvatar?: string;
+  lastMessage?: string;
+  lastMessageTime?: string;
+  updatedAt?: string;
+  unreadCount?: number;
+  subject?: string;
+}
+
+interface RealContribution {
+  id: string;
+  type: string;
+  details: string;
+  contributorName?: string;
+  contributorMobile?: string;
+  status: 'Pending' | 'Approved' | 'Rejected';
+  createdAt: string;
 }
 
 export default function UserProfileSystem({
@@ -26,755 +77,1866 @@ export default function UserProfileSystem({
   onUpdateUser,
   navigate,
   setNotification,
-  onLogout
+  onLogout,
+  destinations = [],
+  attractions = [],
+  homestays = [],
+  likes = [],
+  toggleLike,
+  currentPath = ''
 }: UserProfileSystemProps) {
-  // If profileUser is provided and is different from current user, we are in public view mode
-  const isPublic = !!profileUser && profileUser.id !== user?.id;
-  const activeUser = isPublic ? profileUser : user;
+  const activeUser = profileUser || user;
+  const { themeMode, setThemeMode } = useThemeEngine() as any;
 
-  // Active state for local tabs
-  const [activeTab, setActiveTab] = useState<'overview' | 'passport' | 'photos' | 'reviews' | 'moments' | 'badges'>('overview');
+  // 1. Navigation Tab State (synced with URL tab parameter)
+  const getInitialTab = (): TabKey => {
+    const hash = typeof window !== 'undefined' ? window.location.hash : '';
+    const fullUrl = `${currentPath} ${hash}`;
+    if (fullUrl.includes('tab=bookings') || fullUrl.includes('/bookings')) return 'bookings';
+    if (fullUrl.includes('tab=wishlist') || fullUrl.includes('/wishlist')) return 'wishlist';
+    if (fullUrl.includes('tab=contributions') || fullUrl.includes('/contribute')) return 'contributions';
+    if (fullUrl.includes('tab=messages') || fullUrl.includes('/messages')) return 'messages';
+    if (fullUrl.includes('tab=settings') || fullUrl.includes('/settings')) return 'settings';
+    if (fullUrl.includes('tab=profile')) return 'profile';
+    if (fullUrl.includes('tab=offers') || fullUrl.includes('/offers')) return 'offers';
+    return 'dashboard';
+  };
 
-  // Local state for interactive items with rich social metadata
-  const [profilePhotos, setProfilePhotos] = useState([
-    { 
-      id: 'p1', 
-      url: 'https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png', 
-      caption: 'Sunrise over Sissu Valley, Lahaul', 
-      likes: 24,
-      location: 'Sissu Valley, Lahaul',
-      uploadDate: 'July 14, 2026',
-      comments: [
-        { user: 'Rohit Sharma', text: 'Stunning light! Did you use a filter?' },
-        { user: 'Sneha Gupta', text: 'Heading there next week, any road advice?' }
-      ]
-    },
-    { 
-      id: 'p2', 
-      url: 'https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png', 
-      caption: 'Campfire under the starry sky at Solang', 
-      likes: 42,
-      location: 'Solang Valley, Manali',
-      uploadDate: 'July 10, 2026',
-      comments: [
-        { user: 'Vikram Negi', text: 'The night sky at Solang is truly magical.' }
-      ]
-    },
-    { 
-      id: 'p3', 
-      url: 'https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png', 
-      caption: 'Gramphu Road adventure with luxury SUV', 
-      likes: 18,
-      location: 'Gramphu, Spiti Route',
-      uploadDate: 'July 08, 2026',
-      comments: []
-    },
-    { 
-      id: 'p4', 
-      url: 'https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png', 
-      caption: 'Reaching the majestic peak of Hampta Pass', 
-      likes: 35,
-      location: 'Hampta Pass Peak',
-      uploadDate: 'July 05, 2026',
-      comments: [
-        { user: 'Arun Singh', text: 'This trek is a bucket list goal!' },
-        { user: 'Karan Negi', text: 'Excellent climb, the weather was in your favor.' }
-      ]
-    }
-  ]);
+  const [activeTab, setActiveTab] = useState<TabKey>(getInitialTab);
 
-  const [profileReviews, setProfileReviews] = useState([
-    { id: 'r1', rating: 5, target: 'Pine Crest Wood Cabin (Solang Valley)', text: 'Absolutely spectacular! The host was incredibly welcoming and local organic breakfast was stellar.', date: 'July 10, 2026' },
-    { id: 'r2', rating: 5, target: 'Karan Negi Cab Services', text: 'Highly recommended for any high-altitude transit! Extremely safe driving through Rohtang pass and Atal tunnel.', date: 'July 05, 2026' }
-  ]);
-
-  const [profileMoments, setProfileMoments] = useState([
-    {
-      id: 'm1',
-      title: 'Solitude in Lahaul Valley',
-      text: 'Crossing the Atal Tunnel on a foggy morning feels like stepping into a parallel dimension. The green slopes of Solang instantly shift to the rugged, cold, and dramatic stone peaks of Lahaul. Sissu is quiet, peaceful, and absolutely pristine.',
-      image: 'https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png',
-      time: '3 days ago',
-      likes: 15,
-      comments: 3
-    },
-    {
-      id: 'm2',
-      title: 'Reaching Chandra Taal Lake',
-      text: 'After a bumpy 4 hours on the Spiti overlander camper route, the azure waters of Chandra Taal finally appeared. Nestled at 14,000 feet, this crescent-shaped lake is a true natural wonder.',
-      image: 'https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png',
-      time: '1 week ago',
-      likes: 31,
-      comments: 7
-    }
-  ]);
-
-  // For Adding Travel Moments (owner only)
-  const [momentTitle, setMomentTitle] = useState('');
-  const [momentText, setMomentText] = useState('');
-  const [momentImage, setMomentImage] = useState('');
-  const [showAddMomentForm, setShowAddMomentForm] = useState(false);
-
-  // For Profile Editing & Image Cropping
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [editName, setEditName] = useState('');
-  const [editUsername, setEditUsername] = useState('');
-  const [editPhoto, setEditPhoto] = useState('');
-  const [editCoverUrl, setEditCoverUrl] = useState('');
-  const [editBio, setEditBio] = useState('');
-  const [editHomeLocation, setEditHomeLocation] = useState('');
-
-  // Synchronize state with current activeUser on open
+  // Sync tab with external hash changes
   useEffect(() => {
-    if (activeUser) {
-      setEditName(activeUser.name || activeUser.displayName || '');
-      setEditUsername(activeUser.username || activeUser.email?.split('@')[0] || 'explorer');
-      setEditPhoto(activeUser.photoURL || '');
-      setEditCoverUrl(activeUser.coverUrl || 'https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png');
-      setEditBio(activeUser.bio || '');
-      setEditHomeLocation(activeUser.homeLocation || 'Himalayas, India');
+    const handleHash = () => {
+      const hash = window.location.hash || '';
+      if (hash.includes('tab=bookings')) setActiveTab('bookings');
+      else if (hash.includes('tab=wishlist')) setActiveTab('wishlist');
+      else if (hash.includes('tab=contributions')) setActiveTab('contributions');
+      else if (hash.includes('tab=messages')) setActiveTab('messages');
+      else if (hash.includes('tab=settings')) setActiveTab('settings');
+      else if (hash.includes('tab=profile')) setActiveTab('profile');
+      else if (hash.includes('tab=offers')) setActiveTab('offers');
+      else if (hash === '#/dashboard' || hash === '#/profile') setActiveTab('dashboard');
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  // 2. Partner Eligibility Check
+  const isPartnerEligible = Boolean(
+    activeUser &&
+    ((activeUser.role as string) === 'partner' ||
+      (activeUser.role as string) === 'operator' ||
+      (activeUser.role as string) === 'driver' ||
+      (activeUser.role as string) === 'host' ||
+      (activeUser.role as string) === 'admin' ||
+      (activeUser.role as string) === 'moderator' ||
+      (activeUser.role as string) === 'business_owner' ||
+      (activeUser.role as string) === 'homestay_owner' ||
+      (activeUser as any).isOperator ||
+      (activeUser as any).isPartner ||
+      (activeUser as any).isDriver ||
+      (activeUser as any).isVendor ||
+      (activeUser as any).is_business_owner ||
+      (activeUser as any).is_partner ||
+      (activeUser as any).is_operator ||
+      (activeUser as any).taxiOperatorStatus === 'verified' ||
+      (activeUser as any).is_verified_operator ||
+      (activeUser as any).businessProfile?.isVerified ||
+      (activeUser as any).businessProfile?.status === 'active' ||
+      (activeUser as any).partnerProfile?.status === 'active')
+  );
+
+  // 3. Real Offers Check
+  const availableOffers = useMemo(() => {
+    try {
+      const stored = getOffers();
+      return Array.isArray(stored) ? stored.filter(o => o && o.id) : [];
+    } catch {
+      return [];
     }
-  }, [activeUser, isEditingProfile]);
+  }, []);
+  const hasRealOffers = availableOffers.length > 0;
 
-  // Image Cropping States
-  const [showPhotoOptions, setShowPhotoOptions] = useState(false);
-  const [showCropModal, setShowCropModal] = useState(false);
-  const [rawImage, setRawImage] = useState<string | null>(null);
-  const [zoom, setZoom] = useState(1);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [imgDimensions, setImgDimensions] = useState({ width: 0, height: 0 });
-  
-  // Save status states
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  // 4. Real Bookings Data
+  const [bookings, setBookings] = useState<RealBooking[]>([]);
+  const [loadingBookings, setLoadingBookings] = useState<boolean>(true);
 
-  // Full Screen Photo Viewer States
-  const [activeFullPhotoIndex, setActiveFullPhotoIndex] = useState<number | null>(null);
-  const [newPhotoComment, setNewPhotoComment] = useState('');
-  const [showAddPhotoForm, setShowAddPhotoForm] = useState(false);
-  const [newPhotoCaption, setNewPhotoCaption] = useState('');
-  const [newPhotoLocation, setNewPhotoLocation] = useState('');
-  const [newPhotoRaw, setNewPhotoRaw] = useState<string | null>(null);
-
-  // Swipe detection refs / states for Full Screen Viewer
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-
-  // Member Since Calculation
-  const getMemberSince = () => {
-    if (activeUser?.createdAt) {
-      try {
-        const date = new Date(activeUser.createdAt);
-        return 'Joined ' + date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-      } catch (e) {
-        return 'Joined July 2024';
-      }
-    }
-    return 'Joined July 2024';
-  };
-
-  // Draggable cropped image pointer event handlers
-  const handlePointerDown = (e: React.MouseEvent | React.TouchEvent) => {
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-    setIsDragging(true);
-    setDragStart({ x: clientX - position.x, y: clientY - position.y });
-  };
-
-  const handlePointerMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDragging) return;
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-    setPosition({ x: clientX - dragStart.x, y: clientY - dragStart.y });
-  };
-
-  const handlePointerUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const { naturalWidth, naturalHeight } = e.currentTarget;
-    setImgDimensions({ width: naturalWidth, height: naturalHeight });
-  };
-
-  // Base display dimensions calculated to ensure the image covers the 280px cropper box
-  const isLandscape = imgDimensions.width > imgDimensions.height;
-  const displayWidth = isLandscape ? 280 * (imgDimensions.width / imgDimensions.height) : 280;
-  const displayHeight = isLandscape ? 280 : 280 * (imgDimensions.height / imgDimensions.width);
-
-  // Mathematical Canvas Image Cropping mapping to 400x400 output
-  const cropImage = (): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const size = 400; // Output high-res avatar size
-        canvas.width = size;
-        canvas.height = size;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          reject(new Error('Canvas context not available'));
-          return;
+  const fetchUserBookings = useCallback(async () => {
+    if (!activeUser) return;
+    setLoadingBookings(true);
+    try {
+      const identifier = activeUser.email || (activeUser as any).mobile || (activeUser as any).phone || activeUser.id || '';
+      const res = await fetch(`/api/booking-leads?role=customer&identifier=${encodeURIComponent(identifier)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.leads)) {
+          setBookings(data.leads);
         }
+      }
+    } catch {
+      // Fallback: check local storage if offline
+      try {
+        const local = localStorage.getItem('hillytrip_user_bookings');
+        if (local) {
+          const parsed = JSON.parse(local);
+          if (Array.isArray(parsed)) setBookings(parsed);
+        }
+      } catch {}
+    } finally {
+      setLoadingBookings(false);
+    }
+  }, [activeUser]);
 
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, size, size);
+  useEffect(() => {
+    fetchUserBookings();
+  }, [fetchUserBookings]);
 
-        // Crop circle is 220px in a 280px UI box
-        const scaleFactor = 400 / 220;
+  // 5. Real Wishlist Items Resolution
+  const [savedIds, setSavedIds] = useState<string[]>([]);
 
-        ctx.save();
-        ctx.translate(200, 200);
-        ctx.scale(scaleFactor, scaleFactor);
-        ctx.translate(position.x, position.y);
-        ctx.scale(zoom, zoom);
+  const readSavedIds = useCallback(() => {
+    try {
+      const idSet = new Set<string>();
+      const storageKeys = [
+        'hillytrip_likes',
+        'hillytrip_saved',
+        'hillytrip_wishlist',
+        'hillytrip_homestay_wishlist',
+        'hillytrip_saved_places'
+      ];
 
-        const isLand = img.width > img.height;
-        const dW = isLand ? 280 * (img.width / img.height) : 280;
-        const dH = isLand ? 280 : 280 * (img.height / img.width);
+      storageKeys.forEach((key) => {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              parsed.forEach((item: any) => {
+                if (typeof item === 'string' && item.trim()) {
+                  idSet.add(item.trim());
+                } else if (item && typeof item === 'object') {
+                  if (item.id) idSet.add(String(item.id));
+                  else if (item.contentId) idSet.add(String(item.contentId));
+                }
+              });
+            } else if (parsed && typeof parsed === 'object') {
+              Object.keys(parsed).forEach((k) => idSet.add(k));
+            }
+          } catch {}
+        }
+      });
 
-        ctx.drawImage(img, -dW / 2, -dH / 2, dW, dH);
-        ctx.restore();
+      if (Array.isArray(likes)) {
+        likes.forEach((l) => {
+          if (l && l.contentId) idSet.add(String(l.contentId));
+        });
+      }
 
-        resolve(canvas.toDataURL('image/jpeg', 0.85));
-      };
-      img.onerror = () => reject(new Error('Failed to load image'));
-      img.src = rawImage || '';
+      setSavedIds(Array.from(idSet));
+    } catch {
+      setSavedIds([]);
+    }
+  }, [likes]);
+
+  useEffect(() => {
+    readSavedIds();
+    window.addEventListener('storage', readSavedIds);
+    return () => window.removeEventListener('storage', readSavedIds);
+  }, [readSavedIds]);
+
+  // Resolve saved items to actual entities
+  const wishlistItems = useMemo(() => {
+    const items: Array<{
+      id: string;
+      name: string;
+      category: 'village' | 'attraction' | 'homestay';
+      location?: string;
+      image?: string;
+      slug?: string;
+    }> = [];
+
+    const idSet = new Set(savedIds);
+
+    // 1. Homestays
+    homestays.forEach(h => {
+      if (idSet.has(h.id) || idSet.has(String(h.id))) {
+        items.push({
+          id: h.id,
+          name: h.name,
+          category: 'homestay',
+          location: (h as any).village || (h as any).location || h.address || 'Himalayas',
+          image: h.images?.[0] || (h as any).photos?.[0] || (h as any).image,
+          slug: h.id
+        });
+      }
     });
+
+    // 2. Destinations / Villages
+    destinations.forEach(d => {
+      if (idSet.has(d.id) || idSet.has(String(d.id)) || (d.slug && idSet.has(d.slug))) {
+        items.push({
+          id: d.id,
+          name: d.name,
+          category: 'village',
+          location: d.state || (d as any).region || 'Himalayas',
+          image: (d as any).imageUrl || (d as any).image || (d as any).heroImage,
+          slug: d.slug || d.id
+        });
+      }
+    });
+
+    // 3. Attractions
+    attractions.forEach(a => {
+      if (idSet.has(a.id) || idSet.has(String(a.id))) {
+        items.push({
+          id: a.id,
+          name: a.name,
+          category: 'attraction',
+          location: (a as any).location || a.district || 'Scenic Point',
+          image: (a as any).imageUrl || (a as any).image || (a as any).images?.[0],
+          slug: a.id
+        });
+      }
+    });
+
+    return items;
+  }, [savedIds, destinations, attractions, homestays]);
+
+  // Remove item from wishlist
+  const handleRemoveWishlist = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const nextIds = savedIds.filter(itemId => itemId !== id);
+      setSavedIds(nextIds);
+      ['hillytrip_likes', 'hillytrip_saved', 'hillytrip_wishlist', 'hillytrip_homestay_wishlist', 'hillytrip_saved_places'].forEach(key => {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              const updated = parsed.filter((item: any) => {
+                const checkId = typeof item === 'string' ? item : item?.id || item?.contentId;
+                return checkId !== id;
+              });
+              localStorage.setItem(key, JSON.stringify(updated));
+            }
+          } catch {}
+        }
+      });
+      setNotification({ type: 'info', message: 'Item removed from your wishlist.' });
+    } catch {
+      setNotification({ type: 'error', message: 'Failed to update wishlist.' });
+    }
   };
 
-  // Photo Selection handler
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, target: 'avatar' | 'gallery') => {
+  // 6. Real Contributions
+  const [contributions, setContributions] = useState<RealContribution[]>([]);
+  useEffect(() => {
+    try {
+      const local = localStorage.getItem('hillytrip_community_contributions');
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (Array.isArray(parsed)) {
+          setContributions(parsed);
+        }
+      }
+    } catch {
+      setContributions([]);
+    }
+  }, []);
+
+  // 7. Real Messages / Conversations
+  const [conversations, setConversations] = useState<RealConversation[]>([]);
+  const [loadingMessages, setLoadingMessages] = useState<boolean>(false);
+
+  const fetchConversations = useCallback(async () => {
+    if (!activeUser?.id) return;
+    setLoadingMessages(true);
+    try {
+      const res = await fetch(`/api/messaging/conversations?userId=${encodeURIComponent(activeUser.id)}&role=${encodeURIComponent(activeUser.role || 'traveler')}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.conversations)) {
+          setConversations(data.conversations);
+        }
+      }
+    } catch {
+      setConversations([]);
+    } finally {
+      setLoadingMessages(false);
+    }
+  }, [activeUser]);
+
+  useEffect(() => {
+    fetchConversations();
+  }, [fetchConversations]);
+
+  // 8. Profile Editing Form State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editName, setEditName] = useState(activeUser.name || (activeUser as any).displayName || '');
+  const [editPhone, setEditPhone] = useState((activeUser as any).phone || (activeUser as any).phoneNumber || (activeUser as any).mobile || '');
+  const [editBio, setEditBio] = useState(activeUser.bio || '');
+  const [editLocation, setEditLocation] = useState((activeUser as any).homeLocation || (activeUser as any).location || '');
+  const [editPhotoURL, setEditPhotoURL] = useState(activeUser.photoURL || '');
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+
+  const handleOpenEditModal = () => {
+    setEditName(activeUser.name || (activeUser as any).displayName || '');
+    setEditPhone((activeUser as any).phone || (activeUser as any).phoneNumber || (activeUser as any).mobile || '');
+    setEditBio(activeUser.bio || '');
+    setEditLocation((activeUser as any).homeLocation || (activeUser as any).location || '');
+    setEditPhotoURL(activeUser.photoURL || '');
+    setIsEditModalOpen(true);
+  };
+
+  const handleAvatarFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
-      if (setNotification) setNotification({ type: 'error', message: 'Unsupported file type. Please upload JPEG, PNG, or WEBP.' });
-      return;
-    }
-
     if (file.size > 5 * 1024 * 1024) {
-      if (setNotification) setNotification({ type: 'error', message: 'File size exceeds 5MB limit.' });
+      setNotification({ type: 'error', message: 'Image size should be less than 5MB.' });
       return;
     }
-
     const reader = new FileReader();
     reader.onload = () => {
-      if (target === 'avatar') {
-        setRawImage(reader.result as string);
-        setZoom(1);
-        setPosition({ x: 0, y: 0 });
-        setShowCropModal(true);
-      } else {
-        setNewPhotoRaw(reader.result as string);
+      if (typeof reader.result === 'string') {
+        setEditPhotoURL(reader.result);
       }
     };
     reader.readAsDataURL(file);
   };
 
-  // Submit avatar cropping and upload to Supabase avatars bucket
-  const handleSaveCroppedPhoto = async () => {
-    setIsUploading(true);
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingProfile(true);
     try {
-      const croppedBase64 = await cropImage();
-      const response = await fetch('/api/profile/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: activeUser.email,
-          imageBase64: croppedBase64
-        })
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Upload failed');
-      }
-
-      setEditPhoto(data.publicUrl);
-      onUpdateUser({
+      const updatedUser: User = {
         ...activeUser,
-        photoURL: data.publicUrl
-      });
+        name: editName.trim() || activeUser.name,
+        displayName: editName.trim() || (activeUser as any).displayName,
+        phone: editPhone.trim(),
+        bio: editBio.trim(),
+        homeLocation: editLocation.trim(),
+        photoURL: editPhotoURL.trim() || activeUser.photoURL
+      } as any;
 
-      if (setNotification) {
-        setNotification({ type: 'success', message: 'Photo uploaded and synchronized successfully!' });
-      }
-
-      setShowCropModal(false);
-      setShowPhotoOptions(false);
-    } catch (error: any) {
-      if (setNotification) {
-        setNotification({ type: 'error', message: error.message || 'Failed to upload photo' });
-      }
+      onUpdateUser(updatedUser);
+      setIsEditModalOpen(false);
+      setNotification({ type: 'success', message: 'Your profile has been updated successfully.' });
+    } catch {
+      setNotification({ type: 'error', message: 'Failed to update profile. Please try again.' });
     } finally {
-      setIsUploading(false);
+      setIsSavingProfile(false);
     }
   };
 
-  // Clear avatar photoURL via server endpoint
-  const handleRemovePhoto = async () => {
-    if (window.confirm('Are you sure you want to remove your profile photo?')) {
-      try {
-        const response = await fetch('/api/auth/profile/update', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: activeUser.email,
-            photoURL: ''
-          })
-        });
+  // 9. Real Activity Generation (Strictly from real data)
+  const recentActivities = useMemo(() => {
+    const activities: Array<{
+      id: string;
+      title: string;
+      time?: string;
+      icon: any;
+      type: 'booking' | 'wishlist' | 'message';
+    }> = [];
 
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to remove photo');
-        }
-
-        setEditPhoto('');
-        onUpdateUser(data.user);
-
-        if (setNotification) {
-          setNotification({ type: 'success', message: 'Profile photo removed' });
-        }
-        setShowPhotoOptions(false);
-      } catch (error: any) {
-        if (setNotification) {
-          setNotification({ type: 'error', message: error.message || 'Failed to remove photo' });
-        }
-      }
-    }
-  };
-
-  // Determine if profile fields have actual changes
-  const hasChanges = 
-    editName.trim() !== (activeUser?.name || activeUser?.displayName || '').trim() ||
-    editBio.trim() !== (activeUser?.bio || '').trim() ||
-    editPhoto !== (activeUser?.photoURL || '');
-
-  // Main profile details update (Full Name & Bio)
-  const handleUpdateProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!hasChanges || isSaving) return;
-
-    setIsSaving(true);
-    try {
-      const response = await fetch('/api/auth/profile/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: activeUser.email,
-          name: editName.trim(),
-          bio: editBio.trim(),
-          photoURL: editPhoto
-        })
+    // Real bookings
+    bookings.slice(0, 2).forEach(b => {
+      activities.push({
+        id: `act-b-${b.id}`,
+        title: `Booked ${b.homestayName || b.serviceName || b.destinationName || 'Himalayan Stay'} (${b.status || 'Pending'})`,
+        time: b.createdAt ? new Date(b.createdAt).toLocaleDateString() : undefined,
+        icon: Calendar,
+        type: 'booking'
       });
+    });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to update profile');
-      }
+    // Real wishlist
+    wishlistItems.slice(0, 2).forEach(w => {
+      activities.push({
+        id: `act-w-${w.id}`,
+        title: `Saved ${w.name} to your wishlist`,
+        icon: Heart,
+        type: 'wishlist'
+      });
+    });
 
-      setSaveSuccess(true);
-      onUpdateUser(data.user);
+    // Real messages
+    conversations.slice(0, 2).forEach(c => {
+      activities.push({
+        id: `act-m-${c.id}`,
+        title: `Message from ${c.peerName || 'Local Host'}`,
+        time: c.lastMessageTime || c.updatedAt ? new Date(c.lastMessageTime || c.updatedAt || '').toLocaleDateString() : undefined,
+        icon: MessageSquare,
+        type: 'message'
+      });
+    });
 
-      if (setNotification) {
-        setNotification({ type: 'success', message: 'Profile updated successfully!' });
-      }
+    return activities;
+  }, [bookings, wishlistItems, conversations]);
 
-      setTimeout(() => {
-        setIsEditingProfile(false);
-        setSaveSuccess(false);
-        setIsSaving(false);
-      }, 1500);
+  // Actual display name
+  const actualUserName = activeUser.name || (activeUser as any).displayName || activeUser.email?.split('@')[0] || 'Traveler';
+  const actualUserEmail = activeUser.email || '';
 
-    } catch (error: any) {
-      setIsSaving(false);
-      if (setNotification) {
-        setNotification({ type: 'error', message: error.message || 'Error updating profile' });
-      }
+  // Helpers
+  const getStatusBadge = (status?: string) => {
+    const s = (status || 'pending').toLowerCase();
+    if (s.includes('confirm') || s === 'completed' || s === 'approved') {
+      return (
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+          <Check className="w-3 h-3" /> {status || 'Confirmed'}
+        </span>
+      );
     }
-  };
-
-  const handleAddMoment = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!momentTitle.trim() || !momentText.trim()) return;
-    const newMoment = {
-      id: `m_${Date.now()}`,
-      title: momentTitle,
-      text: momentText,
-      image: momentImage || 'https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png',
-      time: 'Just now',
-      likes: 0,
-      comments: 0
-    };
-    setProfileMoments([newMoment, ...profileMoments]);
-    setMomentTitle('');
-    setMomentText('');
-    setMomentImage('');
-    setShowAddMomentForm(false);
-    if (setNotification) {
-      setNotification({ type: 'success', message: 'Travel moment shared successfully!' });
+    if (s.includes('cancel') || s === 'rejected') {
+      return (
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+          <X className="w-3 h-3" /> {status || 'Cancelled'}
+        </span>
+      );
     }
+    return (
+      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+        <Clock className="w-3 h-3" /> {status || 'Pending'}
+      </span>
+    );
   };
-
-  // Add new photo to the social gallery list
-  const handleAddGalleryPhoto = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newPhotoCaption.trim() || !newPhotoRaw) {
-      if (setNotification) setNotification({ type: 'error', message: 'Please select an image and enter a caption.' });
-      return;
-    }
-
-    const newPhoto = {
-      id: `p_${Date.now()}`,
-      url: newPhotoRaw,
-      caption: newPhotoCaption.trim(),
-      likes: 0,
-      location: newPhotoLocation.trim() || 'Himalayas',
-      uploadDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-      comments: []
-    };
-
-    setProfilePhotos([newPhoto, ...profilePhotos]);
-    setNewPhotoCaption('');
-    setNewPhotoLocation('');
-    setNewPhotoRaw(null);
-    setShowAddPhotoForm(false);
-
-    if (setNotification) {
-      setNotification({ type: 'success', message: 'Travel photo uploaded successfully to gallery!' });
-    }
-  };
-
-  // Like a photo inside Full Screen Photo Viewer
-  const handleLikePhoto = (photoId: string) => {
-    setProfilePhotos(prev => prev.map(p => {
-      if (p.id === photoId) {
-        return { ...p, likes: p.likes + 1 };
-      }
-      return p;
-    }));
-  };
-
-  // Post comment on a photo inside Full Screen Photo Viewer
-  const handlePostComment = (photoId: string) => {
-    if (!newPhotoComment.trim()) return;
-    setProfilePhotos(prev => prev.map(p => {
-      if (p.id === photoId) {
-        return {
-          ...p,
-          comments: [...p.comments, { user: user?.name || 'You', text: newPhotoComment.trim() }] as any
-        };
-      }
-      return p;
-    }));
-    setNewPhotoComment('');
-  };
-
-  // Delete gallery photo
-  const handleDeletePhoto = (photoId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this photo from your gallery?')) {
-      setProfilePhotos(prev => prev.filter(p => p.id !== photoId));
-      if (setNotification) {
-        setNotification({ type: 'success', message: 'Photo deleted successfully.' });
-      }
-    }
-  };
-
-  // Full Screen Swipe Handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd || activeFullPhotoIndex === null) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-    if (isLeftSwipe && activeFullPhotoIndex < profilePhotos.length - 1) {
-      setActiveFullPhotoIndex(activeFullPhotoIndex + 1);
-    } else if (isRightSwipe && activeFullPhotoIndex > 0) {
-      setActiveFullPhotoIndex(activeFullPhotoIndex - 1);
-    }
-    setTouchStart(null);
-    setTouchEnd(null);
-  };
-
-  const userStats: CommunityUserStats = {
-    photosCount: profilePhotos.length || 18,
-    reviewsCount: profileReviews.length || 14,
-    likesCount: 142,
-    destinationsVisitedCount: 9,
-    attractionsVisitedCount: 16,
-    journeysCompletedCount: 5,
-    badgesUnlockedCount: 4
-  };
-
-  const userExplorerScore = calculateExplorerScore(userStats);
-  const { currentLevel, nextLevel, progressPercent } = getExplorerLevel(userExplorerScore);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 selection:bg-emerald-500/10">
-
-      {/* ========================================================
-          PRIVATE DASHBOARD REDIRECT BANNER
-          ======================================================== */}
-      {!isPublic && (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border border-emerald-500/30 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 shrink-0">
-              <LayoutDashboard className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs font-black tracking-wide text-white">My Profile vs Dashboard</h4>
-              <p className="text-[11px] text-slate-300">
-                This view is your <strong>Public Travel Identity</strong>. Looking for your private stay bookings, taxi receipts, or account settings?
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => navigate('#/dashboard')}
-            className="w-full sm:w-auto px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black rounded-xl border border-emerald-400/30 transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap min-h-[44px]"
-          >
-            <span>Go to Private Dashboard</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-      
-      {/* ========================================================
-          PROFILE HEADER (Cover, Profile Photo, Name, Username, Explorer Level, Bio, Home Location)
-          ======================================================== */}
-      <div className="relative rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 shadow-3xs">
-        {/* Cover Photo */}
-        <div className="relative h-44 sm:h-56 md:h-64 w-full overflow-hidden bg-slate-950">
-          <img 
-            src={activeUser?.coverUrl || 'https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png'} 
-            alt="Cover" 
-            className="w-full h-full object-cover" 
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
-        </div>
-
-        {/* Profile Identity Row */}
-        <div className="p-6 md:p-8 relative z-10 -mt-16 sm:-mt-20 flex flex-col md:flex-row items-center md:items-end justify-between gap-6">
-          <div className="flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left w-full md:w-auto">
-            {/* Profile Avatar */}
-            <div className="relative shrink-0 group">
-              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl p-1 bg-gradient-to-tr from-amber-500 via-emerald-400 to-sky-500 shadow-2xl">
-                {activeUser?.photoURL ? (
+    <div className="w-full text-slate-850 dark:text-slate-100 selection:bg-orange-500/20">
+      <div className="flex flex-col lg:flex-row gap-8 items-start">
+        
+        {/* ========================================================
+            DESKTOP LEFT ACCOUNT NAVIGATION SIDEBAR
+            ======================================================== */}
+        <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs sticky top-24">
+          
+          {/* User Profile Card Top */}
+          <div className="flex flex-col items-center text-center pb-5 border-b border-slate-150 dark:border-slate-800/80">
+            <div className="relative group mb-3">
+              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-tr from-orange-400 to-amber-500 p-0.5 shadow-sm">
+                {activeUser.photoURL ? (
                   <img 
                     src={activeUser.photoURL} 
-                    alt={activeUser.name || 'Explorer'} 
-                    className="w-full h-full rounded-[22px] object-cover bg-slate-900 border-2 border-slate-950"
+                    alt={actualUserName}
+                    className="w-full h-full object-cover rounded-[14px] bg-slate-100 dark:bg-slate-800"
                     referrerPolicy="no-referrer"
                   />
                 ) : (
-                  <div className="w-full h-full rounded-[22px] bg-slate-900 text-amber-300 flex items-center justify-center text-4xl font-black font-sans shrink-0 shadow-md select-none border-2 border-slate-950">
-                    {(activeUser?.name || activeUser?.email || 'T').charAt(0).toUpperCase()}
+                  <div className="w-full h-full rounded-[14px] bg-white dark:bg-slate-900 flex items-center justify-center text-orange-600 dark:text-orange-400 font-bold text-2xl">
+                    {actualUserName.charAt(0).toUpperCase()}
                   </div>
                 )}
               </div>
-              <div className="absolute -bottom-2 -right-2 px-2.5 py-1 rounded-full bg-slate-950 border border-amber-400/40 text-[10px] font-black text-amber-300 flex items-center gap-1 shadow-md">
-                <span>{currentLevel.badgeEmoji}</span>
-                <span>Lvl {currentLevel.level}</span>
-              </div>
+              <button 
+                onClick={handleOpenEditModal}
+                className="absolute -bottom-1 -right-1 w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center hover:bg-orange-700 transition shadow-xs cursor-pointer"
+                title="Update avatar"
+              >
+                <Camera className="w-3.5 h-3.5" />
+              </button>
             </div>
 
-            {/* Profile Identity Details */}
-            <div className="space-y-2">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-center md:justify-start gap-2">
-                <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-                  {activeUser?.name || activeUser?.displayName || activeUser?.email?.split('@')[0] || 'Explorer'}
-                </h2>
-                <span className="text-xs font-mono font-bold text-amber-500 dark:text-amber-400">
-                  @{activeUser?.username || activeUser?.email?.split('@')[0] || 'explorer'}
-                </span>
-                <span className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800/40 inline-flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                  <span>Verified Traveler</span>
-                </span>
-              </div>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white truncate max-w-[200px]">
+              {actualUserName}
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[200px] mb-3">
+              {actualUserEmail}
+            </p>
 
-              <div className="flex items-center justify-center md:justify-start gap-3 text-xs text-slate-500 dark:text-slate-400 flex-wrap font-medium">
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-amber-500" /> {activeUser?.homeLocation || 'Himalayas, India'}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-sky-500" /> {getMemberSince()}
-                </span>
-              </div>
-              
-              <p className="text-xs text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed">
-                {activeUser?.bio || 'High altitude trekker, tea garden wanderer & photography enthusiast.'}
-              </p>
-            </div>
+            <button
+              onClick={handleOpenEditModal}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/30 hover:bg-orange-100 dark:hover:bg-orange-950/50 rounded-lg transition cursor-pointer"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              <span>Edit Profile</span>
+            </button>
           </div>
 
-          {/* Edit Profile Button (Owner only) */}
-          {!isPublic && (
+          {/* Primary Navigation List */}
+          <nav className="py-4 space-y-1">
             <button
-              onClick={() => setIsEditingProfile(true)}
-              className="w-full md:w-auto px-5 py-3 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-750 text-white text-xs font-black rounded-xl border border-slate-700 transition duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-md min-h-[44px]"
+              onClick={() => setActiveTab('dashboard')}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-left ${
+                activeTab === 'dashboard'
+                  ? 'bg-orange-500 text-white shadow-xs'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+              }`}
             >
-              <Edit3 className="w-4 h-4 text-amber-400" />
-              <span>Edit Travel Profile</span>
+              <LayoutDashboard className="w-4 h-4" />
+              <span>Dashboard</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('profile')}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-left ${
+                activeTab === 'profile'
+                  ? 'bg-orange-500 text-white shadow-xs'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <UserIcon className="w-4 h-4" />
+              <span>My Profile</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('bookings')}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-left ${
+                activeTab === 'bookings'
+                  ? 'bg-orange-500 text-white shadow-xs'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Calendar className="w-4 h-4" />
+                <span>My Bookings</span>
+              </div>
+              {bookings.length > 0 && (
+                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                  activeTab === 'bookings' ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                }`}>
+                  {bookings.length}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('wishlist')}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-left ${
+                activeTab === 'wishlist'
+                  ? 'bg-orange-500 text-white shadow-xs'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Heart className="w-4 h-4" />
+                <span>My Wishlist</span>
+              </div>
+              {wishlistItems.length > 0 && (
+                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                  activeTab === 'wishlist' ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                }`}>
+                  {wishlistItems.length}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('contributions')}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-left ${
+                activeTab === 'contributions'
+                  ? 'bg-orange-500 text-white shadow-xs'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Sparkles className="w-4 h-4" />
+                <span>My Contributions</span>
+              </div>
+              {contributions.length > 0 && (
+                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                  activeTab === 'contributions' ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                }`}>
+                  {contributions.length}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('messages')}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-left ${
+                activeTab === 'messages'
+                  ? 'bg-orange-500 text-white shadow-xs'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <MessageSquare className="w-4 h-4" />
+                <span>Messages</span>
+              </div>
+              {conversations.length > 0 && (
+                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                  activeTab === 'messages' ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                }`}>
+                  {conversations.length}
+                </span>
+              )}
+            </button>
+          </nav>
+
+          {/* Business & Partner Section */}
+          <div className="py-3 border-t border-slate-150 dark:border-slate-800/80 space-y-1">
+            <button
+              onClick={() => navigate('#/become-partner')}
+              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition cursor-pointer text-left"
+            >
+              <div className="flex items-center gap-2.5">
+                <Building2 className="w-4 h-4 text-orange-500" />
+                <span>Business Onboarding</span>
+              </div>
+              <ExternalLink className="w-3.5 h-3.5 opacity-50" />
+            </button>
+
+            {/* Partner Dashboard (Strictly for verified/eligible partners) */}
+            {isPartnerEligible && (
+              <button
+                onClick={() => navigate('#/partner/dashboard')}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 transition cursor-pointer text-left"
+              >
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                  <span>Partner Dashboard</span>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+
+            {/* Offers (Strictly if real offers exist in system) */}
+            {hasRealOffers && (
+              <button
+                onClick={() => setActiveTab('offers')}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer text-left ${
+                  activeTab === 'offers'
+                    ? 'bg-orange-500 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Tag className="w-4 h-4 text-amber-500" />
+                  <span>Offers</span>
+                </div>
+                <span className="text-[10px] bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 font-bold px-1.5 py-0.5 rounded">
+                  {availableOffers.length}
+                </span>
+              </button>
+            )}
+          </div>
+
+          {/* Settings, Support & Logout */}
+          <div className="pt-3 border-t border-slate-150 dark:border-slate-800/80 space-y-1">
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer text-left ${
+                activeTab === 'settings'
+                  ? 'bg-orange-500 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <Settings className="w-4 h-4" />
+              <span>Account Settings</span>
+            </button>
+
+            <button
+              onClick={() => navigate('#/support')}
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition cursor-pointer text-left"
+            >
+              <HelpCircle className="w-4 h-4" />
+              <span>Help & Support</span>
+            </button>
+
+            {/* Logout button (Prominent Red) */}
+            <button
+              onClick={onLogout}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition cursor-pointer text-left mt-2"
+            >
+              <LogOut className="w-4 h-4 text-red-500" />
+              <span>Log Out</span>
+            </button>
+          </div>
+        </aside>
+
+        {/* ========================================================
+            MAIN DASHBOARD CONTENT AREA
+            ======================================================== */}
+        <main className="flex-1 w-full min-w-0">
+
+          {/* MOBILE PROFILE HEADER & TABS (Visible only on < lg screens) */}
+          <div className="lg:hidden mb-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-4 shadow-xs">
+            {/* Mobile Header Row */}
+            <div className="flex items-center gap-3.5 pb-4 border-b border-slate-150 dark:border-slate-800">
+              <div className="w-14 h-14 rounded-xl overflow-hidden bg-gradient-to-tr from-orange-400 to-amber-500 p-0.5 shrink-0">
+                {activeUser.photoURL ? (
+                  <img 
+                    src={activeUser.photoURL} 
+                    alt={actualUserName}
+                    className="w-full h-full object-cover rounded-[10px]"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded-[10px] bg-white dark:bg-slate-900 flex items-center justify-center text-orange-600 font-bold text-lg">
+                    {actualUserName.charAt(0).toUpperCase()}
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="font-bold text-base text-slate-900 dark:text-white truncate">
+                  {actualUserName}
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                  {actualUserEmail}
+                </p>
+                <div className="mt-1 flex items-center gap-2">
+                  <button
+                    onClick={handleOpenEditModal}
+                    className="text-[11px] font-bold text-orange-600 dark:text-orange-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    <Edit3 className="w-3 h-3" /> Edit Profile
+                  </button>
+                </div>
+              </div>
+              <button
+                onClick={onLogout}
+                className="p-2 rounded-xl text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition cursor-pointer shrink-0"
+                title="Log Out"
+                aria-label="Log Out"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Mobile Nav Tabs (Min 44px touch targets, wrapped/scrollable) */}
+            <div className="pt-3 flex gap-2 overflow-x-auto no-scrollbar py-1">
+              {[
+                { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+                { id: 'profile', label: 'Profile', icon: UserIcon },
+                { id: 'bookings', label: `Bookings (${bookings.length})`, icon: Calendar },
+                { id: 'wishlist', label: `Wishlist (${wishlistItems.length})`, icon: Heart },
+                { id: 'contributions', label: 'Contributions', icon: Sparkles },
+                { id: 'messages', label: 'Messages', icon: MessageSquare },
+                { id: 'settings', label: 'Settings', icon: Settings }
+              ].map(tab => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as TabKey)}
+                    className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl text-xs font-semibold transition cursor-pointer ${
+                      isActive
+                        ? 'bg-orange-500 text-white shadow-xs'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Partner quick link if eligible */}
+            {isPartnerEligible && (
+              <div className="mt-3 pt-3 border-t border-slate-150 dark:border-slate-800 flex items-center justify-between">
+                <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4" /> Partner Verified
+                </span>
+                <button
+                  onClick={() => navigate('#/partner/dashboard')}
+                  className="text-xs font-bold text-emerald-600 dark:text-emerald-400 underline cursor-pointer"
+                >
+                  Partner Dashboard →
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* ========================================================
+              TAB 1: DASHBOARD OVERVIEW
+              ======================================================== */}
+          {activeTab === 'dashboard' && (
+            <div className="space-y-6 animate-fade-in">
+              
+              {/* Header Greeting Banner */}
+              <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 text-white rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-sm relative overflow-hidden">
+                <div className="relative z-10 max-w-2xl">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-bold mb-3">
+                    <Compass className="w-3.5 h-3.5" />
+                    <span>HillyTrip Traveler Account</span>
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white mb-2">
+                    Welcome back, {actualUserName}
+                  </h1>
+                  <p className="text-sm text-slate-300 leading-relaxed font-normal">
+                    Manage your verified stays, taxi bookings, saved mountain places, and account details in one place.
+                  </p>
+                </div>
+                <div className="absolute -right-8 -bottom-8 opacity-10 text-white pointer-events-none">
+                  <Mountain className="w-64 h-64" />
+                </div>
+              </div>
+
+              {/* QUICK SUMMARY CARDS (Strictly calculated from real data) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                
+                {/* 1. Total Bookings */}
+                <div 
+                  onClick={() => setActiveTab('bookings')}
+                  className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs hover:border-orange-300 transition cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Total Bookings</span>
+                    <div className="p-2 rounded-xl bg-orange-50 text-orange-600 dark:bg-orange-950/30 dark:text-orange-400">
+                      <Calendar className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">
+                    {loadingBookings ? <Loader2 className="w-5 h-5 animate-spin text-slate-400" /> : bookings.length}
+                  </div>
+                  <span className="text-[11px] text-slate-400 mt-1 block group-hover:text-orange-600 transition">
+                    View stays & rides →
+                  </span>
+                </div>
+
+                {/* 2. Wishlist Items */}
+                <div 
+                  onClick={() => setActiveTab('wishlist')}
+                  className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs hover:border-orange-300 transition cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Wishlist Items</span>
+                    <div className="p-2 rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400">
+                      <Heart className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">
+                    {wishlistItems.length}
+                  </div>
+                  <span className="text-[11px] text-slate-400 mt-1 block group-hover:text-rose-600 transition">
+                    Saved destinations →
+                  </span>
+                </div>
+
+                {/* 3. Contributions */}
+                <div 
+                  onClick={() => setActiveTab('contributions')}
+                  className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs hover:border-orange-300 transition cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Contributions</span>
+                    <div className="p-2 rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">
+                    {contributions.length}
+                  </div>
+                  <span className="text-[11px] text-slate-400 mt-1 block group-hover:text-amber-600 transition">
+                    Community spots →
+                  </span>
+                </div>
+
+                {/* 4. Messages */}
+                <div 
+                  onClick={() => setActiveTab('messages')}
+                  className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs hover:border-orange-300 transition cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Conversations</span>
+                    <div className="p-2 rounded-xl bg-sky-50 text-sky-600 dark:bg-sky-950/30 dark:text-sky-400">
+                      <MessageSquare className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">
+                    {loadingMessages ? <Loader2 className="w-5 h-5 animate-spin text-slate-400" /> : conversations.length}
+                  </div>
+                  <span className="text-[11px] text-slate-400 mt-1 block group-hover:text-sky-600 transition">
+                    Host discussions →
+                  </span>
+                </div>
+
+              </div>
+
+              {/* QUICK ACTIONS BAR */}
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs">
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white mb-3">
+                  Quick Travel Actions
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <button
+                    onClick={() => navigate('#/homestays')}
+                    className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-orange-400 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 text-left transition cursor-pointer flex items-center gap-3"
+                  >
+                    <div className="p-2 rounded-lg bg-orange-100 text-orange-600 dark:bg-orange-950/50 dark:text-orange-400 shrink-0">
+                      <Home className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-slate-900 dark:text-white">Find Stays</div>
+                      <div className="text-[10px] text-slate-500">Local homestays</div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => navigate('#/villages')}
+                    className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-orange-400 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 text-left transition cursor-pointer flex items-center gap-3"
+                  >
+                    <div className="p-2 rounded-lg bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400 shrink-0">
+                      <Mountain className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-slate-900 dark:text-white">Villages</div>
+                      <div className="text-[10px] text-slate-500">Curated hamlets</div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => navigate('#/taxi')}
+                    className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-orange-400 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 text-left transition cursor-pointer flex items-center gap-3"
+                  >
+                    <div className="p-2 rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400 shrink-0">
+                      <Car className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-slate-900 dark:text-white">Book Taxi</div>
+                      <div className="text-[10px] text-slate-500">Mountain routes</div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => navigate('#/ai-planner')}
+                    className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-orange-400 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 text-left transition cursor-pointer flex items-center gap-3"
+                  >
+                    <div className="p-2 rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400 shrink-0">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-slate-900 dark:text-white">AI Planner</div>
+                      <div className="text-[10px] text-slate-500">Smart itineraries</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* RECENT BOOKINGS PREVIEW */}
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-bold text-base text-slate-900 dark:text-white">Recent Bookings</h3>
+                    <p className="text-xs text-slate-500">Your latest stay and taxi reservations</p>
+                  </div>
+                  {bookings.length > 0 && (
+                    <button
+                      onClick={() => setActiveTab('bookings')}
+                      className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:underline"
+                    >
+                      View All ({bookings.length}) →
+                    </button>
+                  )}
+                </div>
+
+                {loadingBookings ? (
+                  <div className="py-8 flex justify-center text-slate-400">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  </div>
+                ) : bookings.length === 0 ? (
+                  <div className="text-center py-8 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-6">
+                    <Calendar className="w-10 h-10 mx-auto text-slate-300 dark:text-slate-600 mb-2" />
+                    <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">No bookings yet</h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1 mb-4">
+                      Start planning your next mountain escape with local homestays or point-to-point cabs.
+                    </p>
+                    <button
+                      onClick={() => navigate('#/homestays')}
+                      className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                    >
+                      <Home className="w-3.5 h-3.5" />
+                      <span>Explore Homestays</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {bookings.slice(0, 2).map(booking => (
+                      <div 
+                        key={booking.id}
+                        className="p-4 rounded-xl border border-slate-150 dark:border-slate-800 hover:border-orange-300 dark:hover:border-slate-700 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="p-2.5 rounded-xl bg-orange-50 text-orange-600 dark:bg-orange-950/30 dark:text-orange-400 shrink-0 mt-0.5">
+                            {booking.leadType === 'taxi' ? <Car className="w-5 h-5" /> : <Home className="w-5 h-5" />}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-sm text-slate-900 dark:text-white">
+                              {booking.homestayName || booking.serviceName || booking.destinationName || booking.leadTitle || 'Himalayan Booking'}
+                            </h4>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500 mt-1">
+                              {booking.checkInDate && (
+                                <span>Check-in: {new Date(booking.checkInDate).toLocaleDateString()}</span>
+                              )}
+                              {booking.date && (
+                                <span>Date: {new Date(booking.date).toLocaleDateString()}</span>
+                              )}
+                              {booking.createdAt && !booking.checkInDate && !booking.date && (
+                                <span>Created: {new Date(booking.createdAt).toLocaleDateString()}</span>
+                              )}
+                              <span className="font-mono text-slate-400">Ref: #{booking.id.slice(-6)}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800">
+                          <div>{getStatusBadge(booking.status)}</div>
+                          <button
+                            onClick={() => setActiveTab('bookings')}
+                            className="px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition cursor-pointer"
+                          >
+                            Details
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* SAVED PLACES PREVIEW */}
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-bold text-base text-slate-900 dark:text-white">Wishlist Highlights</h3>
+                    <p className="text-xs text-slate-500">Places you saved for future journeys</p>
+                  </div>
+                  {wishlistItems.length > 0 && (
+                    <button
+                      onClick={() => setActiveTab('wishlist')}
+                      className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:underline"
+                    >
+                      View All ({wishlistItems.length}) →
+                    </button>
+                  )}
+                </div>
+
+                {wishlistItems.length === 0 ? (
+                  <div className="text-center py-8 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-6">
+                    <Heart className="w-10 h-10 mx-auto text-slate-300 dark:text-slate-600 mb-2" />
+                    <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">Your wishlist is empty</h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1 mb-4">
+                      Explore authentic villages, attractions, and mountain homestays to save your favorites.
+                    </p>
+                    <button
+                      onClick={() => navigate('#/villages')}
+                      className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                    >
+                      <Compass className="w-3.5 h-3.5" />
+                      <span>Explore Destinations</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {wishlistItems.slice(0, 3).map(item => (
+                      <div 
+                        key={item.id}
+                        onClick={() => {
+                          if (item.category === 'homestay') navigate(`#/homestay/${item.slug || item.id}`);
+                          else if (item.category === 'village') navigate(`#/village/${item.slug || item.id}`);
+                          else navigate(`#/attraction/${item.slug || item.id}`);
+                        }}
+                        className="group rounded-xl overflow-hidden border border-slate-150 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-850/50 hover:shadow-md transition cursor-pointer flex flex-col"
+                      >
+                        <div className="h-28 w-full overflow-hidden bg-slate-200 dark:bg-slate-800 relative">
+                          {item.image ? (
+                            <img 
+                              src={item.image} 
+                              alt={item.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-slate-400">
+                              <Mountain className="w-8 h-8" />
+                            </div>
+                          )}
+                          <span className="absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-900/80 text-white backdrop-blur-xs">
+                            {item.category}
+                          </span>
+                        </div>
+                        <div className="p-3 flex-1 flex flex-col justify-between">
+                          <div>
+                            <h4 className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                              {item.name}
+                            </h4>
+                            {item.location && (
+                              <p className="text-[11px] text-slate-500 truncate flex items-center gap-1 mt-0.5">
+                                <MapPin className="w-3 h-3 text-orange-500" />
+                                {item.location}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* RECENT ACTIVITY SECTION (Rendered only if real activities exist) */}
+              {recentActivities.length > 0 && (
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs">
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white mb-3">
+                    Recent Activity
+                  </h3>
+                  <div className="space-y-2.5">
+                    {recentActivities.map(act => {
+                      const Icon = act.icon;
+                      return (
+                        <div key={act.id} className="flex items-center justify-between text-xs py-2 border-b border-slate-100 dark:border-slate-800/60 last:border-0">
+                          <div className="flex items-center gap-2.5">
+                            <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-orange-600">
+                              <Icon className="w-3.5 h-3.5" />
+                            </div>
+                            <span className="font-medium text-slate-700 dark:text-slate-300">{act.title}</span>
+                          </div>
+                          {act.time && (
+                            <span className="text-slate-400 text-[11px]">{act.time}</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+            </div>
           )}
-        </div>
+
+          {/* ========================================================
+              TAB 2: MY PROFILE
+              ======================================================== */}
+          {activeTab === 'profile' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-150 dark:border-slate-800">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gradient-to-tr from-orange-400 to-amber-500 p-0.5 shrink-0 shadow-sm">
+                      {activeUser.photoURL ? (
+                        <img 
+                          src={activeUser.photoURL} 
+                          alt={actualUserName}
+                          className="w-full h-full object-cover rounded-[14px]"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="w-full h-full rounded-[14px] bg-white dark:bg-slate-900 flex items-center justify-center text-orange-600 font-bold text-xl">
+                          {actualUserName.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                        {actualUserName}
+                      </h2>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {actualUserEmail}
+                      </p>
+                      <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                        <CheckCircle2 className="w-3 h-3" /> Verified Authenticated Account
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleOpenEditModal}
+                    className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center justify-center gap-1.5"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>Edit Profile Details</span>
+                  </button>
+                </div>
+
+                {/* Profile Information List */}
+                <div className="pt-6 space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800">
+                      <span className="text-xs text-slate-400 font-medium block mb-1">Full Name</span>
+                      <div className="font-bold text-sm text-slate-800 dark:text-slate-200">{actualUserName}</div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800">
+                      <span className="text-xs text-slate-400 font-medium block mb-1">Email Address</span>
+                      <div className="font-bold text-sm text-slate-800 dark:text-slate-200">{actualUserEmail}</div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800">
+                      <span className="text-xs text-slate-400 font-medium block mb-1">Contact Phone</span>
+                      <div className="font-bold text-sm text-slate-800 dark:text-slate-200">
+                        {(activeUser as any).phone || (activeUser as any).phoneNumber || (activeUser as any).mobile || (
+                          <span className="text-slate-400 font-normal italic">Not provided (click edit to add)</span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800">
+                      <span className="text-xs text-slate-400 font-medium block mb-1">Home Region / City</span>
+                      <div className="font-bold text-sm text-slate-800 dark:text-slate-200">
+                        {(activeUser as any).homeLocation || (activeUser as any).location || (
+                          <span className="text-slate-400 font-normal italic">Not provided</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800">
+                    <span className="text-xs text-slate-400 font-medium block mb-1">About / Traveler Bio</span>
+                    <div className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                      {activeUser.bio || (
+                        <span className="text-slate-400 italic">No personal bio added yet. Tell other mountain travelers about your journeys.</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================
+              TAB 3: MY BOOKINGS
+              ======================================================== */}
+          {activeTab === 'bookings' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-150 dark:border-slate-800">
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">My Bookings</h2>
+                    <p className="text-xs text-slate-500">Direct bookings, taxi transfers, and homestay inquiries</p>
+                  </div>
+                  <button
+                    onClick={() => navigate('#/homestays')}
+                    className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5 self-start sm:self-auto"
+                  >
+                    <Home className="w-3.5 h-3.5" />
+                    <span>Explore Homestays</span>
+                  </button>
+                </div>
+
+                {loadingBookings ? (
+                  <div className="py-12 flex justify-center text-slate-400">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  </div>
+                ) : bookings.length === 0 ? (
+                  <div className="text-center py-12 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl p-8">
+                    <Calendar className="w-12 h-12 mx-auto text-slate-300 dark:text-slate-600 mb-3" />
+                    <h3 className="font-bold text-base text-slate-800 dark:text-slate-200">No bookings yet</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1 mb-6">
+                      Start planning your next mountain escape. Once you reserve a verified homestay or taxi, your booking confirmations and receipt timeline will appear here.
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-3">
+                      <button
+                        onClick={() => navigate('#/homestays')}
+                        className="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                      >
+                        <Home className="w-3.5 h-3.5" />
+                        <span>Explore Homestays</span>
+                      </button>
+                      <button
+                        onClick={() => navigate('#/taxi')}
+                        className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-white text-xs font-bold rounded-xl transition cursor-pointer inline-flex items-center gap-1.5"
+                      >
+                        <Car className="w-3.5 h-3.5" />
+                        <span>Book a Taxi</span>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {bookings.map(booking => (
+                      <div 
+                        key={booking.id}
+                        className="p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-orange-300 dark:hover:border-slate-700 transition bg-white dark:bg-slate-900 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4"
+                      >
+                        <div className="flex items-start gap-3.5">
+                          <div className="p-3 rounded-xl bg-orange-50 text-orange-600 dark:bg-orange-950/40 dark:text-orange-400 shrink-0 mt-1">
+                            {booking.leadType === 'taxi' ? <Car className="w-6 h-6" /> : <Home className="w-6 h-6" />}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                                {booking.leadType || 'Booking'}
+                              </span>
+                              <span className="text-xs font-mono text-slate-400">Ref: #{booking.id.slice(-8)}</span>
+                            </div>
+                            <h4 className="font-bold text-base text-slate-900 dark:text-white">
+                              {booking.homestayName || booking.serviceName || booking.destinationName || booking.leadTitle || 'Himalayan Stay'}
+                            </h4>
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 mt-1.5">
+                              {booking.checkInDate && (
+                                <span>Check-in: {new Date(booking.checkInDate).toLocaleDateString()}</span>
+                              )}
+                              {booking.checkOutDate && (
+                                <span>Check-out: {new Date(booking.checkOutDate).toLocaleDateString()}</span>
+                              )}
+                              {booking.date && (
+                                <span>Date: {new Date(booking.date).toLocaleDateString()}</span>
+                              )}
+                              {(booking.amount || booking.totalAmount || booking.price) && (
+                                <span className="font-bold text-slate-900 dark:text-white">
+                                  Amount: ₹{booking.amount || booking.totalAmount || booking.price}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 dark:border-slate-800">
+                          <div>{getStatusBadge(booking.status)}</div>
+                          <button
+                            onClick={() => {
+                              // Direct deep link to booking engine inquiry
+                              if (booking.homestayName) {
+                                navigate(`#/homestays`);
+                              } else {
+                                navigate(`#/taxi`);
+                              }
+                            }}
+                            className="px-4 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition cursor-pointer"
+                          >
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================
+              TAB 4: MY WISHLIST
+              ======================================================== */}
+          {activeTab === 'wishlist' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-150 dark:border-slate-800">
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">My Wishlist</h2>
+                    <p className="text-xs text-slate-500">Mountain villages, attractions, and stays saved to your account</p>
+                  </div>
+                  <button
+                    onClick={() => navigate('#/villages')}
+                    className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5 self-start sm:self-auto"
+                  >
+                    <Compass className="w-3.5 h-3.5" />
+                    <span>Explore Destinations</span>
+                  </button>
+                </div>
+
+                {wishlistItems.length === 0 ? (
+                  <div className="text-center py-12 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl p-8">
+                    <Heart className="w-12 h-12 mx-auto text-slate-300 dark:text-slate-600 mb-3" />
+                    <h3 className="font-bold text-base text-slate-800 dark:text-slate-200">Your wishlist is empty</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1 mb-6">
+                      Save places you want to visit across Himachal, Uttarakhand, Ladakh, and Sikkim. Tap the heart icon anywhere on HillyTrip to save.
+                    </p>
+                    <button
+                      onClick={() => navigate('#/villages')}
+                      className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                    >
+                      <Compass className="w-3.5 h-3.5" />
+                      <span>Explore Destinations</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                    {wishlistItems.map(item => (
+                      <div 
+                        key={item.id}
+                        onClick={() => {
+                          if (item.category === 'homestay') navigate(`#/homestay/${item.slug || item.id}`);
+                          else if (item.category === 'village') navigate(`#/village/${item.slug || item.id}`);
+                          else navigate(`#/attraction/${item.slug || item.id}`);
+                        }}
+                        className="group rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-md hover:border-orange-300 transition cursor-pointer flex flex-col"
+                      >
+                        <div className="h-40 w-full overflow-hidden bg-slate-200 dark:bg-slate-800 relative">
+                          {item.image ? (
+                            <img 
+                              src={item.image} 
+                              alt={item.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-slate-400">
+                              <Mountain className="w-10 h-10" />
+                            </div>
+                          )}
+                          <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase bg-slate-900/80 text-white backdrop-blur-xs">
+                            {item.category}
+                          </span>
+                          <button
+                            onClick={(e) => handleRemoveWishlist(item.id, e)}
+                            className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-slate-900/60 hover:bg-rose-600 text-white flex items-center justify-center transition"
+                            title="Remove from wishlist"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <div className="p-4 flex-1 flex flex-col justify-between">
+                          <div>
+                            <h4 className="font-bold text-sm text-slate-900 dark:text-white truncate group-hover:text-orange-600 transition">
+                              {item.name}
+                            </h4>
+                            {item.location && (
+                              <p className="text-xs text-slate-500 truncate flex items-center gap-1 mt-1">
+                                <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                                {item.location}
+                              </p>
+                            )}
+                          </div>
+                          <div className="pt-3 mt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-orange-600">
+                            <span>Open details</span>
+                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================
+              TAB 5: MY CONTRIBUTIONS
+              ======================================================== */}
+          {activeTab === 'contributions' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-150 dark:border-slate-800">
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">My Contributions</h2>
+                    <p className="text-xs text-slate-500">Uncharted trails, road condition reports, and homestay recommendations</p>
+                  </div>
+                  <button
+                    onClick={() => navigate('#/contribute')}
+                    className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5 self-start sm:self-auto"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Contribute to HillyTrip</span>
+                  </button>
+                </div>
+
+                {contributions.length === 0 ? (
+                  <div className="text-center py-12 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl p-8">
+                    <Sparkles className="w-12 h-12 mx-auto text-slate-300 dark:text-slate-600 mb-3" />
+                    <h3 className="font-bold text-base text-slate-800 dark:text-slate-200">No contributions yet</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1 mb-6">
+                      Help other travelers discover the mountains. Share hidden waterfalls, scenic viewpoints, or report live road status.
+                    </p>
+                    <button
+                      onClick={() => navigate('#/contribute')}
+                      className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Contribute to HillyTrip</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {contributions.map(contrib => (
+                      <div 
+                        key={contrib.id}
+                        className="p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                              {contrib.type}
+                            </span>
+                            <span className="text-xs text-slate-400">
+                              Submitted {new Date(contrib.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <p className="text-sm font-medium text-slate-800 dark:text-slate-200 mt-1">
+                            {contrib.details}
+                          </p>
+                        </div>
+                        <div>
+                          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
+                            contrib.status === 'Approved'
+                              ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
+                              : 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300'
+                          }`}>
+                            {contrib.status === 'Approved' ? <Check className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
+                            {contrib.status || 'Pending Validation'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================
+              TAB 6: MESSAGES
+              ======================================================== */}
+          {activeTab === 'messages' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-150 dark:border-slate-800">
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Messages & Inquiries</h2>
+                    <p className="text-xs text-slate-500">Live conversations with local homestay hosts and verified taxi drivers</p>
+                  </div>
+                  <button
+                    onClick={() => navigate('#/messages')}
+                    className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5 self-start sm:self-auto"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>Open Full Inbox</span>
+                  </button>
+                </div>
+
+                {loadingMessages ? (
+                  <div className="py-12 flex justify-center text-slate-400">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  </div>
+                ) : conversations.length === 0 ? (
+                  <div className="text-center py-12 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl p-8">
+                    <MessageSquare className="w-12 h-12 mx-auto text-slate-300 dark:text-slate-600 mb-3" />
+                    <h3 className="font-bold text-base text-slate-800 dark:text-slate-200">No messages yet</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1 mb-6">
+                      Reach out to local hosts or drivers to plan your journey. When you inquire about a stay or custom cab route, conversations will appear here.
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-3">
+                      <button
+                        onClick={() => navigate('#/homestays')}
+                        className="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                      >
+                        <Home className="w-3.5 h-3.5" />
+                        <span>Explore Homestays</span>
+                      </button>
+                      <button
+                        onClick={() => navigate('#/taxi')}
+                        className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-white text-xs font-bold rounded-xl transition cursor-pointer inline-flex items-center gap-1.5"
+                      >
+                        <Car className="w-3.5 h-3.5" />
+                        <span>Find a Taxi</span>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-slate-150 dark:divide-slate-800">
+                    {conversations.map(conv => (
+                      <div
+                        key={conv.id}
+                        onClick={() => navigate('#/messages')}
+                        className="py-4 flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-850/50 px-3 rounded-xl transition cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3.5">
+                          <div className="w-11 h-11 rounded-xl bg-orange-100 text-orange-600 dark:bg-orange-950/50 dark:text-orange-400 flex items-center justify-center font-bold text-base shrink-0">
+                            {conv.peerName?.charAt(0).toUpperCase() || 'H'}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-bold text-sm text-slate-900 dark:text-white">{conv.peerName || 'Local Host'}</h4>
+                              {conv.peerRole && (
+                                <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded bg-slate-150 dark:bg-slate-800 text-slate-500">
+                                  {conv.peerRole}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-slate-500 truncate max-w-xs sm:max-w-md mt-0.5">
+                              {conv.lastMessage || 'Click to open conversation'}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="text-right shrink-0">
+                          {conv.lastMessageTime && (
+                            <span className="text-[11px] text-slate-400 block mb-1">
+                              {new Date(conv.lastMessageTime).toLocaleDateString()}
+                            </span>
+                          )}
+                          <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================
+              TAB 7: OFFERS (Strictly if real offers exist in system)
+              ======================================================== */}
+          {activeTab === 'offers' && hasRealOffers && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs">
+                <div className="mb-6 pb-4 border-b border-slate-150 dark:border-slate-800">
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">Active Offers & Promotions</h2>
+                  <p className="text-xs text-slate-500">Verified season promotions available across HillyTrip</p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {availableOffers.map(offer => (
+                    <div 
+                      key={offer.id}
+                      className="p-5 rounded-2xl border border-amber-200 dark:border-amber-900/40 bg-gradient-to-br from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10 shadow-xs flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500 text-white mb-2">
+                          <Tag className="w-3 h-3" /> Special Offer
+                        </div>
+                        <h4 className="font-bold text-base text-slate-900 dark:text-white mb-1">
+                          {offer.title}
+                        </h4>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                          {(offer as any).description || (offer as any).tagline || ''}
+                        </p>
+                      </div>
+
+                      <div className="pt-4 mt-4 border-t border-amber-100 dark:border-amber-900/30 flex items-center justify-between">
+                        {(offer as any).code && (
+                          <span className="font-mono text-xs font-bold px-2.5 py-1 rounded bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400">
+                            CODE: {(offer as any).code}
+                          </span>
+                        )}
+                        <button
+                          onClick={() => navigate('#/homestays')}
+                          className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:underline"
+                        >
+                          Book with offer →
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================
+              TAB 8: ACCOUNT SETTINGS
+              ======================================================== */}
+          {activeTab === 'settings' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs">
+                <div className="mb-6 pb-4 border-b border-slate-150 dark:border-slate-800">
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">Account Settings</h2>
+                  <p className="text-xs text-slate-500">Manage interface preferences and account security</p>
+                </div>
+
+                <div className="space-y-6">
+                  {/* Theme Mode Preference */}
+                  <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                        {themeMode === 'dark' ? <Moon className="w-4 h-4 text-purple-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
+                        Interface Theme
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        Switch between light and dark modes for optimal viewing across mountain trails.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => setThemeMode('light')}
+                        className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                          themeMode === 'light'
+                            ? 'bg-orange-500 text-white shadow-xs'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                        }`}
+                      >
+                        <Sun className="w-3.5 h-3.5" /> Light
+                      </button>
+                      <button
+                        onClick={() => setThemeMode('dark')}
+                        className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                          themeMode === 'dark'
+                            ? 'bg-orange-500 text-white shadow-xs'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                        }`}
+                      >
+                        <Moon className="w-3.5 h-3.5" /> Dark
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Security & Authentication status */}
+                  <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800">
+                    <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2 mb-1">
+                      <ShieldCheck className="w-4 h-4 text-emerald-500" /> Account Security & Session
+                    </h4>
+                    <p className="text-xs text-slate-500 mb-3">
+                      Your session is authenticated via secure tokens.
+                    </p>
+                    <div className="flex items-center justify-between text-xs py-2 border-t border-slate-100 dark:border-slate-800">
+                      <span className="text-slate-500">Logged in email</span>
+                      <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{actualUserEmail}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs py-2 border-t border-slate-100 dark:border-slate-800">
+                      <span className="text-slate-500">Account status</span>
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                        <Check className="w-3 h-3" /> Active & Verified
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Logout prominent callout */}
+                  <div className="p-4 rounded-xl bg-red-50/50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h4 className="font-bold text-sm text-red-700 dark:text-red-400">Sign Out of HillyTrip</h4>
+                      <p className="text-xs text-red-600/80 dark:text-red-400/80 mt-0.5">
+                        Securely end your current session on this device.
+                      </p>
+                    </div>
+                    <button
+                      onClick={onLogout}
+                      className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center justify-center gap-1.5 shrink-0"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Log Out Now</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </main>
       </div>
 
-      {/* Edit Profile Form Modal */}
+      {/* ========================================================
+          PROFILE EDIT MODAL (Clean, Real Fields Only)
+          ======================================================== */}
       <AnimatePresence>
-        {isEditingProfile && (
-          <div className="fixed inset-0 z-[10000] flex items-center justify-center px-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/60 backdrop-blur-xs"
-              onClick={() => {
-                if (!isSaving && !showPhotoOptions && !showCropModal) {
-                  setIsEditingProfile(false);
-                }
-              }}
-            />
-            
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl space-y-6 overflow-hidden text-slate-800 dark:text-slate-100"
+        {isEditModalOpen && (
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 max-w-lg w-full shadow-2xl relative"
             >
-              {/* Success Notification Banner inside Modal */}
-              <AnimatePresence>
-                {saveSuccess && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="absolute inset-x-0 top-0 bg-emerald-500 text-white py-4 px-6 text-center font-black text-sm flex items-center justify-center gap-2 z-50 shadow-md"
-                  >
-                    <Check className="w-5 h-5 shrink-0" />
-                    <span>✅ Profile Updated Successfully</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              <div className="flex justify-between items-center">
-                <div className="space-y-0.5">
-                  <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">Profile Editor</h3>
-                  <p className="text-xs text-slate-400">WhatsApp, Airbnb & Google styled traveller profile.</p>
-                </div>
-                <button 
-                  disabled={isSaving}
-                  onClick={() => setIsEditingProfile(false)} 
-                  className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+              <div className="flex items-center justify-between pb-4 border-b border-slate-150 dark:border-slate-800 mb-5">
+                <h3 className="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                  <Edit3 className="w-5 h-5 text-orange-500" />
+                  Edit Profile Details
+                </h3>
+                <button
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <form onSubmit={handleUpdateProfile} className="space-y-6">
-                
-                {/* 120-140px CIRCULAR PROFILE AVATAR AT TOP OF EDITOR */}
-                <div className="flex flex-col items-center gap-3 py-2">
-                  <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-md group flex items-center justify-center bg-slate-100 dark:bg-slate-950">
-                    {editPhoto ? (
-                      <img 
-                        src={editPhoto} 
-                        alt={editName || 'Explorer'} 
-                        className="w-full h-full object-cover"
-                        referrerPolicy="no-referrer"
+              <form onSubmit={handleSaveProfile} className="space-y-4">
+                {/* Avatar Preview & Upload */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
+                    Profile Avatar
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0">
+                      {editPhotoURL ? (
+                        <img 
+                          src={editPhotoURL} 
+                          alt="Avatar Preview" 
+                          className="w-full h-full object-cover" 
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold text-xl">
+                          {editName.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold cursor-pointer transition">
+                        <Camera className="w-3.5 h-3.5" />
+                        <span>Upload Image File</span>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          className="hidden" 
+                          onChange={handleAvatarFileUpload}
+                        />
+                      </label>
+                      <input
+                        type="url"
+                        value={editPhotoURL}
+                        onChange={(e) => setEditPhotoURL(e.target.value)}
+                        placeholder="Or paste image URL"
+                        className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-hidden focus:border-orange-500"
                       />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-4xl font-black select-none">
-                        {(editName || 'T').charAt(0).toUpperCase()}
-                      </div>
-                    )}
+                    </div>
                   </div>
-                  
-                  {/* CHANGE PHOTO BUTTON BELOW AVATAR */}
-                  <button
-                    type="button"
-                    onClick={() => setShowPhotoOptions(true)}
-                    className="px-4 py-2 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 text-xs font-black rounded-full border border-slate-200 dark:border-slate-700 transition flex items-center gap-1.5 cursor-pointer shadow-3xs"
-                  >
-                    <Camera className="w-3.5 h-3.5 text-emerald-650 dark:text-emerald-400" />
-                    <span>📷 Change Photo</span>
-                  </button>
                 </div>
 
-                {/* HIDDEN FILE INPUTS */}
-                <input
-                  type="file"
-                  id="file-upload-device"
-                  accept="image/jpeg,image/png,image/webp"
-                  className="hidden"
-                  onChange={e => handleFileChange(e, 'avatar')}
-                />
-                <input
-                  type="file"
-                  id="file-upload-camera"
-                  accept="image/jpeg,image/png,image/webp"
-                  capture="user"
-                  className="hidden"
-                  onChange={e => handleFileChange(e, 'avatar')}
-                />
-
-                {/* FIELDS */}
-                <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-black tracking-wider text-slate-400 block font-mono">Full Name</label>
+                {/* Name */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Full Name *
+                  </label>
                   <input
                     type="text"
                     required
                     value={editName}
-                    onChange={e => setEditName(e.target.value)}
-                    placeholder="Enter your full name"
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs text-slate-800 dark:text-slate-100 font-bold focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-hidden focus:border-orange-500"
                   />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-black tracking-wider text-slate-400 block font-mono">Travel Bio</label>
+                {/* Contact Phone */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Phone Number (for booking confirmations)
+                  </label>
+                  <input
+                    type="tel"
+                    value={editPhone}
+                    onChange={(e) => setEditPhone(e.target.value)}
+                    placeholder="+91 98765 43210"
+                    className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-hidden focus:border-orange-500"
+                  />
+                </div>
+
+                {/* Home Location */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Home City / State
+                  </label>
+                  <input
+                    type="text"
+                    value={editLocation}
+                    onChange={(e) => setEditLocation(e.target.value)}
+                    placeholder="e.g. Chandigarh, India"
+                    className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-hidden focus:border-orange-500"
+                  />
+                </div>
+
+                {/* Bio */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Traveler Bio
+                  </label>
                   <textarea
                     rows={3}
                     value={editBio}
-                    onChange={e => setEditBio(e.target.value)}
-                    placeholder="Write a short travel motto or bio..."
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs text-slate-800 dark:text-slate-100 font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500 leading-relaxed"
+                    onChange={(e) => setEditBio(e.target.value)}
+                    placeholder="Tell us about your love for the Himalayan mountains..."
+                    className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-hidden focus:border-orange-500"
                   />
                 </div>
 
-                <div className="flex gap-3 pt-2">
+                {/* Submit button */}
+                <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-150 dark:border-slate-800">
                   <button
                     type="button"
-                    disabled={isSaving}
-                    onClick={() => setIsEditingProfile(false)}
-                    className="flex-1 py-3 bg-slate-100 dark:bg-slate-800 text-slate-750 dark:text-slate-200 rounded-xl text-xs font-black transition cursor-pointer"
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={!hasChanges || isSaving}
-                    className={`flex-1 py-3 rounded-xl text-xs font-black transition cursor-pointer flex items-center justify-center gap-2 ${
-                      !hasChanges 
-                        ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed' 
-                        : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
-                    }`}
+                    disabled={isSavingProfile}
+                    className="px-5 py-2 bg-orange-600 hover:bg-orange-700 disabled:opacity-50 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5"
                   >
-                    {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
+                    {isSavingProfile && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                     <span>Save Changes</span>
                   </button>
                 </div>
@@ -783,1005 +1945,6 @@ export default function UserProfileSystem({
           </div>
         )}
       </AnimatePresence>
-
-      {/* Photo Options Modal Sheet */}
-      <AnimatePresence>
-        {showPhotoOptions && (
-          <div className="fixed inset-0 z-[11000] flex items-center justify-center px-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/50"
-              onClick={() => setShowPhotoOptions(false)}
-            />
-            <motion.div 
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 50, opacity: 0 }}
-              className="relative bg-white dark:bg-slate-900 rounded-3xl max-w-xs w-full p-6 shadow-2xl text-slate-850 dark:text-slate-100 space-y-4 overflow-hidden"
-            >
-              <div className="text-center space-y-1">
-                <h4 className="text-sm font-black text-slate-900 dark:text-white">Change Profile Photo</h4>
-                <p className="text-[10px] text-slate-400">Select how you want to update your avatar</p>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => {
-                    document.getElementById('file-upload-device')?.click();
-                  }}
-                  className="w-full py-3 hover:bg-slate-50 dark:hover:bg-slate-850 text-emerald-600 dark:text-emerald-400 text-xs font-black rounded-xl border border-slate-100 dark:border-slate-800 cursor-pointer transition flex items-center justify-center gap-2"
-                >
-                  <Upload className="w-3.5 h-3.5" />
-                  <span>Upload from Device</span>
-                </button>
-                
-                <button
-                  onClick={() => {
-                    document.getElementById('file-upload-camera')?.click();
-                  }}
-                  className="w-full py-3 hover:bg-slate-50 dark:hover:bg-slate-850 text-sky-600 dark:text-sky-400 text-xs font-black rounded-xl border border-slate-100 dark:border-slate-800 cursor-pointer transition flex items-center justify-center gap-2"
-                >
-                  <Camera className="w-3.5 h-3.5" />
-                  <span>Camera (Mobile)</span>
-                </button>
-
-                {editPhoto && (
-                  <button
-                    onClick={handleRemovePhoto}
-                    className="w-full py-3 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-600 dark:text-rose-450 text-xs font-black rounded-xl border border-rose-100/40 dark:border-rose-950/40 cursor-pointer transition flex items-center justify-center gap-2"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Remove Current Photo</span>
-                  </button>
-                )}
-
-                <button
-                  onClick={() => setShowPhotoOptions(false)}
-                  className="w-full py-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 text-[11px] font-bold rounded-xl cursor-pointer transition"
-                >
-                  Cancel
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Image Cropper Modal */}
-      <AnimatePresence>
-        {showCropModal && rawImage && (
-          <div className="fixed inset-0 z-[12000] flex items-center justify-center px-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.8 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-slate-950/90 backdrop-blur-xs"
-              onClick={() => {
-                if (!isUploading) setShowCropModal(false);
-              }}
-            />
-            
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col items-center gap-5 text-slate-800 dark:text-slate-100"
-            >
-              <div className="text-center space-y-1 w-full">
-                <h4 className="text-sm font-black text-slate-900 dark:text-white">Reposition & Zoom</h4>
-                <p className="text-[10px] text-slate-400">Drag image to adjust framing within circle</p>
-              </div>
-
-              {/* Draggable Circle Cropper Area */}
-              <div 
-                className="w-[280px] h-[280px] relative overflow-hidden bg-slate-950 rounded-2xl cursor-grab active:cursor-grabbing select-none border border-slate-200 dark:border-slate-800 shadow-inner"
-                onMouseDown={handlePointerDown}
-                onMouseMove={handlePointerMove}
-                onMouseUp={handlePointerUp}
-                onMouseLeave={handlePointerUp}
-                onTouchStart={handlePointerDown}
-                onTouchMove={handlePointerMove}
-                onTouchEnd={handlePointerUp}
-              >
-                {/* Draggable Image loaded from user selection */}
-                <img
-                  src={rawImage}
-                  onLoad={handleImageLoad}
-                  style={{
-                    width: displayWidth,
-                    height: displayHeight,
-                    transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
-                    maxWidth: 'none',
-                    maxHeight: 'none'
-                  }}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none pointer-events-none transition-transform duration-75"
-                  alt="Crop Source"
-                />
-
-                {/* Circular Crop Guide Mask overlay */}
-                <div className="absolute inset-0 pointer-events-none z-10 flex items-center justify-center">
-                  <div className="w-[220px] h-[220px] rounded-full border-2 border-emerald-500 shadow-[0_0_0_9999px_rgba(15,23,42,0.75)]" />
-                </div>
-              </div>
-
-              {/* Zoom slider controls */}
-              <div className="w-full space-y-2">
-                <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider font-mono">
-                  <span>Zoom</span>
-                  <span>{Math.round(zoom * 100)}%</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <ZoomOut className="w-4 h-4 text-slate-400 shrink-0" />
-                  <input
-                    type="range"
-                    min="1"
-                    max="3"
-                    step="0.05"
-                    value={zoom}
-                    onChange={e => setZoom(parseFloat(e.target.value))}
-                    className="w-full accent-emerald-500 cursor-pointer h-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg appearance-none"
-                  />
-                  <ZoomIn className="w-4 h-4 text-slate-400 shrink-0" />
-                </div>
-              </div>
-
-              <div className="flex gap-3 w-full pt-1">
-                <button
-                  type="button"
-                  disabled={isUploading}
-                  onClick={() => setShowCropModal(false)}
-                  className="flex-1 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-150 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-black transition cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  disabled={isUploading}
-                  onClick={handleSaveCroppedPhoto}
-                  className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition cursor-pointer flex items-center justify-center gap-2"
-                >
-                  {isUploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
-                  <span>Save Crop</span>
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Full Screen Photo Viewer Modal */}
-      <AnimatePresence>
-        {activeFullPhotoIndex !== null && (
-          <div className="fixed inset-0 z-[15000] flex items-center justify-center bg-black/95 backdrop-blur-md select-none text-white overflow-hidden">
-            
-            {/* Dark background close click */}
-            <div 
-              className="absolute inset-0 z-0" 
-              onClick={() => setActiveFullPhotoIndex(null)}
-            />
-
-            {/* Top Bar with actions */}
-            <div className="absolute top-0 inset-x-0 h-16 px-6 flex items-center justify-between z-50 bg-gradient-to-b from-black/60 to-transparent">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">🏔️</span>
-                <span className="text-xs font-black uppercase tracking-widest font-mono text-emerald-400">HillyTrip Social Feed</span>
-              </div>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => {
-                    const photo = profilePhotos[activeFullPhotoIndex];
-                    navigator.clipboard.writeText(photo.url);
-                    if (setNotification) setNotification({ type: 'success', message: 'Photo link copied to clipboard!' });
-                  }}
-                  className="p-2 hover:bg-white/10 rounded-full transition cursor-pointer text-slate-300 hover:text-white"
-                  title="Share Photo"
-                >
-                  <Share2 className="w-4 h-4" />
-                </button>
-                <a
-                  href={profilePhotos[activeFullPhotoIndex].url}
-                  download={`HillyTrip_${profilePhotos[activeFullPhotoIndex].id}.jpg`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="p-2 hover:bg-white/10 rounded-full transition cursor-pointer text-slate-300 hover:text-white"
-                  title="Download Image"
-                >
-                  <Download className="w-4 h-4" />
-                </a>
-                <button
-                  onClick={() => setActiveFullPhotoIndex(null)}
-                  className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition cursor-pointer"
-                  title="Close Viewer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Main Viewer Body */}
-            <div className="relative w-full h-full flex flex-col lg:flex-row z-10 max-w-6xl mx-auto pt-16 pb-6 px-4 gap-6 items-center justify-center">
-              
-              {/* Left pane: Photo with Desktop Sliders & Touch swipe */}
-              <div 
-                className="relative flex-1 w-full h-[50vh] lg:h-[80vh] flex items-center justify-center overflow-hidden"
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-              >
-                {/* Desktop Left navigation arrow */}
-                {activeFullPhotoIndex > 0 && (
-                  <button
-                    onClick={() => setActiveFullPhotoIndex(activeFullPhotoIndex - 1)}
-                    className="absolute left-4 z-40 p-3 bg-black/40 hover:bg-black/60 text-white rounded-full transition cursor-pointer border border-white/10 hidden md:block"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                )}
-
-                {/* High Resolution Image */}
-                <img
-                  src={profilePhotos[activeFullPhotoIndex].url}
-                  alt={profilePhotos[activeFullPhotoIndex].caption}
-                  className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl pointer-events-none select-none"
-                />
-
-                {/* Desktop Right navigation arrow */}
-                {activeFullPhotoIndex < profilePhotos.length - 1 && (
-                  <button
-                    onClick={() => setActiveFullPhotoIndex(activeFullPhotoIndex + 1)}
-                    className="absolute right-4 z-40 p-3 bg-black/40 hover:bg-black/60 text-white rounded-full transition cursor-pointer border border-white/10 hidden md:block"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                )}
-
-                {/* Mobile swipe indicator overlay */}
-                <div className="absolute bottom-2 inset-x-0 flex justify-center gap-1.5 md:hidden">
-                  {profilePhotos.map((_, idx) => (
-                    <div 
-                      key={idx} 
-                      className={`h-1.5 rounded-full transition-all ${idx === activeFullPhotoIndex ? 'w-5 bg-emerald-400' : 'w-1.5 bg-white/40'}`} 
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Right pane: Social Details & Interactive Comments */}
-              <div className="w-full lg:w-96 bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between h-[40vh] lg:h-[80vh] max-h-[550px] lg:max-h-none shadow-2xl space-y-4">
-                
-                {/* Image Details Header */}
-                <div className="space-y-3.5">
-                  <div className="flex items-center gap-2 text-[10px] uppercase font-black tracking-wider text-emerald-400 font-mono">
-                    <MapPin className="w-3.5 h-3.5" />
-                    <span>{profilePhotos[activeFullPhotoIndex].location || 'Prinstine Himalayas'}</span>
-                    <span className="text-slate-600">•</span>
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span>{profilePhotos[activeFullPhotoIndex].uploadDate}</span>
-                  </div>
-
-                  <h4 className="text-md font-black tracking-tight leading-snug">
-                    {profilePhotos[activeFullPhotoIndex].caption}
-                  </h4>
-                  
-                  {/* Photo Author */}
-                  <div className="flex items-center gap-2.5 pt-1.5">
-                    {activeUser?.photoURL ? (
-                      <img 
-                        src={activeUser.photoURL} 
-                        alt={activeUser.name} 
-                        className="w-7 h-7 rounded-full object-cover border border-white/25"
-                      />
-                    ) : (
-                      <div className="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black">
-                        {(activeUser?.name || 'T').charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                    <span className="text-xs font-bold text-slate-200">
-                      Shared by {activeUser?.name || 'Explorer'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Comments Scrollable list */}
-                <div className="flex-1 overflow-y-auto border-y border-slate-800 py-3.5 space-y-3 scrollbar-thin scrollbar-thumb-slate-800">
-                  {profilePhotos[activeFullPhotoIndex].comments.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-center p-4 text-slate-500">
-                      <MessageSquare className="w-8 h-8 mb-2 opacity-40" />
-                      <p className="text-[11px] font-semibold">No comments yet. Start the conversation!</p>
-                    </div>
-                  ) : (
-                    profilePhotos[activeFullPhotoIndex].comments.map((c, index) => (
-                      <div key={index} className="space-y-1 text-left">
-                        <div className="flex justify-between items-center text-[10px] text-slate-400 font-black">
-                          <span>{c.user}</span>
-                        </div>
-                        <p className="text-xs text-slate-200 bg-slate-950/30 p-2.5 rounded-xl border border-slate-850/40 leading-relaxed">
-                          {c.text}
-                        </p>
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                {/* Bottom Social Action Toolbar & Comment Input */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <button
-                      onClick={() => handleLikePhoto(profilePhotos[activeFullPhotoIndex].id)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-rose-500/10 text-rose-400 hover:text-rose-350 text-xs font-black transition cursor-pointer border border-white/5"
-                    >
-                      <span>♥</span>
-                      <span>{profilePhotos[activeFullPhotoIndex].likes} Likes</span>
-                    </button>
-                    
-                    <span className="text-[10px] text-slate-500 font-bold font-mono">
-                      {profilePhotos[activeFullPhotoIndex].comments.length} Comments
-                    </span>
-                  </div>
-
-                  {/* Comment Input */}
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Add a comment..."
-                      value={newPhotoComment}
-                      onChange={e => setNewPhotoComment(e.target.value)}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') {
-                          handlePostComment(profilePhotos[activeFullPhotoIndex].id);
-                        }
-                      }}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-4 pr-10 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                    />
-                    <button
-                      onClick={() => handlePostComment(profilePhotos[activeFullPhotoIndex].id)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:text-emerald-400 text-slate-400 transition cursor-pointer"
-                    >
-                      <Send className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* ========================================================
-          PUBLIC COMMUNITY STATISTICS GRID (Strictly Public Community Stats!)
-          ======================================================== */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 text-center space-y-1 shadow-3xs">
-          <div className="text-xl sm:text-2xl font-black text-amber-500 dark:text-amber-400">📸 {userStats.photosCount}</div>
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Photos Uploaded</div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 text-center space-y-1 shadow-3xs">
-          <div className="text-xl sm:text-2xl font-black text-amber-600 dark:text-amber-300">⭐ {userStats.reviewsCount}</div>
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Reviews Submitted</div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 text-center space-y-1 shadow-3xs">
-          <div className="text-xl sm:text-2xl font-black text-rose-500 dark:text-rose-400">❤️ {userStats.likesCount}</div>
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Likes Received</div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 text-center space-y-1 shadow-3xs">
-          <div className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">🗺️ {userStats.destinationsVisitedCount}</div>
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Destinations Visited</div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 text-center space-y-1 shadow-3xs">
-          <div className="text-xl sm:text-2xl font-black text-sky-600 dark:text-sky-400">📍 {userStats.attractionsVisitedCount}</div>
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Attractions Visited</div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 text-center space-y-1 shadow-3xs">
-          <div className="text-xl sm:text-2xl font-black text-purple-600 dark:text-purple-400">🥾 {userStats.journeysCompletedCount}</div>
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Journeys Completed</div>
-        </div>
-      </div>
-
-      {/* ========================================================
-          PROFILE TABS NAVIGATION
-          ======================================================== */}
-      <div className="flex gap-2 border-b border-slate-150 dark:border-slate-800 pb-px overflow-x-auto custom-scrollbar">
-        {[
-          { id: 'overview', label: 'Overview' },
-          { id: 'passport', label: 'Travel Passport 🛂' },
-          { id: 'photos', label: `Photos (${profilePhotos.length}) 📸` },
-          { id: 'reviews', label: `Reviews (${profileReviews.length}) ⭐` },
-          { id: 'moments', label: `Moments (${profileMoments.length}) 💬` },
-          { id: 'badges', label: 'Badges & Level 🏆' }
-        ].map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
-            className={`px-4 py-3.5 text-xs font-black uppercase tracking-wider border-b-2 transition-all cursor-pointer whitespace-nowrap min-h-[44px] ${
-              activeTab === tab.id 
-                ? 'border-amber-500 text-amber-600 dark:text-amber-400 font-black' 
-                : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* ========================================================
-          ACTIVE TAB VIEWS
-          ======================================================== */}
-      {activeTab === 'passport' && (
-        <TravelPassport userName={activeUser?.name || 'Explorer'} explorerLevelTitle={currentLevel.title} />
-      )}
-
-      {activeTab === 'badges' && (
-        <ExplorerBadges />
-      )}
-
-      {activeTab !== 'passport' && activeTab !== 'badges' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Left/Middle Content Area (Tabs) */}
-          <div className="lg:col-span-2 space-y-8">
-            
-            {/* TAB 1: OVERVIEW */}
-            {activeTab === 'overview' && (
-              <div className="space-y-8">
-                {/* Travel Passport Summary */}
-                <TravelPassport userName={activeUser?.name || 'Explorer'} explorerLevelTitle={currentLevel.title} />
-              
-              {/* BADGES */}
-              <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono">My Explorer Badges</h3>
-                  <span className="text-[10px] text-slate-400 font-bold">4 / 8 unlocked</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-850 rounded-2xl flex gap-3.5">
-                    <div className="w-10 h-10 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center shrink-0">
-                      <Compass className="w-5 h-5 animate-spin-slow" />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">Wilderness Trekker</h4>
-                      <p className="text-[10px] text-slate-500">Completed 5 high-altitude Himalayan treks above 12,000 feet.</p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-850 rounded-2xl flex gap-3.5">
-                    <div className="w-10 h-10 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-xl flex items-center justify-center shrink-0">
-                      <Award className="w-5 h-5" />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">Peak Climber</h4>
-                      <p className="text-[10px] text-slate-500">Conquered standard routes on Hampta Pass and Rohtang.</p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-850 rounded-2xl flex gap-3.5">
-                    <div className="w-10 h-10 bg-sky-500/10 text-sky-600 dark:text-sky-400 rounded-xl flex items-center justify-center shrink-0">
-                      <Car className="w-5 h-5" />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">Roadtripper Champion</h4>
-                      <p className="text-[10px] text-slate-500">Explored Lahaul and Spiti Valley backcountry routes successfully.</p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-850 rounded-2xl flex gap-3.5">
-                    <div className="w-10 h-10 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center shrink-0">
-                      <Sparkles className="w-5 h-5" />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">Night Sky Gazer</h4>
-                      <p className="text-[10px] text-slate-500">Contributed 3 certified astrophotography shots from Spiti.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* UPCOMING TRIP (Private / Owner Only) */}
-              {!isPublic && (
-                <div className="bg-gradient-to-r from-emerald-800 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-md relative overflow-hidden border border-emerald-950">
-                  <div className="absolute inset-0 opacity-10">
-                    <img src="https://ijyzcvzaosfimvrzgopb.supabase.co/storage/v1/object/public/destinations/Grand%20Himalayan%20Landscape.png" alt="background" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="relative z-10 space-y-4">
-                    <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider inline-flex items-center gap-1">
-                      <Calendar className="w-3 h-3" /> Upcoming Adventure
-                    </span>
-                    <div className="space-y-1">
-                      <h4 className="text-lg font-black tracking-tight">Manali - Lahaul Expedition 2026</h4>
-                      <p className="text-xs text-slate-300">Scheduled Departure: July 20, 2026 (5 days left)</p>
-                    </div>
-                    <div className="p-3.5 bg-slate-950/40 rounded-xl border border-slate-800/40 text-[11px] leading-relaxed text-slate-200">
-                      <strong>Itinerary Highlight:</strong> Sissu waterfall trek, campfire stargazing, and 4x4 offroad traverse to Gondhla castle. Cab booked with <em>Karan Negi services</em>.
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* RECENT ACTIVITY TIMELINE */}
-              <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono">Recent Traveller Activity</h3>
-                
-                <div className="relative border-l border-slate-100 dark:border-slate-850 ml-3.5 pl-6 space-y-6">
-                  <div className="relative">
-                    <span className="absolute -left-9.5 top-0.5 w-7 h-7 bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center text-xs border border-emerald-200">
-                      ✓
-                    </span>
-                    <div className="space-y-1">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">Trip Completed</h4>
-                      <p className="text-[11px] text-slate-500">Finished the Gramphu - Keylong Backcountry road traverse.</p>
-                      <span className="text-[9px] text-slate-400 font-bold font-mono">Yesterday</span>
-                    </div>
-                  </div>
-
-                  <div className="relative">
-                    <span className="absolute -left-9.5 top-0.5 w-7 h-7 bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs border border-blue-200">
-                      📷
-                    </span>
-                    <div className="space-y-1">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">Photo Uploaded</h4>
-                      <p className="text-[11px] text-slate-500">Shared a majestic peak sunrise photo at Sissu Valley.</p>
-                      <span className="text-[9px] text-slate-400 font-bold font-mono">3 days ago</span>
-                    </div>
-                  </div>
-
-                  <div className="relative">
-                    <span className="absolute -left-9.5 top-0.5 w-7 h-7 bg-yellow-100 dark:bg-yellow-950 text-yellow-600 dark:text-yellow-450 rounded-full flex items-center justify-center text-xs border border-yellow-200">
-                      ★
-                    </span>
-                    <div className="space-y-1">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">Review Submitted</h4>
-                      <p className="text-[11px] text-slate-500">Rated Pine Crest cabin 5-stars for outstanding hospitality.</p>
-                      <span className="text-[9px] text-slate-400 font-bold font-mono">1 week ago</span>
-                    </div>
-                  </div>
-
-                  <div className="relative">
-                    <span className="absolute -left-9.5 top-0.5 w-7 h-7 bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-450 rounded-full flex items-center justify-center text-xs border border-rose-200">
-                      ♥
-                    </span>
-                    <div className="space-y-1">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">Like Received</h4>
-                      <p className="text-[11px] text-slate-500">Your travel moment "Solitude in Lahaul Valley" was liked by 12 other explorers.</p>
-                      <span className="text-[9px] text-slate-400 font-bold font-mono">1 week ago</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          )}
-
-          {/* TAB 2: PHOTOS */}
-          {activeTab === 'photos' && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 text-slate-800 dark:text-slate-100">
-              <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-850 pb-4">
-                <div className="space-y-0.5">
-                  <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono">Uploaded Traveller Photos</h3>
-                  <p className="text-[10px] text-slate-400">Pristine geotagged Himalayan visual logs shared by the traveller</p>
-                </div>
-                {!isPublic && (
-                  <button 
-                    onClick={() => setShowAddPhotoForm(true)}
-                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl transition cursor-pointer flex items-center gap-1.5 shadow-3xs animate-fade-in"
-                  >
-                    <span>+ Add Photo</span>
-                  </button>
-                )}
-              </div>
-
-              {/* Add New Gallery Photo Form Modal */}
-              <AnimatePresence>
-                {showAddPhotoForm && (
-                  <div className="fixed inset-0 z-[11000] flex items-center justify-center px-4">
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 0.6 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute inset-0 bg-black/60 backdrop-blur-xs"
-                      onClick={() => setShowAddPhotoForm(false)}
-                    />
-                    
-                    <motion.div 
-                      initial={{ scale: 0.95, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0.95, opacity: 0 }}
-                      className="relative bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl space-y-6 overflow-hidden text-slate-850 dark:text-slate-100"
-                    >
-                      <div className="flex justify-between items-center">
-                        <div className="space-y-0.5">
-                          <h4 className="text-md font-black tracking-tight text-slate-900 dark:text-white">Share a Travel Photo</h4>
-                          <p className="text-xs text-slate-400">Post a geotagged Himalayan shot to your HillyTrip feed.</p>
-                        </div>
-                        <button 
-                          onClick={() => setShowAddPhotoForm(false)}
-                          className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
-                        >
-                          <X className="w-5 h-5" />
-                        </button>
-                      </div>
-
-                      <form onSubmit={handleAddGalleryPhoto} className="space-y-4">
-                        
-                        {/* Image selector */}
-                        <div className="space-y-1">
-                          <label className="text-[10px] uppercase font-black tracking-wider text-slate-400 block font-mono">Select Photograph</label>
-                          {newPhotoRaw ? (
-                            <div className="relative h-44 rounded-2xl overflow-hidden border border-slate-250 dark:border-slate-850">
-                              <img src={newPhotoRaw} alt="Preview" className="w-full h-full object-cover" />
-                              <button
-                                type="button"
-                                onClick={() => setNewPhotoRaw(null)}
-                                className="absolute top-2.5 right-2.5 p-1.5 bg-black/50 hover:bg-black/75 rounded-full text-white transition cursor-pointer"
-                              >
-                                <X className="w-4 h-4" />
-                              </button>
-                            </div>
-                          ) : (
-                            <div 
-                              onClick={() => document.getElementById('gallery-photo-input')?.click()}
-                              className="h-44 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-emerald-500 hover:bg-slate-50 dark:hover:bg-slate-950 flex flex-col items-center justify-center gap-2 cursor-pointer transition"
-                            >
-                              <ImageIcon className="w-8 h-8 text-slate-400" />
-                              <span className="text-xs font-bold text-slate-500">Click to Upload Image</span>
-                              <span className="text-[9px] text-slate-400 font-mono">Supports JPEG, PNG, WEBP up to 5MB</span>
-                            </div>
-                          )}
-                          <input
-                            type="file"
-                            id="gallery-photo-input"
-                            accept="image/jpeg,image/png,image/webp"
-                            className="hidden"
-                            onChange={e => handleFileChange(e, 'gallery')}
-                          />
-                        </div>
-
-                        {/* Caption input */}
-                        <div className="space-y-1">
-                          <label className="text-[10px] uppercase font-black tracking-wider text-slate-400 block font-mono">Caption *</label>
-                          <input
-                            type="text"
-                            required
-                            placeholder="e.g. Majestic view of Chandra Taal water"
-                            value={newPhotoCaption}
-                            onChange={e => setNewPhotoCaption(e.target.value)}
-                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs text-slate-800 dark:text-slate-100 font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                          />
-                        </div>
-
-                        {/* Location geotag */}
-                        <div className="space-y-1">
-                          <label className="text-[10px] uppercase font-black tracking-wider text-slate-400 block font-mono">Location Geotag</label>
-                          <input
-                            type="text"
-                            placeholder="e.g. Chandra Taal, Spiti"
-                            value={newPhotoLocation}
-                            onChange={e => setNewPhotoLocation(e.target.value)}
-                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs text-slate-800 dark:text-slate-100 font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                          />
-                        </div>
-
-                        <div className="flex gap-3 pt-2">
-                          <button
-                            type="button"
-                            onClick={() => setShowAddPhotoForm(false)}
-                            className="flex-1 py-3 bg-slate-100 dark:bg-slate-800 text-slate-705 rounded-xl text-xs font-black transition cursor-pointer"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="submit"
-                            className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition cursor-pointer"
-                          >
-                            Share Photo
-                          </button>
-                        </div>
-                      </form>
-                    </motion.div>
-                  </div>
-                )}
-              </AnimatePresence>
-
-              {profilePhotos.length === 0 ? (
-                <div className="text-center py-16 border border-dashed border-slate-150 dark:border-slate-800 rounded-2xl">
-                  <ImageIcon className="w-10 h-10 text-slate-350 mx-auto mb-3" />
-                  <p className="text-xs font-bold text-slate-650 dark:text-slate-350">No uploaded photos yet.</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {profilePhotos.map((photo, index) => (
-                    <div 
-                      key={photo.id} 
-                      onClick={() => setActiveFullPhotoIndex(index)}
-                      className="group relative rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-850 shadow-3xs bg-slate-50 dark:bg-slate-950 cursor-pointer transition hover:shadow-md text-left"
-                    >
-                      <div className="h-52 overflow-hidden relative">
-                        <img 
-                          src={photo.url} 
-                          alt={photo.caption} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                        />
-                        
-                        {/* Location Geotag inside Photo card */}
-                        <div className="absolute top-3 left-3 bg-slate-950/70 backdrop-blur-xs text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 border border-white/5 select-none z-10">
-                          <MapPin className="w-2.5 h-2.5 text-emerald-450" />
-                          <span>{photo.location || 'Himalayas'}</span>
-                        </div>
-
-                        {/* Photo metrics */}
-                        <div className="absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
-                          <div className="bg-slate-950/75 backdrop-blur-xs text-white text-[9px] font-black px-2.5 py-1 rounded-lg flex items-center gap-1 select-none border border-white/5">
-                            <span className="text-rose-450">♥</span>
-                            <span>{photo.likes}</span>
-                          </div>
-                          <div className="bg-slate-950/75 backdrop-blur-xs text-white text-[9px] font-black px-2.5 py-1 rounded-lg flex items-center gap-1 select-none border border-white/5">
-                            <span>💬</span>
-                            <span>{photo.comments.length}</span>
-                          </div>
-                        </div>
-
-                        {/* Desktop Hover Action overlay */}
-                        <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden md:flex flex-col items-center justify-center gap-3 z-20">
-                          <div className="flex gap-2">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setActiveFullPhotoIndex(index);
-                              }}
-                              className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-wider rounded-lg transition cursor-pointer"
-                            >
-                              View Photo
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                navigator.clipboard.writeText(photo.url);
-                                if (setNotification) setNotification({ type: 'success', message: 'Photo link copied to clipboard!' });
-                              }}
-                              className="p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition cursor-pointer"
-                              title="Share link"
-                            >
-                              <Share2 className="w-3.5 h-3.5" />
-                            </button>
-                            {!isPublic && (
-                              <button
-                                onClick={(e) => handleDeletePhoto(photo.id, e)}
-                                className="p-2 bg-rose-950/70 hover:bg-rose-900 text-rose-200 rounded-lg transition border border-rose-900/30 cursor-pointer"
-                                title="Delete Photo"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            )}
-                          </div>
-                          <span className="text-[9px] text-slate-300 font-bold tracking-wider uppercase font-mono mt-1">Uploaded {photo.uploadDate}</span>
-                        </div>
-                      </div>
-
-                      {/* Photo details footer on card */}
-                      <div className="p-4 space-y-1 bg-white dark:bg-slate-900 border-t border-slate-50 dark:border-slate-850">
-                        <p className="text-xs font-bold text-slate-800 dark:text-slate-200 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                          {photo.caption}
-                        </p>
-                        <div className="flex justify-between items-center text-[9px] text-slate-400 font-bold font-mono">
-                          <span>Verifiable Himalayan Geolocation Tagged</span>
-                          <span>{photo.uploadDate}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* TAB 3: REVIEWS */}
-          {activeTab === 'reviews' && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-              <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono">Reviews Written</h3>
-              
-              <div className="space-y-6 divide-y divide-slate-100 dark:divide-slate-800">
-                {profileReviews.map((rev, idx) => (
-                  <div key={rev.id} className={`space-y-3 ${idx > 0 ? 'pt-6' : ''}`}>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="text-xs font-black text-slate-900 dark:text-white">{rev.target}</h4>
-                        <span className="text-[9px] text-slate-400 font-bold font-mono">{rev.date}</span>
-                      </div>
-                      <div className="flex text-amber-450 text-xs font-bold gap-0.5">
-                        {Array.from({ length: rev.rating }).map((_, i) => (
-                          <span key={i}>★</span>
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-xs text-slate-500 leading-relaxed font-semibold italic">
-                      "{rev.text}"
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 4: TRAVEL MOMENTS */}
-          {activeTab === 'moments' && (
-            <div className="space-y-8">
-              
-              {/* Add Travel Moment (Owner Only) */}
-              {!isPublic && (
-                <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-3xl p-6 md:p-8 space-y-4">
-                  <div className="flex justify-between items-center">
-                    <div className="space-y-0.5">
-                      <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono">Post a Travel Moment</h3>
-                      <p className="text-[10px] text-slate-400">Share your high-country stories, advice or vlogs with the HillyTrip community.</p>
-                    </div>
-                    <button
-                      onClick={() => setShowAddMomentForm(!showAddMomentForm)}
-                      className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition cursor-pointer"
-                    >
-                      {showAddMomentForm ? 'Cancel' : '+ Add New Story'}
-                    </button>
-                  </div>
-
-                  <AnimatePresence>
-                    {showAddMomentForm && (
-                      <motion.form
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        onSubmit={handleAddMoment}
-                        className="space-y-4 border-t border-slate-100 dark:border-slate-800 pt-4 overflow-hidden"
-                      >
-                        <div className="space-y-1">
-                          <label className="text-[10px] uppercase font-black text-slate-400">Moment Title *</label>
-                          <input
-                            type="text"
-                            required
-                            placeholder="e.g. Crossing the treacherous Gramphu turn"
-                            value={momentTitle}
-                            onChange={e => setMomentTitle(e.target.value)}
-                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs text-slate-800 dark:text-slate-100 font-bold"
-                          />
-                        </div>
-                        <FeaturedPhotoUploader
-                          onUploadComplete={(url) => setMomentImage(url)}
-                          onClear={() => setMomentImage('')}
-                          currentImageUrl={momentImage}
-                          email={activeUser?.email || user?.email}
-                        />
-                        <div className="space-y-1">
-                          <label className="text-[10px] uppercase font-black text-slate-400">Story Narrative *</label>
-                          <textarea
-                            rows={4}
-                            required
-                            placeholder="Write your adventure story or travel tips here..."
-                            value={momentText}
-                            onChange={e => setMomentText(e.target.value)}
-                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs text-slate-800 dark:text-slate-100 font-semibold"
-                          />
-                        </div>
-                        <button
-                          type="submit"
-                          className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl transition cursor-pointer"
-                        >
-                          Share Travel Moment
-                        </button>
-                      </motion.form>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
-
-              {/* Moments List */}
-              <div className="space-y-6">
-                {profileMoments.map(mom => (
-                  <div key={mom.id} className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-3xl overflow-hidden shadow-3xs flex flex-col sm:flex-row">
-                    <div className="sm:w-52 h-44 sm:h-auto overflow-hidden shrink-0 relative">
-                      <img src={mom.image} alt={mom.title} className="w-full h-full object-cover" />
-                    </div>
-                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-start gap-3">
-                          <h4 className="text-sm font-black text-slate-900 dark:text-white leading-snug">{mom.title}</h4>
-                          <span className="text-[9px] text-slate-400 font-bold font-mono shrink-0">{mom.time}</span>
-                        </div>
-                        <p className="text-xs text-slate-500 leading-relaxed font-semibold line-clamp-3">
-                          {mom.text}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-4 text-[10px] font-black text-slate-400 font-mono">
-                        <button className="flex items-center gap-1 hover:text-rose-500 transition cursor-pointer">
-                          <span>♥</span>
-                          <span>{mom.likes} Likes</span>
-                        </button>
-                        <button className="flex items-center gap-1 hover:text-emerald-500 transition cursor-pointer">
-                          <span>💬</span>
-                          <span>{mom.comments} Comments</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          )}
-
-        </div>
-
-        {/* Right Sidebar Area (Quick Actions, Community Rank info) */}
-        <div className="space-y-8">
-          
-          {/* COMMUNITY EXPLORER CARD */}
-          <div className="bg-slate-900 border border-amber-500/30 rounded-3xl p-6 space-y-4 text-slate-100 shadow-xl">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase font-mono tracking-wider text-amber-300 flex items-center gap-1.5">
-                <Award className="w-4 h-4" /> Community Rank
-              </span>
-              <span className="text-xs font-mono font-black text-amber-400">{userExplorerScore} pts</span>
-            </div>
-            <div>
-              <div className="text-base font-black text-white">{currentLevel.badgeEmoji} {currentLevel.title}</div>
-              <p className="text-[11px] text-slate-300 mt-1 leading-relaxed">
-                Earn score by sharing photos (+5), writing verified reviews (+10), and receiving community likes (+1).
-              </p>
-            </div>
-            {nextLevel && (
-              <div className="space-y-1">
-                <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-amber-500 to-emerald-400" style={{ width: `${progressPercent}%` }} />
-                </div>
-                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                  <span>Level {currentLevel.level}</span>
-                  <span>Level {nextLevel.level} ({progressPercent}%)</span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* QUICK COMMUNITY ACTIONS */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-3xl p-6 md:p-8 space-y-5">
-            <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono">Community Quick Actions</h3>
-            
-            <div className="space-y-2">
-              <button 
-                onClick={() => navigate('#/destinations')}
-                className="w-full h-11 px-4 bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-850 border border-slate-150 dark:border-slate-850 text-slate-800 dark:text-slate-100 text-xs font-black rounded-xl cursor-pointer transition text-left flex items-center justify-between"
-              >
-                <span>Explore Destinations</span>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              </button>
-
-              <button 
-                onClick={() => navigate('#/attractions')}
-                className="w-full h-11 px-4 bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-850 border border-slate-150 dark:border-slate-850 text-slate-800 dark:text-slate-100 text-xs font-black rounded-xl cursor-pointer transition text-left flex items-center justify-between"
-              >
-                <span>Discover Attractions</span>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              </button>
-
-              <button 
-                onClick={() => navigate('#/homestays')}
-                className="w-full h-11 px-4 bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-850 border border-slate-150 dark:border-slate-850 text-slate-800 dark:text-slate-100 text-xs font-black rounded-xl cursor-pointer transition text-left flex items-center justify-between"
-              >
-                <span>Explore Homestays</span>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-      )}
 
     </div>
   );

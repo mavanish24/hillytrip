@@ -1,0 +1,31 @@
+# Enforce correct Content-Type for JavaScript modules and assets
+/*.js
+  Content-Type: application/javascript; charset=UTF-8
+  X-Content-Type-Options: nosniff
+
+/*.mjs
+  Content-Type: application/javascript; charset=UTF-8
+  X-Content-Type-Options: nosniff
+
+/assets/*.js
+  Content-Type: application/javascript; charset=UTF-8
+  X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.mjs
+  Content-Type: application/javascript; charset=UTF-8
+  X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.css
+  Content-Type: text/css; charset=UTF-8
+  X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=31536000, immutable
+
+/sw.js
+  Content-Type: application/javascript; charset=UTF-8
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/manifest.json
+  Content-Type: application/manifest+json; charset=UTF-8
+  Cache-Control: public, max-age=86400

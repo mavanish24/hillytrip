@@ -1784,9 +1784,9 @@ export const DestinationDetailFlow: React.FC<DestinationDetailFlowProps> = ({
                     <button
                       key={rt.id}
                       onClick={() => {
-                        const fromSlug = fromH ? getItemSlug(fromH) : getItemSlug(rt.fromHubId);
-                        const toSlugStr = toH ? getItemSlug(toH) : getItemSlug(rt.toHubId);
-                        navigate(`#/route/${fromSlug}-to-${toSlugStr}`);
+                        const fromName = fromH?.name || rt.fromHubId;
+                        const toName = toH?.name || rt.toHubId;
+                        navigate(`#/taxi?from=${encodeURIComponent(fromName)}&to=${encodeURIComponent(toName)}`);
                       }}
                       className="w-full text-left bg-slate-50 dark:bg-slate-950 hover:bg-emerald-50 dark:hover:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-xs transition-all flex flex-col sm:flex-row justify-between sm:items-center gap-3 cursor-pointer shadow-3xs"
                     >
@@ -2073,10 +2073,10 @@ export const DestinationDetailFlow: React.FC<DestinationDetailFlowProps> = ({
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           onSelectTaxiStand={(ts) => {
-            navigate(`#/routes?from=${encodeURIComponent(ts.taxi_stand_name || ts.name)}`);
+            navigate(`#/taxi?from=${encodeURIComponent(ts.taxi_stand_name || ts.name)}`);
           }}
           onBookTaxi={(fromHub, toDest) => {
-            navigate(`#/routes?from=${encodeURIComponent(fromHub)}&to=${encodeURIComponent(toDest || '')}`);
+            navigate(`#/taxi?from=${encodeURIComponent(fromHub)}&to=${encodeURIComponent(toDest || '')}`);
           }}
         />
 

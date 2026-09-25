@@ -269,7 +269,7 @@ export class IndexService {
           subtitle: `Distance: ${r.distance || '65 km'} • Time: ${r.timeMin || '2 hrs 30 mins'}`,
           description: (r as any).Description || (r as any).description || `Taxi cab transfers for ${(r as any).route_name || r.id}. Verified operators, transparent fares.`,
           slug: r.slug || r.id,
-          canonicalUrl: `https://hillytrip.com/routes/${r.id}`,
+          canonicalUrl: `https://hillytrip.com/#/taxi?from=${encodeURIComponent(r.path && r.path[0] ? r.path[0] : (r as any).fromHubId || '')}&to=${encodeURIComponent(r.path && r.path.length > 1 ? r.path[r.path.length - 1] : (r as any).toHubId || '')}`,
           location: {},
           tags: ['Taxi Route', 'Cab Transfer', 'Shared Cab', 'Reserved Taxi'],
           keywords: [(r as any).route_name, ...(r.path || []), 'taxi', 'cab', 'fare', 'transfer', 'njp', 'bagdogra', 'kalimpong', 'darjeeling', 'gangtok'].filter(Boolean) as string[],
