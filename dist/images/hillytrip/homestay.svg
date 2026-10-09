@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="hsSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="50%" stop-color="#fdba74"/>
+      <stop offset="100%" stop-color="#ffedd5"/>
+    </linearGradient>
+    <linearGradient id="woodWall" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+    <linearGradient id="roofGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#b91c1c"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#hsSky)"/>
+  <!-- Mountain backdrop -->
+  <polygon points="50,380 320,190 550,380" fill="#64748b" opacity="0.6"/>
+  <polygon points="350,380 650,140 950,380" fill="#475569" opacity="0.7"/>
+  <path d="M0,420 Q400,360 800,430 T1200,390 L1200,675 L0,675 Z" fill="#15803d"/>
+  <!-- Traditional Himalayan Wooden Homestay Building -->
+  <!-- Main House Structure -->
+  <polygon points="500,240 700,240 790,320 410,320" fill="url(#roofGrad)"/>
+  <rect x="440" y="320" width="320" height="230" fill="url(#woodWall)" rx="4"/>
+  <!-- Wooden Verandah / Balcony -->
+  <rect x="420" y="420" width="360" height="15" fill="#92400e"/>
+  <rect x="420" y="540" width="360" height="15" fill="#92400e"/>
+  <!-- Windows with Warm Glow -->
+  <rect x="470" y="350" width="60" height="50" fill="#fef08a" rx="4" stroke="#451a03" stroke-width="4"/>
+  <rect x="670" y="350" width="60" height="50" fill="#fef08a" rx="4" stroke="#451a03" stroke-width="4"/>
+  <rect x="470" y="450" width="60" height="60" fill="#fef08a" rx="4" stroke="#451a03" stroke-width="4"/>
+  <!-- Wooden Door -->
+  <rect x="570" y="440" width="60" height="100" fill="#92400e" rx="4" stroke="#451a03" stroke-width="4"/>
+  <!-- Flower Pots on Railing -->
+  <circle cx="450" cy="415" r="8" fill="#ef4444"/>
+  <circle cx="530" cy="415" r="8" fill="#eab308"/>
+  <circle cx="670" cy="415" r="8" fill="#ec4899"/>
+  <circle cx="750" cy="415" r="8" fill="#3b82f6"/>
+  <!-- Stone Pathway -->
+  <ellipse cx="600" cy="580" rx="90" ry="18" fill="#94a3b8"/>
+  <ellipse cx="600" cy="620" rx="140" ry="24" fill="#64748b"/>
+  <ellipse cx="600" cy="660" rx="190" ry="30" fill="#475569"/>
+</svg>

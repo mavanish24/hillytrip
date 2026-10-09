@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="jungleSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="60%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+    <linearGradient id="teaGrass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#84cc16"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+  <!-- Dooars Plains & Foothills Canopy -->
+  <rect width="1200" height="675" fill="url(#jungleSky)"/>
+  <!-- Distant Bhutan/Bengal Foothill Ridge -->
+  <path d="M0,320 Q350,260 700,310 T1200,280 L1200,675 L0,675 Z" fill="#065f46" opacity="0.6"/>
+  <path d="M0,380 Q400,330 800,390 T1200,350 L1200,675 L0,675 Z" fill="#047857" opacity="0.8"/>
+  <!-- Sal Forest & Grassland Plains -->
+  <rect y="440" width="1200" height="235" fill="url(#teaGrass)"/>
+  <!-- Great Indian One-Horned Rhino / Wild Elephant Silhouette in Jaldapara/Gorumara -->
+  <!-- Elephant Silhouette -->
+  <ellipse cx="450" cy="520" rx="90" ry="60" fill="#1e293b"/>
+  <circle cx="360" cy="490" r="45" fill="#1e293b"/>
+  <!-- Trunk -->
+  <path d="M330,490 Q290,530 300,580 Q320,590 325,560 Q320,520 340,510" fill="#1e293b"/>
+  <!-- Tusks -->
+  <path d="M320,520 Q300,535 285,530" stroke="#f8fafc" stroke-width="6" fill="none"/>
+  <!-- Legs -->
+  <rect x="380" y="550" width="22" height="70" fill="#1e293b" rx="4"/>
+  <rect x="420" y="550" width="22" height="70" fill="#1e293b" rx="4"/>
+  <rect x="480" y="550" width="22" height="70" fill="#1e293b" rx="4"/>
+  <rect x="520" y="550" width="22" height="70" fill="#1e293b" rx="4"/>
+  <!-- Teesta/Murti River Stream -->
+  <path d="M0,580 Q400,560 700,610 T1200,580 L1200,675 L0,675 Z" fill="#38bdf8" opacity="0.8"/>
+</svg>

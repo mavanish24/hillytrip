@@ -1,0 +1,47 @@
+{
+  "name": "HillyTrip",
+  "short_name": "HillyTrip",
+  "description": "India's Intelligent Mountain Travel Network",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#022c22",
+  "theme_color": "#064e3b",
+  "orientation": "any",
+  "categories": ["travel", "navigation"],
+  "icons": [
+    {
+      "src": "/hillytrip_logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/hillytrip_logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/hillytrip_logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Plan My Trip",
+      "short_name": "Plan Trip",
+      "description": "Design your custom Himalayan mountain trip",
+      "url": "/plan-my-trip",
+      "icons": [{ "src": "/hillytrip_logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Book a Car",
+      "short_name": "Book Car",
+      "description": "Hire expert local Himalayan drivers",
+      "url": "/book-car",
+      "icons": [{ "src": "/hillytrip_logo.png", "sizes": "192x192" }]
+    }
+  ]
+}

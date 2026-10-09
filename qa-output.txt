@@ -1,0 +1,18 @@
+====================================================
+HILLYTRIP PHASE 3B - COMPREHENSIVE FINANCIAL QA SUITE
+====================================================
+
+>>> TEST 1: Base Financial Scenario (₹5,000)
+Reserve 1 result: {
+  error: 'The requested room is unavailable for the selected dates.',
+  code: 'ROOM_UNAVAILABLE',
+  conflict: {
+    existingBookingId: 'HT-STAY-159087',
+    checkInDate: '2028-06-10',
+    checkOutDate: '2028-06-12',
+    status: 'awaiting_payment'
+  }
+}
+TypeError: Cannot read properties of undefined (reading 'bookingAmount')
+    at run (file:///app/applet/scripts/phase3b-qa-suite.mjs:67:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)

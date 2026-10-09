@@ -1,0 +1,4 @@
+/sitemap.xml         https://hillytrip-api-930292453548.asia-south1.run.app/sitemap.xml         200!
+/sitemap-images.xml  https://hillytrip-api-930292453548.asia-south1.run.app/sitemap-images.xml  200!
+/api/*               https://hillytrip-api-930292453548.asia-south1.run.app/api/:splat          200!
+/*                   /index.html                                                                200

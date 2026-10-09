@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="monSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="50%" stop-color="#4338ca"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="stupaGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#a16207"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#monSky)"/>
+  <!-- Kanchenjunga Snow Peaks in Background -->
+  <polygon points="120,360 380,140 600,360" fill="#ffffff"/>
+  <polygon points="380,140 600,360 500,380" fill="#cbd5e1"/>
+  <polygon points="460,350 720,100 960,350" fill="#ffffff"/>
+  <polygon points="720,100 960,350 850,370" fill="#cbd5e1"/>
+  <!-- Hill Ridge -->
+  <path d="M0,400 Q400,340 800,410 T1200,370 L1200,675 L0,675 Z" fill="#047857"/>
+  <!-- Traditional Tibetan Buddhist Monastery (Rumtek / Pemayangtse) -->
+  <!-- Base Tier (White & Red Brick) -->
+  <rect x="420" y="320" width="360" height="180" fill="#dc2626" rx="4" stroke="#7f1d1d" stroke-width="6"/>
+  <rect x="440" y="340" width="320" height="140" fill="#ffffff" rx="2"/>
+  <!-- Windows with Tibetan curtains -->
+  <rect x="470" y="370" width="40" height="50" fill="#1e1b4b" rx="2" stroke="#eab308" stroke-width="4"/>
+  <rect x="540" y="370" width="40" height="50" fill="#1e1b4b" rx="2" stroke="#eab308" stroke-width="4"/>
+  <rect x="620" y="370" width="40" height="50" fill="#1e1b4b" rx="2" stroke="#eab308" stroke-width="4"/>
+  <rect x="690" y="370" width="40" height="50" fill="#1e1b4b" rx="2" stroke="#eab308" stroke-width="4"/>
+  <!-- Traditional Gold Chinese-Tibetan Pagoda Roof -->
+  <polygon points="390,320 810,320 740,250 460,250" fill="url(#stupaGold)"/>
+  <polygon points="440,250 760,250 700,200 500,200" fill="url(#stupaGold)"/>
+  <!-- Top Stupa Pinnacle (Gilded Dokhang) -->
+  <circle cx="600" cy="180" r="16" fill="#fef08a" stroke="#ca8a04" stroke-width="4"/>
+  <polygon points="590,170 600,130 610,170" fill="#fef08a"/>
+  <!-- Colorful Tibetan Prayer Flags (Lungta) running across -->
+  <path d="M50,150 Q300,250 600,200 T1150,160" stroke="#f8fafc" stroke-width="2" fill="none"/>
+  <polygon points="120,170 145,200 120,200" fill="#3b82f6"/>
+  <polygon points="155,185 180,215 155,215" fill="#ffffff"/>
+  <polygon points="190,195 215,225 190,225" fill="#ef4444"/>
+  <polygon points="225,205 250,235 225,235" fill="#22c55e"/>
+  <polygon points="260,210 285,240 260,240" fill="#eab308"/>
+  <polygon points="850,205 875,235 850,235" fill="#3b82f6"/>
+  <polygon points="885,195 910,225 885,225" fill="#ffffff"/>
+  <polygon points="920,185 945,215 920,215" fill="#ef4444"/>
+  <polygon points="955,170 980,200 955,200" fill="#22c55e"/>
+</svg>

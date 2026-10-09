@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="snowSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="60%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="glacier" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#7dd3fc"/>
+    </linearGradient>
+    <linearGradient id="iceShadow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#075985"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#snowSky)"/>
+  <circle cx="200" cy="180" r="70" fill="#ffffff" opacity="0.9"/>
+  <!-- Grand Snow Summit -->
+  <polygon points="50,480 350,140 600,480" fill="url(#glacier)"/>
+  <polygon points="350,140 600,480 480,500" fill="url(#iceShadow)" opacity="0.85"/>
+  <polygon points="450,460 750,90 1020,460" fill="url(#glacier)"/>
+  <polygon points="750,90 1020,460 900,490" fill="url(#iceShadow)" opacity="0.9"/>
+  <polygon points="850,490 1050,200 1200,490" fill="url(#glacier)"/>
+  <!-- Glacier base -->
+  <path d="M0,450 Q300,410 600,460 T1200,430 L1200,675 L0,675 Z" fill="#e0f2fe"/>
+  <path d="M0,520 Q400,480 800,530 T1200,500 L1200,675 L0,675 Z" fill="#bae6fd" opacity="0.8"/>
+  <path d="M0,580 Q350,560 700,600 T1200,570 L1200,675 L0,675 Z" fill="#7dd3fc" opacity="0.6"/>
+</svg>

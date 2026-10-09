@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="wallPine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="100%" stop-color="#78350f"/>
+    </linearGradient>
+    <linearGradient id="warmLight" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#fef08a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Pine Wood Paneled Room -->
+  <rect width="1200" height="675" fill="url(#wallPine)"/>
+  <!-- Floor Wooden Planks -->
+  <polygon points="0,480 1200,480 1200,675 0,675" fill="#451a03"/>
+  <line x1="0" y1="540" x2="1200" y2="540" stroke="#290e03" stroke-width="3"/>
+  <line x1="0" y1="600" x2="1200" y2="600" stroke="#290e03" stroke-width="3"/>
+  <!-- Large Mountain View Bay Window -->
+  <rect x="250" y="80" width="700" height="340" fill="#0284c7" rx="8" stroke="#78350f" stroke-width="12"/>
+  <!-- Snow Peaks visible through window -->
+  <polygon points="300,320 480,160 660,320" fill="#ffffff"/>
+  <polygon points="560,320 740,140 920,320" fill="#ffffff"/>
+  <polygon points="480,160 660,320 570,330" fill="#cbd5e1"/>
+  <polygon points="740,140 920,320 830,330" fill="#cbd5e1"/>
+  <rect x="250" y="320" width="700" height="100" fill="#15803d"/>
+  <!-- Window Cross Panes -->
+  <line x1="600" y1="80" x2="600" y2="420" stroke="#78350f" stroke-width="8"/>
+  <line x1="250" y1="250" x2="950" y2="250" stroke="#78350f" stroke-width="8"/>
+  <!-- Cozy Tibetan Rug on Floor -->
+  <rect x="350" y="510" width="500" height="130" fill="#991b1b" rx="10" stroke="#fbbf24" stroke-width="6"/>
+  <rect x="380" y="530" width="440" height="90" fill="#b91c1c" rx="6" stroke="#fbbf24" stroke-width="3" stroke-dasharray="8,8"/>
+  <!-- Brass Himalayan Tea Kettle & Cups on Wood Table -->
+  <ellipse cx="600" cy="565" rx="70" ry="25" fill="#d97706"/>
+  <circle cx="600" cy="555" r="14" fill="#fbbf24"/>
+  <circle cx="560" cy="565" r="8" fill="#fef08a"/>
+  <circle cx="640" cy="565" r="8" fill="#fef08a"/>
+</svg>
